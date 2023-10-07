@@ -1,16 +1,17 @@
-# tachiyomi_flutter
+# Flutteryomi
 
-A new Flutter project.
+A personal project for learning Flutter. An attempt to port Tachiyomi's UI and functionality to Flutter and its target platforms.
 
-## Getting Started
+## Running Locally
 
-This project is a starting point for a Flutter application.
+```sh
+flutter run --verbose --fast-start
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Todo
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Folder structure and conventions
+- Feature parity with Tachiyomi
+- Desktop layout
+  - Browser-like tabs (?)
+- Conditional Cupertino for iOS (?)
