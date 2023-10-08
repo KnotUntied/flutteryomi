@@ -1,0 +1,56 @@
+{
+  "on": "On",
+  "off": "Off",
+
+  "name": "Name",
+  "categories": "Categories",
+  "manga": "Library entries",
+  "chapters": "Chapters",
+  "track": "Tracking",
+  "delete_downloaded": "Delete downloaded",
+  "history": "History",
+
+  "label_more": "More",
+  "label_settings": "Settings",
+  "label_download_queue": "Download queue",
+  "label_library": "Library",
+  "label_recent_updates": "Updates",
+  "label_recent_manga": "History",
+  "label_sources": "Sources",
+  "label_backup": "Backup and restore",
+  "label_stats": "Statistics",
+  "label_migration": "Migrate",
+  "label_extensions": "Extensions",
+  "label_extension_info": "Extension info",
+  "label_help": "Help",
+  "label_default": "Default",
+  "label_warning": "Warning",
+
+  "no_more_results": "No more results",
+  "no_results_found": "No results found",
+  "licensed_manga_chapters_error": "Licensed - No chapters to show",
+  "local_source": "Local source",
+  "other_source": "Other",
+  "last_used_source": "Last used",
+  "pinned_sources": "Pinned",
+  "action_global_search_hint": "Global search…",
+  "action_global_search_query": "Search for {query} globally",
+  "@action_global_search_query": {
+    "placeholders": {
+      "query": {
+        "type": "String",
+        "example": "manga"
+      }
+    }
+  },
+  "latest": "Latest",
+  "popular": "Popular",
+  "browse": "Browse",
+  "has_results": "Has results",
+  "local_source_help_guide": "Local source guide",
+  "no_pinned_sources": "You have no pinned sources",
+  "chapter_not_found": "Chapter not found",
+  "local_invalid_format": "Invalid chapter format",
+  "local_filter_order_by": "Order by",
+  "date": "Date"
+}
