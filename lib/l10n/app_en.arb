@@ -26,6 +26,15 @@
   "label_default": "Default",
   "label_warning": "Warning",
 
+  "pref_category_general": "General",
+  "pref_category_appearance": "Appearance",
+  "pref_category_library": "Library",
+  "pref_category_reader": "Reader",
+  "pref_category_downloads": "Downloads",
+  "pref_category_tracking": "Tracking",
+  "pref_category_advanced": "Advanced",
+  "pref_category_about": "About",
+
   "no_more_results": "No more results",
   "no_results_found": "No results found",
   "licensed_manga_chapters_error": "Licensed - No chapters to show",
@@ -52,5 +61,21 @@
   "chapter_not_found": "Chapter not found",
   "local_invalid_format": "Invalid chapter format",
   "local_filter_order_by": "Order by",
-  "date": "Date"
+  "date": "Date",
+
+  "fdroid_warning": "F-Droid builds are not officially supported.\nTap to learn more.",
+  "label_downloaded_only": "Downloaded only",
+  "pref_incognito_mode": "Incognito mode",
+  "pref_incognito_mode_summary": "Pauses reading history",
+  "notification_incognito_text": "Disable incognito mode",
+  "downloaded_only_summary": "Filters all entries in your library",
+  "download_queue_summary": "{count} remaining",
+  "@download_queue_summary": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  }
 }
