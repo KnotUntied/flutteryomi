@@ -12,65 +12,70 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+const Map<int, Widget> _HomePageMap = {
+  0: LibraryPage(),
+  1: LibraryPage(),
+  2: LibraryPage(),
+  3: LibraryPage(),
+  4: MorePage(),
+};
+
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    Widget page;
-    switch (currentPageIndex) {
-      case 0:
-        page = const LibraryPage();
-      case 1:
-        page = const LibraryPage();
-      case 2:
-        page = const LibraryPage();
-      case 3:
-        page = const LibraryPage();
-      case 4:
-        page = const MorePage();
-      default:
-        throw UnimplementedError('Undefined page from menu.');
-    }
 
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        body: Center(child: page),
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (int index) {
-            setState(() { currentPageIndex = index; });
-          },
-          selectedIndex: currentPageIndex,
-          destinations: <NavigationDestination>[
-            NavigationDestination(
-              selectedIcon: const Icon(Icons.collections_bookmark),
-              icon: const Icon(Icons.collections_bookmark_outlined),
-              label: lang.label_library,
-            ),
-            NavigationDestination(
-              selectedIcon: const Icon(Icons.new_releases),
-              icon: const Icon(Icons.new_releases_outlined),
-              label: lang.label_recent_updates,
-            ),
-            NavigationDestination(
-              selectedIcon: const Icon(Icons.history),
-              icon: const Icon(Icons.history_outlined),
-              label: lang.label_recent_manga,
-            ),
-            NavigationDestination(
-              selectedIcon: const Icon(Icons.explore),
-              icon: const Icon(Icons.explore_outlined),
-              label: lang.browse,
-            ),
-            NavigationDestination(
-              selectedIcon: const Icon(Icons.more_horiz),
-              icon: const Icon(Icons.more_horiz_outlined),
-              label: lang.label_more,
-            ),
-          ],
-        ),
-      );
-    });
+    return WillPopScope(
+      onWillPop: () async {
+        if (currentPageIndex == 0) {
+          return true;
+        } else {
+          setState(() { currentPageIndex = 0; });
+          return false;
+        }
+      },
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Scaffold(
+          body: Center(child: _HomePageMap[currentPageIndex]),
+          bottomNavigationBar: NavigationBar(
+            onDestinationSelected: (int index) {
+              // TODO: Find declarative way to have LibraryPage as the home page for HomePage
+              // Currently not supported or documented for NavigationBar
+              setState(() { currentPageIndex = index; });
+            },
+            selectedIndex: currentPageIndex,
+            destinations: <NavigationDestination>[
+              NavigationDestination(
+                selectedIcon: const Icon(Icons.collections_bookmark),
+                icon: const Icon(Icons.collections_bookmark_outlined),
+                label: lang.label_library,
+              ),
+              NavigationDestination(
+                selectedIcon: const Icon(Icons.new_releases),
+                icon: const Icon(Icons.new_releases_outlined),
+                label: lang.label_recent_updates,
+              ),
+              NavigationDestination(
+                selectedIcon: const Icon(Icons.history),
+                icon: const Icon(Icons.history_outlined),
+                label: lang.label_recent_manga,
+              ),
+              NavigationDestination(
+                selectedIcon: const Icon(Icons.explore),
+                icon: const Icon(Icons.explore_outlined),
+                label: lang.browse,
+              ),
+              NavigationDestination(
+                selectedIcon: const Icon(Icons.more_horiz),
+                icon: const Icon(Icons.more_horiz_outlined),
+                label: lang.label_more,
+              ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

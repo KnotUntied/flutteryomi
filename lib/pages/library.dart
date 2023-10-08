@@ -27,10 +27,7 @@ class _LibraryPageState extends State<LibraryPage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.search),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('This is a snackbar')));
-              },
+              onPressed: () {},
             ),
             IconButton(
               icon: const Icon(Icons.filter_list),
