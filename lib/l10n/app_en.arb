@@ -35,6 +35,41 @@
   "pref_category_advanced": "Advanced",
   "pref_category_about": "About",
 
+  "pref_general_summary": "App language, notifications",
+  "@pref_general_summary": {
+    "description": "Not in strings.xml. To be investigated."
+  },
+  "pref_appearance_summary": "Theme, date & time format",
+  "pref_library_summary": "Categories, global update, chapter swipe",
+  "pref_reader_summary": "Reading mode, display, navigation",
+  "pref_downloads_summary": "Automatic download, download ahead",
+  "pref_tracking_summary": "One-way progress sync, enhanced sync",
+  "pref_browse_summary": "Sources, extensions, global search",
+  "pref_backup_summary": "Manual & automatic backups",
+  "pref_security_summary": "App lock, secure screen",
+  "pref_advanced_summary": "Dump crash logs, battery optimizations",
+
+  "pref_category_security": "Security and privacy",
+  "@pref_category_security": {
+    "description": "Placed like in strings.xml. To be moved to same-prefixed items."
+  },
+  "lock_with_biometrics": "Require unlock",
+  "lock_when_idle": "Lock when idle",
+  "lock_always": "Always",
+  "lock_never": "Never",
+  "lock_after_mins": "{count, plural, =1{After {count} minute} other{After {count} minutes}}",
+  "@lock_after_mins": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "hide_notification_content": "Hide notification content",
+  "secure_screen": "Secure screen",
+  "secure_screen_summary": "Secure screen hides app contents when switching apps and block screenshots",
+
   "no_more_results": "No more results",
   "no_results_found": "No results found",
   "licensed_manga_chapters_error": "Licensed - No chapters to show",
