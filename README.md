@@ -12,6 +12,12 @@ flutter run --verbose --fast-start
 
 See [here](https://github.com/tachiyomiorg/tachiyomi/blob/master/i18n/src/main/res/values/strings.xml) for naming and arrangement conventions when adding or editing `.arb` files. The `app_name` key-value pair is not included.
 
+Update localizations by adding or editing the `.arb` files in `lib/l10n`. Then run:
+
+```sh
+flutter gen-l10n
+```
+
 ## Todo
 
 - Folder structure and conventions

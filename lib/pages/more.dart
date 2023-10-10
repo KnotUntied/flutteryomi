@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/pages/about.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -10,9 +11,9 @@ class MorePage extends StatelessWidget {
     final lang = AppLocalizations.of(context);
     return ListView(
       children: <Widget>[
-        Container(
+        const SizedBox(
           height: 50,
-          child: const Center(child: Text('Logo here')),
+          child: Center(child: Text('Logo here')),
         ),
         const Divider(),
         SwitchListTile(
@@ -55,6 +56,14 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.info_outlined),
           title: Text(lang.pref_category_about),
+          onTap: () { 
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AboutPage(),
+              ),
+            );
+          },
         ),
         ListTile(
           leading: const Icon(Icons.help_outline),

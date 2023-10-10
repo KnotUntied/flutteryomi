@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/pages/browse.dart';
 import 'package:flutteryomi/pages/library.dart';
 import 'package:flutteryomi/pages/more.dart';
 
@@ -16,7 +17,7 @@ const Map<int, Widget> _HomePageMap = {
   0: LibraryPage(),
   1: LibraryPage(),
   2: LibraryPage(),
-  3: LibraryPage(),
+  3: BrowsePage(),
   4: MorePage(),
 };
 

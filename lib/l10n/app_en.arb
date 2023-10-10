@@ -63,6 +63,23 @@
   "local_filter_order_by": "Order by",
   "date": "Date",
 
+  "website": "Website",
+  "version": "Version",
+  "whats_new": "What's new",
+  "help_translate": "Help translate",
+  "licenses": "Open source licenses",
+  "privacy_policy": "Privacy policy",
+  "check_for_updates": "Check for updates",
+  "updated_version": "Updated to v{version}s",
+  "@updated_version": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "0.0.0"
+      }
+    }
+  },
+
   "fdroid_warning": "F-Droid builds are not officially supported.\nTap to learn more.",
   "label_downloaded_only": "Downloaded only",
   "pref_incognito_mode": "Incognito mode",
