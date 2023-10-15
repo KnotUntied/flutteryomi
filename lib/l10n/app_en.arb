@@ -26,6 +26,146 @@
   "label_default": "Default",
   "label_warning": "Warning",
 
+  "label_started": "Started",
+  "label_local": "Local",
+  "label_downloaded": "Downloaded",
+
+  "unlock_app_title": "Unlock {title}",
+  "@unlock_app_title": {
+    "description": "Purpose to be identified.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "confirm_lock_change": "Authenticate to confirm change",
+
+  "action_settings": "Settings",
+  "action_menu": "Menu",
+  "action_filter": "Filter",
+  "action_set_interval": "Set interval",
+  "action_filter_bookmarked": "Bookmarked",
+  "action_filter_tracked": "Tracked",
+  "action_filter_unread": "Unread",
+  "action_filter_interval_custom": "Customized fetch interval",
+  "action_filter_interval_long": "Fetch monthly (28 days)",
+  "action_filter_interval_late": "Late 10+ check",
+  "action_filter_interval_dropped": "Dropped? Late 20+ and 2 months",
+  "action_filter_interval_passed": "Passed check period",
+  "action_filter_empty": "Remove filter",
+  "action_sort_alpha": "Alphabetically",
+  "action_sort_count": "Total entries",
+  "action_sort_total": "Total chapters",
+  "action_sort_last_read": "Last read",
+  "action_sort_last_manga_update": "Last update check",
+  "action_sort_unread_count": "Unread count",
+  "action_sort_next_updated": "Next expected update",
+  "action_sort_latest_chapter": "Latest chapter",
+  "action_sort_chapter_fetch_date": "Chapter fetch date",
+  "action_sort_date_added": "Date added",
+  "action_search": "Search",
+  "action_search_hint": "Search…",
+  "action_search_settings": "Search settings",
+  "action_global_search": "Global search",
+  "action_select_all": "Select all",
+  "action_select_inverse": "Select inverse",
+  "action_mark_as_read": "Mark as read",
+  "action_mark_as_unread": "Mark as unread",
+  "action_mark_previous_as_read": "Mark previous as read",
+  "action_download": "Download",
+  "action_bookmark": "Bookmark chapter",
+  "action_remove_bookmark": "Unbookmark chapter",
+  "action_delete": "Delete",
+  "action_update_library": "Update library",
+  "action_enable_all": "Enable all",
+  "action_disable_all": "Disable all",
+  "action_edit": "Edit",
+  "action_add": "Add",
+  "action_update_category": "Update category",
+  "action_open_random_manga": "Open random entry",
+  "action_add_category": "Add category",
+  "action_edit_categories": "Edit categories",
+  "action_rename_category": "Rename category",
+  "action_move_category": "Set categories",
+  "delete_category_confirmation": "Do you wish to delete the category {category}?",
+  "@delete_category_confirmation": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "delete_category": "Delete category",
+  "action_sort_category": "Sort categories",
+  "sort_category_confirmation": "Would you like to sort the categories alphabetically?",
+  "action_edit_cover": "Edit cover",
+  "action_view_chapters": "View chapters",
+  "action_pause": "Pause",
+  "action_previous_chapter": "Previous chapter",
+  "action_next_chapter": "Next chapter",
+  "action_retry": "Retry",
+  "action_remove": "Remove",
+  "action_remove_everything": "Remove everything",
+  "action_start": "Start",
+  "action_resume": "Resume",
+  "action_open_in_browser": "Open in browser",
+  "action_show_manga": "Show entry",
+  "action_copy_to_clipboard": "Copy to clipboard",
+  "action_open_in_web_view": "Open in WebView",
+  "action_web_view": "WebView",
+  "action_migrate": "Migrate",
+  "action_display_mode": "Display mode",
+  "action_display": "Display",
+  "action_display_grid": "Compact grid",
+  "action_display_comfortable_grid": "Comfortable grid",
+  "action_display_list": "List",
+  "action_display_cover_only_grid": "Cover-only grid",
+  "action_display_download_badge": "Downloaded chapters",
+  "action_display_local_badge": "Local source",
+  "action_display_language_badge": "Language",
+  "action_display_show_tabs": "Show category tabs",
+  "action_display_show_number_of_items": "Show number of items",
+  "action_display_show_continue_reading_button": "Continue reading button",
+  "action_disable": "Disable",
+  "action_pin": "Pin",
+  "action_unpin": "Unpin",
+  "action_cancel": "Cancel",
+  "action_ok": "OK",
+  "action_cancel_all": "Cancel all",
+  "cancel_all_for_series": "Cancel all for this series",
+  "action_sort": "Sort",
+  "action_order_by_upload_date": "By upload date",
+  "action_order_by_chapter_number": "By chapter number",
+  "action_newest": "Newest",
+  "action_oldest": "Oldest",
+  "action_asc": "Ascending",
+  "action_desc": "Descending",
+  "action_move_to_top": "Move to top",
+  "action_move_to_top_all_for_series": "Move series to top",
+  "action_move_to_bottom": "Move to bottom",
+  "action_move_to_bottom_all_for_series": "Move series to bottom",
+  "action_install": "Install",
+  "action_share": "Share",
+  "action_save": "Save",
+  "action_reset": "Reset",
+  "action_undo": "Undo",
+  "action_close": "Close",
+  "action_open_log": "Open log",
+  "action_show_errors": "Tap to see details",
+  "action_restore": "Restore",
+  "action_webview_back": "Back",
+  "action_webview_forward": "Forward",
+  "action_webview_refresh": "Refresh",
+  "action_start_downloading_now": "Start downloading now",
+  "action_faq_and_guides": "FAQ and Guides",
+  "action_not_now": "Not now",
+
+  "loading": "Loading…",
+  "internal_error": "InternalError: Check crash logs for further information",
+
+  "app_not_available": "App not available",
+
   "pref_category_general": "General",
   "pref_category_appearance": "Appearance",
   "pref_category_library": "Library",
@@ -70,6 +210,44 @@
   "secure_screen": "Secure screen",
   "secure_screen_summary": "Secure screen hides app contents when switching apps and block screenshots",
 
+  "pref_category_display": "Display",
+  "pref_library_columns": "Grid size",
+  "pref_library_columns_per_row": "{columns} per row",
+  "@pref_library_columns_per_row": {
+    "placeholders": {
+      "columns": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "portrait": "Portrait",
+  "landscape": "Landscape",
+
+  "pref_category_library_update": "Global update",
+  "pref_library_update_interval": "Automatic updates",
+  "update_never": "Off",
+  "update_6hour": "Every 6 hours",
+  "update_12hour": "Every 12 hours",
+  "update_24hour": "Daily",
+  "update_48hour": "Every 2 days",
+  "update_72hour": "Every 3 days",
+  "update_weekly": "Weekly",
+  "pref_library_update_restriction": "Automatic updates device restrictions",
+  "connected_to_wifi": "Only on Wi-Fi",
+  "network_not_metered": "Only on unmetered network",
+  "charging": "When charging",
+  "restrictions": "Restrictions: {string}",
+  "@restrictions": {
+    "description": "Purpose to be identified.",
+    "placeholders": {
+      "string": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+
   "no_more_results": "No more results",
   "no_results_found": "No results found",
   "licensed_manga_chapters_error": "Licensed - No chapters to show",
@@ -97,6 +275,73 @@
   "local_invalid_format": "Invalid chapter format",
   "local_filter_order_by": "Order by",
   "date": "Date",
+  "days": "{count, plural, =1{1 day} other{{count} days}}",
+  "@days": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+
+  "missing_chapters": "{count, plural, =1{Missing 1 chapter} other{Missing {count} chapters}}",
+  "@missing_chapters": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "ongoing": "Ongoing",
+  "unknown": "Unknown",
+  "unknown_author": "Unknown author",
+  "unknown_status": "Unknown status",
+  "licensed": "Licensed",
+  "publishing_finished": "Publishing finished",
+  "cancelled": "Cancelled",
+  "on_hiatus": "On hiatus",
+  "add_to_library": "Add to library",
+  "in_library": "In library",
+  "remove_from_library": "Remove from library",
+  "unknown_title": "Unknown title",
+  "confirm_add_duplicate_manga": "You have an entry in your library with the same name.\n\nDo you still wish to continue?",
+  "manga_added_library": "Added to library",
+  "manga_removed_library": "Removed from library",
+  "manga_info_expand": "More",
+  "manga_info_collapse": "Less",
+  "manga_num_chapters": "{count, plural, =1{1 chapter} other{{count} chapters}}",
+  "@manga_num_chapters": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "delete_downloads_for_manga": "Delete downloaded chapters?",
+  "copied_to_clipboard_plain": "Copied to clipboard",
+  "copied_to_clipboard": "Copied to clipboard:\n%1$s",
+  "copied_to_clipboard": "Copied to clipboard:\n{data}",
+  "@copied_to_clipboard": {
+    "placeholders": {
+      "data": {
+        "type": "String"
+      }
+    }
+  },
+  "clipboard_copy_error": "Failed to copy to clipboard",
+  "source_not_installed": "Source not installed: {data}",
+  "@source_not_installed": {
+    "placeholders": {
+      "data": {
+        "type": "String"
+      }
+    }
+  },
+  "snack_add_to_library": "Add to library?",
+  "description_placeholder": "No description",
 
   "website": "Website",
   "version": "Version",
@@ -129,5 +374,35 @@
         "format": "compact"
       }
     }
-  }
+  },
+
+  "recent_manga_time": "Ch. {number} - {time}",
+  "@recent_manga_time": {
+    "placeholders": {
+      "number": {
+        "type": "num",
+        "format": "compact"
+      },
+      "time": {
+        "type": "DateTime",
+        "format": "jm"
+      }
+    }
+  },
+  "pref_clear_history": "Clear history",
+  "clear_history_completed": "History deleted",
+  "clear_history_confirmation": "Are you sure? All history will be lost.",
+
+  "label_overview_section": "Overview",
+  "label_completed_titles": "Completed entries",
+  "label_read_duration": "Read duration",
+  "label_titles_section": "Entries",
+  "label_titles_in_global_update": "In global update",
+  "label_total_chapters": "Total",
+  "label_read_chapters": "Read",
+  "label_tracker_section": "Trackers",
+  "label_tracked_titles": "Tracked entries",
+  "label_mean_score": "Mean score",
+  "label_used": "Used",
+  "not_applicable": "N/A"
 }

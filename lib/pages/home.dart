@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/pages/browse.dart';
+import 'package:flutteryomi/pages/history.dart';
 import 'package:flutteryomi/pages/library.dart';
 import 'package:flutteryomi/pages/more.dart';
-
+import 'package:flutteryomi/pages/updates.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,8 +16,8 @@ class HomePage extends StatefulWidget {
 
 const Map<int, Widget> _HomePageMap = {
   0: LibraryPage(),
-  1: LibraryPage(),
-  2: LibraryPage(),
+  1: UpdatesPage(),
+  2: HistoryPage(),
   3: BrowsePage(),
   4: MorePage(),
 };
@@ -33,7 +34,9 @@ class _HomePageState extends State<HomePage> {
         if (currentPageIndex == 0) {
           return true;
         } else {
-          setState(() { currentPageIndex = 0; });
+          setState(() {
+            currentPageIndex = 0;
+          });
           return false;
         }
       },
@@ -44,7 +47,9 @@ class _HomePageState extends State<HomePage> {
             onDestinationSelected: (int index) {
               // TODO: Find declarative way to have LibraryPage as the home page for HomePage
               // Currently not supported or documented for NavigationBar
-              setState(() { currentPageIndex = index; });
+              setState(() {
+                currentPageIndex = index;
+              });
             },
             selectedIndex: currentPageIndex,
             destinations: <NavigationDestination>[

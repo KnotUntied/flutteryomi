@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 
@@ -18,38 +17,14 @@ class HistoryPage extends StatelessWidget {
               icon: const Icon(Icons.refresh),
               onPressed: () {},
             ),
+            IconButton(
+              icon: const Icon(Icons.delete_sweep_outlined),
+              onPressed: () => _askDeleteHistory(context),
+            ),
           ],
-          bottom: TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: <Widget>[
-              Tab(text: lang.label_default),
-            ],
-          ),
         ),
         body: ListView(
           children: <Widget>[
-            Container(
-              height: 50,
-              child: const Center(child: Text('Logo here')),
-            ),
-            const Divider(),
-            SwitchListTile(
-              secondary: const Icon(Icons.cloud_off_outlined),
-              title: Text(lang.label_downloaded_only),
-              subtitle: Text(lang.downloaded_only_summary),
-              value: true,
-              onChanged: (bool? value) { },
-            ),
-            SwitchListTile(
-              // glasses are somehow missing in Material Icons
-              secondary: const Icon(Icons.visibility_off_outlined),
-              title: Text(lang.pref_incognito_mode),
-              subtitle: Text(lang.pref_incognito_mode_summary),
-              value: true,
-              onChanged: (bool? value) { },
-            ),
-            const Divider(),
             ListTile(
               leading: const Icon(Icons.download_outlined),
               title: Text(lang.label_download_queue),
@@ -57,6 +32,33 @@ class HistoryPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _askDeleteHistory(BuildContext context) {
+    final lang = AppLocalizations.of(context);
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(lang.action_remove_everything),
+          content: Text(lang.clear_history_confirmation),
+          actions: <Widget>[
+            TextButton(
+              child: Text(lang.action_cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(lang.action_ok),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

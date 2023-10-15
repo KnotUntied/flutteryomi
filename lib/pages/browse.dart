@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BrowsePage extends StatefulWidget {
   const BrowsePage({super.key});
@@ -54,22 +54,23 @@ class _BrowsePageState extends State<BrowsePage> {
             ),
           ],
           bottom: TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
+            tabAlignment: TabAlignment.fill,
             tabs: <Widget>[
-              Tab(text: lang.label_default),
+              Tab(text: lang.label_sources),
+              Tab(text: lang.label_extensions),
+              Tab(text: lang.label_migration),
             ],
           ),
         ),
         //body: TabBarView(
-          //children: myTabs.map((Tab tab) {
-          //  return Center(
-          //    child: Text(
-          //      'This is the tab',
-          //      style: const TextStyle(fontSize: 36),
-          //    ),
-          //  );
-          //}).toList(),
+        //children: myTabs.map((Tab tab) {
+        //  return Center(
+        //    child: Text(
+        //      'This is the tab',
+        //      style: const TextStyle(fontSize: 36),
+        //    ),
+        //  );
+        //}).toList(),
         //),
       ),
     );

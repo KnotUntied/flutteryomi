@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -31,23 +31,32 @@ class _LibraryPageState extends State<LibraryPage> {
             ),
             IconButton(
               icon: const Icon(Icons.filter_list),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Next page'),
-                      ),
-                      body: const Center(
-                        child: Text(
-                          'This is the next page',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    );
+              onPressed: () {},
+            ),
+            MenuAnchor(
+              builder: (BuildContext context, MenuController controller,
+                  Widget? child) {
+                return IconButton(
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
                   },
-                ));
+                  icon: const Icon(Icons.more_vert),
+                );
               },
+              menuChildren: <MenuItemButton>[
+                MenuItemButton(
+                  onPressed: () => {},
+                  child: Text(lang.pref_category_library_update),
+                ),
+                MenuItemButton(
+                  onPressed: () => {},
+                  child: Text(lang.action_open_random_manga),
+                ),
+              ],
             ),
           ],
           bottom: TabBar(
@@ -59,14 +68,14 @@ class _LibraryPageState extends State<LibraryPage> {
           ),
         ),
         //body: TabBarView(
-          //children: myTabs.map((Tab tab) {
-          //  return Center(
-          //    child: Text(
-          //      'This is the tab',
-          //      style: const TextStyle(fontSize: 36),
-          //    ),
-          //  );
-          //}).toList(),
+        //children: myTabs.map((Tab tab) {
+        //  return Center(
+        //    child: Text(
+        //      'This is the tab',
+        //      style: const TextStyle(fontSize: 36),
+        //    ),
+        //  );
+        //}).toList(),
         //),
       ),
     );
