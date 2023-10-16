@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/widgets/list_heading.dart';
+
+
 class UpdatesPage extends StatefulWidget {
   const UpdatesPage({super.key});
 
@@ -29,7 +32,14 @@ class _UpdatesPageState extends State<UpdatesPage> {
         ],
       ),
       body: ListView(
-        children: const [Text('Library last updated: Yesterday')],
+        children: [
+          ListTile(
+            title: Text(
+              lang.updates_last_update_info(lang.updates_last_update_info_just_now),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(fontStyle: FontStyle.italic),
+            ),
+          ),
+        ],
       ),
     );
   }

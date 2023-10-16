@@ -189,6 +189,17 @@
   "pref_security_summary": "App lock, secure screen",
   "pref_advanced_summary": "Dump crash logs, battery optimizations",
 
+  "relative_time_today": "Today",
+  "relative_time": "{count, plural, =1{Yesterday} other{{count} days ago}}",
+  "@relative_time": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+
   "pref_category_security": "Security and privacy",
   "@pref_category_security": {
     "description": "Placed like in strings.xml. To be moved to same-prefixed items."
@@ -322,7 +333,6 @@
   },
   "delete_downloads_for_manga": "Delete downloaded chapters?",
   "copied_to_clipboard_plain": "Copied to clipboard",
-  "copied_to_clipboard": "Copied to clipboard:\n%1$s",
   "copied_to_clipboard": "Copied to clipboard:\n{data}",
   "@copied_to_clipboard": {
     "placeholders": {
@@ -375,6 +385,108 @@
       }
     }
   },
+
+  "updating_category": "Updating category",
+  "manga_from_library": "From library",
+  "downloaded_chapters": "Downloaded chapters",
+  "intervals_header": "Intervals",
+  "overlay_header": "Overlay",
+  "badges_header": "Badges",
+  "tabs_header": "Tabs",
+
+  "manga_tracking_tab": "Tracking",
+  "num_trackers": "{count, plural, =1{{count} tracker} other{{count} trackers}}",
+  "@num_trackers": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "add_tracking": "Add tracking",
+  "unread": "Unread",
+  "reading": "Reading",
+  "completed": "Completed",
+  "dropped": "Dropped",
+  "on_hold": "On hold",
+  "paused": "Paused",
+  "plan_to_read": "Plan to read",
+  "repeating": "Rereading",
+  "reading_list": "Reading List",
+  "wish_list": "Wish List",
+  "complete_list": "Complete List",
+  "on_hold_list": "On Hold List",
+  "unfinished_list": "Unfinished List",
+  "score": "Score",
+  "title": "Title",
+  "status": "Status",
+  "track_status": "Status",
+  "track_started_reading_date": "Start date",
+  "track_finished_reading_date": "Finish date",
+  "track_type": "Type",
+  "myanimelist_relogin": "Please login to MAL again",
+  "source_unsupported": "Source is not supported",
+  "error_no_match": "No match found",
+  "track_error": "{title} error: {description}",
+  "@track_error": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "track_remove_date_conf_title": "Remove date?",
+  "track_remove_start_date_conf_text": "This will remove your previously selected start date from {title}",
+  "@track_remove_start_date_conf_text": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "track_remove_finish_date_conf_text": "This will remove your previously selected finish date from {title}",
+  "@track_remove_finish_date_conf_text": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "track_delete_title": "Remove {title} tracking?",
+  "@track_delete_title": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "track_delete_text": "This will remove the tracking locally.",
+  "track_delete_remote_text": "Also remove from {title}",
+  "@track_delete_remote_text": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "updating_library": "Updating library",
+  "update_already_running": "An update is already running",
+  "cant_open_last_read_chapter": "Unable to open last read chapter",
+  "updates_last_update_info": "Library last updated: {ago}",
+  "@updates_last_update_info": {
+    "placeholders": {
+      "ago": {
+        "type": "String",
+        "example": "Yesterday"
+      }
+    }
+  },
+  "updates_last_update_info_just_now": "Just now",
 
   "recent_manga_time": "Ch. {number} - {time}",
   "@recent_manga_time": {

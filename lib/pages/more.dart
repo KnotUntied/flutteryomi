@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutteryomi/pages/about.dart';
 import 'package:flutteryomi/pages/statistics.dart';
 
+
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
 

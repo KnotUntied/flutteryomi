@@ -29,7 +29,8 @@ class StatisticsPage extends StatelessWidget {
                 icon: const Icon(Icons.local_library_outlined),
               ),
               StatisticsItemLarge(
-                value: const Duration(days: 1, hours: 1, minutes: 33, microseconds: 500).toString(),
+                //value: const Duration(days: 1, hours: 1, minutes: 33, microseconds: 500).toString(),
+                value: '0 m',
                 label: lang.label_read_duration,
                 icon: const Icon(Icons.schedule_outlined),
               ),
