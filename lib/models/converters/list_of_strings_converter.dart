@@ -1,10 +1,8 @@
-//https://github.com/simolus3/drift/issues/1339#issue-942163256
+// https://github.com/simolus3/drift/issues/1339#issue-942163256
 
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
-
-//part 'converters.g.dart';
 
 
 class ListOfStringsConverter extends TypeConverter<List<String>, String> {

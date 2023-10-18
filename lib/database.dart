@@ -5,9 +5,14 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+// Tedious but necessary
+// See https://github.com/simolus3/drift/issues/2474#issuecomment-1591582644
+import 'package:flutteryomi/models/converters/list_of_strings_converter.dart';
+import 'package:flutteryomi/models/enums/update_strategy.dart';
 import 'package:flutteryomi/models/manga.dart';
 
 part 'database.g.dart';
+
 
 @DriftDatabase(tables: [MangaItems])
 class AppDatabase extends _$AppDatabase {
@@ -16,6 +21,7 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 }
+
 
 LazyDatabase _openConnection() {
   // the LazyDatabase util lets us find the right location for the file async.
