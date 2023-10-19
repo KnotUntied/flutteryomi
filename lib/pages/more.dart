@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/pages/about.dart';
+import 'package:flutteryomi/pages/backup_and_restore.dart';
 import 'package:flutteryomi/pages/statistics.dart';
 
 
@@ -57,6 +58,14 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.settings_backup_restore_outlined),
           title: Text(lang.label_backup),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const BackupAndRestorePage(),
+              ),
+            );
+          },
         ),
         const Divider(),
         ListTile(

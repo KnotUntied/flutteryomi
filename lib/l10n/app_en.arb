@@ -353,6 +353,153 @@
   "snack_add_to_library": "Add to library?",
   "description_placeholder": "No description",
 
+  "tracking_guide": "Tracking guide",
+  "pref_auto_update_manga_sync": "Update progress after reading",
+  "services": "Trackers",
+  "tracking_info": "One-way sync to update the chapter progress in external tracker services. Set up tracking for individual entries from their tracking button.",
+  "enhanced_services": "Enhanced trackers",
+  "enhanced_services_not_installed": "Available but source not installed: {title}",
+  "@enhanced_services_not_installed": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "enhanced_tracking_info": "Provides enhanced features for specific sources. Entries are automatically tracked when added to your library.",
+  "action_track": "Track",
+  "track_activity_name": "Tracker login",
+
+  "pref_hide_in_library_items": "Hide entries already in library",
+
+  "pref_create_backup": "Create backup",
+  "pref_create_backup_summ": "Can be used to restore current library",
+  "pref_restore_backup": "Restore backup",
+  "pref_restore_backup_summ": "Restore library from backup file",
+  "pref_backup_directory": "Backup location",
+  "pref_backup_service_category": "Automatic backups",
+  "pref_backup_interval": "Backup frequency",
+  "pref_backup_slots": "Maximum backups",
+  "backup_created": "Backup created",
+  "invalid_backup_file": "Invalid backup file",
+  "invalid_backup_file_missing_manga": "Backup does not contain any library entries.",
+  "backup_restore_missing_sources": "Missing sources:",
+  "backup_restore_missing_trackers": "Trackers not logged into:",
+  "backup_restore_content_full": "Data from the backup file will be restored.\n\nYou will need to install any missing extensions and log in to tracking services afterwards to use them.",
+  "restore_completed": "Restore completed",
+  "restore_duration": "{min} min, {sec} sec",
+  "@restore_duration": {
+    "placeholders": {
+      "min": {
+        "type": "num",
+        "format": "compact"
+      },
+      "sec": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "restore_completed_message": "Done in {time} with {count, plural, =1{{count} error} other{{count} errors}}",
+  "@restore_completed_message": {
+    "placeholders": {
+      "elapsed": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "backup_in_progress": "Backup is already in progress",
+  "backup_choice": "What do you want to backup?",
+  "app_settings": "App settings",
+  "source_settings": "Source settings",
+  "creating_backup": "Creating backup",
+  "creating_backup_error": "Backup failed",
+  "missing_storage_permission": "Storage permissions not granted",
+  "empty_backup_error": "No library entries to back up",
+  "create_backup_file_error": "Couldn't create a backup file",
+  "restore_miui_warning": "Backup/restore may not function properly if MIUI Optimization is disabled.",
+  "restore_in_progress": "Restore is already in progress",
+  "restoring_backup": "Restoring backup",
+  "restoring_backup_error": "Restoring backup failed",
+  "restoring_backup_canceled": "Canceled restore",
+  "backup_info": "You should keep copies of backups in other places as well. Backups may contain sensitive data including any stored passwords; be careful if sharing.",
+
+  "syncing_library": "Syncing library",
+  "library_sync_complete": "Library sync complete",
+
+  "label_network": "Network",
+  "pref_clear_cookies": "Clear cookies",
+  "pref_dns_over_https": "DNS over HTTPS (DoH)",
+  "pref_user_agent_string": "Default user agent string",
+  "error_user_agent_string_blank": "User agent string can not be blank",
+  "error_user_agent_string_invalid": "Invalid user agent string",
+  "pref_reset_user_agent_string": "Reset default user agent string",
+  "requires_app_restart": "Requires app restart to take effect",
+  "cookies_cleared": "Cookies cleared",
+  "label_data": "Data",
+  "pref_clear_chapter_cache": "Clear chapter cache",
+  "used_cache": "Used: {size}",
+  "@used_cache": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "cache_deleted": "Cache cleared. {count} files have been deleted",
+  "@cache_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "cache_delete_error": "Error occurred while clearing",
+  "pref_auto_clear_chapter_cache": "Clear chapter cache on app launch",
+  "pref_invalidate_download_cache": "Invalidate downloads index",
+  "pref_invalidate_download_cache_summary": "Force app to recheck downloaded chapters",
+  "download_cache_invalidated": "Downloads index invalidated",
+  "pref_clear_database": "Clear database",
+  "pref_clear_database_summary": "Delete history for entries that are not saved in your library",
+  "clear_database_source_item_count": "{count} non-library entries in database",
+  "@clear_database_source_item_count": {
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "clear_database_confirmation": "Are you sure? Read chapters and progress of non-library entries will be lost",
+  "clear_database_completed": "Entries deleted",
+  "database_clean": "Nothing to clear",
+  "pref_clear_webview_data": "Clear WebView data",
+  "webview_data_deleted": "WebView data cleared",
+  "pref_refresh_library_covers": "Refresh library covers",
+  "pref_refresh_library_tracking": "Refresh tracking",
+  "pref_refresh_library_tracking_summary": "Updates status, score and last chapter read from the tracking services",
+  "pref_reset_viewer_flags": "Reset per-series reader settings",
+  "pref_reset_viewer_flags_summary": "Resets reading mode and orientation of all series",
+  "pref_reset_viewer_flags_success": "All reader settings reset",
+  "pref_reset_viewer_flags_error": "Couldn't reset reader settings",
+  "pref_dump_crash_logs": "Share crash logs",
+  "pref_dump_crash_logs_summary": "Saves error logs to a file for sharing with the developers",
+  "label_background_activity": "Background activity",
+  "pref_disable_battery_optimization": "Disable battery optimization",
+  "pref_disable_battery_optimization_summary": "Helps with background library updates and backups",
+  "battery_optimization_disabled": "Battery optimization is already disabled",
+  "battery_optimization_setting_activity_not_found": "Couldn't open device settings",
+  "about_dont_kill_my_app": "Some manufacturers have additional app restrictions that kill background services. This website has more info on how to fix it.",
+  "pref_tablet_ui_mode": "Tablet UI",
+  "pref_verbose_logging": "Verbose logging",
+  "pref_verbose_logging_summary": "Print verbose logs to system log (reduces app performance)",
+  "pref_debug_info": "Debug info",
+
   "website": "Website",
   "version": "Version",
   "whats_new": "What's new",

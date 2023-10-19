@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-const Map<int, Widget> _HomePageMap = {
+const Map<int, Widget> homePageMap = {
   0: LibraryPage(),
   1: UpdatesPage(),
   2: HistoryPage(),
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: LayoutBuilder(builder: (context, constraints) {
         return Scaffold(
-          body: Center(child: _HomePageMap[currentPageIndex]),
+          body: Center(child: homePageMap[currentPageIndex]),
           bottomNavigationBar: NavigationBar(
             onDestinationSelected: (int index) {
               // TODO: Find declarative way to have LibraryPage as the home page for HomePage
