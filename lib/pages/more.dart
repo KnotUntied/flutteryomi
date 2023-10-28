@@ -22,14 +22,14 @@ class MorePage extends StatelessWidget {
           child: Center(child: Text('Logo here')),
         ),
         const Divider(),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           secondary: const Icon(Icons.cloud_off_outlined),
           title: Text(lang.label_downloaded_only),
           subtitle: Text(lang.downloaded_only_summary),
           value: true,
           onChanged: (bool? value) {},
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           // glasses are somehow missing in Material Icons
           secondary: const Icon(Icons.visibility_off_outlined),
           title: Text(lang.pref_incognito_mode),

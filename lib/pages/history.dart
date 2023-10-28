@@ -40,7 +40,7 @@ class HistoryPage extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return AlertDialog.adaptive(
           title: Text(lang.action_remove_everything),
           content: Text(lang.clear_history_confirmation),
           actions: <Widget>[

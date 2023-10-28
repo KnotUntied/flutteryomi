@@ -171,14 +171,8 @@ class StatisticsItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+          Text(value, style: Theme.of(context).textTheme.titleMedium),
+          Text(label, style: Theme.of(context).textTheme.labelMedium),
         ],
       )
     );

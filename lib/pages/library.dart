@@ -13,7 +13,16 @@ class LibraryPage extends StatefulWidget {
 }
 
 class _LibraryPageState extends State<LibraryPage> with AutomaticKeepAliveClientMixin<LibraryPage> {
-  //final String _query = '';
+  //val isLoading: Boolean = true,
+  //val library: LibraryMap = emptyMap(),
+  //val searchQuery: String? = null,
+  //val selection: List<LibraryManga> = emptyList(),
+  //val hasActiveFilters: Boolean = false,
+  //val showCategoryTabs: Boolean = false,
+  //val showMangaCount: Boolean = false,
+  //val showMangaContinueButton: Boolean = false,
+  //val dialog: Dialog? = null,
+  final String? searchQuery = null;
 
   @override
   bool get wantKeepAlive => true;
@@ -138,7 +147,7 @@ class LibrarySettingsCheckboxListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
+    return CheckboxListTile.adaptive(
       controlAffinity: ListTileControlAffinity.leading,
       title: Text(title),
       value: false,

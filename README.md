@@ -1,5 +1,7 @@
 # Flutteryomi
 
+*I can't believe it's not Tachiyomi!*
+
 A personal project for learning Flutter. An attempt to port Tachiyomi's UI and functionality to Flutter and its target platforms.
 
 ## Running Locally
@@ -30,6 +32,6 @@ dart run build_runner build
 
 - Folder structure and conventions
 - Feature parity with Tachiyomi
-- Desktop layout
+- Desktop layout (?)
   - Browser-like tabs (?)
-- ~~Conditional Cupertino for iOS~~ Cupertino is not interchangeable with Material
+- Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp` rather than simply using `CupertinoIcons`
