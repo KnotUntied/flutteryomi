@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutteryomi/pages/about.dart';
 import 'package:flutteryomi/pages/backup_and_restore.dart';
 import 'package:flutteryomi/pages/statistics.dart';
 
+
+final Uri helpUrl = Uri.parse('https://github.com/KnotUntied/flutteryomi');
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -87,8 +90,16 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.help_outline),
           title: Text(lang.label_help),
+          onTap: _launchHelpUrl,
         ),
       ],
     );
+  }
+}
+
+
+Future<void> _launchHelpUrl() async {
+  if (!await launchUrl(helpUrl)) {
+    throw Exception('Could not open $helpUrl');
   }
 }

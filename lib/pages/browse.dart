@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutteryomi/pages/sources_filter.dart';
+
 
 class BrowsePage extends StatefulWidget {
   const BrowsePage({super.key});
@@ -9,18 +12,18 @@ class BrowsePage extends StatefulWidget {
   State<BrowsePage> createState() => _BrowsePageState();
 }
 
-class _BrowsePageState extends State<BrowsePage> {
+class _BrowsePageState extends State<BrowsePage> with AutomaticKeepAliveClientMixin<BrowsePage> {
   //final String _query = '';
 
-  void _incrementCounter() {
-    //setState(() { _query++; });
-  }
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final lang = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 1,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(lang.label_library),
@@ -35,27 +38,19 @@ class _BrowsePageState extends State<BrowsePage> {
             IconButton(
               icon: const Icon(Icons.filter_list),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Next page'),
-                      ),
-                      body: const Center(
-                        child: Text(
-                          'This is the next page',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    );
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SourcesFilterPage(),
+                  ),
+                );
               },
             ),
           ],
           bottom: TabBar(
-            tabAlignment: TabAlignment.fill,
-            tabs: <Widget>[
+            // Does not match Tachiyomi appearance, but currently set to match Library TabBar
+            dividerColor: Colors.transparent,
+            tabs: <Tab>[
               Tab(text: lang.label_sources),
               Tab(text: lang.label_extensions),
               Tab(text: lang.label_migration),

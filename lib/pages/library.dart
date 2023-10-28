@@ -12,15 +12,15 @@ class LibraryPage extends StatefulWidget {
   State<LibraryPage> createState() => _LibraryPageState();
 }
 
-class _LibraryPageState extends State<LibraryPage> {
+class _LibraryPageState extends State<LibraryPage> with AutomaticKeepAliveClientMixin<LibraryPage> {
   //final String _query = '';
 
-  void _incrementCounter() {
-    //setState(() { _query++; });
-  }
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final lang = AppLocalizations.of(context);
     return DefaultTabController(
       length: 1,
@@ -95,13 +95,16 @@ class _LibraryPageState extends State<LibraryPage> {
               ],
             ),
           ],
+          // Flutter issue; use workaround for now
+          // https://github.com/flutter/flutter/issues/117722
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
+            preferredSize: const Size.fromHeight(kTextTabBarHeight),
             child: Align(
               alignment: Alignment.centerLeft,
               child: TabBar(
+                dividerColor: Colors.transparent,
                 isScrollable: true,
-                //tabAlignment: TabAlignment.start,
+                tabAlignment: TabAlignment.start,
                 tabs: <Widget>[
                   Tab(text: lang.label_default),
                 ],

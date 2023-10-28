@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutteryomi/database.dart';
 import 'package:flutteryomi/pages/home.dart';
+import 'package:flutteryomi/providers/home.dart';
 
 void main() {
   runApp(
@@ -13,7 +14,7 @@ void main() {
       create: (context) => AppDatabase(),
       child: const MyApp(),
       dispose: (context, db) => db.close(),
-   ),
+    ),
   );
 }
 
@@ -23,19 +24,24 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutteryomi',
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        //GlobalCupertinoLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<HomeProvider>(create: (BuildContext context) => HomeProvider()),
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        useMaterial3: true,
+      child: MaterialApp(
+        title: 'Flutteryomi',
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          //GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }
