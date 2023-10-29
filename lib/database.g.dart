@@ -936,6 +936,7 @@ class MangaItemsCompanion extends UpdateCompanion<Manga> {
     }
     if (genre.present) {
       final converter = $MangaItemsTable.$convertergenre;
+
       map['genre'] = Variable<String>(converter.toSql(genre.value));
     }
     if (status.present) {
@@ -946,6 +947,7 @@ class MangaItemsCompanion extends UpdateCompanion<Manga> {
     }
     if (updateStrategy.present) {
       final converter = $MangaItemsTable.$converterupdateStrategy;
+
       map['update_strategy'] =
           Variable<int>(converter.toSql(updateStrategy.value));
     }

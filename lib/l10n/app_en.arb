@@ -652,6 +652,18 @@
   "clear_history_completed": "History deleted",
   "clear_history_confirmation": "Are you sure? All history will be lost.",
 
+  "source_empty_screen": "No source found",
+
+  "source_filter_empty_screen": "No installed source found",
+
+  "migration_help_guide": "Source migration guide",
+  "migration_dialog_what_to_include": "Select data to include",
+  "migration_selection_prompt": "Select a source to migrate from",
+  "migrate": "Migrate",
+  "copy": "Copy",
+  "empty_screen": "Well, this is awkward",
+  "not_installed": "Not installed",
+
   "label_overview_section": "Overview",
   "label_completed_titles": "Completed entries",
   "label_read_duration": "Read duration",
@@ -663,5 +675,53 @@
   "label_tracked_titles": "Tracked entries",
   "label_mean_score": "Mean score",
   "label_used": "Used",
-  "not_applicable": "N/A"
+  "not_applicable": "N/A",
+
+  "download_queue_error": "Couldn't download chapters. You can try again in the downloads section",
+  "download_insufficient_space": "Couldn't download chapters due to low storage space",
+  "download_queue_size_warning": "Warning: large bulk downloads may lead to sources becoming slower and/or blocking Tachiyomi. Tap to learn more.",
+
+  "file_select_cover": "Select cover image",
+  "file_select_backup": "Select backup file",
+  "file_picker_error": "No file picker app found",
+  "file_null_uri_error": "File picker failed to return file to app",
+
+  "update_check_confirm": "Download",
+  "update_check_open": "Open on GitHub",
+  "update_check_eol": "This Android version is no longer supported",
+  "update_check_no_new_updates": "No new updates available",
+
+  "update_check_notification_download_in_progress": "Downloading…",
+  "update_check_notification_download_complete": "Tap to install update",
+  "update_check_notification_download_error": "Download error",
+  "update_check_notification_update_available": "New version available!",
+  "update_check_fdroid_migration_info": "A new version is available from the official releases. Tap to learn how to migrate from unofficial F-Droid releases.",
+
+  "information_no_downloads": "No downloads",
+  "information_no_recent": "No recent updates",
+  "information_no_recent_manga": "Nothing read recently",
+  "information_empty_library": "Your library is empty",
+  "information_no_manga_category": "Category is empty",
+  "information_no_entries_found": "No entries found in this category",
+  "getting_started_guide": "Getting started guide",
+  "information_empty_category": "You have no categories. Tap the plus button to create one for organizing your library.",
+  "information_empty_category_dialog": "You don't have any categories yet.",
+  "information_cloudflare_bypass_failure": "Failed to bypass Cloudflare",
+  "information_cloudflare_help": "Tap here for help with Cloudflare",
+  "information_required_plain": "*required",
+  "information_webview_required": "WebView is required for the app to function",
+  "information_webview_outdated": "Please update the WebView app for better compatibility",
+  "chapter_settings_updated": "Updated default chapter settings",
+
+  "channel_common": "Common",
+  "channel_progress": "Progress",
+  "channel_complete": "Complete",
+  "channel_errors": "Errors",
+  "channel_skipped": "Skipped",
+  "channel_new_chapters": "Chapter updates",
+  "channel_app_updates": "App updates",
+  "channel_ext_updates": "Extension updates",
+
+  "spen_previous_page": "Previous page",
+  "spen_next_page": "Next page"
 }

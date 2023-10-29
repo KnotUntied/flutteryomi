@@ -20,16 +20,25 @@ class CategoriesPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         label: Text(lang.action_add),
         icon: const Icon(Icons.add),
-        onPressed: () => _showAddCategoryDialog(context),
+        onPressed: () => _showCategoryAddDialog(context),
       ),
     );
   }
 
-  Future<void> _showAddCategoryDialog(BuildContext context) {
+  Future<void> _showCategoryAddDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AddCategoryDialog();
+        return const CategoryAddDialog();
+      },
+    );
+  }
+
+  Future<void> _showCategoryRenameDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const CategoryRenameDialog();
       },
     );
   }
@@ -120,14 +129,14 @@ class CategoryListItem extends StatelessWidget {
 }
 
 
-class AddCategoryDialog extends StatefulWidget {
-  const AddCategoryDialog({super.key});
+class CategoryAddDialog extends StatefulWidget {
+  const CategoryAddDialog({super.key});
 
   @override
-  State<AddCategoryDialog> createState() => _AddCategoryDialogState();
+  State<CategoryAddDialog> createState() => _CategoryAddDialogState();
 }
 
-class _AddCategoryDialogState extends State<AddCategoryDialog> {
+class _CategoryAddDialogState extends State<CategoryAddDialog> {
   late TextEditingController _controller;
 
   @override
@@ -147,7 +156,57 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
     final lang = AppLocalizations.of(context);
     return AlertDialog.adaptive(
       title: Text(lang.action_add_category),
-      // TODO: Max textfield longer
+      content: TextField(
+        autofocus: true,
+        controller: _controller,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          hintText: lang.name, // *required
+          labelText: lang.name,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text(lang.action_cancel),
+          onPressed: () { Navigator.of(context).pop(); },
+        ),
+        TextButton(
+          child: Text(lang.action_add),
+          onPressed: () { Navigator.of(context).pop(); },
+        ),
+      ],
+    );
+  }
+}
+
+
+class CategoryRenameDialog extends StatefulWidget {
+  const CategoryRenameDialog({super.key});
+
+  @override
+  State<CategoryRenameDialog> createState() => _CategoryRenameDialogState();
+}
+
+class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context);
+    return AlertDialog.adaptive(
+      title: Text(lang.action_rename_category),
       content: TextField(
         autofocus: true,
         controller: _controller,
