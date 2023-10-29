@@ -9,7 +9,7 @@ class SourcesFilterPage extends StatelessWidget {
     final lang = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(lang.pref_category_about),
+        title: Text(lang.label_sources),
       ),
       body: ListView(
         children: <Widget>[

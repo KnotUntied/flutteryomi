@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutteryomi/pages/sources.dart';
 import 'package:flutteryomi/pages/sources_filter.dart';
 
 
@@ -57,16 +58,13 @@ class _BrowsePageState extends State<BrowsePage> with AutomaticKeepAliveClientMi
             ],
           ),
         ),
-        //body: TabBarView(
-        //children: myTabs.map((Tab tab) {
-        //  return Center(
-        //    child: Text(
-        //      'This is the tab',
-        //      style: const TextStyle(fontSize: 36),
-        //    ),
-        //  );
-        //}).toList(),
-        //),
+        body: TabBarView(
+          children: [
+            const SourcesPage(),
+            const SourcesPage(),
+            const SourcesPage(),
+          ]
+        ),
       ),
     );
   }

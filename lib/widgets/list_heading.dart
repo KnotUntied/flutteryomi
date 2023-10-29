@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 
 class ListHeading extends StatelessWidget {
-  const ListHeading(this.data, {super.key});
+  const ListHeading(this.label, {super.key});
 
-  final String data;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        data,
+        label,
         style: Theme.of(context).textTheme.titleSmall,
       ),
     );
