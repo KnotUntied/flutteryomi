@@ -37,7 +37,7 @@ class HistoryPage extends StatelessWidget {
 
   Future<void> _askDeleteHistory(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    return showDialog<void>(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog.adaptive(

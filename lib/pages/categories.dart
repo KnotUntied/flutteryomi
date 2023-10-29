@@ -12,23 +12,32 @@ class CategoriesPage extends StatelessWidget {
         title: Text(lang.action_edit_categories),
       ),
       body: ListView(
-        children: const <CategoryTile>[
-          CategoryTile("Curated"),
-          CategoryTile("Example"),
+        children: const <CategoryListItem>[
+          CategoryListItem("Curated"),
+          CategoryListItem("Example"),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Add'),
+        label: Text(lang.action_add),
         icon: const Icon(Icons.add),
-        onPressed: () {  },
+        onPressed: () => _showAddCategoryDialog(context),
       ),
+    );
+  }
+
+  Future<void> _showAddCategoryDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddCategoryDialog();
+      },
     );
   }
 }
 
 
-class CategoryTile extends StatelessWidget {
-  const CategoryTile(this.label, {super.key});
+class CategoryListItem extends StatelessWidget {
+  const CategoryListItem(this.label, {super.key});
 
   final String label;
 
@@ -36,44 +45,128 @@ class CategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: <ListTile>[
-              ListTile(
-                leading: const Icon(Icons.label_outlined),
-                title: Text(label, style: Theme.of(context).textTheme.titleSmall),
-              ),
-              ListTile(
-                leading: Row(
-                  children: <IconButton>[
-                    IconButton(
-                      icon: const Icon(Icons.arrow_drop_up),
-                      onPressed: () {  },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.arrow_drop_down),
-                      onPressed: () {  },
-                    ),
-                  ]
+        //child: Padding(
+        //  padding: const EdgeInsets.all(16),
+        //  child: Column(
+        //    children: <Widget>[
+        //      ListTile(
+        //        leading: const Icon(Icons.label_outlined),
+        //        title: Text(label, style: Theme.of(context).textTheme.titleSmall),
+        //      ),
+        //      Row(
+        //        children: <Widget>[
+        //          IconButton(
+        //            icon: const Icon(Icons.arrow_drop_up),
+        //            onPressed: () {  },
+        //          ),
+        //          IconButton(
+        //            icon: const Icon(Icons.arrow_drop_down),
+        //            onPressed: () {  },
+        //          ),
+        //          const Spacer(),
+        //          IconButton(
+        //            icon: const Icon(Icons.edit_outlined),
+        //            onPressed: () {  },
+        //          ),
+        //          IconButton(
+        //            icon: const Icon(Icons.delete_outlined),
+        //            onPressed: () {  },
+        //          ),
+        //        ],
+        //      ),
+        //    ],
+        //  ),
+        //),
+        child: Column(
+          children: <Widget>[
+            //ListTile(
+            //  leading: const Icon(Icons.label_outlined),
+            //  title: Text(label, style: Theme.of(context).textTheme.titleSmall),
+            //),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+              child: Row(children: <Widget>[
+                const Icon(Icons.label_outlined),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(label, style: Theme.of(context).textTheme.titleSmall),
                 ),
-                trailing: Row(
-                  children: <IconButton>[
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined),
-                      onPressed: () {  },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outlined),
-                      onPressed: () {  },
-                    ),
-                  ]
-                ),
+              ]),
+            ),
+            Row(children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.arrow_drop_up),
+                onPressed: () {  },
               ),
-            ],
-          ),
+              IconButton(
+                icon: const Icon(Icons.arrow_drop_down),
+                onPressed: () {  },
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.edit_outlined),
+                onPressed: () {  },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete_outlined),
+                onPressed: () {  },
+              ),
+            ]),
+          ],
         ),
       ),
+    );
+  }
+}
+
+
+class AddCategoryDialog extends StatefulWidget {
+  const AddCategoryDialog({super.key});
+
+  @override
+  State<AddCategoryDialog> createState() => _AddCategoryDialogState();
+}
+
+class _AddCategoryDialogState extends State<AddCategoryDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context);
+    return AlertDialog.adaptive(
+      title: Text(lang.action_add_category),
+      // TODO: Max textfield longer
+      content: TextField(
+        autofocus: true,
+        controller: _controller,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          hintText: lang.name, // *required
+          labelText: lang.name,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text(lang.action_cancel),
+          onPressed: () { Navigator.of(context).pop(); },
+        ),
+        TextButton(
+          child: Text(lang.action_add),
+          onPressed: () { Navigator.of(context).pop(); },
+        ),
+      ],
     );
   }
 }

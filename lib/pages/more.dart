@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutteryomi/pages/about.dart';
 import 'package:flutteryomi/pages/backup_and_restore.dart';
+import 'package:flutteryomi/pages/categories.dart';
 import 'package:flutteryomi/pages/statistics.dart';
 
 
@@ -41,10 +42,19 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.download_outlined),
           title: Text(lang.label_download_queue),
+          onTap: () {  },
         ),
         ListTile(
           leading: const Icon(Icons.label_outlined),
           title: Text(lang.categories),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CategoriesPage(),
+              ),
+            );
+          },
         ),
         ListTile(
           leading: const Icon(Icons.query_stats_outlined),
