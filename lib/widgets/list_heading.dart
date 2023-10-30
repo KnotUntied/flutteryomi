@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class ListHeading extends StatelessWidget {
   const ListHeading(this.label, {super.key});
 

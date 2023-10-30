@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 
-
 class ListOfStringsConverter extends TypeConverter<List<String>, String> {
   const ListOfStringsConverter();
 

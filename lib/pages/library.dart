@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutteryomi/widgets/list_heading.dart';
 
-
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
 
@@ -12,7 +11,8 @@ class LibraryPage extends StatefulWidget {
   State<LibraryPage> createState() => _LibraryPageState();
 }
 
-class _LibraryPageState extends State<LibraryPage> with AutomaticKeepAliveClientMixin<LibraryPage> {
+class _LibraryPageState extends State<LibraryPage>
+    with AutomaticKeepAliveClientMixin<LibraryPage> {
   //val isLoading: Boolean = true,
   //val library: LibraryMap = emptyMap(),
   //val searchQuery: String? = null,
@@ -50,37 +50,37 @@ class _LibraryPageState extends State<LibraryPage> with AutomaticKeepAliveClient
                   useSafeArea: true,
                   builder: (BuildContext context) {
                     return DefaultTabController(
-                      length: 3,
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            TabBar(
-                              tabAlignment: TabAlignment.fill,
-                              tabs: <Widget>[
-                                Tab(text: lang.action_filter),
-                                Tab(text: lang.action_sort),
-                                Tab(text: lang.pref_category_display),
-                              ],
-                            ),
-                            const Expanded(
-                              child: TabBarView(
-                                children: <Widget>[
-                                  LibrarySettingsFilterView(),
-                                  LibrarySettingsFilterView(),
-                                  LibrarySettingsDisplayView(),
+                        length: 3,
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              TabBar(
+                                tabAlignment: TabAlignment.fill,
+                                tabs: <Widget>[
+                                  Tab(text: lang.action_filter),
+                                  Tab(text: lang.action_sort),
+                                  Tab(text: lang.pref_category_display),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    );
+                              const Expanded(
+                                child: TabBarView(
+                                  children: <Widget>[
+                                    LibrarySettingsFilterView(),
+                                    LibrarySettingsFilterView(),
+                                    LibrarySettingsDisplayView(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ));
                   },
                 );
               },
             ),
             MenuAnchor(
-              builder: (BuildContext context, MenuController controller, Widget? child) {
+              builder: (BuildContext context, MenuController controller,
+                  Widget? child) {
                 return IconButton(
                   onPressed: () {
                     if (controller.isOpen) {
@@ -136,7 +136,6 @@ class _LibraryPageState extends State<LibraryPage> with AutomaticKeepAliveClient
   }
 }
 
-
 class LibrarySettingsCheckboxListTile extends StatelessWidget {
   const LibrarySettingsCheckboxListTile({
     super.key,
@@ -151,11 +150,10 @@ class LibrarySettingsCheckboxListTile extends StatelessWidget {
       controlAffinity: ListTileControlAffinity.leading,
       title: Text(title),
       value: false,
-      onChanged: (bool? value) {  },
+      onChanged: (bool? value) {},
     );
   }
 }
-
 
 class LibrarySettingsFilterView extends StatelessWidget {
   const LibrarySettingsFilterView({super.key});
@@ -187,7 +185,6 @@ class LibrarySettingsFilterView extends StatelessWidget {
     );
   }
 }
-
 
 class LibrarySettingsDisplayView extends StatelessWidget {
   const LibrarySettingsDisplayView({super.key});

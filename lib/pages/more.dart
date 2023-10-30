@@ -5,8 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutteryomi/pages/about.dart';
 import 'package:flutteryomi/pages/backup_and_restore.dart';
 import 'package:flutteryomi/pages/categories.dart';
+import 'package:flutteryomi/pages/download_queue.dart';
 import 'package:flutteryomi/pages/statistics.dart';
-
 
 final Uri helpUrl = Uri.parse('https://github.com/KnotUntied/flutteryomi');
 
@@ -42,7 +42,14 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.download_outlined),
           title: Text(lang.label_download_queue),
-          onTap: () {  },
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DownloadQueuePage(),
+              ),
+            );
+          },
         ),
         ListTile(
           leading: const Icon(Icons.label_outlined),
@@ -106,7 +113,6 @@ class MorePage extends StatelessWidget {
     );
   }
 }
-
 
 Future<void> _launchHelpUrl() async {
   if (!await launchUrl(helpUrl)) {

@@ -44,7 +44,6 @@ class CategoriesPage extends StatelessWidget {
   }
 }
 
-
 class CategoryListItem extends StatelessWidget {
   const CategoryListItem(this.label, {super.key});
 
@@ -93,32 +92,34 @@ class CategoryListItem extends StatelessWidget {
             //  title: Text(label, style: Theme.of(context).textTheme.titleSmall),
             //),
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+              padding:
+                  const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
               child: Row(children: <Widget>[
                 const Icon(Icons.label_outlined),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
-                  child: Text(label, style: Theme.of(context).textTheme.titleSmall),
+                  child: Text(label,
+                      style: Theme.of(context).textTheme.titleSmall),
                 ),
               ]),
             ),
             Row(children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.arrow_drop_up),
-                onPressed: () {  },
+                onPressed: () {},
               ),
               IconButton(
                 icon: const Icon(Icons.arrow_drop_down),
-                onPressed: () {  },
+                onPressed: () {},
               ),
               const Spacer(),
               IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () {  },
+                onPressed: () {},
               ),
               IconButton(
                 icon: const Icon(Icons.delete_outlined),
-                onPressed: () {  },
+                onPressed: () {},
               ),
             ]),
           ],
@@ -127,7 +128,6 @@ class CategoryListItem extends StatelessWidget {
     );
   }
 }
-
 
 class CategoryAddDialog extends StatefulWidget {
   const CategoryAddDialog({super.key});
@@ -168,17 +168,20 @@ class _CategoryAddDialogState extends State<CategoryAddDialog> {
       actions: <Widget>[
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () { Navigator.of(context).pop(); },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         TextButton(
           child: Text(lang.action_add),
-          onPressed: () { Navigator.of(context).pop(); },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ],
     );
   }
 }
-
 
 class CategoryRenameDialog extends StatefulWidget {
   const CategoryRenameDialog({super.key});
@@ -219,11 +222,15 @@ class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
       actions: <Widget>[
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () { Navigator.of(context).pop(); },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         TextButton(
           child: Text(lang.action_add),
-          onPressed: () { Navigator.of(context).pop(); },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ],
     );

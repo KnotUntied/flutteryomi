@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/widgets/list_heading.dart';
 
-
 class SourcesPage extends StatelessWidget {
   const SourcesPage({super.key});
 
@@ -22,7 +21,6 @@ class SourcesPage extends StatelessWidget {
     );
   }
 }
-
 
 class SourceTile extends StatelessWidget {
   const SourceTile({
@@ -47,16 +45,16 @@ class SourceTile extends StatelessWidget {
       trailing: Wrap(
         children: [
           TextButton(
-            onPressed: () {  },
+            onPressed: () {},
             child: Text(lang.latest),
           ),
           IconButton(
             icon: const Icon(Icons.push_pin_outlined),
-            onPressed: () {  },
+            onPressed: () {},
           ),
         ],
       ),
-      onTap: () {  },
+      onTap: () {},
       onLongPress: () => _showSourceDialog(context),
     );
   }
@@ -71,11 +69,15 @@ class SourceTile extends StatelessWidget {
           children: <SimpleDialogOption>[
             SimpleDialogOption(
               child: Text(lang.action_pin),
-              onPressed: () { Navigator.of(context).pop(); },
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
             SimpleDialogOption(
               child: Text(lang.action_disable),
-              onPressed: () { Navigator.of(context).pop(); },
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
         );

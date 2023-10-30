@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class HomeProvider extends ChangeNotifier {
   bool _bottomNavVisibility = true;
 

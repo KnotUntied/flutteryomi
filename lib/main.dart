@@ -21,12 +21,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<HomeProvider>(create: (BuildContext context) => HomeProvider()),
+        ChangeNotifierProvider<HomeProvider>(
+            create: (BuildContext context) => HomeProvider()),
       ],
       child: MaterialApp(
         title: 'Flutteryomi',
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-          //GlobalCupertinoLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(

@@ -13,7 +13,6 @@ import 'package:flutteryomi/models/manga.dart';
 
 part 'database.g.dart';
 
-
 @DriftDatabase(tables: [MangaItems])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -21,7 +20,6 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 }
-
 
 LazyDatabase _openConnection() {
   // the LazyDatabase util lets us find the right location for the file async.

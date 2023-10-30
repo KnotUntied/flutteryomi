@@ -21,5 +21,6 @@ abstract final class PlatformAdaptiveIcons {
     }
   }
 
-  IconData get info_outlined => !_isCupertino() ? Icons.info_outlined : CupertinoIcons.info;
+  IconData get info_outlined =>
+      !_isCupertino() ? Icons.info_outlined : CupertinoIcons.info;
 }

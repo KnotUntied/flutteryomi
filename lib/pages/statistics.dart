@@ -93,7 +93,6 @@ class StatisticsPage extends StatelessWidget {
   }
 }
 
-
 class StatisticsCard extends StatelessWidget {
   const StatisticsCard({
     super.key,
@@ -119,7 +118,6 @@ class StatisticsCard extends StatelessWidget {
   }
 }
 
-
 class StatisticsItemLarge extends StatelessWidget {
   const StatisticsItemLarge({
     super.key,
@@ -135,25 +133,23 @@ class StatisticsItemLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          icon,
-        ],
-      )
-    );
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          value,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        icon,
+      ],
+    ));
   }
 }
-
 
 class StatisticsItem extends StatelessWidget {
   const StatisticsItem({
@@ -168,13 +164,12 @@ class StatisticsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(value, style: Theme.of(context).textTheme.titleMedium),
-          Text(label, style: Theme.of(context).textTheme.labelMedium),
-        ],
-      )
-    );
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(value, style: Theme.of(context).textTheme.titleMedium),
+        Text(label, style: Theme.of(context).textTheme.labelMedium),
+      ],
+    ));
   }
 }

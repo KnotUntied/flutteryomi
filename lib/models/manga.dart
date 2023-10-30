@@ -3,7 +3,6 @@ import 'package:drift/drift.dart';
 import 'package:flutteryomi/models/converters/list_of_strings_converter.dart';
 import 'package:flutteryomi/models/enums/update_strategy.dart';
 
-
 @DataClassName('Manga')
 class MangaItems extends Table {
   Int64Column get id => int64().autoIncrement()();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class MangaCompactGridItem extends StatelessWidget {
   const MangaCompactGridItem({
     super.key,

@@ -5,7 +5,6 @@ import 'package:flutteryomi/database.dart';
 part 'manga_cover.freezed.dart';
 //part 'manga_cover.g.dart';
 
-
 @freezed
 class MangaCover with _$MangaCover {
   factory MangaCover({

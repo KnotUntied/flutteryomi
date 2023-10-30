@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutteryomi/pages/sources.dart';
 import 'package:flutteryomi/pages/sources_filter.dart';
 
-
 class BrowsePage extends StatefulWidget {
   const BrowsePage({super.key});
 
@@ -13,7 +12,8 @@ class BrowsePage extends StatefulWidget {
   State<BrowsePage> createState() => _BrowsePageState();
 }
 
-class _BrowsePageState extends State<BrowsePage> with AutomaticKeepAliveClientMixin<BrowsePage> {
+class _BrowsePageState extends State<BrowsePage>
+    with AutomaticKeepAliveClientMixin<BrowsePage> {
   //final String _query = '';
 
   @override
@@ -58,13 +58,11 @@ class _BrowsePageState extends State<BrowsePage> with AutomaticKeepAliveClientMi
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            const SourcesPage(),
-            const SourcesPage(),
-            const SourcesPage(),
-          ]
-        ),
+        body: TabBarView(children: const [
+          SourcesPage(),
+          SourcesPage(),
+          SourcesPage(),
+        ]),
       ),
     );
   }

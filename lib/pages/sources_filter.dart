@@ -18,14 +18,13 @@ class SourcesFilterPage extends StatelessWidget {
             icon: Icons.directions,
             label: lang.version,
             value: false,
-            onChanged: (bool? value) {  },
+            onChanged: (bool? value) {},
           ),
         ],
       ),
     );
   }
 }
-
 
 class SourceFilterTile extends StatelessWidget {
   const SourceFilterTile({
