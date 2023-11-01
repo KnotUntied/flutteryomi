@@ -16,11 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MangaCover {
-  BigInt get mangaId => throw _privateConstructorUsedError;
-  BigInt get sourceId => throw _privateConstructorUsedError;
+  int get mangaId => throw _privateConstructorUsedError;
+  int get sourceId => throw _privateConstructorUsedError;
   bool get isMangaFavorite => throw _privateConstructorUsedError;
   String? get url => throw _privateConstructorUsedError;
-  BigInt get lastModified => throw _privateConstructorUsedError;
+  int get lastModified => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MangaCoverCopyWith<MangaCover> get copyWith =>
@@ -34,11 +34,11 @@ abstract class $MangaCoverCopyWith<$Res> {
       _$MangaCoverCopyWithImpl<$Res, MangaCover>;
   @useResult
   $Res call(
-      {BigInt mangaId,
-      BigInt sourceId,
+      {int mangaId,
+      int sourceId,
       bool isMangaFavorite,
       String? url,
-      BigInt lastModified});
+      int lastModified});
 }
 
 /// @nodoc
@@ -64,11 +64,11 @@ class _$MangaCoverCopyWithImpl<$Res, $Val extends MangaCover>
       mangaId: null == mangaId
           ? _value.mangaId
           : mangaId // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       sourceId: null == sourceId
           ? _value.sourceId
           : sourceId // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       isMangaFavorite: null == isMangaFavorite
           ? _value.isMangaFavorite
           : isMangaFavorite // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,7 @@ class _$MangaCoverCopyWithImpl<$Res, $Val extends MangaCover>
       lastModified: null == lastModified
           ? _value.lastModified
           : lastModified // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
     ) as $Val);
   }
 }
@@ -94,11 +94,11 @@ abstract class _$$MangaCoverImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {BigInt mangaId,
-      BigInt sourceId,
+      {int mangaId,
+      int sourceId,
       bool isMangaFavorite,
       String? url,
-      BigInt lastModified});
+      int lastModified});
 }
 
 /// @nodoc
@@ -122,11 +122,11 @@ class __$$MangaCoverImplCopyWithImpl<$Res>
       mangaId: null == mangaId
           ? _value.mangaId
           : mangaId // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       sourceId: null == sourceId
           ? _value.sourceId
           : sourceId // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       isMangaFavorite: null == isMangaFavorite
           ? _value.isMangaFavorite
           : isMangaFavorite // ignore: cast_nullable_to_non_nullable
@@ -138,7 +138,7 @@ class __$$MangaCoverImplCopyWithImpl<$Res>
       lastModified: null == lastModified
           ? _value.lastModified
           : lastModified // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
     ));
   }
 }
@@ -154,15 +154,15 @@ class _$MangaCoverImpl implements _MangaCover {
       required this.lastModified});
 
   @override
-  final BigInt mangaId;
+  final int mangaId;
   @override
-  final BigInt sourceId;
+  final int sourceId;
   @override
   final bool isMangaFavorite;
   @override
   final String? url;
   @override
-  final BigInt lastModified;
+  final int lastModified;
 
   @override
   String toString() {
@@ -197,22 +197,22 @@ class _$MangaCoverImpl implements _MangaCover {
 
 abstract class _MangaCover implements MangaCover {
   factory _MangaCover(
-      {required final BigInt mangaId,
-      required final BigInt sourceId,
+      {required final int mangaId,
+      required final int sourceId,
       required final bool isMangaFavorite,
       final String? url,
-      required final BigInt lastModified}) = _$MangaCoverImpl;
+      required final int lastModified}) = _$MangaCoverImpl;
 
   @override
-  BigInt get mangaId;
+  int get mangaId;
   @override
-  BigInt get sourceId;
+  int get sourceId;
   @override
   bool get isMangaFavorite;
   @override
   String? get url;
   @override
-  BigInt get lastModified;
+  int get lastModified;
   @override
   @JsonKey(ignore: true)
   _$$MangaCoverImplCopyWith<_$MangaCoverImpl> get copyWith =>

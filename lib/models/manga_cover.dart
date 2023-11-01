@@ -3,16 +3,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutteryomi/database.dart';
 
 part 'manga_cover.freezed.dart';
-//part 'manga_cover.g.dart';
 
 @freezed
 class MangaCover with _$MangaCover {
   factory MangaCover({
-    required BigInt mangaId,
-    required BigInt sourceId,
+    required int mangaId,
+    required int sourceId,
     required bool isMangaFavorite,
     String? url,
-    required BigInt lastModified,
+    required int lastModified,
   }) = _MangaCover;
 }
 

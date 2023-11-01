@@ -28,10 +28,10 @@ class DownloadQueuePage extends StatelessWidget {
           : EmptyScreen(message: lang.information_no_downloads),
       floatingActionButton: downloadCount > 0
           ? FloatingActionButton.extended(
-            label: Text(lang.action_pause),
-            icon: const Icon(Icons.pause_outlined),
-            onPressed: () {},
-          )
+              label: Text(lang.action_pause),
+              icon: const Icon(Icons.pause_outlined),
+              onPressed: () {},
+            )
           : null,
     );
   }

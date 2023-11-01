@@ -9,11 +9,21 @@ import 'package:path/path.dart' as p;
 // See https://github.com/simolus3/drift/issues/2474#issuecomment-1591582644
 import 'package:flutteryomi/models/converters/list_of_strings_converter.dart';
 import 'package:flutteryomi/models/enums/update_strategy.dart';
+import 'package:flutteryomi/models/category.dart';
+import 'package:flutteryomi/models/chapter.dart';
+import 'package:flutteryomi/models/history.dart';
 import 'package:flutteryomi/models/manga.dart';
+import 'package:flutteryomi/models/source.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [MangaItems])
+@DriftDatabase(tables: [
+  CategoryItems,
+  ChapterItems,
+  HistoryItems,
+  MangaItems,
+  SourceItems,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
