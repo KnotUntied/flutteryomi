@@ -5,25 +5,19 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-// Tedious but necessary
-// See https://github.com/simolus3/drift/issues/2474#issuecomment-1591582644
-import 'package:flutteryomi/models/converters/list_of_strings_converter.dart';
-import 'package:flutteryomi/models/enums/update_strategy.dart';
-import 'package:flutteryomi/models/category.dart';
-import 'package:flutteryomi/models/chapter.dart';
-import 'package:flutteryomi/models/history.dart';
-import 'package:flutteryomi/models/manga.dart';
-import 'package:flutteryomi/models/source.dart';
-
 part 'database.g.dart';
 
-@DriftDatabase(tables: [
-  CategoryItems,
-  ChapterItems,
-  HistoryItems,
-  MangaItems,
-  SourceItems,
-])
+@DriftDatabase(
+  include: {
+    'models/categories.drift',
+    'models/chapters.drift',
+    'models/history.drift',
+    'models/manga_sync.drift',
+    'models/mangas.drift',
+    'models/mangas_categories.drift',
+    'models/sources.drift',
+  },
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
