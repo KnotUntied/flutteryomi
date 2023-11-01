@@ -1,3 +1,5 @@
+import 'chapters.drift';
+
 CREATE TABLE history(
     _id INTEGER NOT NULL PRIMARY KEY,
     chapter_id INTEGER NOT NULL UNIQUE,

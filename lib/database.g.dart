@@ -209,75 +209,67 @@ class SourcesCompanion extends UpdateCompanion<Source> {
   }
 }
 
-class MangasCategories extends Table
-    with TableInfo<MangasCategories, MangasCategorie> {
+class Categories extends Table with TableInfo<Categories, Category> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  MangasCategories(this.attachedDatabase, [this._alias]);
+  Categories(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       '_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL PRIMARY KEY');
-  static const VerificationMeta _mangaIdMeta =
-      const VerificationMeta('mangaId');
-  late final GeneratedColumn<int> mangaId = GeneratedColumn<int>(
-      'manga_id', aliasedName, false,
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  static const VerificationMeta _sortMeta = const VerificationMeta('sort');
+  late final GeneratedColumn<int> sort = GeneratedColumn<int>(
+      'sort', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  static const VerificationMeta _categoryIdMeta =
-      const VerificationMeta('categoryId');
-  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
+  static const VerificationMeta _flagsMeta = const VerificationMeta('flags');
+  late final GeneratedColumn<int> flags = GeneratedColumn<int>(
+      'flags', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  static const VerificationMeta _lastModifiedAtMeta =
-      const VerificationMeta('lastModifiedAt');
-  late final GeneratedColumn<int> lastModifiedAt = GeneratedColumn<int>(
-      'last_modified_at', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0',
-      defaultValue: const CustomExpression('0'));
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, mangaId, categoryId, lastModifiedAt];
+  List<GeneratedColumn> get $columns => [id, name, sort, flags];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'mangas_categories';
+  static const String $name = 'categories';
   @override
-  VerificationContext validateIntegrity(Insertable<MangasCategorie> instance,
+  VerificationContext validateIntegrity(Insertable<Category> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('_id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['_id']!, _idMeta));
     }
-    if (data.containsKey('manga_id')) {
-      context.handle(_mangaIdMeta,
-          mangaId.isAcceptableOrUnknown(data['manga_id']!, _mangaIdMeta));
-    } else if (isInserting) {
-      context.missing(_mangaIdMeta);
-    }
-    if (data.containsKey('category_id')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _categoryIdMeta,
-          categoryId.isAcceptableOrUnknown(
-              data['category_id']!, _categoryIdMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_categoryIdMeta);
+      context.missing(_nameMeta);
     }
-    if (data.containsKey('last_modified_at')) {
+    if (data.containsKey('sort')) {
       context.handle(
-          _lastModifiedAtMeta,
-          lastModifiedAt.isAcceptableOrUnknown(
-              data['last_modified_at']!, _lastModifiedAtMeta));
+          _sortMeta, sort.isAcceptableOrUnknown(data['sort']!, _sortMeta));
+    } else if (isInserting) {
+      context.missing(_sortMeta);
+    }
+    if (data.containsKey('flags')) {
+      context.handle(
+          _flagsMeta, flags.isAcceptableOrUnknown(data['flags']!, _flagsMeta));
+    } else if (isInserting) {
+      context.missing(_flagsMeta);
     }
     return context;
   }
@@ -285,71 +277,66 @@ class MangasCategories extends Table
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  MangasCategorie map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return MangasCategorie(
+    return Category(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}_id'])!,
-      mangaId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}manga_id'])!,
-      categoryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
-      lastModifiedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}last_modified_at'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      sort: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort'])!,
+      flags: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}flags'])!,
     );
   }
 
   @override
-  MangasCategories createAlias(String alias) {
-    return MangasCategories(attachedDatabase, alias);
+  Categories createAlias(String alias) {
+    return Categories(attachedDatabase, alias);
   }
 
-  @override
-  List<String> get customConstraints => const [
-        'FOREIGN KEY(category_id)REFERENCES categories(_id)ON DELETE CASCADE',
-        'FOREIGN KEY(manga_id)REFERENCES mangas(_id)ON DELETE CASCADE'
-      ];
   @override
   bool get dontWriteConstraints => true;
 }
 
-class MangasCategorie extends DataClass implements Insertable<MangasCategorie> {
+class Category extends DataClass implements Insertable<Category> {
   final int id;
-  final int mangaId;
-  final int categoryId;
-  final int lastModifiedAt;
-  const MangasCategorie(
+  final String name;
+  final int sort;
+  final int flags;
+  const Category(
       {required this.id,
-      required this.mangaId,
-      required this.categoryId,
-      required this.lastModifiedAt});
+      required this.name,
+      required this.sort,
+      required this.flags});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['_id'] = Variable<int>(id);
-    map['manga_id'] = Variable<int>(mangaId);
-    map['category_id'] = Variable<int>(categoryId);
-    map['last_modified_at'] = Variable<int>(lastModifiedAt);
+    map['name'] = Variable<String>(name);
+    map['sort'] = Variable<int>(sort);
+    map['flags'] = Variable<int>(flags);
     return map;
   }
 
-  MangasCategoriesCompanion toCompanion(bool nullToAbsent) {
-    return MangasCategoriesCompanion(
+  CategoriesCompanion toCompanion(bool nullToAbsent) {
+    return CategoriesCompanion(
       id: Value(id),
-      mangaId: Value(mangaId),
-      categoryId: Value(categoryId),
-      lastModifiedAt: Value(lastModifiedAt),
+      name: Value(name),
+      sort: Value(sort),
+      flags: Value(flags),
     );
   }
 
-  factory MangasCategorie.fromJson(Map<String, dynamic> json,
+  factory Category.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return MangasCategorie(
+    return Category(
       id: serializer.fromJson<int>(json['_id']),
-      mangaId: serializer.fromJson<int>(json['manga_id']),
-      categoryId: serializer.fromJson<int>(json['category_id']),
-      lastModifiedAt: serializer.fromJson<int>(json['last_modified_at']),
+      name: serializer.fromJson<String>(json['name']),
+      sort: serializer.fromJson<int>(json['sort']),
+      flags: serializer.fromJson<int>(json['flags']),
     );
   }
   @override
@@ -357,85 +344,84 @@ class MangasCategorie extends DataClass implements Insertable<MangasCategorie> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       '_id': serializer.toJson<int>(id),
-      'manga_id': serializer.toJson<int>(mangaId),
-      'category_id': serializer.toJson<int>(categoryId),
-      'last_modified_at': serializer.toJson<int>(lastModifiedAt),
+      'name': serializer.toJson<String>(name),
+      'sort': serializer.toJson<int>(sort),
+      'flags': serializer.toJson<int>(flags),
     };
   }
 
-  MangasCategorie copyWith(
-          {int? id, int? mangaId, int? categoryId, int? lastModifiedAt}) =>
-      MangasCategorie(
+  Category copyWith({int? id, String? name, int? sort, int? flags}) => Category(
         id: id ?? this.id,
-        mangaId: mangaId ?? this.mangaId,
-        categoryId: categoryId ?? this.categoryId,
-        lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
+        name: name ?? this.name,
+        sort: sort ?? this.sort,
+        flags: flags ?? this.flags,
       );
   @override
   String toString() {
-    return (StringBuffer('MangasCategorie(')
+    return (StringBuffer('Category(')
           ..write('id: $id, ')
-          ..write('mangaId: $mangaId, ')
-          ..write('categoryId: $categoryId, ')
-          ..write('lastModifiedAt: $lastModifiedAt')
+          ..write('name: $name, ')
+          ..write('sort: $sort, ')
+          ..write('flags: $flags')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, mangaId, categoryId, lastModifiedAt);
+  int get hashCode => Object.hash(id, name, sort, flags);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MangasCategorie &&
+      (other is Category &&
           other.id == this.id &&
-          other.mangaId == this.mangaId &&
-          other.categoryId == this.categoryId &&
-          other.lastModifiedAt == this.lastModifiedAt);
+          other.name == this.name &&
+          other.sort == this.sort &&
+          other.flags == this.flags);
 }
 
-class MangasCategoriesCompanion extends UpdateCompanion<MangasCategorie> {
+class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<int> id;
-  final Value<int> mangaId;
-  final Value<int> categoryId;
-  final Value<int> lastModifiedAt;
-  const MangasCategoriesCompanion({
+  final Value<String> name;
+  final Value<int> sort;
+  final Value<int> flags;
+  const CategoriesCompanion({
     this.id = const Value.absent(),
-    this.mangaId = const Value.absent(),
-    this.categoryId = const Value.absent(),
-    this.lastModifiedAt = const Value.absent(),
+    this.name = const Value.absent(),
+    this.sort = const Value.absent(),
+    this.flags = const Value.absent(),
   });
-  MangasCategoriesCompanion.insert({
+  CategoriesCompanion.insert({
     this.id = const Value.absent(),
-    required int mangaId,
-    required int categoryId,
-    this.lastModifiedAt = const Value.absent(),
-  })  : mangaId = Value(mangaId),
-        categoryId = Value(categoryId);
-  static Insertable<MangasCategorie> custom({
+    required String name,
+    required int sort,
+    required int flags,
+  })  : name = Value(name),
+        sort = Value(sort),
+        flags = Value(flags);
+  static Insertable<Category> custom({
     Expression<int>? id,
-    Expression<int>? mangaId,
-    Expression<int>? categoryId,
-    Expression<int>? lastModifiedAt,
+    Expression<String>? name,
+    Expression<int>? sort,
+    Expression<int>? flags,
   }) {
     return RawValuesInsertable({
       if (id != null) '_id': id,
-      if (mangaId != null) 'manga_id': mangaId,
-      if (categoryId != null) 'category_id': categoryId,
-      if (lastModifiedAt != null) 'last_modified_at': lastModifiedAt,
+      if (name != null) 'name': name,
+      if (sort != null) 'sort': sort,
+      if (flags != null) 'flags': flags,
     });
   }
 
-  MangasCategoriesCompanion copyWith(
+  CategoriesCompanion copyWith(
       {Value<int>? id,
-      Value<int>? mangaId,
-      Value<int>? categoryId,
-      Value<int>? lastModifiedAt}) {
-    return MangasCategoriesCompanion(
+      Value<String>? name,
+      Value<int>? sort,
+      Value<int>? flags}) {
+    return CategoriesCompanion(
       id: id ?? this.id,
-      mangaId: mangaId ?? this.mangaId,
-      categoryId: categoryId ?? this.categoryId,
-      lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
+      name: name ?? this.name,
+      sort: sort ?? this.sort,
+      flags: flags ?? this.flags,
     );
   }
 
@@ -445,25 +431,25 @@ class MangasCategoriesCompanion extends UpdateCompanion<MangasCategorie> {
     if (id.present) {
       map['_id'] = Variable<int>(id.value);
     }
-    if (mangaId.present) {
-      map['manga_id'] = Variable<int>(mangaId.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
-    if (categoryId.present) {
-      map['category_id'] = Variable<int>(categoryId.value);
+    if (sort.present) {
+      map['sort'] = Variable<int>(sort.value);
     }
-    if (lastModifiedAt.present) {
-      map['last_modified_at'] = Variable<int>(lastModifiedAt.value);
+    if (flags.present) {
+      map['flags'] = Variable<int>(flags.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('MangasCategoriesCompanion(')
+    return (StringBuffer('CategoriesCompanion(')
           ..write('id: $id, ')
-          ..write('mangaId: $mangaId, ')
-          ..write('categoryId: $categoryId, ')
-          ..write('lastModifiedAt: $lastModifiedAt')
+          ..write('name: $name, ')
+          ..write('sort: $sort, ')
+          ..write('flags: $flags')
           ..write(')'))
         .toString();
   }
@@ -1470,6 +1456,266 @@ class MangasCompanion extends UpdateCompanion<Manga> {
   }
 }
 
+class MangasCategories extends Table
+    with TableInfo<MangasCategories, MangasCategorie> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  MangasCategories(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      '_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL PRIMARY KEY');
+  static const VerificationMeta _mangaIdMeta =
+      const VerificationMeta('mangaId');
+  late final GeneratedColumn<int> mangaId = GeneratedColumn<int>(
+      'manga_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  static const VerificationMeta _categoryIdMeta =
+      const VerificationMeta('categoryId');
+  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
+      'category_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  static const VerificationMeta _lastModifiedAtMeta =
+      const VerificationMeta('lastModifiedAt');
+  late final GeneratedColumn<int> lastModifiedAt = GeneratedColumn<int>(
+      'last_modified_at', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, mangaId, categoryId, lastModifiedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'mangas_categories';
+  @override
+  VerificationContext validateIntegrity(Insertable<MangasCategorie> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('_id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['_id']!, _idMeta));
+    }
+    if (data.containsKey('manga_id')) {
+      context.handle(_mangaIdMeta,
+          mangaId.isAcceptableOrUnknown(data['manga_id']!, _mangaIdMeta));
+    } else if (isInserting) {
+      context.missing(_mangaIdMeta);
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+          _categoryIdMeta,
+          categoryId.isAcceptableOrUnknown(
+              data['category_id']!, _categoryIdMeta));
+    } else if (isInserting) {
+      context.missing(_categoryIdMeta);
+    }
+    if (data.containsKey('last_modified_at')) {
+      context.handle(
+          _lastModifiedAtMeta,
+          lastModifiedAt.isAcceptableOrUnknown(
+              data['last_modified_at']!, _lastModifiedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MangasCategorie map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MangasCategorie(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}_id'])!,
+      mangaId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}manga_id'])!,
+      categoryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+      lastModifiedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}last_modified_at'])!,
+    );
+  }
+
+  @override
+  MangasCategories createAlias(String alias) {
+    return MangasCategories(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+        'FOREIGN KEY(category_id)REFERENCES categories(_id)ON DELETE CASCADE',
+        'FOREIGN KEY(manga_id)REFERENCES mangas(_id)ON DELETE CASCADE'
+      ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class MangasCategorie extends DataClass implements Insertable<MangasCategorie> {
+  final int id;
+  final int mangaId;
+  final int categoryId;
+  final int lastModifiedAt;
+  const MangasCategorie(
+      {required this.id,
+      required this.mangaId,
+      required this.categoryId,
+      required this.lastModifiedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['_id'] = Variable<int>(id);
+    map['manga_id'] = Variable<int>(mangaId);
+    map['category_id'] = Variable<int>(categoryId);
+    map['last_modified_at'] = Variable<int>(lastModifiedAt);
+    return map;
+  }
+
+  MangasCategoriesCompanion toCompanion(bool nullToAbsent) {
+    return MangasCategoriesCompanion(
+      id: Value(id),
+      mangaId: Value(mangaId),
+      categoryId: Value(categoryId),
+      lastModifiedAt: Value(lastModifiedAt),
+    );
+  }
+
+  factory MangasCategorie.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MangasCategorie(
+      id: serializer.fromJson<int>(json['_id']),
+      mangaId: serializer.fromJson<int>(json['manga_id']),
+      categoryId: serializer.fromJson<int>(json['category_id']),
+      lastModifiedAt: serializer.fromJson<int>(json['last_modified_at']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      '_id': serializer.toJson<int>(id),
+      'manga_id': serializer.toJson<int>(mangaId),
+      'category_id': serializer.toJson<int>(categoryId),
+      'last_modified_at': serializer.toJson<int>(lastModifiedAt),
+    };
+  }
+
+  MangasCategorie copyWith(
+          {int? id, int? mangaId, int? categoryId, int? lastModifiedAt}) =>
+      MangasCategorie(
+        id: id ?? this.id,
+        mangaId: mangaId ?? this.mangaId,
+        categoryId: categoryId ?? this.categoryId,
+        lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MangasCategorie(')
+          ..write('id: $id, ')
+          ..write('mangaId: $mangaId, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('lastModifiedAt: $lastModifiedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, mangaId, categoryId, lastModifiedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MangasCategorie &&
+          other.id == this.id &&
+          other.mangaId == this.mangaId &&
+          other.categoryId == this.categoryId &&
+          other.lastModifiedAt == this.lastModifiedAt);
+}
+
+class MangasCategoriesCompanion extends UpdateCompanion<MangasCategorie> {
+  final Value<int> id;
+  final Value<int> mangaId;
+  final Value<int> categoryId;
+  final Value<int> lastModifiedAt;
+  const MangasCategoriesCompanion({
+    this.id = const Value.absent(),
+    this.mangaId = const Value.absent(),
+    this.categoryId = const Value.absent(),
+    this.lastModifiedAt = const Value.absent(),
+  });
+  MangasCategoriesCompanion.insert({
+    this.id = const Value.absent(),
+    required int mangaId,
+    required int categoryId,
+    this.lastModifiedAt = const Value.absent(),
+  })  : mangaId = Value(mangaId),
+        categoryId = Value(categoryId);
+  static Insertable<MangasCategorie> custom({
+    Expression<int>? id,
+    Expression<int>? mangaId,
+    Expression<int>? categoryId,
+    Expression<int>? lastModifiedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) '_id': id,
+      if (mangaId != null) 'manga_id': mangaId,
+      if (categoryId != null) 'category_id': categoryId,
+      if (lastModifiedAt != null) 'last_modified_at': lastModifiedAt,
+    });
+  }
+
+  MangasCategoriesCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? mangaId,
+      Value<int>? categoryId,
+      Value<int>? lastModifiedAt}) {
+    return MangasCategoriesCompanion(
+      id: id ?? this.id,
+      mangaId: mangaId ?? this.mangaId,
+      categoryId: categoryId ?? this.categoryId,
+      lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['_id'] = Variable<int>(id.value);
+    }
+    if (mangaId.present) {
+      map['manga_id'] = Variable<int>(mangaId.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<int>(categoryId.value);
+    }
+    if (lastModifiedAt.present) {
+      map['last_modified_at'] = Variable<int>(lastModifiedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MangasCategoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('mangaId: $mangaId, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('lastModifiedAt: $lastModifiedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class MangaSync extends Table with TableInfo<MangaSync, MangaSyncData> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -2091,265 +2337,6 @@ class MangaSyncCompanion extends UpdateCompanion<MangaSyncData> {
           ..write('remoteUrl: $remoteUrl, ')
           ..write('startDate: $startDate, ')
           ..write('finishDate: $finishDate')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class History extends Table with TableInfo<History, HistoryData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  History(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      '_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL PRIMARY KEY');
-  static const VerificationMeta _chapterIdMeta =
-      const VerificationMeta('chapterId');
-  late final GeneratedColumn<int> chapterId = GeneratedColumn<int>(
-      'chapter_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL UNIQUE');
-  static const VerificationMeta _lastReadMeta =
-      const VerificationMeta('lastRead');
-  late final GeneratedColumn<DateTime> lastRead = GeneratedColumn<DateTime>(
-      'last_read', aliasedName, true,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      $customConstraints: '');
-  static const VerificationMeta _timeReadMeta =
-      const VerificationMeta('timeRead');
-  late final GeneratedColumn<int> timeRead = GeneratedColumn<int>(
-      'time_read', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  @override
-  List<GeneratedColumn> get $columns => [id, chapterId, lastRead, timeRead];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'history';
-  @override
-  VerificationContext validateIntegrity(Insertable<HistoryData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('_id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['_id']!, _idMeta));
-    }
-    if (data.containsKey('chapter_id')) {
-      context.handle(_chapterIdMeta,
-          chapterId.isAcceptableOrUnknown(data['chapter_id']!, _chapterIdMeta));
-    } else if (isInserting) {
-      context.missing(_chapterIdMeta);
-    }
-    if (data.containsKey('last_read')) {
-      context.handle(_lastReadMeta,
-          lastRead.isAcceptableOrUnknown(data['last_read']!, _lastReadMeta));
-    }
-    if (data.containsKey('time_read')) {
-      context.handle(_timeReadMeta,
-          timeRead.isAcceptableOrUnknown(data['time_read']!, _timeReadMeta));
-    } else if (isInserting) {
-      context.missing(_timeReadMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  HistoryData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return HistoryData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}_id'])!,
-      chapterId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}chapter_id'])!,
-      lastRead: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_read']),
-      timeRead: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}time_read'])!,
-    );
-  }
-
-  @override
-  History createAlias(String alias) {
-    return History(attachedDatabase, alias);
-  }
-
-  @override
-  List<String> get customConstraints => const [
-        'FOREIGN KEY(chapter_id)REFERENCES chapters(_id)ON DELETE CASCADE'
-      ];
-  @override
-  bool get dontWriteConstraints => true;
-}
-
-class HistoryData extends DataClass implements Insertable<HistoryData> {
-  final int id;
-  final int chapterId;
-  final DateTime? lastRead;
-  final int timeRead;
-  const HistoryData(
-      {required this.id,
-      required this.chapterId,
-      this.lastRead,
-      required this.timeRead});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['_id'] = Variable<int>(id);
-    map['chapter_id'] = Variable<int>(chapterId);
-    if (!nullToAbsent || lastRead != null) {
-      map['last_read'] = Variable<DateTime>(lastRead);
-    }
-    map['time_read'] = Variable<int>(timeRead);
-    return map;
-  }
-
-  HistoryCompanion toCompanion(bool nullToAbsent) {
-    return HistoryCompanion(
-      id: Value(id),
-      chapterId: Value(chapterId),
-      lastRead: lastRead == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastRead),
-      timeRead: Value(timeRead),
-    );
-  }
-
-  factory HistoryData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return HistoryData(
-      id: serializer.fromJson<int>(json['_id']),
-      chapterId: serializer.fromJson<int>(json['chapter_id']),
-      lastRead: serializer.fromJson<DateTime?>(json['last_read']),
-      timeRead: serializer.fromJson<int>(json['time_read']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      '_id': serializer.toJson<int>(id),
-      'chapter_id': serializer.toJson<int>(chapterId),
-      'last_read': serializer.toJson<DateTime?>(lastRead),
-      'time_read': serializer.toJson<int>(timeRead),
-    };
-  }
-
-  HistoryData copyWith(
-          {int? id,
-          int? chapterId,
-          Value<DateTime?> lastRead = const Value.absent(),
-          int? timeRead}) =>
-      HistoryData(
-        id: id ?? this.id,
-        chapterId: chapterId ?? this.chapterId,
-        lastRead: lastRead.present ? lastRead.value : this.lastRead,
-        timeRead: timeRead ?? this.timeRead,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('HistoryData(')
-          ..write('id: $id, ')
-          ..write('chapterId: $chapterId, ')
-          ..write('lastRead: $lastRead, ')
-          ..write('timeRead: $timeRead')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, chapterId, lastRead, timeRead);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is HistoryData &&
-          other.id == this.id &&
-          other.chapterId == this.chapterId &&
-          other.lastRead == this.lastRead &&
-          other.timeRead == this.timeRead);
-}
-
-class HistoryCompanion extends UpdateCompanion<HistoryData> {
-  final Value<int> id;
-  final Value<int> chapterId;
-  final Value<DateTime?> lastRead;
-  final Value<int> timeRead;
-  const HistoryCompanion({
-    this.id = const Value.absent(),
-    this.chapterId = const Value.absent(),
-    this.lastRead = const Value.absent(),
-    this.timeRead = const Value.absent(),
-  });
-  HistoryCompanion.insert({
-    this.id = const Value.absent(),
-    required int chapterId,
-    this.lastRead = const Value.absent(),
-    required int timeRead,
-  })  : chapterId = Value(chapterId),
-        timeRead = Value(timeRead);
-  static Insertable<HistoryData> custom({
-    Expression<int>? id,
-    Expression<int>? chapterId,
-    Expression<DateTime>? lastRead,
-    Expression<int>? timeRead,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) '_id': id,
-      if (chapterId != null) 'chapter_id': chapterId,
-      if (lastRead != null) 'last_read': lastRead,
-      if (timeRead != null) 'time_read': timeRead,
-    });
-  }
-
-  HistoryCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? chapterId,
-      Value<DateTime?>? lastRead,
-      Value<int>? timeRead}) {
-    return HistoryCompanion(
-      id: id ?? this.id,
-      chapterId: chapterId ?? this.chapterId,
-      lastRead: lastRead ?? this.lastRead,
-      timeRead: timeRead ?? this.timeRead,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['_id'] = Variable<int>(id.value);
-    }
-    if (chapterId.present) {
-      map['chapter_id'] = Variable<int>(chapterId.value);
-    }
-    if (lastRead.present) {
-      map['last_read'] = Variable<DateTime>(lastRead.value);
-    }
-    if (timeRead.present) {
-      map['time_read'] = Variable<int>(timeRead.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('HistoryCompanion(')
-          ..write('id: $id, ')
-          ..write('chapterId: $chapterId, ')
-          ..write('lastRead: $lastRead, ')
-          ..write('timeRead: $timeRead')
           ..write(')'))
         .toString();
   }
@@ -2978,67 +2965,68 @@ class ChaptersCompanion extends UpdateCompanion<Chapter> {
   }
 }
 
-class Categories extends Table with TableInfo<Categories, Category> {
+class History extends Table with TableInfo<History, HistoryData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  Categories(this.attachedDatabase, [this._alias]);
+  History(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       '_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL PRIMARY KEY');
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  static const VerificationMeta _sortMeta = const VerificationMeta('sort');
-  late final GeneratedColumn<int> sort = GeneratedColumn<int>(
-      'sort', aliasedName, false,
+  static const VerificationMeta _chapterIdMeta =
+      const VerificationMeta('chapterId');
+  late final GeneratedColumn<int> chapterId = GeneratedColumn<int>(
+      'chapter_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  static const VerificationMeta _flagsMeta = const VerificationMeta('flags');
-  late final GeneratedColumn<int> flags = GeneratedColumn<int>(
-      'flags', aliasedName, false,
+      $customConstraints: 'NOT NULL UNIQUE');
+  static const VerificationMeta _lastReadMeta =
+      const VerificationMeta('lastRead');
+  late final GeneratedColumn<DateTime> lastRead = GeneratedColumn<DateTime>(
+      'last_read', aliasedName, true,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _timeReadMeta =
+      const VerificationMeta('timeRead');
+  late final GeneratedColumn<int> timeRead = GeneratedColumn<int>(
+      'time_read', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
   @override
-  List<GeneratedColumn> get $columns => [id, name, sort, flags];
+  List<GeneratedColumn> get $columns => [id, chapterId, lastRead, timeRead];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'categories';
+  static const String $name = 'history';
   @override
-  VerificationContext validateIntegrity(Insertable<Category> instance,
+  VerificationContext validateIntegrity(Insertable<HistoryData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('_id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['_id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    if (data.containsKey('chapter_id')) {
+      context.handle(_chapterIdMeta,
+          chapterId.isAcceptableOrUnknown(data['chapter_id']!, _chapterIdMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_chapterIdMeta);
     }
-    if (data.containsKey('sort')) {
-      context.handle(
-          _sortMeta, sort.isAcceptableOrUnknown(data['sort']!, _sortMeta));
-    } else if (isInserting) {
-      context.missing(_sortMeta);
+    if (data.containsKey('last_read')) {
+      context.handle(_lastReadMeta,
+          lastRead.isAcceptableOrUnknown(data['last_read']!, _lastReadMeta));
     }
-    if (data.containsKey('flags')) {
-      context.handle(
-          _flagsMeta, flags.isAcceptableOrUnknown(data['flags']!, _flagsMeta));
+    if (data.containsKey('time_read')) {
+      context.handle(_timeReadMeta,
+          timeRead.isAcceptableOrUnknown(data['time_read']!, _timeReadMeta));
     } else if (isInserting) {
-      context.missing(_flagsMeta);
+      context.missing(_timeReadMeta);
     }
     return context;
   }
@@ -3046,66 +3034,74 @@ class Categories extends Table with TableInfo<Categories, Category> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
+  HistoryData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Category(
+    return HistoryData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      sort: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sort'])!,
-      flags: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}flags'])!,
+      chapterId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chapter_id'])!,
+      lastRead: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_read']),
+      timeRead: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}time_read'])!,
     );
   }
 
   @override
-  Categories createAlias(String alias) {
-    return Categories(attachedDatabase, alias);
+  History createAlias(String alias) {
+    return History(attachedDatabase, alias);
   }
 
+  @override
+  List<String> get customConstraints => const [
+        'FOREIGN KEY(chapter_id)REFERENCES chapters(_id)ON DELETE CASCADE'
+      ];
   @override
   bool get dontWriteConstraints => true;
 }
 
-class Category extends DataClass implements Insertable<Category> {
+class HistoryData extends DataClass implements Insertable<HistoryData> {
   final int id;
-  final String name;
-  final int sort;
-  final int flags;
-  const Category(
+  final int chapterId;
+  final DateTime? lastRead;
+  final int timeRead;
+  const HistoryData(
       {required this.id,
-      required this.name,
-      required this.sort,
-      required this.flags});
+      required this.chapterId,
+      this.lastRead,
+      required this.timeRead});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['_id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
-    map['sort'] = Variable<int>(sort);
-    map['flags'] = Variable<int>(flags);
+    map['chapter_id'] = Variable<int>(chapterId);
+    if (!nullToAbsent || lastRead != null) {
+      map['last_read'] = Variable<DateTime>(lastRead);
+    }
+    map['time_read'] = Variable<int>(timeRead);
     return map;
   }
 
-  CategoriesCompanion toCompanion(bool nullToAbsent) {
-    return CategoriesCompanion(
+  HistoryCompanion toCompanion(bool nullToAbsent) {
+    return HistoryCompanion(
       id: Value(id),
-      name: Value(name),
-      sort: Value(sort),
-      flags: Value(flags),
+      chapterId: Value(chapterId),
+      lastRead: lastRead == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastRead),
+      timeRead: Value(timeRead),
     );
   }
 
-  factory Category.fromJson(Map<String, dynamic> json,
+  factory HistoryData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Category(
+    return HistoryData(
       id: serializer.fromJson<int>(json['_id']),
-      name: serializer.fromJson<String>(json['name']),
-      sort: serializer.fromJson<int>(json['sort']),
-      flags: serializer.fromJson<int>(json['flags']),
+      chapterId: serializer.fromJson<int>(json['chapter_id']),
+      lastRead: serializer.fromJson<DateTime?>(json['last_read']),
+      timeRead: serializer.fromJson<int>(json['time_read']),
     );
   }
   @override
@@ -3113,84 +3109,88 @@ class Category extends DataClass implements Insertable<Category> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       '_id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
-      'sort': serializer.toJson<int>(sort),
-      'flags': serializer.toJson<int>(flags),
+      'chapter_id': serializer.toJson<int>(chapterId),
+      'last_read': serializer.toJson<DateTime?>(lastRead),
+      'time_read': serializer.toJson<int>(timeRead),
     };
   }
 
-  Category copyWith({int? id, String? name, int? sort, int? flags}) => Category(
+  HistoryData copyWith(
+          {int? id,
+          int? chapterId,
+          Value<DateTime?> lastRead = const Value.absent(),
+          int? timeRead}) =>
+      HistoryData(
         id: id ?? this.id,
-        name: name ?? this.name,
-        sort: sort ?? this.sort,
-        flags: flags ?? this.flags,
+        chapterId: chapterId ?? this.chapterId,
+        lastRead: lastRead.present ? lastRead.value : this.lastRead,
+        timeRead: timeRead ?? this.timeRead,
       );
   @override
   String toString() {
-    return (StringBuffer('Category(')
+    return (StringBuffer('HistoryData(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('sort: $sort, ')
-          ..write('flags: $flags')
+          ..write('chapterId: $chapterId, ')
+          ..write('lastRead: $lastRead, ')
+          ..write('timeRead: $timeRead')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, sort, flags);
+  int get hashCode => Object.hash(id, chapterId, lastRead, timeRead);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Category &&
+      (other is HistoryData &&
           other.id == this.id &&
-          other.name == this.name &&
-          other.sort == this.sort &&
-          other.flags == this.flags);
+          other.chapterId == this.chapterId &&
+          other.lastRead == this.lastRead &&
+          other.timeRead == this.timeRead);
 }
 
-class CategoriesCompanion extends UpdateCompanion<Category> {
+class HistoryCompanion extends UpdateCompanion<HistoryData> {
   final Value<int> id;
-  final Value<String> name;
-  final Value<int> sort;
-  final Value<int> flags;
-  const CategoriesCompanion({
+  final Value<int> chapterId;
+  final Value<DateTime?> lastRead;
+  final Value<int> timeRead;
+  const HistoryCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.sort = const Value.absent(),
-    this.flags = const Value.absent(),
+    this.chapterId = const Value.absent(),
+    this.lastRead = const Value.absent(),
+    this.timeRead = const Value.absent(),
   });
-  CategoriesCompanion.insert({
+  HistoryCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
-    required int sort,
-    required int flags,
-  })  : name = Value(name),
-        sort = Value(sort),
-        flags = Value(flags);
-  static Insertable<Category> custom({
+    required int chapterId,
+    this.lastRead = const Value.absent(),
+    required int timeRead,
+  })  : chapterId = Value(chapterId),
+        timeRead = Value(timeRead);
+  static Insertable<HistoryData> custom({
     Expression<int>? id,
-    Expression<String>? name,
-    Expression<int>? sort,
-    Expression<int>? flags,
+    Expression<int>? chapterId,
+    Expression<DateTime>? lastRead,
+    Expression<int>? timeRead,
   }) {
     return RawValuesInsertable({
       if (id != null) '_id': id,
-      if (name != null) 'name': name,
-      if (sort != null) 'sort': sort,
-      if (flags != null) 'flags': flags,
+      if (chapterId != null) 'chapter_id': chapterId,
+      if (lastRead != null) 'last_read': lastRead,
+      if (timeRead != null) 'time_read': timeRead,
     });
   }
 
-  CategoriesCompanion copyWith(
+  HistoryCompanion copyWith(
       {Value<int>? id,
-      Value<String>? name,
-      Value<int>? sort,
-      Value<int>? flags}) {
-    return CategoriesCompanion(
+      Value<int>? chapterId,
+      Value<DateTime?>? lastRead,
+      Value<int>? timeRead}) {
+    return HistoryCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
-      sort: sort ?? this.sort,
-      flags: flags ?? this.flags,
+      chapterId: chapterId ?? this.chapterId,
+      lastRead: lastRead ?? this.lastRead,
+      timeRead: timeRead ?? this.timeRead,
     );
   }
 
@@ -3200,25 +3200,25 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (id.present) {
       map['_id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (chapterId.present) {
+      map['chapter_id'] = Variable<int>(chapterId.value);
     }
-    if (sort.present) {
-      map['sort'] = Variable<int>(sort.value);
+    if (lastRead.present) {
+      map['last_read'] = Variable<DateTime>(lastRead.value);
     }
-    if (flags.present) {
-      map['flags'] = Variable<int>(flags.value);
+    if (timeRead.present) {
+      map['time_read'] = Variable<int>(timeRead.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('CategoriesCompanion(')
+    return (StringBuffer('HistoryCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('sort: $sort, ')
-          ..write('flags: $flags')
+          ..write('chapterId: $chapterId, ')
+          ..write('lastRead: $lastRead, ')
+          ..write('timeRead: $timeRead')
           ..write(')'))
         .toString();
   }
@@ -3227,11 +3227,12 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final Sources sources = Sources(this);
+  late final Categories categories = Categories(this);
+  late final Mangas mangas = Mangas(this);
   late final MangasCategories mangasCategories = MangasCategories(this);
   late final Trigger updateLastModifiedAtMangasCategories = Trigger(
       'CREATE TRIGGER update_last_modified_at_mangas_categories AFTER UPDATE ON mangas_categories BEGIN UPDATE mangas_categories SET last_modified_at = strftime(\'%s\', \'now\') WHERE _id = new._id;END',
       'update_last_modified_at_mangas_categories');
-  late final Mangas mangas = Mangas(this);
   late final Index libraryFavoriteIndex = Index('library_favorite_index',
       'CREATE INDEX library_favorite_index ON mangas (favorite) WHERE favorite = 1');
   late final Index mangasUrlIndex = Index(
@@ -3243,11 +3244,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       'CREATE TRIGGER update_last_modified_at_mangas AFTER UPDATE ON mangas BEGIN UPDATE mangas SET last_modified_at = strftime(\'%s\', \'now\') WHERE _id = new._id;END',
       'update_last_modified_at_mangas');
   late final MangaSync mangaSync = MangaSync(this);
+  late final Chapters chapters = Chapters(this);
   late final History history = History(this);
   late final Index historyHistoryChapterIdIndex = Index(
       'history_history_chapter_id_index',
       'CREATE INDEX history_history_chapter_id_index ON history (chapter_id)');
-  late final Chapters chapters = Chapters(this);
   late final Index chaptersMangaIdIndex = Index('chapters_manga_id_index',
       'CREATE INDEX chapters_manga_id_index ON chapters (manga_id)');
   late final Index chaptersUnreadByMangaIndex = Index(
@@ -3256,7 +3257,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final Trigger updateLastModifiedAtChapters = Trigger(
       'CREATE TRIGGER update_last_modified_at_chapters AFTER UPDATE ON chapters BEGIN UPDATE chapters SET last_modified_at = strftime(\'%s\', \'now\') WHERE _id = new._id;END',
       'update_last_modified_at_chapters');
-  late final Categories categories = Categories(this);
   Selectable<Source> findAll() {
     return customSelect('SELECT * FROM sources', variables: [], readsFrom: {
       sources,
@@ -3280,14 +3280,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         Variable<String>(name)
       ],
       updates: {sources},
-    );
-  }
-
-  Future<int> insert(int mangaId, int categoryId) {
-    return customInsert(
-      'INSERT INTO mangas_categories (manga_id, category_id, last_modified_at) VALUES (?1, ?2, strftime(\'%s\', \'now\'))',
-      variables: [Variable<int>(mangaId), Variable<int>(categoryId)],
-      updates: {mangasCategories},
     );
   }
 
@@ -3413,118 +3405,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     );
   }
 
-  Future<int> insert(
-      int source,
-      String url,
-      String? artist,
-      String? author,
-      String? description,
-      List<String>? genre,
-      String title,
-      int status,
-      String? thumbnailUrl,
-      bool favorite,
-      DateTime? lastUpdate,
-      DateTime? nextUpdate,
-      bool initialized,
-      int viewerFlags,
-      int chapterFlags,
-      int coverLastModified,
-      DateTime dateAdded,
-      UpdateStrategy updateStrategy,
-      int calculateInterval) {
-    return customInsert(
-      'INSERT INTO mangas (source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, chapter_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, strftime(\'%s\', \'now\'))',
-      variables: [
-        Variable<int>(source),
-        Variable<String>(url),
-        Variable<String>(artist),
-        Variable<String>(author),
-        Variable<String>(description),
-        Variable<String>(
-            NullAwareTypeConverter.wrapToSql(Mangas.$convertergenre, genre)),
-        Variable<String>(title),
-        Variable<int>(status),
-        Variable<String>(thumbnailUrl),
-        Variable<bool>(favorite),
-        Variable<DateTime>(lastUpdate),
-        Variable<DateTime>(nextUpdate),
-        Variable<bool>(initialized),
-        Variable<int>(viewerFlags),
-        Variable<int>(chapterFlags),
-        Variable<int>(coverLastModified),
-        Variable<DateTime>(dateAdded),
-        Variable<DateTime>(
-            Mangas.$converterupdateStrategy.toSql(updateStrategy)),
-        Variable<int>(calculateInterval)
-      ],
-      updates: {mangas},
-    );
-  }
-
-  Future<int> update(
-      String source,
-      String url,
-      String artist,
-      String author,
-      String description,
-      String genre,
-      String title,
-      String status,
-      String thumbnailUrl,
-      String favorite,
-      String lastUpdate,
-      String nextUpdate,
-      String initialized,
-      String viewer,
-      String chapterFlags,
-      String coverLastModified,
-      String dateAdded,
-      String updateStrategy,
-      String calculateInterval,
-      int mangaId) {
-    return customUpdate(
-      'UPDATE mangas SET source = coalesce(?1, source), url = coalesce(?2, url), artist = coalesce(?3, artist), author = coalesce(?4, author), description = coalesce(?5, description), genre = coalesce(?6, genre), title = coalesce(?7, title), status = coalesce(?8, status), thumbnail_url = coalesce(?9, thumbnail_url), favorite = coalesce(?10, favorite), last_update = coalesce(?11, last_update), next_update = coalesce(?12, next_update), initialized = coalesce(?13, initialized), viewer = coalesce(?14, viewer), chapter_flags = coalesce(?15, chapter_flags), cover_last_modified = coalesce(?16, cover_last_modified), date_added = coalesce(?17, date_added), update_strategy = coalesce(?18, update_strategy), calculate_interval = coalesce(?19, calculate_interval) WHERE _id = ?20',
-      variables: [
-        Variable<String>(source),
-        Variable<String>(url),
-        Variable<String>(artist),
-        Variable<String>(author),
-        Variable<String>(description),
-        Variable<String>(genre),
-        Variable<String>(title),
-        Variable<String>(status),
-        Variable<String>(thumbnailUrl),
-        Variable<String>(favorite),
-        Variable<String>(lastUpdate),
-        Variable<String>(nextUpdate),
-        Variable<String>(initialized),
-        Variable<String>(viewer),
-        Variable<String>(chapterFlags),
-        Variable<String>(coverLastModified),
-        Variable<String>(dateAdded),
-        Variable<String>(updateStrategy),
-        Variable<String>(calculateInterval),
-        Variable<int>(mangaId)
-      ],
-      updates: {mangas},
-      updateKind: UpdateKind.update,
-    );
-  }
-
   Selectable<int> selectLastInsertedRowId() {
     return customSelect('SELECT last_insert_rowid() AS _c0',
         variables: [],
         readsFrom: {}).map((QueryRow row) => row.read<int>('_c0'));
-  }
-
-  Future<int> delete(int mangaId, int syncId) {
-    return customUpdate(
-      'DELETE FROM manga_sync WHERE manga_id = ?1 AND sync_id = ?2',
-      variables: [Variable<int>(mangaId), Variable<int>(syncId)],
-      updates: {mangaSync},
-      updateKind: UpdateKind.delete,
-    );
   }
 
   Selectable<MangaSyncData> getTracks() {
@@ -3551,83 +3435,15 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         }).asyncMap(mangaSync.mapFromRow);
   }
 
-  Future<int> insert(
-      int mangaId,
-      int syncId,
-      int remoteId,
-      int? libraryId,
-      String title,
-      double lastChapterRead,
-      int totalChapters,
-      int status,
-      double score,
-      String remoteUrl,
-      int startDate,
-      int finishDate) {
-    return customInsert(
-      'INSERT INTO manga_sync (manga_id, sync_id, remote_id, library_id, title, last_chapter_read, total_chapters, status, score, remote_url, start_date, finish_date) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)',
-      variables: [
-        Variable<int>(mangaId),
-        Variable<int>(syncId),
-        Variable<int>(remoteId),
-        Variable<int>(libraryId),
-        Variable<String>(title),
-        Variable<double>(lastChapterRead),
-        Variable<int>(totalChapters),
-        Variable<int>(status),
-        Variable<double>(score),
-        Variable<String>(remoteUrl),
-        Variable<int>(startDate),
-        Variable<int>(finishDate)
-      ],
-      updates: {mangaSync},
-    );
-  }
-
-  Future<int> update(
-      String mangaId,
-      String syncId,
-      String mediaId,
-      String libraryId,
-      String title,
-      String lastChapterRead,
-      String totalChapter,
-      String status,
-      String score,
-      String trackingUrl,
-      String startDate,
-      String finishDate,
-      int id) {
-    return customUpdate(
-      'UPDATE manga_sync SET manga_id = coalesce(?1, manga_id), sync_id = coalesce(?2, sync_id), remote_id = coalesce(?3, remote_id), library_id = coalesce(?4, library_id), title = coalesce(?5, title), last_chapter_read = coalesce(?6, last_chapter_read), total_chapters = coalesce(?7, total_chapters), status = coalesce(?8, status), score = coalesce(?9, score), remote_url = coalesce(?10, remote_url), start_date = coalesce(?11, start_date), finish_date = coalesce(?12, finish_date) WHERE _id = ?13',
-      variables: [
-        Variable<String>(mangaId),
-        Variable<String>(syncId),
-        Variable<String>(mediaId),
-        Variable<String>(libraryId),
-        Variable<String>(title),
-        Variable<String>(lastChapterRead),
-        Variable<String>(totalChapter),
-        Variable<String>(status),
-        Variable<String>(score),
-        Variable<String>(trackingUrl),
-        Variable<String>(startDate),
-        Variable<String>(finishDate),
-        Variable<int>(id)
-      ],
-      updates: {mangaSync},
-      updateKind: UpdateKind.update,
-    );
-  }
-
-  Selectable<HistoryData> getHistoryByMangaId(String mangaId) {
+  Selectable<HistoryData> getHistoryByMangaId(int mangaId) {
     return customSelect(
         'SELECT H._id, H.chapter_id, H.last_read, H.time_read FROM history AS H JOIN chapters AS C ON H.chapter_id = C._id WHERE C.manga_id = ?1 AND C._id = H.chapter_id',
         variables: [
-          Variable<String>(mangaId)
+          Variable<int>(mangaId)
         ],
         readsFrom: {
           history,
+          chapters,
         }).asyncMap(history.mapFromRow);
   }
 
@@ -3639,6 +3455,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         ],
         readsFrom: {
           history,
+          chapters,
         }).asyncMap(history.mapFromRow);
   }
 
@@ -3651,10 +3468,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     );
   }
 
-  Future<int> resetHistoryByMangaId(String mangaId) {
+  Future<int> resetHistoryByMangaId(int mangaId) {
     return customUpdate(
       'UPDATE history SET last_read = 0 WHERE _id IN (SELECT H._id FROM mangas AS M INNER JOIN chapters AS C ON M._id = C.manga_id INNER JOIN history AS H ON C._id = H.chapter_id WHERE M._id = ?1)',
-      variables: [Variable<String>(mangaId)],
+      variables: [Variable<int>(mangaId)],
       updates: {history},
       updateKind: UpdateKind.update,
     );
@@ -3761,71 +3578,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     );
   }
 
-  Future<int> insert(
-      int mangaId,
-      String url,
-      String name,
-      String? scanlator,
-      bool read,
-      bool bookmark,
-      int lastPageRead,
-      double chapterNumber,
-      int sourceOrder,
-      DateTime dateFetch,
-      DateTime dateUpload) {
-    return customInsert(
-      'INSERT INTO chapters (manga_id, url, name, scanlator, read, bookmark, last_page_read, chapter_number, source_order, date_fetch, date_upload, last_modified_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, strftime(\'%s\', \'now\'))',
-      variables: [
-        Variable<int>(mangaId),
-        Variable<String>(url),
-        Variable<String>(name),
-        Variable<String>(scanlator),
-        Variable<bool>(read),
-        Variable<bool>(bookmark),
-        Variable<int>(lastPageRead),
-        Variable<double>(chapterNumber),
-        Variable<int>(sourceOrder),
-        Variable<DateTime>(dateFetch),
-        Variable<DateTime>(dateUpload)
-      ],
-      updates: {chapters},
-    );
-  }
-
-  Future<int> update(
-      String mangaId,
-      String url,
-      String name,
-      String scanlator,
-      String read,
-      String bookmark,
-      String lastPageRead,
-      String chapterNumber,
-      String sourceOrder,
-      String dateFetch,
-      String dateUpload,
-      int chapterId) {
-    return customUpdate(
-      'UPDATE chapters SET manga_id = coalesce(?1, manga_id), url = coalesce(?2, url), name = coalesce(?3, name), scanlator = coalesce(?4, scanlator), read = coalesce(?5, read), bookmark = coalesce(?6, bookmark), last_page_read = coalesce(?7, last_page_read), chapter_number = coalesce(?8, chapter_number), source_order = coalesce(?9, source_order), date_fetch = coalesce(?10, date_fetch), date_upload = coalesce(?11, date_upload) WHERE _id = ?12',
-      variables: [
-        Variable<String>(mangaId),
-        Variable<String>(url),
-        Variable<String>(name),
-        Variable<String>(scanlator),
-        Variable<String>(read),
-        Variable<String>(bookmark),
-        Variable<String>(lastPageRead),
-        Variable<String>(chapterNumber),
-        Variable<String>(sourceOrder),
-        Variable<String>(dateFetch),
-        Variable<String>(dateUpload),
-        Variable<int>(chapterId)
-      ],
-      updates: {chapters},
-      updateKind: UpdateKind.update,
-    );
-  }
-
   Selectable<int> selectLastInsertedRowId() {
     return customSelect('SELECT last_insert_rowid() AS _c0',
         variables: [],
@@ -3840,41 +3592,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         readsFrom: {
           categories,
         }).asyncMap(categories.mapFromRow);
-  }
-
-  Future<int> insert(String name, int order, int flags) {
-    return customInsert(
-      'INSERT INTO categories (name, sort, flags) VALUES (?1, ?2, ?3)',
-      variables: [
-        Variable<String>(name),
-        Variable<int>(order),
-        Variable<int>(flags)
-      ],
-      updates: {categories},
-    );
-  }
-
-  Future<int> delete(int categoryId) {
-    return customUpdate(
-      'DELETE FROM categories WHERE _id = ?1',
-      variables: [Variable<int>(categoryId)],
-      updates: {categories},
-      updateKind: UpdateKind.delete,
-    );
-  }
-
-  Future<int> update(String name, String order, String flags, int categoryId) {
-    return customUpdate(
-      'UPDATE categories SET name = coalesce(?1, name), sort = coalesce(?2, sort), flags = coalesce(?3, flags) WHERE _id = ?4',
-      variables: [
-        Variable<String>(name),
-        Variable<String>(order),
-        Variable<String>(flags),
-        Variable<int>(categoryId)
-      ],
-      updates: {categories},
-      updateKind: UpdateKind.update,
-    );
   }
 
   Future<int> updateAllFlags(String var1) {
@@ -3898,25 +3615,39 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         sources,
+        categories,
+        mangas,
         mangasCategories,
         updateLastModifiedAtMangasCategories,
-        mangas,
         libraryFavoriteIndex,
         mangasUrlIndex,
         updateLastFavoritedAtMangas,
         updateLastModifiedAtMangas,
         mangaSync,
+        chapters,
         history,
         historyHistoryChapterIdIndex,
-        chapters,
         chaptersMangaIdIndex,
         chaptersUnreadByMangaIndex,
-        updateLastModifiedAtChapters,
-        categories
+        updateLastModifiedAtChapters
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('categories',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('mangas_categories', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('mangas',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('mangas_categories', kind: UpdateKind.delete),
+            ],
+          ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('mangas_categories',
                 limitUpdateKind: UpdateKind.update),
@@ -3936,6 +3667,27 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.update),
             result: [
               TableUpdate('mangas', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('mangas',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('manga_sync', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('mangas',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('chapters', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chapters',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('history', kind: UpdateKind.delete),
             ],
           ),
           WritePropagation(

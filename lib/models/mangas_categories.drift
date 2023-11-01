@@ -1,3 +1,6 @@
+import 'categories.drift';
+import 'mangas.drift';
+
 CREATE TABLE mangas_categories(
     _id INTEGER NOT NULL PRIMARY KEY,
     manga_id INTEGER NOT NULL,
@@ -17,10 +20,6 @@ BEGIN
   SET last_modified_at = strftime('%s', 'now')
   WHERE _id = new._id;
 END;
-
-insert:
-INSERT INTO mangas_categories(manga_id, category_id, last_modified_at)
-VALUES (:mangaId, :categoryId, strftime('%s', 'now'));
 
 deleteMangaCategoryByMangaId:
 DELETE FROM mangas_categories

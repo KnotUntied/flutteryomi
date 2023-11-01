@@ -42,21 +42,6 @@ JOIN mangas_categories MC
 ON C._id = MC.category_id
 WHERE MC.manga_id = :mangaId;
 
-insert:
-INSERT INTO categories(name, sort, flags)
-VALUES (:name, :order, :flags);
-
-delete:
-DELETE FROM categories
-WHERE _id = :categoryId;
-
-update:
-UPDATE categories
-SET name = coalesce(:name, name),
-    sort = coalesce(:order, sort),
-    flags = coalesce(:flags, flags)
-WHERE _id = :categoryId;
-
 updateAllFlags:
 UPDATE categories SET
 flags = coalesce(?, flags);
