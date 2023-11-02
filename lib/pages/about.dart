@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-//import 'package:flutteryomi/utils/crash_log_util.dart';
+//import 'package:flutteryomi/utils/crash_log.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
