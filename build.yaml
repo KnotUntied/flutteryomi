@@ -1,0 +1,26 @@
+# https://drift.simonbinder.eu/docs/advanced-features/builder_options/
+# https://drift.simonbinder.eu/docs/generation-options/modular/
+# https://drift.simonbinder.eu/docs/generation-options/in_other_builders/
+targets:
+  drift:
+    auto_apply_builders: false
+    builders:
+      drift_dev:modular:
+        enabled: true
+        options: &options
+          # store_date_time_values_as_text: true
+          named_parameters: true
+          sql:
+            dialect: sqlite
+            options:
+              version: "3.44"
+              modules: [fts5]
+      drift_dev:analyzer:
+        enabled: true
+        options: *options
+  $default:
+    dependencies:
+      - ":drift"
+    builders:
+      drift_dev:
+        enabled: false

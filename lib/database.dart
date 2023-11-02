@@ -5,24 +5,45 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-part 'database.g.dart';
+import 'database.drift.dart';
+import 'models/tables/categories.drift.dart';
 
 @DriftDatabase(
   include: {
-    'models/categories.drift',
-    'models/chapters.drift',
-    'models/history.drift',
-    'models/manga_sync.drift',
-    'models/mangas.drift',
-    'models/mangas_categories.drift',
-    'models/sources.drift',
+    'models/tables/categories.drift',
+    'models/tables/chapters.drift',
+    'models/tables/history.drift',
+    'models/tables/manga_sync.drift',
+    'models/tables/mangas.drift',
+    'models/tables/mangas_categories.drift',
+    'models/tables/sources.drift',
   },
 )
-class AppDatabase extends _$AppDatabase {
+class AppDatabase extends $AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (m) async {
+        await m.createAll();
+
+        // Add default category if not already
+        await into(categories).insert(
+          CategoriesCompanion.insert(
+            id: const Value(0),
+            name: '',
+            sort: -1,
+            flags: 0,
+          ),
+          mode: InsertMode.insertOrIgnore,
+        );
+      },
+    );
+  }
 }
 
 LazyDatabase _openConnection() {

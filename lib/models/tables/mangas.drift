@@ -18,7 +18,7 @@ CREATE TABLE mangas(
     initialized BOOLEAN NOT NULL,
     viewer INTEGER NOT NULL,
     chapter_flags INTEGER NOT NULL,
-    cover_last_modified INTEGER NOT NULL,
+    cover_last_modified DATETIME NOT NULL,
     date_added DATETIME NOT NULL,
     update_strategy ENUM(UpdateStrategy) NOT NULL,
     calculate_interval INTEGER DEFAULT 0 NOT NULL,
@@ -33,7 +33,7 @@ CREATE TRIGGER update_last_favorited_at_mangas
 AFTER UPDATE OF favorite ON mangas
 BEGIN
   UPDATE mangas
-  SET favorite_modified_at = strftime('%s', 'now')
+  SET favorite_modified_at = unixepoch()
   WHERE _id = new._id;
 END;
 
@@ -42,7 +42,7 @@ AFTER UPDATE ON mangas
 FOR EACH ROW
 BEGIN
   UPDATE mangas
-  SET last_modified_at = strftime('%s', 'now')
+  SET last_modified_at = unixepoch()
   WHERE _id = new._id;
 END;
 
@@ -108,6 +108,3 @@ deleteMangasNotInLibraryBySourceIds:
 DELETE FROM mangas
 WHERE favorite = 0
 AND source IN :sourceIds;
-
-selectLastInsertedRowId:
-SELECT last_insert_rowid();

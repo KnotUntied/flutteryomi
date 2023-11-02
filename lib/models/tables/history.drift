@@ -1,4 +1,5 @@
 import 'chapters.drift';
+import 'mangas.drift';
 
 CREATE TABLE history(
     _id INTEGER NOT NULL PRIMARY KEY,
@@ -57,16 +58,6 @@ DELETE FROM history;
 removeResettedHistory:
 DELETE FROM history
 WHERE last_read = 0;
-
-upsert:
-INSERT INTO history(chapter_id, last_read, time_read)
-VALUES (:chapterId, :readAt, :time_read)
-ON CONFLICT(chapter_id)
-DO UPDATE
-SET
-    last_read = :readAt,
-    time_read = time_read + :time_read
-WHERE chapter_id = :chapterId;
 
 getReadDuration:
 SELECT coalesce(sum(time_read), 0)

@@ -20,7 +20,7 @@ mixin _$MangaCover {
   int get sourceId => throw _privateConstructorUsedError;
   bool get isMangaFavorite => throw _privateConstructorUsedError;
   String? get url => throw _privateConstructorUsedError;
-  int get lastModified => throw _privateConstructorUsedError;
+  DateTime get lastModified => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MangaCoverCopyWith<MangaCover> get copyWith =>
@@ -38,7 +38,7 @@ abstract class $MangaCoverCopyWith<$Res> {
       int sourceId,
       bool isMangaFavorite,
       String? url,
-      int lastModified});
+      DateTime lastModified});
 }
 
 /// @nodoc
@@ -80,7 +80,7 @@ class _$MangaCoverCopyWithImpl<$Res, $Val extends MangaCover>
       lastModified: null == lastModified
           ? _value.lastModified
           : lastModified // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ) as $Val);
   }
 }
@@ -98,7 +98,7 @@ abstract class _$$MangaCoverImplCopyWith<$Res>
       int sourceId,
       bool isMangaFavorite,
       String? url,
-      int lastModified});
+      DateTime lastModified});
 }
 
 /// @nodoc
@@ -138,7 +138,7 @@ class __$$MangaCoverImplCopyWithImpl<$Res>
       lastModified: null == lastModified
           ? _value.lastModified
           : lastModified // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 }
@@ -162,7 +162,7 @@ class _$MangaCoverImpl implements _MangaCover {
   @override
   final String? url;
   @override
-  final int lastModified;
+  final DateTime lastModified;
 
   @override
   String toString() {
@@ -201,7 +201,7 @@ abstract class _MangaCover implements MangaCover {
       required final int sourceId,
       required final bool isMangaFavorite,
       final String? url,
-      required final int lastModified}) = _$MangaCoverImpl;
+      required final DateTime lastModified}) = _$MangaCoverImpl;
 
   @override
   int get mangaId;
@@ -212,7 +212,7 @@ abstract class _MangaCover implements MangaCover {
   @override
   String? get url;
   @override
-  int get lastModified;
+  DateTime get lastModified;
   @override
   @JsonKey(ignore: true)
   _$$MangaCoverImplCopyWith<_$MangaCoverImpl> get copyWith =>

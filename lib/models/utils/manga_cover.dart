@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:flutteryomi/database.dart';
+import 'package:flutteryomi/models/tables/mangas.drift.dart';
 
 part 'manga_cover.freezed.dart';
 
@@ -11,7 +11,7 @@ class MangaCover with _$MangaCover {
     required int sourceId,
     required bool isMangaFavorite,
     String? url,
-    required int lastModified,
+    required DateTime lastModified,
   }) = _MangaCover;
 }
 

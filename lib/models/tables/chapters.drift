@@ -26,7 +26,7 @@ AFTER UPDATE ON chapters
 FOR EACH ROW
 BEGIN
   UPDATE chapters
-  SET last_modified_at = strftime('%s', 'now')
+  SET last_modified_at = unixepoch()
   WHERE _id = new._id;
 END;
 
@@ -60,6 +60,3 @@ AND manga_id = :mangaId;
 removeChaptersWithIds:
 DELETE FROM chapters
 WHERE _id IN :chapterIds;
-
-selectLastInsertedRowId:
-SELECT last_insert_rowid();
