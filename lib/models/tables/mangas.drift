@@ -20,7 +20,9 @@ CREATE TABLE mangas(
     chapter_flags INTEGER NOT NULL,
     cover_last_modified DATETIME NOT NULL,
     date_added DATETIME NOT NULL,
-    update_strategy ENUM(UpdateStrategy) NOT NULL,
+    -- Built as DateTime for some reason
+    -- update_strategy ENUM(UpdateStrategy) NOT NULL DEFAULT 0,
+    update_strategy INTEGER NOT NULL DEFAULT 0,
     calculate_interval INTEGER DEFAULT 0 NOT NULL,
     last_modified_at DATETIME NOT NULL DEFAULT 0,
     favorite_modified_at DATETIME

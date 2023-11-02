@@ -1,9 +1,8 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
 import 'package:flutteryomi/models/tables/mangas.drift.dart' as i1;
-import 'package:flutteryomi/models/enums/update_strategy.dart' as i2;
-import 'package:flutteryomi/models/converters/list_of_strings.dart' as i3;
-import 'package:drift/internal/modular.dart' as i4;
+import 'package:flutteryomi/models/converters/list_of_strings.dart' as i2;
+import 'package:drift/internal/modular.dart' as i3;
 
 class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
   @override
@@ -137,13 +136,12 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           $customConstraints: 'NOT NULL');
   static const i0.VerificationMeta _updateStrategyMeta =
       const i0.VerificationMeta('updateStrategy');
-  late final i0.GeneratedColumnWithTypeConverter<i2.UpdateStrategy, DateTime>
-      updateStrategy = i0.GeneratedColumn<DateTime>(
-              'update_strategy', aliasedName, false,
-              type: i0.DriftSqlType.dateTime,
-              requiredDuringInsert: true,
-              $customConstraints: 'NOT NULL')
-          .withConverter<i2.UpdateStrategy>(i1.Mangas.$converterupdateStrategy);
+  late final i0.GeneratedColumn<int> updateStrategy = i0.GeneratedColumn<int>(
+      'update_strategy', aliasedName, false,
+      type: i0.DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const i0.CustomExpression('0'));
   static const i0.VerificationMeta _calculateIntervalMeta =
       const i0.VerificationMeta('calculateInterval');
   late final i0.GeneratedColumn<int> calculateInterval =
@@ -304,7 +302,12 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
     } else if (isInserting) {
       context.missing(_dateAddedMeta);
     }
-    context.handle(_updateStrategyMeta, const i0.VerificationResult.success());
+    if (data.containsKey('update_strategy')) {
+      context.handle(
+          _updateStrategyMeta,
+          updateStrategy.isAcceptableOrUnknown(
+              data['update_strategy']!, _updateStrategyMeta));
+    }
     if (data.containsKey('calculate_interval')) {
       context.handle(
           _calculateIntervalMeta,
@@ -369,9 +372,8 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           data['${effectivePrefix}cover_last_modified'])!,
       dateAdded: attachedDatabase.typeMapping.read(
           i0.DriftSqlType.dateTime, data['${effectivePrefix}date_added'])!,
-      updateStrategy: i1.Mangas.$converterupdateStrategy.fromSql(
-          attachedDatabase.typeMapping.read(i0.DriftSqlType.dateTime,
-              data['${effectivePrefix}update_strategy'])!),
+      updateStrategy: attachedDatabase.typeMapping.read(
+          i0.DriftSqlType.int, data['${effectivePrefix}update_strategy'])!,
       calculateInterval: attachedDatabase.typeMapping.read(
           i0.DriftSqlType.int, data['${effectivePrefix}calculate_interval'])!,
       lastModifiedAt: attachedDatabase.typeMapping.read(
@@ -389,12 +391,9 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
   }
 
   static i0.TypeConverter<List<String>, String> $convertergenre =
-      const i3.ListOfStringsConverter();
+      const i2.ListOfStringsConverter();
   static i0.TypeConverter<List<String>?, String?> $convertergenren =
       i0.NullAwareTypeConverter.wrap($convertergenre);
-  static i0.JsonTypeConverter2<i2.UpdateStrategy, String, String>
-      $converterupdateStrategy =
-      const i0.EnumNameConverter<i2.UpdateStrategy>(i2.UpdateStrategy.values);
   @override
   bool get dontWriteConstraints => true;
 }
@@ -418,7 +417,10 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
   final int chapterFlags;
   final DateTime coverLastModified;
   final DateTime dateAdded;
-  final i2.UpdateStrategy updateStrategy;
+
+  /// update_strategy ENUM(UpdateStrategy) NOT NULL DEFAULT 0,
+  /// Built as DateTime for some reason
+  final int updateStrategy;
   final int calculateInterval;
   final DateTime lastModifiedAt;
   final DateTime? favoriteModifiedAt;
@@ -481,11 +483,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
     map['chapter_flags'] = i0.Variable<int>(chapterFlags);
     map['cover_last_modified'] = i0.Variable<DateTime>(coverLastModified);
     map['date_added'] = i0.Variable<DateTime>(dateAdded);
-    {
-      final converter = i1.Mangas.$converterupdateStrategy;
-      map['update_strategy'] =
-          i0.Variable<DateTime>(converter.toSql(updateStrategy));
-    }
+    map['update_strategy'] = i0.Variable<int>(updateStrategy);
     map['calculate_interval'] = i0.Variable<int>(calculateInterval);
     map['last_modified_at'] = i0.Variable<DateTime>(lastModifiedAt);
     if (!nullToAbsent || favoriteModifiedAt != null) {
@@ -560,8 +558,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       coverLastModified:
           serializer.fromJson<DateTime>(json['cover_last_modified']),
       dateAdded: serializer.fromJson<DateTime>(json['date_added']),
-      updateStrategy: i1.Mangas.$converterupdateStrategy
-          .fromJson(serializer.fromJson<String>(json['update_strategy'])),
+      updateStrategy: serializer.fromJson<int>(json['update_strategy']),
       calculateInterval: serializer.fromJson<int>(json['calculate_interval']),
       lastModifiedAt: serializer.fromJson<DateTime>(json['last_modified_at']),
       favoriteModifiedAt:
@@ -590,8 +587,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       'chapter_flags': serializer.toJson<int>(chapterFlags),
       'cover_last_modified': serializer.toJson<DateTime>(coverLastModified),
       'date_added': serializer.toJson<DateTime>(dateAdded),
-      'update_strategy': serializer.toJson<String>(
-          i1.Mangas.$converterupdateStrategy.toJson(updateStrategy)),
+      'update_strategy': serializer.toJson<int>(updateStrategy),
       'calculate_interval': serializer.toJson<int>(calculateInterval),
       'last_modified_at': serializer.toJson<DateTime>(lastModifiedAt),
       'favorite_modified_at': serializer.toJson<DateTime?>(favoriteModifiedAt),
@@ -617,7 +613,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
           int? chapterFlags,
           DateTime? coverLastModified,
           DateTime? dateAdded,
-          i2.UpdateStrategy? updateStrategy,
+          int? updateStrategy,
           int? calculateInterval,
           DateTime? lastModifiedAt,
           i0.Value<DateTime?> favoriteModifiedAt = const i0.Value.absent()}) =>
@@ -749,7 +745,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
   final i0.Value<int> chapterFlags;
   final i0.Value<DateTime> coverLastModified;
   final i0.Value<DateTime> dateAdded;
-  final i0.Value<i2.UpdateStrategy> updateStrategy;
+  final i0.Value<int> updateStrategy;
   final i0.Value<int> calculateInterval;
   final i0.Value<DateTime> lastModifiedAt;
   final i0.Value<DateTime?> favoriteModifiedAt;
@@ -796,7 +792,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     required int chapterFlags,
     required DateTime coverLastModified,
     required DateTime dateAdded,
-    required i2.UpdateStrategy updateStrategy,
+    this.updateStrategy = const i0.Value.absent(),
     this.calculateInterval = const i0.Value.absent(),
     this.lastModifiedAt = const i0.Value.absent(),
     this.favoriteModifiedAt = const i0.Value.absent(),
@@ -809,8 +805,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
         viewer = i0.Value(viewer),
         chapterFlags = i0.Value(chapterFlags),
         coverLastModified = i0.Value(coverLastModified),
-        dateAdded = i0.Value(dateAdded),
-        updateStrategy = i0.Value(updateStrategy);
+        dateAdded = i0.Value(dateAdded);
   static i0.Insertable<i1.Manga> custom({
     i0.Expression<int>? id,
     i0.Expression<int>? source,
@@ -830,7 +825,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     i0.Expression<int>? chapterFlags,
     i0.Expression<DateTime>? coverLastModified,
     i0.Expression<DateTime>? dateAdded,
-    i0.Expression<DateTime>? updateStrategy,
+    i0.Expression<int>? updateStrategy,
     i0.Expression<int>? calculateInterval,
     i0.Expression<DateTime>? lastModifiedAt,
     i0.Expression<DateTime>? favoriteModifiedAt,
@@ -881,7 +876,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       i0.Value<int>? chapterFlags,
       i0.Value<DateTime>? coverLastModified,
       i0.Value<DateTime>? dateAdded,
-      i0.Value<i2.UpdateStrategy>? updateStrategy,
+      i0.Value<int>? updateStrategy,
       i0.Value<int>? calculateInterval,
       i0.Value<DateTime>? lastModifiedAt,
       i0.Value<DateTime?>? favoriteModifiedAt}) {
@@ -972,10 +967,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       map['date_added'] = i0.Variable<DateTime>(dateAdded.value);
     }
     if (updateStrategy.present) {
-      final converter = i1.Mangas.$converterupdateStrategy;
-
-      map['update_strategy'] =
-          i0.Variable<DateTime>(converter.toSql(updateStrategy.value));
+      map['update_strategy'] = i0.Variable<int>(updateStrategy.value);
     }
     if (calculateInterval.present) {
       map['calculate_interval'] = i0.Variable<int>(calculateInterval.value);
@@ -1031,7 +1023,7 @@ i0.Trigger get updateLastModifiedAtMangas => i0.Trigger(
     'CREATE TRIGGER update_last_modified_at_mangas AFTER UPDATE ON mangas BEGIN UPDATE mangas SET last_modified_at = unixepoch() WHERE _id = new._id;END',
     'update_last_modified_at_mangas');
 
-class MangasDrift extends i4.ModularAccessor {
+class MangasDrift extends i3.ModularAccessor {
   MangasDrift(i0.GeneratedDatabase db) : super(db);
   i0.Selectable<i1.Manga> getMangaById({required int id}) {
     return customSelect('SELECT * FROM mangas WHERE _id = ?1', variables: [

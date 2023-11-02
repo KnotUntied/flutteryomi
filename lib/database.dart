@@ -17,6 +17,9 @@ import 'models/tables/categories.drift.dart';
     'models/tables/mangas.drift',
     'models/tables/mangas_categories.drift',
     'models/tables/sources.drift',
+    'models/views/historyView.drift',
+    'models/views/libraryView.drift',
+    'models/views/updatesView.drift',
   },
 )
 class AppDatabase extends $AppDatabase {
