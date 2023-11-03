@@ -22,13 +22,13 @@ class MangaCover extends StatelessWidget {
   }) : ratio = 2.0 / 3.0;
 
   final String contentDescription;
-  final ImageProvider<Object> image;
+  //final ImageProvider<Object> image;
+  final String image;
   final double ratio;
   //final double shape;
 
   @override
   Widget build(BuildContext context) {
-    print(ratio);
     //https://github.com/tachiyomiorg/tachiyomi/blob/master/app/src/main/java/eu/kanade/presentation/manga/components/MangaCover.kt#L18
     //return AspectRatio(
     //  aspectRatio: ratio,
@@ -39,9 +39,13 @@ class MangaCover extends StatelessWidget {
     //    placeholderFit: BoxFit.cover,
     //  ),
     //);
-    return AspectRatio(
-      aspectRatio: ratio,
-      child: const Placeholder(),
+    return Center(
+      child: AspectRatio(
+        aspectRatio: ratio,
+        child: const Placeholder(
+          color: Color(0x1F888888),
+        ),
+      ),
     );
   }
 }

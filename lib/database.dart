@@ -50,10 +50,7 @@ class AppDatabase extends $AppDatabase {
 }
 
 LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
   return LazyDatabase(() async {
-    // put the database file, called db.sqlite here, into the documents folder
-    // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase.createInBackground(file);

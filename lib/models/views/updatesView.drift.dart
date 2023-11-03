@@ -298,12 +298,12 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
 class UpdatesViewDrift extends i2.ModularAccessor {
   UpdatesViewDrift(i0.GeneratedDatabase db) : super(db);
   i0.Selectable<i1.UpdatesViewData> getRecentUpdates(
-      {required DateTime after, required int rowLimit}) {
+      {required DateTime after, required int limit}) {
     return customSelect(
         'SELECT * FROM updatesView WHERE dateUpload > ?1 LIMIT ?2',
         variables: [
           i0.Variable<DateTime>(after),
-          i0.Variable<int>(rowLimit)
+          i0.Variable<int>(limit)
         ],
         readsFrom: {
           mangas,
@@ -312,13 +312,13 @@ class UpdatesViewDrift extends i2.ModularAccessor {
   }
 
   i0.Selectable<i1.UpdatesViewData> getUpdatesByReadStatus(
-      {required bool read, required DateTime after, required int rowLimit}) {
+      {required bool read, required DateTime after, required int limit}) {
     return customSelect(
         'SELECT * FROM updatesView WHERE read = ?1 AND dateUpload > ?2 LIMIT ?3',
         variables: [
           i0.Variable<bool>(read),
           i0.Variable<DateTime>(after),
-          i0.Variable<int>(rowLimit)
+          i0.Variable<int>(limit)
         ],
         readsFrom: {
           mangas,

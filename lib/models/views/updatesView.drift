@@ -27,15 +27,11 @@ getRecentUpdates:
 SELECT *
 FROM updatesView
 WHERE dateUpload > :after
--- limit is a reserved keyword
--- use rowLimit instead
--- LIMIT :limit;
-LIMIT :rowLimit;
+LIMIT :limit;
 
 getUpdatesByReadStatus:
 SELECT *
 FROM updatesView
 WHERE read = :read
 AND dateUpload > :after
--- LIMIT :limit;
-LIMIT :rowLimit;
+LIMIT :limit;

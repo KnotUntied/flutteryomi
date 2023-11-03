@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutteryomi/widgets/list_heading.dart';
+import 'package:flutteryomi/widgets/manga_cover.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -51,28 +52,26 @@ class _LibraryPageState extends State<LibraryPage>
                   builder: (BuildContext context) {
                     return DefaultTabController(
                         length: 3,
-                        child: Container(
-                          child: Column(
-                            children: <Widget>[
-                              TabBar(
-                                tabAlignment: TabAlignment.fill,
-                                tabs: <Widget>[
-                                  Tab(text: lang.action_filter),
-                                  Tab(text: lang.action_sort),
-                                  Tab(text: lang.pref_category_display),
+                        child: Column(
+                          children: <Widget>[
+                            TabBar(
+                              tabAlignment: TabAlignment.fill,
+                              tabs: <Widget>[
+                                Tab(text: lang.action_filter),
+                                Tab(text: lang.action_sort),
+                                Tab(text: lang.pref_category_display),
+                              ],
+                            ),
+                            const Expanded(
+                              child: TabBarView(
+                                children: <Widget>[
+                                  LibrarySettingsFilterView(),
+                                  LibrarySettingsFilterView(),
+                                  LibrarySettingsDisplayView(),
                                 ],
                               ),
-                              const Expanded(
-                                child: TabBarView(
-                                  children: <Widget>[
-                                    LibrarySettingsFilterView(),
-                                    LibrarySettingsFilterView(),
-                                    LibrarySettingsDisplayView(),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ));
                   },
                 );
@@ -121,16 +120,21 @@ class _LibraryPageState extends State<LibraryPage>
             ),
           ),
         ),
-        //body: TabBarView(
-        //children: myTabs.map((Tab tab) {
-        //  return Center(
-        //    child: Text(
-        //      'This is the tab',
-        //      style: const TextStyle(fontSize: 36),
-        //    ),
-        //  );
-        //}).toList(),
-        //),
+        body: TabBarView(
+          //TODO: GridView with manga covers
+          children: [
+            GridView.count(
+              crossAxisCount: 3,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              children: const [
+                MangaCover.book(contentDescription: '', image: '',),
+                MangaCover.book(contentDescription: '', image: '',),
+                MangaCover.book(contentDescription: '', image: '',),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
