@@ -103,29 +103,35 @@ class _CoverTextOverlay extends StatelessWidget {
               ],
             ),
           ),
-          padding: const EdgeInsets.all(8.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: _GridItemTitle(
-                  title: title,
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Colors.white,
-                    shadows: [
-                      const Shadow(
-                        blurRadius: 4.0,
-                        color: Colors.black,
-                      ),
-                    ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _GridItemTitle(
+                    title: title,
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
+                      shadows: [
+                        const Shadow(
+                          blurRadius: 4.0,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                    minLines: 1,
                   ),
-                  minLines: 1,
                 ),
               ),
               //if (onClickContinueReading != null) _ContinueReadingButton(
               //  onClickContinueReading: onClickContinueReading,
               //),
-              _ContinueReadingButton(
-                onClickContinueReading: onClickContinueReading,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2.0, right: 2.0),
+                child: _ContinueReadingButton(
+                  onClickContinueReading: onClickContinueReading,
+                ),
               ),
             ],
           ),
@@ -156,18 +162,20 @@ class MangaGridCover extends StatelessWidget {
       child: Stack(
         children: [
           cover,
-          if (badgesStart.isNotEmpty) Positioned(
-            top: 4.0,
-            left: 4.0,
-            //child: badgesStart as Widget,
-            child: badges.BadgeGroup(content: badgesStart),
-          ),
-          if (badgesEnd.isNotEmpty) Positioned(
-            top: 4.0,
-            right: 4.0,
-            //child: badgesEnd as Widget,
-            child: badges.BadgeGroup(content: badgesEnd),
-          ),
+          if (badgesStart.isNotEmpty)
+            Positioned(
+              top: 4.0,
+              left: 4.0,
+              //child: badgesStart as Widget,
+              child: badges.BadgeGroup(content: badgesStart),
+            ),
+          if (badgesEnd.isNotEmpty)
+            Positioned(
+              top: 4.0,
+              right: 4.0,
+              //child: badgesEnd as Widget,
+              child: badges.BadgeGroup(content: badgesEnd),
+            ),
           //if (content != null) content as Widget,
           content!,
         ],
@@ -262,8 +270,10 @@ class _ContinueReadingButton extends StatelessWidget {
         backgroundColor: MaterialStatePropertyAll<Color>(
           Theme.of(context).colorScheme.primary.withOpacity(0.9),
         ),
-        iconColor: MaterialStatePropertyAll<Color>(Theme.of(context).colorScheme.onPrimary),
-        //shape: RoundedRectangleBorder,
+        iconColor: MaterialStatePropertyAll<Color>(
+            Theme.of(context).colorScheme.onPrimary),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
       ),
       visualDensity: VisualDensity.compact,
     );
