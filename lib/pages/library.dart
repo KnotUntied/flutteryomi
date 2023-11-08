@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutteryomi/models/utils/manga_cover.dart' as manga_cover_data;
 import 'package:flutteryomi/widgets/list_heading.dart';
-import 'package:flutteryomi/widgets/manga_cover.dart';
+import 'package:flutteryomi/widgets/library/library_compact_grid.dart';
+import 'package:flutteryomi/widgets/library/manga_item.dart';
+import 'package:flutteryomi/widgets/manga/manga_cover.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -33,7 +36,7 @@ class _LibraryPageState extends State<LibraryPage>
     super.build(context);
     final lang = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 1,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(lang.label_library),
@@ -115,25 +118,26 @@ class _LibraryPageState extends State<LibraryPage>
                 tabAlignment: TabAlignment.start,
                 tabs: <Widget>[
                   Tab(text: lang.label_default),
+                  Tab(text: lang.label_default),
                 ],
               ),
             ),
           ),
         ),
-        body: TabBarView(
-          //TODO: GridView with manga covers
-          children: [
-            GridView.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              children: const [
-                MangaCover.book(contentDescription: '', image: '',),
-                MangaCover.book(contentDescription: '', image: '',),
-                MangaCover.book(contentDescription: '', image: '',),
-              ],
-            )
-          ],
+        body: RefreshIndicator.adaptive(
+          onRefresh: () async {  },
+          child: const TabBarView(
+            children: [
+              LibraryCompactGrid(
+                showTitle: true,
+                columns: 3,
+              ),
+              LibraryCompactGrid(
+                showTitle: true,
+                columns: 3,
+              ),
+            ],
+          ),
         ),
       ),
     );

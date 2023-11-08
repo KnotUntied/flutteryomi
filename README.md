@@ -1,6 +1,8 @@
 # Flutteryomi
 
-*I can't believe it's not Tachiyomi!*
+*I can't believe it's not [Tachiyomi](https://tachiyomi.org/)!*
+
+*Well, close enough.*
 
 A personal project for learning Flutter. An attempt to port Tachiyomi's UI and functionality to Flutter and its target platforms.
 
@@ -30,6 +32,7 @@ dart run build_runner build
 
 ## Todo
 
+- License (esp. wrt. existing Tachiyomi license and permissions)
 - Folder structure and conventions
 - Feature parity with Tachiyomi
 - Desktop layout (?)

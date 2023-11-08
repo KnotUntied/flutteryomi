@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutteryomi/models/utils/manga_cover.dart' as manga_cover_data;
 
 class MangaCover extends StatelessWidget {
+  static const squareRatio = 1.0;
+  static const bookRatio = 2.0 / 3.0;
+
   const MangaCover({
     super.key,
     this.contentDescription = "",
-    required this.image,
+    required this.data,
     required this.ratio,
     //required this.shape,
   });
@@ -12,18 +16,18 @@ class MangaCover extends StatelessWidget {
   const MangaCover.square({
     super.key,
     required this.contentDescription,
-    required this.image,
-  }) : ratio = 1.0;
+    required this.data,
+  }) : ratio = squareRatio;
 
   const MangaCover.book({
     super.key,
     required this.contentDescription,
-    required this.image,
-  }) : ratio = 2.0 / 3.0;
+    required this.data,
+  }) : ratio = bookRatio;
 
   final String contentDescription;
   //final ImageProvider<Object> image;
-  final String image;
+  final manga_cover_data.MangaCover data;
   final double ratio;
   //final double shape;
 
@@ -39,12 +43,10 @@ class MangaCover extends StatelessWidget {
     //    placeholderFit: BoxFit.cover,
     //  ),
     //);
-    return Center(
-      child: AspectRatio(
-        aspectRatio: ratio,
-        child: const Placeholder(
-          color: Color(0x1F888888),
-        ),
+    return AspectRatio(
+      aspectRatio: ratio,
+      child: const Placeholder(
+        color: Color(0x1F888888),
       ),
     );
   }
