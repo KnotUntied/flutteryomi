@@ -47,6 +47,7 @@ class Badge extends StatelessWidget {
   }
 }
 
+// LanguageBadge is supposed to use this but I can't see it actually in use in Tachiyomi proper
 //class IconBadge extends StatelessWidget {
 //  const IconBadge({
 //    super.key,
@@ -63,6 +64,17 @@ class Badge extends StatelessWidget {
 
 //  @override
 //  Widget build(BuildContext context) {
-//    return const Placeholder();
+//    return Container(
+//      color: color ?? Theme.of(context).colorScheme.secondary,
+//      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
+//      child: Text(
+//        text,
+//        maxLines: 1,
+//        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+//          color: iconColor ?? Theme.of(context).colorScheme.onSecondary,
+//          fontWeight: FontWeight.w500,
+//        ),
+//      ),
+//    );
 //  }
 //}
