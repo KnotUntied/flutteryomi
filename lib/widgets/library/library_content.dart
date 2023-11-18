@@ -13,7 +13,6 @@ class LibraryContent extends StatelessWidget {
     //required this.contentPadding,
     required this.currentPage,
     required this.hasActiveFilters,
-    required this.showPageTabs,
     required this.onChangeCurrentPage,
     required this.onMangaClicked,
     //this.onContinueReadingClicked,
@@ -33,7 +32,6 @@ class LibraryContent extends StatelessWidget {
   //final PaddingValues contentPadding;
   final int Function() currentPage;
   final bool hasActiveFilters;
-  final bool showPageTabs;
   final ValueChanged<int> onChangeCurrentPage;
   final ValueChanged<int> onMangaClicked;
   //final ValueChanged<LibraryManga>? onContinueReadingClicked;
@@ -51,37 +49,22 @@ class LibraryContent extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       //length: categories.length,
-      child: Column(
-        children: [
-          if (showPageTabs) const TabBar(
-            dividerColor: Colors.transparent,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: <Widget>[
-              Tab(text: 'Dest'),
-              Tab(text: 'Dest'),
-            ],
-          ),
-          if (showPageTabs) const Divider(height: 1.0),
-          //if (showPageTabs && categories.size > 1)
-          RefreshIndicator.adaptive(
-            onRefresh: () async {  },
-            child: const TabBarView(
-              children: [
-                Placeholder(),
-                Placeholder(),
-                //LibraryCompactGrid(
-                //  showTitle: true,
-                //  columns: 3,
-                //),
-                //LibraryCompactGrid(
-                //  showTitle: true,
-                //  columns: 3,
-                //),
-              ],
-            ),
-          ),
-        ],
+      child: RefreshIndicator.adaptive(
+        onRefresh: () async {  },
+        child: const TabBarView(
+          children: [
+            Placeholder(),
+            Placeholder(),
+            //LibraryCompactGrid(
+            //  showTitle: true,
+            //  columns: 3,
+            //),
+            //LibraryCompactGrid(
+            //  showTitle: true,
+            //  columns: 3,
+            //),
+          ],
+        ),
       ),
     );
   }

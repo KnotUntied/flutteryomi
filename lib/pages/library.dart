@@ -4,9 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutteryomi/models/utils/manga_cover.dart' as manga_cover_data;
 import 'package:flutteryomi/widgets/list_heading.dart';
+import 'package:flutteryomi/widgets/tab_text.dart';
 import 'package:flutteryomi/widgets/library/library_compact_grid.dart';
+import 'package:flutteryomi/widgets/library/library_toolbar.dart';
 import 'package:flutteryomi/widgets/library/manga_item.dart';
-import 'package:flutteryomi/widgets/manga/manga_cover.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -39,6 +40,30 @@ class _LibraryPageState extends State<LibraryPage>
       length: 2,
       //length: categories.length,
       child: Scaffold(
+        //appBar: LibraryToolbar(
+          //hasActiveFilters: state.hasActiveFilters,
+          //selectedCount: state.selection.size,
+          //title: title,
+          //onClickUnselectAll: screenModel::clearSelection,
+          //onClickSelectAll: { screenModel.selectAll(screenModel.activeCategoryIndex) },
+          //onClickInvertSelection: { screenModel.invertSelection(screenModel.activeCategoryIndex) },
+          //onClickFilter: screenModel::showSettingsDialog,
+          //onClickRefresh: { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+          //onClickGlobalUpdate: { onClickRefresh(null) },
+          //onClickOpenRandomManga: {
+          //    scope.launch {
+          //        val randomItem: screenModel.getRandomLibraryItemForCurrentCategory()
+          //        if (randomItem != null) {
+          //            navigator.push(MangaScreen(randomItem.libraryManga.manga.id))
+          //        } else {
+          //            snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
+          //        }
+          //    }
+          //},
+          //searchQuery: state.searchQuery,
+          //onSearchQueryChange: screenModel::search,
+          //scrollBehavior: scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+        //),
         appBar: AppBar(
           title: Text(lang.label_library),
           actions: <Widget>[
@@ -110,28 +135,42 @@ class _LibraryPageState extends State<LibraryPage>
           bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            tabs: <Widget>[
-              Tab(text: lang.label_default),
-              Tab(text: lang.label_default),
+            tabs: [
+              //hacky way to have text and pill
+              Tab(
+                icon: TabText(
+                  text: lang.label_default,
+                  badgeCount: 7,
+                ),
+              ),
+              Tab(
+                icon: TabText(
+                  text: lang.label_default,
+                  badgeCount: 7,
+                ),
+              ),
             ],
           ),
         ),
-        body: RefreshIndicator.adaptive(
-          onRefresh: () async {  },
-          child: TabBarView(
-            children: [
-              LibraryCompactGrid(
-                showTitle: true,
+        body: TabBarView(
+          children: [
+            RefreshIndicator.adaptive(
+              onRefresh: () async {  },
+              child: LibraryCompactGrid(
+                showTitle: false,
                 columns: 3,
                 onGlobalSearchClicked: () {  },
               ),
-              LibraryCompactGrid(
-                showTitle: true,
+            ),
+            RefreshIndicator.adaptive(
+              onRefresh: () async {  },
+              child: LibraryCompactGrid(
+                showTitle: false,
                 columns: 3,
                 onGlobalSearchClicked: () {  },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
