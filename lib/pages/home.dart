@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutteryomi/pages/browse.dart';
 import 'package:flutteryomi/pages/history.dart';
 import 'package:flutteryomi/pages/library.dart';
 import 'package:flutteryomi/pages/more.dart';
 import 'package:flutteryomi/pages/updates.dart';
-import 'package:flutteryomi/providers/home.dart';
+//import 'package:flutteryomi/providers/home.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<HomeProvider>(context);
+    //final homeProvider = Provider.of<HomeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -91,18 +91,20 @@ class _HomePageState extends State<HomePage> {
               //  ],
               //),
               Expanded(
-                child: Center(
-                  child: homePageMap[currentPageIndex],
-                ),
+                child: Center(child: homePageMap[currentPageIndex]),
               ),
             ],
           ),
-          bottomNavigationBar: homeProvider.bottomNavVisibility
-              ? HomeNavigationBar(
-                  index: currentPageIndex,
-                  onTap: navigate,
-                )
-              : null,
+          //bottomNavigationBar: homeProvider.bottomNavVisibility
+          //    ? HomeNavigationBar(
+          //        index: currentPageIndex,
+          //        onTap: navigate,
+          //      )
+          //    : null,
+          bottomNavigationBar: HomeNavigationBar(
+            index: currentPageIndex,
+            onTap: navigate,
+          ),
         );
       }),
     );
@@ -122,10 +124,7 @@ class BadgedIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (count > 0) {
-      return Badge.count(
-        count: count,
-        child: icon,
-      );
+      return Badge.count(count: count, child: icon);
     } else {
       return icon;
     }

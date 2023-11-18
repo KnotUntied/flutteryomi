@@ -29,5 +29,7 @@ linter:
 
 # https://drift.simonbinder.eu/faq/
 analyzer:
+  plugins:
+    - custom_lint
   exclude:
     - "**/*.g.dart"

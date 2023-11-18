@@ -22,7 +22,9 @@ Update localizations by adding or editing the `.arb` files in `lib/l10n`. Then r
 flutter gen-l10n
 ```
 
-## Updating Models
+## Code Generation
+
+Required when updating Riverpod providers, database models, etc.
 
 See [Drift's official documentation](https://drift.simonbinder.eu/docs/getting-started/).
 

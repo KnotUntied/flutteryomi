@@ -40,7 +40,7 @@ class LibraryCompactGrid extends StatelessWidget {
     //    mainAxisSpacing: CommonMangaItemDefaults.gridVerticalSpacer,
     //  ),
     //  itemCount: items.length,
-    //  itemBuilder: (BuildContext context, int index) => 
+    //  itemBuilder: (BuildContext context, int index) =>
     //    MangaCompactGridItem(
     //      title: 'Suavemente',
     //      coverData: manga_cover_data.MangaCover(
@@ -72,8 +72,8 @@ class LibraryCompactGrid extends StatelessWidget {
             isMangaFavorite: false,
             lastModified: DateTime.now(),
           ),
-          onLongClick: () {  },
-          onClick: () {  },
+          onClick: () {},
+          onLongClick: () {},
         ),
       ],
     );

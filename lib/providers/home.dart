@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 
-class HomeProvider extends ChangeNotifier {
-  bool _bottomNavVisibility = true;
+//class HomeProvider extends ChangeNotifier {
+//  bool _bottomNavVisibility = true;
 
-  bool get bottomNavVisibility => _bottomNavVisibility;
+//  bool get bottomNavVisibility => _bottomNavVisibility;
 
-  set bottomNavVisibility(bool visibility) {
-    _bottomNavVisibility = visibility;
-    notifyListeners();
-  }
-}
+//  set bottomNavVisibility(bool visibility) {
+//    _bottomNavVisibility = visibility;
+//    notifyListeners();
+//  }
+//}
