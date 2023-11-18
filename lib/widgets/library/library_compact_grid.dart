@@ -16,19 +16,19 @@ class LibraryCompactGrid extends StatelessWidget {
     //required this.onLongClick,
     //this.onClickContinueReading,
     this.searchQuery,
-    //required this.onGlobalSearchClicked,
+    required this.onGlobalSearchClicked,
   });
 
   //final List<LibraryItem> items;
   final bool showTitle;
   final int columns;
-  //final contentPadding: PaddingValues;
+  //final PaddingValues contentPadding;
   //final List<LibraryManga> selection;
-  //final onClick: (LibraryManga) -> Unit;
-  //final onLongClick: (LibraryManga) -> Unit;
-  //final onClickContinueReading: ((LibraryManga) -> Unit)?;
+  //final ValueChanged<LibraryManga> onClick;
+  //final ValueChanged<LibraryManga> onLongClick;
+  //final ValueChanged<LibraryManga>? onClickContinueReading;
   final String? searchQuery;
-  //final onGlobalSearchClicked: () -> Unit;
+  final VoidCallback onGlobalSearchClicked;
 
   @override
   Widget build(BuildContext context) {

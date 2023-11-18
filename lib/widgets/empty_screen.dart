@@ -27,7 +27,9 @@ class EmptyScreen extends StatelessWidget {
         children: [
           Text(
             errorFaces[Random().nextInt(errorFaces.length)],
-            style: Theme.of(context).textTheme.displayMedium,
+            style: Theme.of(context).textTheme.displayMedium!.copyWith(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),

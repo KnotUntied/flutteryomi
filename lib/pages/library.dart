@@ -37,6 +37,7 @@ class _LibraryPageState extends State<LibraryPage>
     final lang = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
+      //length: categories.length,
       child: Scaffold(
         appBar: AppBar(
           title: Text(lang.label_library),
@@ -91,7 +92,7 @@ class _LibraryPageState extends State<LibraryPage>
                       controller.open();
                     }
                   },
-                  icon: const Icon(Icons.more_vert),
+                  icon: Icon(Icons.adaptive.more_outlined),
                 );
               },
               menuChildren: <MenuItemButton>[
@@ -106,35 +107,28 @@ class _LibraryPageState extends State<LibraryPage>
               ],
             ),
           ],
-          // Flutter issue; use workaround for now
-          // https://github.com/flutter/flutter/issues/117722
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(kTextTabBarHeight),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TabBar(
-                dividerColor: Colors.transparent,
-                isScrollable: true,
-                tabAlignment: TabAlignment.start,
-                tabs: <Widget>[
-                  Tab(text: lang.label_default),
-                  Tab(text: lang.label_default),
-                ],
-              ),
-            ),
+          bottom: TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            tabs: <Widget>[
+              Tab(text: lang.label_default),
+              Tab(text: lang.label_default),
+            ],
           ),
         ),
         body: RefreshIndicator.adaptive(
           onRefresh: () async {  },
-          child: const TabBarView(
+          child: TabBarView(
             children: [
               LibraryCompactGrid(
                 showTitle: true,
                 columns: 3,
+                onGlobalSearchClicked: () {  },
               ),
               LibraryCompactGrid(
                 showTitle: true,
                 columns: 3,
+                onGlobalSearchClicked: () {  },
               ),
             ],
           ),

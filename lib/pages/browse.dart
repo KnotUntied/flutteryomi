@@ -46,8 +46,6 @@ class _BrowsePageState extends State<BrowsePage>
             ),
           ],
           bottom: TabBar(
-            // Does not match Tachiyomi appearance, but currently set to match Library TabBar
-            dividerColor: Colors.transparent,
             tabs: <Tab>[
               Tab(text: lang.label_sources),
               Tab(text: lang.label_extensions),
