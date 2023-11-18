@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/widgets/app_bar.dart';
 import 'package:flutteryomi/widgets/pill.dart';
+import 'package:flutteryomi/widgets/library/library_compact_grid.dart';
 
 class LibraryContent extends StatelessWidget {
   const LibraryContent({
@@ -11,7 +12,6 @@ class LibraryContent extends StatelessWidget {
     this.searchQuery,
     //required this.selection,
     //required this.contentPadding,
-    required this.currentPage,
     required this.hasActiveFilters,
     required this.onChangeCurrentPage,
     required this.onMangaClicked,
@@ -30,7 +30,6 @@ class LibraryContent extends StatelessWidget {
   final String? searchQuery;
   //final List<LibraryManga> selection;
   //final PaddingValues contentPadding;
-  final int Function() currentPage;
   final bool hasActiveFilters;
   final ValueChanged<int> onChangeCurrentPage;
   final ValueChanged<int> onMangaClicked;
@@ -46,26 +45,25 @@ class LibraryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      //length: categories.length,
-      child: RefreshIndicator.adaptive(
-        onRefresh: () async {  },
-        child: const TabBarView(
-          children: [
-            Placeholder(),
-            Placeholder(),
-            //LibraryCompactGrid(
-            //  showTitle: true,
-            //  columns: 3,
-            //),
-            //LibraryCompactGrid(
-            //  showTitle: true,
-            //  columns: 3,
-            //),
-          ],
+    return TabBarView(
+      children: [
+        RefreshIndicator.adaptive(
+          onRefresh: () async {},
+          child: LibraryCompactGrid(
+            showTitle: false,
+            columns: 3,
+            onGlobalSearchClicked: () {},
+          ),
         ),
-      ),
+        RefreshIndicator.adaptive(
+          onRefresh: () async {},
+          child: LibraryCompactGrid(
+            showTitle: false,
+            columns: 3,
+            onGlobalSearchClicked: () {},
+          ),
+        ),
+      ],
     );
   }
 }

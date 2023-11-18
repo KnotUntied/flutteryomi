@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutteryomi/models/utils/manga_cover.dart' as manga_cover_data;
 import 'package:flutteryomi/widgets/list_heading.dart';
 import 'package:flutteryomi/widgets/tab_text.dart';
-import 'package:flutteryomi/widgets/library/library_compact_grid.dart';
+import 'package:flutteryomi/widgets/library/library_content.dart';
 import 'package:flutteryomi/widgets/library/library_toolbar.dart';
 import 'package:flutteryomi/widgets/library/manga_item.dart';
 
@@ -41,28 +41,28 @@ class _LibraryPageState extends State<LibraryPage>
       //length: categories.length,
       child: Scaffold(
         //appBar: LibraryToolbar(
-          //hasActiveFilters: state.hasActiveFilters,
-          //selectedCount: state.selection.size,
-          //title: title,
-          //onClickUnselectAll: screenModel::clearSelection,
-          //onClickSelectAll: { screenModel.selectAll(screenModel.activeCategoryIndex) },
-          //onClickInvertSelection: { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-          //onClickFilter: screenModel::showSettingsDialog,
-          //onClickRefresh: { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
-          //onClickGlobalUpdate: { onClickRefresh(null) },
-          //onClickOpenRandomManga: {
-          //    scope.launch {
-          //        val randomItem: screenModel.getRandomLibraryItemForCurrentCategory()
-          //        if (randomItem != null) {
-          //            navigator.push(MangaScreen(randomItem.libraryManga.manga.id))
-          //        } else {
-          //            snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
-          //        }
-          //    }
-          //},
-          //searchQuery: state.searchQuery,
-          //onSearchQueryChange: screenModel::search,
-          //scrollBehavior: scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+        //hasActiveFilters: state.hasActiveFilters,
+        //selectedCount: state.selection.size,
+        //title: title,
+        //onClickUnselectAll: screenModel::clearSelection,
+        //onClickSelectAll: { screenModel.selectAll(screenModel.activeCategoryIndex) },
+        //onClickInvertSelection: { screenModel.invertSelection(screenModel.activeCategoryIndex) },
+        //onClickFilter: screenModel::showSettingsDialog,
+        //onClickRefresh: { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+        //onClickGlobalUpdate: { onClickRefresh(null) },
+        //onClickOpenRandomManga: {
+        //    scope.launch {
+        //        val randomItem: screenModel.getRandomLibraryItemForCurrentCategory()
+        //        if (randomItem != null) {
+        //            navigator.push(MangaScreen(randomItem.libraryManga.manga.id))
+        //        } else {
+        //            snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
+        //        }
+        //    }
+        //},
+        //searchQuery: state.searchQuery,
+        //onSearchQueryChange: screenModel::search,
+        //scrollBehavior: scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
         //),
         appBar: AppBar(
           title: Text(lang.label_library),
@@ -152,25 +152,11 @@ class _LibraryPageState extends State<LibraryPage>
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            RefreshIndicator.adaptive(
-              onRefresh: () async {  },
-              child: LibraryCompactGrid(
-                showTitle: false,
-                columns: 3,
-                onGlobalSearchClicked: () {  },
-              ),
-            ),
-            RefreshIndicator.adaptive(
-              onRefresh: () async {  },
-              child: LibraryCompactGrid(
-                showTitle: false,
-                columns: 3,
-                onGlobalSearchClicked: () {  },
-              ),
-            ),
-          ],
+        body: LibraryContent(
+          hasActiveFilters: false,
+          onChangeCurrentPage: (int value) {},
+          onMangaClicked: (int value) {},
+          onGlobalSearchClicked: () {},
         ),
       ),
     );
