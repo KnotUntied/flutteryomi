@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+//import 'dart:io' show Platform;
 
 class CrashLogUtil {
   String getDebugInfo() {

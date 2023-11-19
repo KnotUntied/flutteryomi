@@ -1,0 +1,114 @@
+-- import 'package:flutteryomi/data/converters/list_of_strings.dart';
+-- import 'package:flutteryomi/data/enums/update_strategy.dart';
+import '../converters/list_of_strings.dart';
+import '../enums/update_strategy.dart';
+
+CREATE TABLE mangas(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    source INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    artist TEXT,
+    author TEXT,
+    description TEXT,
+    genre TEXT MAPPED BY `const ListOfStringsConverter()`,
+    title TEXT NOT NULL,
+    status INTEGER NOT NULL,
+    thumbnail_url TEXT,
+    favorite BOOLEAN NOT NULL,
+    last_update DATETIME,
+    next_update DATETIME,
+    initialized BOOLEAN NOT NULL,
+    viewer INTEGER NOT NULL,
+    chapter_flags INTEGER NOT NULL,
+    cover_last_modified DATETIME NOT NULL,
+    date_added DATETIME NOT NULL,
+    -- Built as DateTime for some reason
+    -- update_strategy ENUM(UpdateStrategy) NOT NULL DEFAULT 0,
+    update_strategy INTEGER NOT NULL DEFAULT 0,
+    calculate_interval INTEGER DEFAULT 0 NOT NULL,
+    last_modified_at DATETIME NOT NULL DEFAULT 0,
+    favorite_modified_at DATETIME
+);
+
+CREATE INDEX library_favorite_index ON mangas(favorite) WHERE favorite = 1;
+CREATE INDEX mangas_url_index ON mangas(url);
+
+CREATE TRIGGER update_last_favorited_at_mangas
+AFTER UPDATE OF favorite ON mangas
+BEGIN
+  UPDATE mangas
+  SET favorite_modified_at = unixepoch()
+  WHERE _id = new._id;
+END;
+
+CREATE TRIGGER update_last_modified_at_mangas
+AFTER UPDATE ON mangas
+FOR EACH ROW
+BEGIN
+  UPDATE mangas
+  SET last_modified_at = unixepoch()
+  WHERE _id = new._id;
+END;
+
+getMangaById:
+SELECT *
+FROM mangas
+WHERE _id = :id;
+
+-- TODO: this should ideally never really have more than 1 result
+getMangaByUrlAndSource:
+SELECT *
+FROM mangas
+WHERE url = :url
+AND source = :source
+LIMIT 1;
+
+getFavorites:
+SELECT *
+FROM mangas
+WHERE favorite = 1;
+
+getAllManga:
+SELECT *
+FROM mangas;
+
+getMangasWithFavoriteTimestamp:
+SELECT *
+FROM mangas
+WHERE favorite_modified_at IS NOT NULL;
+
+getSourceIdWithFavoriteCount:
+SELECT
+source,
+count(*)
+FROM mangas
+WHERE favorite = 1
+GROUP BY source;
+
+getFavoriteBySourceId:
+SELECT *
+FROM mangas
+WHERE favorite = 1
+AND source = :sourceId;
+
+getDuplicateLibraryManga:
+SELECT *
+FROM mangas
+WHERE favorite = 1
+AND LOWER(title) = :title
+AND _id != :id;
+
+resetViewerFlags:
+UPDATE mangas
+SET viewer = 0;
+
+getSourceIdsWithNonLibraryManga:
+SELECT source, COUNT(*) AS manga_count
+FROM mangas
+WHERE favorite = 0
+GROUP BY source;
+
+deleteMangasNotInLibraryBySourceIds:
+DELETE FROM mangas
+WHERE favorite = 0
+AND source IN :sourceIds;

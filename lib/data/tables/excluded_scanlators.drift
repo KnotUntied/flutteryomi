@@ -1,0 +1,15 @@
+import 'mangas.drift';
+
+CREATE TABLE excluded_scanlators(
+    manga_id INTEGER NOT NULL,
+    scanlator TEXT NOT NULL,
+    FOREIGN KEY(manga_id) REFERENCES mangas (_id)
+    ON DELETE CASCADE
+);
+
+CREATE INDEX excluded_scanlators_manga_id_index ON excluded_scanlators(manga_id);
+
+getExcludedScanlatorsByMangaId:
+SELECT scanlator
+FROM excluded_scanlators
+WHERE manga_id = :mangaId;
