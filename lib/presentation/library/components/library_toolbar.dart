@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/components/pill.dart';
 
-class LibraryToolbar extends StatelessWidget {
+class LibraryToolbar extends StatelessWidget implements PreferredSizeWidget {
   const LibraryToolbar({
     super.key,
     required this.hasActiveFilters,
@@ -19,7 +19,6 @@ class LibraryToolbar extends StatelessWidget {
     required this.onClickOpenRandomManga,
     this.searchQuery,
     required this.onSearchQueryChange,
-    //this.scrollBehavior,
   });
 
   final bool hasActiveFilters;
@@ -34,7 +33,9 @@ class LibraryToolbar extends StatelessWidget {
   final VoidCallback onClickOpenRandomManga;
   final String? searchQuery;
   final ValueChanged<String?> onSearchQueryChange;
-  //final TopAppBarScrollBehavior scrollBehavior;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,6 @@ class LibraryRegularToolbar extends StatelessWidget {
     required this.onClickRefresh,
     required this.onClickGlobalUpdate,
     required this.onClickOpenRandomManga,
-    //this.scrollBehavior,
   });
 
   final LibraryToolbarTitle title;
@@ -81,7 +81,6 @@ class LibraryRegularToolbar extends StatelessWidget {
   final VoidCallback onClickRefresh;
   final VoidCallback onClickGlobalUpdate;
   final VoidCallback onClickOpenRandomManga;
-  //final TopAppBarScrollBehavior scrollBehavior;
 
   @override
   Widget build(BuildContext context) {

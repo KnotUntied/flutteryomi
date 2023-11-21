@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutteryomi/presentation/browse/browse.dart';
+import 'package:flutteryomi/presentation/components/adaptive_navigation_bar.dart';
 import 'package:flutteryomi/presentation/history/history.dart';
 import 'package:flutteryomi/presentation/library/library.dart';
 import 'package:flutteryomi/presentation/more/more.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-const Map<int, Widget> homeScreenMap = {
+const Map<int, Widget> tabs = {
   0: LibraryTab(),
   1: UpdatesTab(),
   2: HistoryTab(),
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //  ],
               //),
               Expanded(
-                child: Center(child: homeScreenMap[currentPageIndex]),
+                child: Center(child: tabs[currentPageIndex]),
               ),
             ],
           ),
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           //    : null,
           bottomNavigationBar: HomeNavigationBar(
             index: currentPageIndex,
-            onTap: navigate,
+            onSelect: navigate,
           ),
         );
       }),
@@ -128,79 +129,49 @@ class BadgedIcon extends StatelessWidget {
 
 class HomeNavigationBar extends StatelessWidget {
   final int index;
-  final ValueChanged<int> onTap;
+  final ValueChanged<int> onSelect;
 
   const HomeNavigationBar({
     super.key,
     required this.index,
-    required this.onTap,
+    required this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    return Platform.isIOS
-        ? CupertinoTabBar(
-            currentIndex: index,
-            onTap: onTap,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                activeIcon: const Icon(Icons.collections_bookmark),
-                icon: const Icon(Icons.collections_bookmark_outlined),
-                label: lang.label_library,
-              ),
-              BottomNavigationBarItem(
-                activeIcon: const Icon(Icons.new_releases),
-                icon: const Icon(Icons.new_releases_outlined),
-                label: lang.label_recent_updates,
-              ),
-              BottomNavigationBarItem(
-                activeIcon: const Icon(Icons.history),
-                icon: const Icon(Icons.history_outlined),
-                label: lang.label_recent_manga,
-              ),
-              BottomNavigationBarItem(
-                activeIcon: const Icon(Icons.explore),
-                icon: const Icon(Icons.explore_outlined),
-                label: lang.browse,
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(Icons.adaptive.more),
-                icon: Icon(Icons.adaptive.more_outlined),
-                label: lang.label_more,
-              ),
-            ],
-          )
-        : NavigationBar(
-            onDestinationSelected: onTap,
-            selectedIndex: index,
-            destinations: <NavigationDestination>[
-              NavigationDestination(
-                selectedIcon: const Icon(Icons.collections_bookmark),
-                icon: const Icon(Icons.collections_bookmark_outlined),
-                label: lang.label_library,
-              ),
-              NavigationDestination(
-                selectedIcon: const Icon(Icons.new_releases),
-                icon: const Icon(Icons.new_releases_outlined),
-                label: lang.label_recent_updates,
-              ),
-              NavigationDestination(
-                selectedIcon: const Icon(Icons.history),
-                icon: const Icon(Icons.history_outlined),
-                label: lang.label_recent_manga,
-              ),
-              NavigationDestination(
-                selectedIcon: const Icon(Icons.explore),
-                icon: const Icon(Icons.explore_outlined),
-                label: lang.browse,
-              ),
-              NavigationDestination(
-                selectedIcon: Icon(Icons.adaptive.more),
-                icon: Icon(Icons.adaptive.more_outlined),
-                label: lang.label_more,
-              ),
-            ],
-          );
+    final List<NavigationBarItem> items = [
+      NavigationBarItem(
+        selectedIcon: const Icon(Icons.collections_bookmark),
+        icon: const Icon(Icons.collections_bookmark_outlined),
+        label: lang.label_library,
+      ),
+      NavigationBarItem(
+        selectedIcon: const Icon(Icons.new_releases),
+        icon: const Icon(Icons.new_releases_outlined),
+        label: lang.label_recent_updates,
+      ),
+      NavigationBarItem(
+        selectedIcon: const Icon(Icons.history),
+        icon: const Icon(Icons.history_outlined),
+        label: lang.label_recent_manga,
+      ),
+      NavigationBarItem(
+        selectedIcon: const Icon(Icons.explore),
+        icon: const Icon(Icons.explore_outlined),
+        label: lang.browse,
+      ),
+      NavigationBarItem(
+        selectedIcon: Icon(Icons.adaptive.more),
+        icon: Icon(Icons.adaptive.more_outlined),
+        label: lang.label_more,
+      ),
+    ];
+
+    return AdaptiveNavigationBar(
+      index: index,
+      items: items,
+      onSelect: onSelect,
+    );
   }
 }

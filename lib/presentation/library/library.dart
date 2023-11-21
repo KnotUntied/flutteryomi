@@ -18,16 +18,6 @@ class LibraryTab extends StatefulWidget {
 
 class _LibraryTabState extends State<LibraryTab>
     with AutomaticKeepAliveClientMixin<LibraryTab> {
-  //val isLoading: Boolean = true,
-  //val library: LibraryMap = emptyMap(),
-  //val searchQuery: String? = null,
-  //val selection: List<LibraryManga> = emptyList(),
-  //val hasActiveFilters: Boolean = false,
-  //val showCategoryTabs: Boolean = false,
-  //val showMangaCount: Boolean = false,
-  //val showMangaContinueButton: Boolean = false,
-  //val dialog: Dialog? = null,
-  final String? searchQuery = null;
 
   @override
   bool get wantKeepAlive => true;
@@ -40,30 +30,6 @@ class _LibraryTabState extends State<LibraryTab>
       length: 2,
       //length: categories.length,
       child: Scaffold(
-        //appBar: LibraryToolbar(
-        //hasActiveFilters: state.hasActiveFilters,
-        //selectedCount: state.selection.size,
-        //title: title,
-        //onClickUnselectAll: screenModel::clearSelection,
-        //onClickSelectAll: { screenModel.selectAll(screenModel.activeCategoryIndex) },
-        //onClickInvertSelection: { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-        //onClickFilter: screenModel::showSettingsDialog,
-        //onClickRefresh: { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
-        //onClickGlobalUpdate: { onClickRefresh(null) },
-        //onClickOpenRandomManga: {
-        //    scope.launch {
-        //        val randomItem: screenModel.getRandomLibraryItemForCurrentCategory()
-        //        if (randomItem != null) {
-        //            navigator.push(MangaScreen(randomItem.libraryManga.manga.id))
-        //        } else {
-        //            snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
-        //        }
-        //    }
-        //},
-        //searchQuery: state.searchQuery,
-        //onSearchQueryChange: screenModel::search,
-        //scrollBehavior: scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
-        //),
         appBar: AppBar(
           title: Text(lang.label_library),
           actions: <Widget>[
@@ -222,7 +188,7 @@ class LibrarySettingsDisplayView extends StatelessWidget {
     return ListView(
       children: <Widget>[
         ListHeading(lang.action_display_mode),
-        ListHeading(lang.badges_header),
+        //ListHeading(lang.badges_header),
         LibrarySettingsCheckboxListTile(
           title: lang.action_display_download_badge,
         ),

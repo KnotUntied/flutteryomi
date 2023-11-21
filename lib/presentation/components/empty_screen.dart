@@ -2,7 +2,7 @@ import "dart:math";
 
 import 'package:flutter/material.dart';
 
-import 'action_button.dart';
+import 'package:flutteryomi/presentation/components/action_button.dart';
 
 class EmptyScreenAction {
   const EmptyScreenAction({

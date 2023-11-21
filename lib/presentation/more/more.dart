@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutteryomi/presentation/more/settings/screen/about/about.dart';
-import 'package:flutteryomi/presentation/more/create_backup.dart';
+import 'package:flutteryomi/presentation/more/old_backup_and_restore.dart';
 import 'package:flutteryomi/presentation/category/category.dart';
 import 'package:flutteryomi/presentation/download/download_queue.dart';
 import 'package:flutteryomi/presentation/more/stats/stats.dart';
@@ -83,7 +83,7 @@ class MoreTab extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const CreateBackupScreen(),
+                builder: (context) => const OldBackupRestoreScreen(),
               ),
             );
           },
