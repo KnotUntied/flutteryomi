@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/components/empty_screen.dart';
-import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
 
 class UpdatesTab extends StatefulWidget {
   const UpdatesTab({super.key});
@@ -18,8 +17,8 @@ class _UpdatesTabState extends State<UpdatesTab> {
     return UpdatesScreen(
       lastUpdated: DateTime.now(),
       relativeTime: true,
-      onSelectAll: (bool x) => {},
-      onInvertSelection: () => {},
+      onSelectAll: (bool x) {},
+      onInvertSelection: () {},
       onUpdateLibrary: () => true,
     );
   }
@@ -167,8 +166,6 @@ class UpdatesBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MangaBottomActionMenu(
-      visible: true,
-    );
+    return const Placeholder();
   }
 }

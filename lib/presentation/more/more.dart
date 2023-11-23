@@ -8,7 +8,7 @@ import 'package:flutteryomi/presentation/category/category.dart';
 import 'package:flutteryomi/presentation/download/download_queue.dart';
 import 'package:flutteryomi/presentation/more/stats/stats.dart';
 
-final Uri helpUrl = Uri.parse('https://github.com/KnotUntied/flutteryomi');
+final Uri _helpUrl = Uri.parse('https://github.com/KnotUntied/flutteryomi');
 
 class MoreTab extends StatelessWidget {
   const MoreTab({super.key});
@@ -116,7 +116,7 @@ class MoreTab extends StatelessWidget {
 }
 
 Future<void> _launchHelpUrl() async {
-  if (!await launchUrl(helpUrl)) {
-    throw Exception('Could not open $helpUrl');
+  if (!await launchUrl(_helpUrl)) {
+    throw Exception('Could not open $_helpUrl');
   }
 }

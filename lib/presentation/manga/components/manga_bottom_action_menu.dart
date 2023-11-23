@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
+import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart';
 
 class MangaBottomActionMenu extends StatelessWidget {
   const MangaBottomActionMenu({
@@ -144,26 +145,8 @@ class LibraryBottomActionMenu extends StatelessWidget {
               icon: const Icon(Icons.remove_done_outlined),
               onPressed: onMarkAsUnreadClicked,
             ),
-            if (onDownloadClicked != null) MenuAnchor(
-              builder: (BuildContext context, MenuController controller,
-                  Widget? child) {
-                return IconButton(
-                  onPressed: () {
-                    controller.isOpen ? controller.close() : controller.open();
-                  },
-                  icon: Icon(
-                    Icons.download_outlined,
-                    semanticLabel: lang.action_download,
-                  ),
-                  tooltip: lang.action_download,
-                );
-              },
-              menuChildren: actions
-                  .map((action) => MenuItemButton(
-                        onPressed: action.onClick,
-                        child: Text(action.title),
-                      ))
-                  .toList(),
+            if (onDownloadClicked != null) DownloadDropdownMenu(
+              onDownloadClicked: onDownloadClicked!,
             ),
             if (onDeleteClicked != null) IconButton(
               tooltip: lang.action_delete,

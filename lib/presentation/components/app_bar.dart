@@ -16,7 +16,7 @@ class ActionAppBarWithCounter extends StatelessWidget {
     this.actionModeCounter = 0,
     required this.onCancelActionMode,
     this.actionModeActions,
-    //this.scrollBehavior,
+    this.bottom,
   });
 
   final Color? backgroundColor;
@@ -28,7 +28,7 @@ class ActionAppBarWithCounter extends StatelessWidget {
   final int actionModeCounter;
   final VoidCallback onCancelActionMode;
   final List<Widget>? actionModeActions;
-  //final TopAppBarScrollBehavior? scrollBehavior;
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +38,7 @@ class ActionAppBarWithCounter extends StatelessWidget {
       actions: actions,
       automaticallyImplyLeading: true,
       backgroundColor: backgroundColor,
+      bottom: bottom,
       elevation: isActionMode ? 3.0 : 0.0,
       title: isActionMode
           ? Text(actionModeCounter.toString())
@@ -64,7 +65,7 @@ class ActionAppBar extends StatelessWidget {
     this.isActionMode = false,
     required this.onCancelActionMode,
     this.actionModeActions,
-    //this.scrollBehavior,
+    this.bottom,
   });
 
   final Color? backgroundColor;
@@ -75,7 +76,7 @@ class ActionAppBar extends StatelessWidget {
   final bool isActionMode;
   final VoidCallback onCancelActionMode;
   final List<Widget>? actionModeActions;
-  //final TopAppBarScrollBehavior? scrollBehavior;
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +85,7 @@ class ActionAppBar extends StatelessWidget {
       actions: actions,
       automaticallyImplyLeading: true,
       backgroundColor: backgroundColor,
+      bottom: bottom,
       elevation: isActionMode ? 3.0 : 0.0,
       title: titleContent,
       leading: isActionMode
@@ -157,6 +159,20 @@ class AppBarAction extends StatelessWidget {
   }
 }
 
+class AppBarActionData {
+  final String title;
+  final IconData iconData;
+  final Color? iconTint;
+  final VoidCallback? onClick;
+
+  const AppBarActionData({
+    required this.title,
+    required this.iconData,
+    this.iconTint,
+    this.onClick,
+  });
+}
+
 class AppBarOverflowAction {
   final String title;
   final VoidCallback onClick;
@@ -200,7 +216,7 @@ class AppBarOverflowActions extends StatelessWidget {
   }
 }
 
-class SearchToolbar extends StatelessWidget {
+class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
   const SearchToolbar({
     super.key,
     required this.titleContent,
@@ -212,7 +228,7 @@ class SearchToolbar extends StatelessWidget {
     this.onSearch,
     this.onClickCloseSearch,
     required this.actions,
-    //this.scrollBehavior,
+    this.bottom,
     //this.visualTransformation: VisualTransformation = VisualTransformation.None,
     //this.interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   });
@@ -226,9 +242,16 @@ class SearchToolbar extends StatelessWidget {
   final ValueChanged<String>? onSearch;
   final VoidCallback? onClickCloseSearch;
   final List<Widget> actions;
-  //final TopAppBarScrollBehavior? scrollBehavior;
+  final PreferredSizeWidget? bottom;
   //final VisualTransformation visualTransformation = VisualTransformation.None;
   //final MutableInteractionSource interactionSource = remember { MutableInteractionSource() };
+
+  @override
+  Size get preferredSize => Size.fromHeight(
+    bottom != null
+      ? kToolbarHeight + kTextTabBarHeight
+      : kToolbarHeight
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -285,6 +308,7 @@ class SearchToolbar extends StatelessWidget {
 
     return ActionAppBar(
       actions: [searchWidget, ...actions],
+      bottom: bottom,
       isActionMode: false,
       navigateUp: searchQuery == null ? navigateUp : onClickCloseSearch,
       navigationIcon: const Icon(Icons.arrow_back_outlined),

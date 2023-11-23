@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pill.dart';
+import 'package:flutteryomi/presentation/components/pill.dart';
 
 class TabText extends StatelessWidget {
   const TabText({
@@ -18,6 +18,7 @@ class TabText extends StatelessWidget {
         MediaQuery.of(context).platformBrightness == Brightness.dark ? 31 : 20;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           text,

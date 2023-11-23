@@ -8,6 +8,8 @@ import 'package:flutteryomi/presentation/components/tab_text.dart';
 import 'package:flutteryomi/presentation/library/components/library_content.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/library/components/manga_item.dart';
+import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
+import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
 
 class LibraryTab extends StatefulWidget {
   const LibraryTab({super.key});
@@ -124,92 +126,15 @@ class _LibraryTabState extends State<LibraryTab>
           onMangaClicked: (int value) {},
           onGlobalSearchClicked: () {},
         ),
+        bottomNavigationBar: LibraryBottomActionMenu(
+            visible: true,
+            onChangeCategoryClicked: () {},
+            onMarkAsReadClicked: () {},
+            onMarkAsUnreadClicked: () {},
+            onDownloadClicked: (DownloadAction downloadAction) {},
+            onDeleteClicked: () {},
+        ),
       ),
-    );
-  }
-}
-
-class LibrarySettingsCheckboxListTile extends StatelessWidget {
-  const LibrarySettingsCheckboxListTile({
-    super.key,
-    required this.title,
-  });
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return CheckboxListTile.adaptive(
-      controlAffinity: ListTileControlAffinity.leading,
-      title: Text(title),
-      value: false,
-      onChanged: (bool? value) {},
-    );
-  }
-}
-
-class LibrarySettingsFilterView extends StatelessWidget {
-  const LibrarySettingsFilterView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return ListView(
-      children: <LibrarySettingsCheckboxListTile>[
-        LibrarySettingsCheckboxListTile(
-          title: lang.label_downloaded,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_filter_unread,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.label_started,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_filter_bookmarked,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.completed,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_filter_tracked,
-        ),
-      ],
-    );
-  }
-}
-
-class LibrarySettingsDisplayView extends StatelessWidget {
-  const LibrarySettingsDisplayView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return ListView(
-      children: <Widget>[
-        ListHeading(lang.action_display_mode),
-        //ListHeading(lang.badges_header),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_display_download_badge,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_display_local_badge,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_display_language_badge,
-        ),
-        ListHeading(lang.tabs_header),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_display_show_tabs,
-        ),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_display_show_number_of_items,
-        ),
-        ListHeading(lang.other_source),
-        LibrarySettingsCheckboxListTile(
-          title: lang.action_display_show_continue_reading_button,
-        ),
-      ],
     );
   }
 }
