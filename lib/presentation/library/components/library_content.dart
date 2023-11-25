@@ -60,6 +60,30 @@ class LibraryContent extends StatelessWidget {
             onGlobalSearchClicked: () {},
           ),
         ),
+        RefreshIndicator.adaptive(
+          onRefresh: () async {},
+          child: LibraryCompactGrid(
+            showTitle: false,
+            columns: 3,
+            onGlobalSearchClicked: () {},
+          ),
+        ),
+        RefreshIndicator.adaptive(
+          onRefresh: () async {},
+          child: LibraryCompactGrid(
+            showTitle: false,
+            columns: 3,
+            onGlobalSearchClicked: () {},
+          ),
+        ),
+        RefreshIndicator.adaptive(
+          onRefresh: () async {},
+          child: LibraryCompactGrid(
+            showTitle: false,
+            columns: 3,
+            onGlobalSearchClicked: () {},
+          ),
+        ),
       ],
     );
   }

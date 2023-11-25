@@ -7,21 +7,21 @@ import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
 import 'database.drift.dart';
-import 'tables/categories.drift.dart';
+import 'drift/data/categories.drift.dart';
 
 @DriftDatabase(
   include: {
-    'tables/categories.drift',
-    'tables/chapters.drift',
-    'tables/excluded_scanlators.drift',
-    'tables/history.drift',
-    'tables/manga_sync.drift',
-    'tables/mangas.drift',
-    'tables/mangas_categories.drift',
-    'tables/sources.drift',
-    'views/history_view.drift',
-    'views/library_view.drift',
-    'views/updates_view.drift',
+    'drift/data/categories.drift',
+    'drift/data/chapters.drift',
+    'drift/data/excluded_scanlators.drift',
+    'drift/data/history.drift',
+    'drift/data/manga_sync.drift',
+    'drift/data/mangas.drift',
+    'drift/data/mangas_categories.drift',
+    'drift/data/sources.drift',
+    'drift/views/history_view.drift',
+    'drift/views/library_view.drift',
+    'drift/views/updates_view.drift',
   },
 )
 class AppDatabase extends $AppDatabase {

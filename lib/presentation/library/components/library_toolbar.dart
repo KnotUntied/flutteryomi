@@ -19,6 +19,7 @@ class LibraryToolbar extends StatelessWidget implements PreferredSizeWidget {
     required this.onClickOpenRandomManga,
     this.searchQuery,
     required this.onSearchQueryChange,
+    this.bottom,
   });
 
   final bool hasActiveFilters;
@@ -33,9 +34,14 @@ class LibraryToolbar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onClickOpenRandomManga;
   final String? searchQuery;
   final ValueChanged<String?> onSearchQueryChange;
+  final PreferredSizeWidget? bottom;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(
+    bottom != null
+      ? kToolbarHeight + kTextTabBarHeight
+      : kToolbarHeight
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +51,7 @@ class LibraryToolbar extends StatelessWidget implements PreferredSizeWidget {
             onClickUnselectAll: onClickUnselectAll,
             onClickSelectAll: onClickSelectAll,
             onClickInvertSelection: onClickInvertSelection,
+            bottom: bottom,
           )
         : LibraryRegularToolbar(
             title: title,
@@ -55,7 +62,7 @@ class LibraryToolbar extends StatelessWidget implements PreferredSizeWidget {
             onClickRefresh: onClickRefresh,
             onClickGlobalUpdate: onClickGlobalUpdate,
             onClickOpenRandomManga: onClickOpenRandomManga,
-            //scrollBehavior: scrollBehavior,
+            bottom: bottom,
           );
   }
 }
@@ -71,6 +78,7 @@ class LibraryRegularToolbar extends StatelessWidget {
     required this.onClickRefresh,
     required this.onClickGlobalUpdate,
     required this.onClickOpenRandomManga,
+    this.bottom,
   });
 
   final LibraryToolbarTitle title;
@@ -81,6 +89,7 @@ class LibraryRegularToolbar extends StatelessWidget {
   final VoidCallback onClickRefresh;
   final VoidCallback onClickGlobalUpdate;
   final VoidCallback onClickOpenRandomManga;
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +144,7 @@ class LibraryRegularToolbar extends StatelessWidget {
           ),
         ]),
       ],
+      bottom: bottom,
     );
   }
 }
@@ -146,12 +156,14 @@ class LibrarySelectionToolbar extends StatelessWidget {
     required this.onClickUnselectAll,
     required this.onClickSelectAll,
     required this.onClickInvertSelection,
+    this.bottom,
   });
 
   final int selectedCount;
   final VoidCallback onClickUnselectAll;
   final VoidCallback onClickSelectAll;
   final VoidCallback onClickInvertSelection;
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -172,6 +184,7 @@ class LibrarySelectionToolbar extends StatelessWidget {
       ],
       isActionMode: true,
       onCancelActionMode: onClickUnselectAll,
+      bottom: bottom,
     );
   }
 }

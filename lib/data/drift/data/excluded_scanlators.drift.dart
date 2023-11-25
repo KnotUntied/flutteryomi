@@ -1,6 +1,7 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
-import 'package:flutteryomi/data/tables/excluded_scanlators.drift.dart' as i1;
+import 'package:flutteryomi/data/drift/data/excluded_scanlators.drift.dart'
+    as i1;
 import 'package:drift/internal/modular.dart' as i2;
 
 class ExcludedScanlators extends i0.Table

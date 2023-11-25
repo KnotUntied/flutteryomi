@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const searchDebounceMillis = 250;
 
-class ActionAppBarWithCounter extends StatelessWidget {
+class ActionAppBarWithCounter extends StatelessWidget implements PreferredSizeWidget {
   const ActionAppBarWithCounter({
     super.key,
     this.backgroundColor,
@@ -31,6 +31,13 @@ class ActionAppBarWithCounter extends StatelessWidget {
   final PreferredSizeWidget? bottom;
 
   @override
+  Size get preferredSize => Size.fromHeight(
+    bottom != null
+      ? kToolbarHeight + kTextTabBarHeight
+      : kToolbarHeight
+  );
+
+  @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
     final bool isActionMode = actionModeCounter > 0;
@@ -54,7 +61,7 @@ class ActionAppBarWithCounter extends StatelessWidget {
   }
 }
 
-class ActionAppBar extends StatelessWidget {
+class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ActionAppBar({
     super.key,
     this.backgroundColor,
@@ -77,6 +84,13 @@ class ActionAppBar extends StatelessWidget {
   final VoidCallback onCancelActionMode;
   final List<Widget>? actionModeActions;
   final PreferredSizeWidget? bottom;
+
+  @override
+  Size get preferredSize => Size.fromHeight(
+    bottom != null
+      ? kToolbarHeight + kTextTabBarHeight
+      : kToolbarHeight
+  );
 
   @override
   Widget build(BuildContext context) {

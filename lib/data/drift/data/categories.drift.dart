@@ -1,8 +1,8 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
-import 'package:flutteryomi/data/tables/categories.drift.dart' as i1;
+import 'package:flutteryomi/data/drift/data/categories.drift.dart' as i1;
 import 'package:drift/internal/modular.dart' as i2;
-import 'package:flutteryomi/data/tables/mangas_categories.drift.dart' as i3;
+import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart' as i3;
 
 class Categories extends i0.Table with i0.TableInfo<Categories, i1.Category> {
   @override

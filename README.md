@@ -32,6 +32,12 @@ See [Drift's official documentation](https://drift.simonbinder.eu/docs/getting-s
 dart run build_runner build
 ```
 
+## Migrations
+
+```sh
+dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
+```
+
 ## Todo
 
 - License (esp. wrt. existing Tachiyomi license and permissions)

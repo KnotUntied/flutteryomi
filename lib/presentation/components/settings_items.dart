@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutteryomi/presentation/theme/typography.dart';
 
 class HeadingItem extends StatelessWidget {
-  const HeadingItem({super.key, required this.text});
+  const HeadingItem(this.text, {super.key});
 
   final String text;
 
@@ -74,6 +74,79 @@ class SortItem extends StatelessWidget {
       leading: arrowIcon,
       title: Text(label),
       onTap: onClick,
+    );
+  }
+}
+
+class TriStateItem extends StatelessWidget {
+  const TriStateItem({
+    super.key,
+    required this.label,
+    this.state,
+    this.enabled = true,
+    this.onClick,
+  });
+
+  final String label;
+  final bool? state;
+  final bool enabled;
+  final ValueChanged<bool?>? onClick;
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile.adaptive(
+      controlAffinity: ListTileControlAffinity.leading,
+      enabled: enabled,
+      title: Text(label),
+      onChanged: onClick,
+      tristate: true,
+      value: state,
+    );
+  }
+}
+
+class TextItem extends StatefulWidget {
+  const TextItem({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.onChange,
+  });
+
+  final String label;
+  final String value;
+  final ValueChanged<String> onChange;
+
+  @override
+  State<TextItem> createState() => _TextItemState();
+}
+
+class _TextItemState extends State<TextItem> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: widget.label,
+        ),
+        onChanged: widget.onChange,
+      ),
     );
   }
 }

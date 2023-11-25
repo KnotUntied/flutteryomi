@@ -1,9 +1,9 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
-import 'package:flutteryomi/data/tables/history.drift.dart' as i1;
+import 'package:flutteryomi/data/drift/data/history.drift.dart' as i1;
 import 'package:drift/internal/modular.dart' as i2;
-import 'package:flutteryomi/data/tables/chapters.drift.dart' as i3;
-import 'package:flutteryomi/data/tables/mangas.drift.dart' as i4;
+import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as i3;
+import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as i4;
 
 class History extends i0.Table with i0.TableInfo<History, i1.HistoryData> {
   @override

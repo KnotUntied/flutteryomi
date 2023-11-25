@@ -1,6 +1,6 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
-import 'package:flutteryomi/data/tables/sources.drift.dart' as i1;
+import 'package:flutteryomi/data/drift/data/sources.drift.dart' as i1;
 import 'package:drift/internal/modular.dart' as i2;
 
 class Sources extends i0.Table with i0.TableInfo<Sources, i1.Source> {
