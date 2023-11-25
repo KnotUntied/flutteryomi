@@ -150,3 +150,28 @@ class _TextItemState extends State<TextItem> {
     );
   }
 }
+
+class SettingsChipRow extends StatelessWidget {
+  const SettingsChipRow({
+    super.key,
+    required this.labelRes,
+    required this.content,
+  });
+
+  final String labelRes;
+  final List<Widget> content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        HeadingItem(labelRes),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: content,
+        ),
+      ],
+    );
+  }
+}

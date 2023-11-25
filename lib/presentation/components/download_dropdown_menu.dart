@@ -62,7 +62,9 @@ class DownloadDropdownMenu extends StatelessWidget {
       },
       menuChildren: dropdownItems
           .map((item) => MenuItemButton(
-                onPressed: () => {onDownloadClicked(item.value)},
+                onPressed: () {
+                  onDownloadClicked(item.value);
+                },
                 child: Text(item.label),
               ))
           .toList(),

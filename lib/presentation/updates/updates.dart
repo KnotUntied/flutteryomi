@@ -18,8 +18,8 @@ class _UpdatesTabState extends State<UpdatesTab> {
     return UpdatesScreen(
       lastUpdated: DateTime.now(),
       relativeTime: true,
-      onSelectAll: (bool x) => {},
-      onInvertSelection: () => {},
+      onSelectAll: (bool x) {},
+      onInvertSelection: () {},
       onUpdateLibrary: () => true,
     );
   }
@@ -90,9 +90,13 @@ class UpdatesScreen extends StatelessWidget {
         onUpdateLibrary: onUpdateLibrary,
         // TEMP
         actionModeCounter: 0,
-        onSelectAll: () => {onSelectAll(true)},
+        onSelectAll: () {
+          onSelectAll(true);
+        },
         onInvertSelection: onInvertSelection,
-        onCancelActionMode: () => {onSelectAll(false)},
+        onCancelActionMode: () {
+          onSelectAll(false);
+        },
       ),
       body: body,
       bottomNavigationBar: const UpdatesBottomBar(),

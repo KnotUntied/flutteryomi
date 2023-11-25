@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:flutteryomi/data/tables/mangas.drift.dart';
+import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 
 part 'manga_cover.freezed.dart';
 

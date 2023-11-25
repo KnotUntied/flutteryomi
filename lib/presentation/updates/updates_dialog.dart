@@ -16,15 +16,15 @@ class UpdatesDeleteConfirmationDialog extends StatelessWidget {
       title: Text(lang.confirm_delete_chapters),
       actions: [
         TextButton(
-          child: Text(lang.action_ok),
+          child: Text(lang.action_cancel),
           onPressed: () {
-            onConfirm();
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(lang.action_cancel),
+          child: Text(lang.action_ok),
           onPressed: () {
+            onConfirm();
             Navigator.of(context).pop();
           },
         ),

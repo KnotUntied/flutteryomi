@@ -89,9 +89,13 @@ class UpdatesScreen extends StatelessWidget {
         onUpdateLibrary: onUpdateLibrary,
         // TEMP
         actionModeCounter: 0,
-        onSelectAll: () => {onSelectAll(true)},
+        onSelectAll: () {
+          onSelectAll(true);
+        },
         onInvertSelection: onInvertSelection,
-        onCancelActionMode: () => {onSelectAll(false)},
+        onCancelActionMode: () {
+          onSelectAll(false);
+        },
       ),
       body: body,
       bottomNavigationBar: const UpdatesBottomBar(),
