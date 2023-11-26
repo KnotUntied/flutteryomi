@@ -303,10 +303,10 @@ class CategoriesDrift extends i2.ModularAccessor {
             }));
   }
 
-  Future<int> updateAllFlags(String var1) {
+  Future<int> updateAllFlags(int? var1) {
     return customUpdate(
       'UPDATE categories SET flags = coalesce(?1, flags)',
-      variables: [i0.Variable<String>(var1)],
+      variables: [i0.Variable<int>(var1)],
       updates: {categories},
       updateKind: i0.UpdateKind.update,
     );

@@ -1,7 +1,8 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as i1;
-import 'package:drift/internal/modular.dart' as i2;
+import 'package:flutteryomi/data/database_adapter.dart' as i2;
+import 'package:drift/internal/modular.dart' as i3;
 
 class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
   @override
@@ -50,11 +51,12 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           $customConstraints: '');
   static const i0.VerificationMeta _genreMeta =
       const i0.VerificationMeta('genre');
-  late final i0.GeneratedColumn<String> genre = i0.GeneratedColumn<String>(
-      'genre', aliasedName, true,
-      type: i0.DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: '');
+  late final i0.GeneratedColumnWithTypeConverter<List<String>?, String> genre =
+      i0.GeneratedColumn<String>('genre', aliasedName, true,
+              type: i0.DriftSqlType.string,
+              requiredDuringInsert: false,
+              $customConstraints: '')
+          .withConverter<List<String>?>(i1.Mangas.$convertergenren);
   static const i0.VerificationMeta _titleMeta =
       const i0.VerificationMeta('title');
   late final i0.GeneratedColumn<String> title = i0.GeneratedColumn<String>(
@@ -227,10 +229,7 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
     }
-    if (data.containsKey('genre')) {
-      context.handle(
-          _genreMeta, genre.isAcceptableOrUnknown(data['genre']!, _genreMeta));
-    }
+    context.handle(_genreMeta, const i0.VerificationResult.success());
     if (data.containsKey('title')) {
       context.handle(
           _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
@@ -348,8 +347,8 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           .read(i0.DriftSqlType.string, data['${effectivePrefix}author']),
       description: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.string, data['${effectivePrefix}description']),
-      genre: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}genre']),
+      genre: i1.Mangas.$convertergenren.fromSql(attachedDatabase.typeMapping
+          .read(i0.DriftSqlType.string, data['${effectivePrefix}genre'])),
       title: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.string, data['${effectivePrefix}title'])!,
       status: attachedDatabase.typeMapping
@@ -391,6 +390,10 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
     return Mangas(attachedDatabase, alias);
   }
 
+  static i0.TypeConverter<List<String>, String> $convertergenre =
+      const i2.ListOfStringsConverter();
+  static i0.TypeConverter<List<String>?, String?> $convertergenren =
+      i0.NullAwareTypeConverter.wrap($convertergenre);
   @override
   bool get dontWriteConstraints => true;
 }
@@ -402,7 +405,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
   final String? artist;
   final String? author;
   final String? description;
-  final String? genre;
+  final List<String>? genre;
   final String title;
   final int status;
   final String? thumbnailUrl;
@@ -460,7 +463,8 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       map['description'] = i0.Variable<String>(description);
     }
     if (!nullToAbsent || genre != null) {
-      map['genre'] = i0.Variable<String>(genre);
+      final converter = i1.Mangas.$convertergenren;
+      map['genre'] = i0.Variable<String>(converter.toSql(genre));
     }
     map['title'] = i0.Variable<String>(title);
     map['status'] = i0.Variable<int>(status);
@@ -541,7 +545,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       artist: serializer.fromJson<String?>(json['artist']),
       author: serializer.fromJson<String?>(json['author']),
       description: serializer.fromJson<String?>(json['description']),
-      genre: serializer.fromJson<String?>(json['genre']),
+      genre: serializer.fromJson<List<String>?>(json['genre']),
       title: serializer.fromJson<String>(json['title']),
       status: serializer.fromJson<int>(json['status']),
       thumbnailUrl: serializer.fromJson<String?>(json['thumbnail_url']),
@@ -571,7 +575,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       'artist': serializer.toJson<String?>(artist),
       'author': serializer.toJson<String?>(author),
       'description': serializer.toJson<String?>(description),
-      'genre': serializer.toJson<String?>(genre),
+      'genre': serializer.toJson<List<String>?>(genre),
       'title': serializer.toJson<String>(title),
       'status': serializer.toJson<int>(status),
       'thumbnail_url': serializer.toJson<String?>(thumbnailUrl),
@@ -597,7 +601,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
           i0.Value<String?> artist = const i0.Value.absent(),
           i0.Value<String?> author = const i0.Value.absent(),
           i0.Value<String?> description = const i0.Value.absent(),
-          i0.Value<String?> genre = const i0.Value.absent(),
+          i0.Value<List<String>?> genre = const i0.Value.absent(),
           String? title,
           int? status,
           i0.Value<String?> thumbnailUrl = const i0.Value.absent(),
@@ -729,7 +733,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
   final i0.Value<String?> artist;
   final i0.Value<String?> author;
   final i0.Value<String?> description;
-  final i0.Value<String?> genre;
+  final i0.Value<List<String>?> genre;
   final i0.Value<String> title;
   final i0.Value<int> status;
   final i0.Value<String?> thumbnailUrl;
@@ -860,7 +864,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       i0.Value<String?>? artist,
       i0.Value<String?>? author,
       i0.Value<String?>? description,
-      i0.Value<String?>? genre,
+      i0.Value<List<String>?>? genre,
       i0.Value<String>? title,
       i0.Value<int>? status,
       i0.Value<String?>? thumbnailUrl,
@@ -924,7 +928,9 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       map['description'] = i0.Variable<String>(description.value);
     }
     if (genre.present) {
-      map['genre'] = i0.Variable<String>(genre.value);
+      final converter = i1.Mangas.$convertergenren;
+
+      map['genre'] = i0.Variable<String>(converter.toSql(genre.value));
     }
     if (title.present) {
       map['title'] = i0.Variable<String>(title.value);
@@ -1017,7 +1023,7 @@ i0.Trigger get updateLastModifiedAtMangas => i0.Trigger(
     'CREATE TRIGGER update_last_modified_at_mangas AFTER UPDATE ON mangas BEGIN UPDATE mangas SET last_modified_at = unixepoch() WHERE _id = new._id;END',
     'update_last_modified_at_mangas');
 
-class MangasDrift extends i2.ModularAccessor {
+class MangasDrift extends i3.ModularAccessor {
   MangasDrift(i0.GeneratedDatabase db) : super(db);
   i0.Selectable<i1.Manga> getMangaById({required int id}) {
     return customSelect('SELECT * FROM mangas WHERE _id = ?1', variables: [

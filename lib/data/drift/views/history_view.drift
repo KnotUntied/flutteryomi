@@ -1,6 +1,6 @@
-import '../tables/chapters.drift';
-import '../tables/history.drift';
-import '../tables/mangas.drift';
+import '../data/chapters.drift';
+import '../data/history.drift';
+import '../data/mangas.drift';
 
 CREATE VIEW historyView AS
 SELECT

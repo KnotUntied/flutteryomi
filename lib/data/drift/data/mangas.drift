@@ -1,7 +1,7 @@
 -- import 'package:flutteryomi/data/converters/list_of_strings.dart';
 -- import 'package:flutteryomi/data/enums/update_strategy.dart';
-import '../converters/list_of_strings.dart';
-import '../enums/update_strategy.dart';
+import '../../database_adapter.dart';
+import '../../source/update_strategy.dart';
 
 CREATE TABLE mangas(
     _id INTEGER NOT NULL PRIMARY KEY,

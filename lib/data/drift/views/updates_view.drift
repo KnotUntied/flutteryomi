@@ -1,5 +1,5 @@
-import '../tables/chapters.drift';
-import '../tables/mangas.drift';
+import '../data/chapters.drift';
+import '../data/mangas.drift';
 
 CREATE VIEW updatesView AS
 SELECT

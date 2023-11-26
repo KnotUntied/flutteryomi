@@ -38,6 +38,11 @@ dart run build_runner build
 dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 ```
 
+## Personal Notes
+
+- Tachiyomi seems to be based on [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), albeit with multiple instances of such at the root of its repository and some folders deep, possibly due to Android Studio or Kotlin requirements (not sure, I am not a Kotlin dev).
+- Drift codegen is expected to handle some parts of the data and domain layers.
+
 ## Todo
 
 - License (esp. wrt. existing Tachiyomi license and permissions)

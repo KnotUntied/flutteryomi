@@ -2,113 +2,112 @@
 import 'package:drift/drift.dart' as i0;
 import 'package:flutteryomi/data/drift/views/updates_view.drift.dart' as i1;
 import 'package:drift/internal/modular.dart' as i2;
+import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as i3;
+import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as i4;
 
 class UpdatesViewData extends i0.DataClass {
-  final String? mangaId;
-  final String? mangaTitle;
-  final String? chapterId;
-  final String? chapterName;
+  final int mangaId;
+  final String mangaTitle;
+  final int chapterId;
+  final String chapterName;
   final String? scanlator;
-  final String? read;
-  final String? bookmark;
-  final String? lastPageRead;
-  final String? source;
-  final String? favorite;
+  final bool read;
+  final bool bookmark;
+  final int lastPageRead;
+  final int source;
+  final bool favorite;
   final String? thumbnailUrl;
-  final String? coverLastModified;
-  final String? dateUpload;
-  final String? datefetch;
+  final DateTime coverLastModified;
+  final DateTime dateUpload;
+  final DateTime datefetch;
   const UpdatesViewData(
-      {this.mangaId,
-      this.mangaTitle,
-      this.chapterId,
-      this.chapterName,
+      {required this.mangaId,
+      required this.mangaTitle,
+      required this.chapterId,
+      required this.chapterName,
       this.scanlator,
-      this.read,
-      this.bookmark,
-      this.lastPageRead,
-      this.source,
-      this.favorite,
+      required this.read,
+      required this.bookmark,
+      required this.lastPageRead,
+      required this.source,
+      required this.favorite,
       this.thumbnailUrl,
-      this.coverLastModified,
-      this.dateUpload,
-      this.datefetch});
+      required this.coverLastModified,
+      required this.dateUpload,
+      required this.datefetch});
   factory UpdatesViewData.fromJson(Map<String, dynamic> json,
       {i0.ValueSerializer? serializer}) {
     serializer ??= i0.driftRuntimeOptions.defaultSerializer;
     return UpdatesViewData(
-      mangaId: serializer.fromJson<String?>(json['mangaId']),
-      mangaTitle: serializer.fromJson<String?>(json['mangaTitle']),
-      chapterId: serializer.fromJson<String?>(json['chapterId']),
-      chapterName: serializer.fromJson<String?>(json['chapterName']),
+      mangaId: serializer.fromJson<int>(json['mangaId']),
+      mangaTitle: serializer.fromJson<String>(json['mangaTitle']),
+      chapterId: serializer.fromJson<int>(json['chapterId']),
+      chapterName: serializer.fromJson<String>(json['chapterName']),
       scanlator: serializer.fromJson<String?>(json['scanlator']),
-      read: serializer.fromJson<String?>(json['read']),
-      bookmark: serializer.fromJson<String?>(json['bookmark']),
-      lastPageRead: serializer.fromJson<String?>(json['last_page_read']),
-      source: serializer.fromJson<String?>(json['source']),
-      favorite: serializer.fromJson<String?>(json['favorite']),
+      read: serializer.fromJson<bool>(json['read']),
+      bookmark: serializer.fromJson<bool>(json['bookmark']),
+      lastPageRead: serializer.fromJson<int>(json['last_page_read']),
+      source: serializer.fromJson<int>(json['source']),
+      favorite: serializer.fromJson<bool>(json['favorite']),
       thumbnailUrl: serializer.fromJson<String?>(json['thumbnailUrl']),
       coverLastModified:
-          serializer.fromJson<String?>(json['coverLastModified']),
-      dateUpload: serializer.fromJson<String?>(json['dateUpload']),
-      datefetch: serializer.fromJson<String?>(json['datefetch']),
+          serializer.fromJson<DateTime>(json['coverLastModified']),
+      dateUpload: serializer.fromJson<DateTime>(json['dateUpload']),
+      datefetch: serializer.fromJson<DateTime>(json['datefetch']),
     );
   }
   @override
   Map<String, dynamic> toJson({i0.ValueSerializer? serializer}) {
     serializer ??= i0.driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'mangaId': serializer.toJson<String?>(mangaId),
-      'mangaTitle': serializer.toJson<String?>(mangaTitle),
-      'chapterId': serializer.toJson<String?>(chapterId),
-      'chapterName': serializer.toJson<String?>(chapterName),
+      'mangaId': serializer.toJson<int>(mangaId),
+      'mangaTitle': serializer.toJson<String>(mangaTitle),
+      'chapterId': serializer.toJson<int>(chapterId),
+      'chapterName': serializer.toJson<String>(chapterName),
       'scanlator': serializer.toJson<String?>(scanlator),
-      'read': serializer.toJson<String?>(read),
-      'bookmark': serializer.toJson<String?>(bookmark),
-      'last_page_read': serializer.toJson<String?>(lastPageRead),
-      'source': serializer.toJson<String?>(source),
-      'favorite': serializer.toJson<String?>(favorite),
+      'read': serializer.toJson<bool>(read),
+      'bookmark': serializer.toJson<bool>(bookmark),
+      'last_page_read': serializer.toJson<int>(lastPageRead),
+      'source': serializer.toJson<int>(source),
+      'favorite': serializer.toJson<bool>(favorite),
       'thumbnailUrl': serializer.toJson<String?>(thumbnailUrl),
-      'coverLastModified': serializer.toJson<String?>(coverLastModified),
-      'dateUpload': serializer.toJson<String?>(dateUpload),
-      'datefetch': serializer.toJson<String?>(datefetch),
+      'coverLastModified': serializer.toJson<DateTime>(coverLastModified),
+      'dateUpload': serializer.toJson<DateTime>(dateUpload),
+      'datefetch': serializer.toJson<DateTime>(datefetch),
     };
   }
 
   i1.UpdatesViewData copyWith(
-          {i0.Value<String?> mangaId = const i0.Value.absent(),
-          i0.Value<String?> mangaTitle = const i0.Value.absent(),
-          i0.Value<String?> chapterId = const i0.Value.absent(),
-          i0.Value<String?> chapterName = const i0.Value.absent(),
+          {int? mangaId,
+          String? mangaTitle,
+          int? chapterId,
+          String? chapterName,
           i0.Value<String?> scanlator = const i0.Value.absent(),
-          i0.Value<String?> read = const i0.Value.absent(),
-          i0.Value<String?> bookmark = const i0.Value.absent(),
-          i0.Value<String?> lastPageRead = const i0.Value.absent(),
-          i0.Value<String?> source = const i0.Value.absent(),
-          i0.Value<String?> favorite = const i0.Value.absent(),
+          bool? read,
+          bool? bookmark,
+          int? lastPageRead,
+          int? source,
+          bool? favorite,
           i0.Value<String?> thumbnailUrl = const i0.Value.absent(),
-          i0.Value<String?> coverLastModified = const i0.Value.absent(),
-          i0.Value<String?> dateUpload = const i0.Value.absent(),
-          i0.Value<String?> datefetch = const i0.Value.absent()}) =>
+          DateTime? coverLastModified,
+          DateTime? dateUpload,
+          DateTime? datefetch}) =>
       i1.UpdatesViewData(
-        mangaId: mangaId.present ? mangaId.value : this.mangaId,
-        mangaTitle: mangaTitle.present ? mangaTitle.value : this.mangaTitle,
-        chapterId: chapterId.present ? chapterId.value : this.chapterId,
-        chapterName: chapterName.present ? chapterName.value : this.chapterName,
+        mangaId: mangaId ?? this.mangaId,
+        mangaTitle: mangaTitle ?? this.mangaTitle,
+        chapterId: chapterId ?? this.chapterId,
+        chapterName: chapterName ?? this.chapterName,
         scanlator: scanlator.present ? scanlator.value : this.scanlator,
-        read: read.present ? read.value : this.read,
-        bookmark: bookmark.present ? bookmark.value : this.bookmark,
-        lastPageRead:
-            lastPageRead.present ? lastPageRead.value : this.lastPageRead,
-        source: source.present ? source.value : this.source,
-        favorite: favorite.present ? favorite.value : this.favorite,
+        read: read ?? this.read,
+        bookmark: bookmark ?? this.bookmark,
+        lastPageRead: lastPageRead ?? this.lastPageRead,
+        source: source ?? this.source,
+        favorite: favorite ?? this.favorite,
         thumbnailUrl:
             thumbnailUrl.present ? thumbnailUrl.value : this.thumbnailUrl,
-        coverLastModified: coverLastModified.present
-            ? coverLastModified.value
-            : this.coverLastModified,
-        dateUpload: dateUpload.present ? dateUpload.value : this.dateUpload,
-        datefetch: datefetch.present ? datefetch.value : this.datefetch,
+        coverLastModified: coverLastModified ?? this.coverLastModified,
+        dateUpload: dateUpload ?? this.dateUpload,
+        datefetch: datefetch ?? this.datefetch,
       );
   @override
   String toString() {
@@ -206,78 +205,85 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return i1.UpdatesViewData(
       mangaId: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}mangaId']),
+          .read(i0.DriftSqlType.int, data['${effectivePrefix}mangaId'])!,
       mangaTitle: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}mangaTitle']),
+          .read(i0.DriftSqlType.string, data['${effectivePrefix}mangaTitle'])!,
       chapterId: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}chapterId']),
+          .read(i0.DriftSqlType.int, data['${effectivePrefix}chapterId'])!,
       chapterName: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}chapterName']),
+          .read(i0.DriftSqlType.string, data['${effectivePrefix}chapterName'])!,
       scanlator: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.string, data['${effectivePrefix}scanlator']),
       read: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}read']),
+          .read(i0.DriftSqlType.bool, data['${effectivePrefix}read'])!,
       bookmark: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}bookmark']),
-      lastPageRead: attachedDatabase.typeMapping.read(
-          i0.DriftSqlType.string, data['${effectivePrefix}last_page_read']),
+          .read(i0.DriftSqlType.bool, data['${effectivePrefix}bookmark'])!,
+      lastPageRead: attachedDatabase.typeMapping
+          .read(i0.DriftSqlType.int, data['${effectivePrefix}last_page_read'])!,
       source: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}source']),
+          .read(i0.DriftSqlType.int, data['${effectivePrefix}source'])!,
       favorite: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}favorite']),
+          .read(i0.DriftSqlType.bool, data['${effectivePrefix}favorite'])!,
       thumbnailUrl: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.string, data['${effectivePrefix}thumbnailUrl']),
       coverLastModified: attachedDatabase.typeMapping.read(
-          i0.DriftSqlType.string, data['${effectivePrefix}coverLastModified']),
-      dateUpload: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}dateUpload']),
+          i0.DriftSqlType.dateTime,
+          data['${effectivePrefix}coverLastModified'])!,
+      dateUpload: attachedDatabase.typeMapping.read(
+          i0.DriftSqlType.dateTime, data['${effectivePrefix}dateUpload'])!,
       datefetch: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.string, data['${effectivePrefix}datefetch']),
+          .read(i0.DriftSqlType.dateTime, data['${effectivePrefix}datefetch'])!,
     );
   }
 
-  late final i0.GeneratedColumn<String> mangaId = i0.GeneratedColumn<String>(
-      'mangaId', aliasedName, true,
-      type: i0.DriftSqlType.string);
+  late final i0.GeneratedColumn<int> mangaId = i0.GeneratedColumn<int>(
+      'mangaId', aliasedName, false,
+      type: i0.DriftSqlType.int);
   late final i0.GeneratedColumn<String> mangaTitle = i0.GeneratedColumn<String>(
-      'mangaTitle', aliasedName, true,
+      'mangaTitle', aliasedName, false,
       type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> chapterId = i0.GeneratedColumn<String>(
-      'chapterId', aliasedName, true,
-      type: i0.DriftSqlType.string);
+  late final i0.GeneratedColumn<int> chapterId = i0.GeneratedColumn<int>(
+      'chapterId', aliasedName, false,
+      type: i0.DriftSqlType.int);
   late final i0.GeneratedColumn<String> chapterName =
-      i0.GeneratedColumn<String>('chapterName', aliasedName, true,
+      i0.GeneratedColumn<String>('chapterName', aliasedName, false,
           type: i0.DriftSqlType.string);
   late final i0.GeneratedColumn<String> scanlator = i0.GeneratedColumn<String>(
       'scanlator', aliasedName, true,
       type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> read = i0.GeneratedColumn<String>(
-      'read', aliasedName, true,
-      type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> bookmark = i0.GeneratedColumn<String>(
-      'bookmark', aliasedName, true,
-      type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> lastPageRead =
-      i0.GeneratedColumn<String>('last_page_read', aliasedName, true,
-          type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> source = i0.GeneratedColumn<String>(
-      'source', aliasedName, true,
-      type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> favorite = i0.GeneratedColumn<String>(
-      'favorite', aliasedName, true,
-      type: i0.DriftSqlType.string);
+  late final i0.GeneratedColumn<bool> read = i0.GeneratedColumn<bool>(
+      'read', aliasedName, false,
+      type: i0.DriftSqlType.bool,
+      defaultConstraints:
+          i0.GeneratedColumn.constraintIsAlways('CHECK ("read" IN (0, 1))'));
+  late final i0.GeneratedColumn<bool> bookmark = i0.GeneratedColumn<bool>(
+      'bookmark', aliasedName, false,
+      type: i0.DriftSqlType.bool,
+      defaultConstraints: i0.GeneratedColumn.constraintIsAlways(
+          'CHECK ("bookmark" IN (0, 1))'));
+  late final i0.GeneratedColumn<int> lastPageRead = i0.GeneratedColumn<int>(
+      'last_page_read', aliasedName, false,
+      type: i0.DriftSqlType.int);
+  late final i0.GeneratedColumn<int> source = i0.GeneratedColumn<int>(
+      'source', aliasedName, false,
+      type: i0.DriftSqlType.int);
+  late final i0.GeneratedColumn<bool> favorite = i0.GeneratedColumn<bool>(
+      'favorite', aliasedName, false,
+      type: i0.DriftSqlType.bool,
+      defaultConstraints: i0.GeneratedColumn.constraintIsAlways(
+          'CHECK ("favorite" IN (0, 1))'));
   late final i0.GeneratedColumn<String> thumbnailUrl =
       i0.GeneratedColumn<String>('thumbnailUrl', aliasedName, true,
           type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> coverLastModified =
-      i0.GeneratedColumn<String>('coverLastModified', aliasedName, true,
-          type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> dateUpload = i0.GeneratedColumn<String>(
-      'dateUpload', aliasedName, true,
-      type: i0.DriftSqlType.string);
-  late final i0.GeneratedColumn<String> datefetch = i0.GeneratedColumn<String>(
-      'datefetch', aliasedName, true,
-      type: i0.DriftSqlType.string);
+  late final i0.GeneratedColumn<DateTime> coverLastModified =
+      i0.GeneratedColumn<DateTime>('coverLastModified', aliasedName, false,
+          type: i0.DriftSqlType.dateTime);
+  late final i0.GeneratedColumn<DateTime> dateUpload =
+      i0.GeneratedColumn<DateTime>('dateUpload', aliasedName, false,
+          type: i0.DriftSqlType.dateTime);
+  late final i0.GeneratedColumn<DateTime> datefetch =
+      i0.GeneratedColumn<DateTime>('datefetch', aliasedName, false,
+          type: i0.DriftSqlType.dateTime);
   @override
   UpdatesView createAlias(String alias) {
     return UpdatesView(attachedDatabase, alias);
@@ -286,31 +292,42 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
   @override
   i0.Query? get query => null;
   @override
-  Set<String> get readTables => const {};
+  Set<String> get readTables => const {'mangas', 'chapters'};
 }
 
 class UpdatesViewDrift extends i2.ModularAccessor {
   UpdatesViewDrift(i0.GeneratedDatabase db) : super(db);
   i0.Selectable<i1.UpdatesViewData> getRecentUpdates(
-      {String? after, required int limit}) {
+      {required DateTime after, required int limit}) {
     return customSelect(
         'SELECT * FROM updatesView WHERE dateUpload > ?1 LIMIT ?2',
-        variables: [i0.Variable<String>(after), i0.Variable<int>(limit)],
-        readsFrom: {}).asyncMap(updatesView.mapFromRow);
+        variables: [
+          i0.Variable<DateTime>(after),
+          i0.Variable<int>(limit)
+        ],
+        readsFrom: {
+          mangas,
+          chapters,
+        }).asyncMap(updatesView.mapFromRow);
   }
 
   i0.Selectable<i1.UpdatesViewData> getUpdatesByReadStatus(
-      {String? read, String? after, required int limit}) {
+      {required bool read, required DateTime after, required int limit}) {
     return customSelect(
         'SELECT * FROM updatesView WHERE read = ?1 AND dateUpload > ?2 LIMIT ?3',
         variables: [
-          i0.Variable<String>(read),
-          i0.Variable<String>(after),
+          i0.Variable<bool>(read),
+          i0.Variable<DateTime>(after),
           i0.Variable<int>(limit)
         ],
-        readsFrom: {}).asyncMap(updatesView.mapFromRow);
+        readsFrom: {
+          mangas,
+          chapters,
+        }).asyncMap(updatesView.mapFromRow);
   }
 
   i1.UpdatesView get updatesView =>
       this.resultSet<i1.UpdatesView>('updatesView');
+  i3.Mangas get mangas => this.resultSet<i3.Mangas>('mangas');
+  i4.Chapters get chapters => this.resultSet<i4.Chapters>('chapters');
 }

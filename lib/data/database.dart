@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod/riverpod.dart';
 
-import 'database.drift.dart';
-import 'drift/data/categories.drift.dart';
+import 'package:flutteryomi/data/database.drift.dart';
+import 'package:flutteryomi/data/drift/data/categories.drift.dart';
 
 @DriftDatabase(
   include: {

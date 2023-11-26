@@ -1,8 +1,8 @@
-import '../tables/chapters.drift';
-import '../tables/excluded_scanlators.drift';
-import '../tables/history.drift';
-import '../tables/mangas.drift';
-import '../tables/mangas_categories.drift';
+import '../data/chapters.drift';
+import '../data/excluded_scanlators.drift';
+import '../data/history.drift';
+import '../data/mangas.drift';
+import '../data/mangas_categories.drift';
 
 CREATE VIEW libraryView AS
 SELECT

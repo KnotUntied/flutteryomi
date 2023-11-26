@@ -45,6 +45,6 @@ JOIN mangas_categories MC
 ON C._id = MC.category_id
 WHERE MC.manga_id = :mangaId;
 
-updateAllFlags:
+updateAllFlags(?1 AS INTEGER):
 UPDATE categories SET
-flags = coalesce(?, flags);
+flags = coalesce(?1, flags);

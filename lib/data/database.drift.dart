@@ -1,87 +1,110 @@
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
-import 'package:flutteryomi/data/drift/views/updates_view.drift.dart' as i1;
-import 'package:flutteryomi/data/drift/views/history_view.drift.dart' as i2;
-import 'package:flutteryomi/data/drift/data/sources.drift.dart' as i3;
-import 'package:flutteryomi/data/drift/data/categories.drift.dart' as i4;
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as i5;
-import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart' as i6;
-import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart' as i7;
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as i8;
-import 'package:flutteryomi/data/drift/data/history.drift.dart' as i9;
+import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as i1;
+import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as i2;
+import 'package:flutteryomi/data/drift/views/updates_view.drift.dart' as i3;
 import 'package:flutteryomi/data/drift/data/excluded_scanlators.drift.dart'
-    as i10;
-import 'package:drift/internal/modular.dart' as i11;
-import 'package:flutteryomi/data/drift/views/library_view.drift.dart' as i12;
+    as i4;
+import 'package:flutteryomi/data/drift/data/history.drift.dart' as i5;
+import 'package:flutteryomi/data/drift/data/categories.drift.dart' as i6;
+import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart' as i7;
+import 'package:flutteryomi/data/drift/views/library_view.drift.dart' as i8;
+import 'package:flutteryomi/data/drift/views/history_view.drift.dart' as i9;
+import 'package:flutteryomi/data/drift/data/sources.drift.dart' as i10;
+import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart' as i11;
+import 'package:drift/internal/modular.dart' as i12;
 
 abstract class $AppDatabase extends i0.GeneratedDatabase {
   $AppDatabase(i0.QueryExecutor e) : super(e);
-  late final i1.UpdatesView updatesView = i1.UpdatesView(this);
-  late final i2.HistoryView historyView = i2.HistoryView(this);
-  late final i3.Sources sources = i3.Sources(this);
-  late final i4.Categories categories = i4.Categories(this);
-  late final i5.Mangas mangas = i5.Mangas(this);
-  late final i6.MangasCategories mangasCategories = i6.MangasCategories(this);
-  late final i7.MangaSync mangaSync = i7.MangaSync(this);
-  late final i8.Chapters chapters = i8.Chapters(this);
-  late final i9.History history = i9.History(this);
-  late final i10.ExcludedScanlators excludedScanlators =
-      i10.ExcludedScanlators(this);
-  i4.CategoriesDrift get categoriesDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i4.CategoriesDrift>(i4.CategoriesDrift.new);
-  i8.ChaptersDrift get chaptersDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i8.ChaptersDrift>(i8.ChaptersDrift.new);
-  i10.ExcludedScanlatorsDrift get excludedScanlatorsDrift =>
-      i11.ReadDatabaseContainer(this).accessor<i10.ExcludedScanlatorsDrift>(
-          i10.ExcludedScanlatorsDrift.new);
-  i9.HistoryDrift get historyDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i9.HistoryDrift>(i9.HistoryDrift.new);
-  i7.MangaSyncDrift get mangaSyncDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i7.MangaSyncDrift>(i7.MangaSyncDrift.new);
-  i5.MangasDrift get mangasDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i5.MangasDrift>(i5.MangasDrift.new);
-  i6.MangasCategoriesDrift get mangasCategoriesDrift =>
-      i11.ReadDatabaseContainer(this)
-          .accessor<i6.MangasCategoriesDrift>(i6.MangasCategoriesDrift.new);
-  i3.SourcesDrift get sourcesDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i3.SourcesDrift>(i3.SourcesDrift.new);
-  i2.HistoryViewDrift get historyViewDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i2.HistoryViewDrift>(i2.HistoryViewDrift.new);
-  i12.LibraryViewDrift get libraryViewDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i12.LibraryViewDrift>(i12.LibraryViewDrift.new);
-  i1.UpdatesViewDrift get updatesViewDrift => i11.ReadDatabaseContainer(this)
-      .accessor<i1.UpdatesViewDrift>(i1.UpdatesViewDrift.new);
+  late final i1.Mangas mangas = i1.Mangas(this);
+  late final i2.Chapters chapters = i2.Chapters(this);
+  late final i3.UpdatesView updatesView = i3.UpdatesView(this);
+  late final i4.ExcludedScanlators excludedScanlators =
+      i4.ExcludedScanlators(this);
+  late final i5.History history = i5.History(this);
+  late final i6.Categories categories = i6.Categories(this);
+  late final i7.MangasCategories mangasCategories = i7.MangasCategories(this);
+  late final i8.LibraryView libraryView = i8.LibraryView(this);
+  late final i9.HistoryView historyView = i9.HistoryView(this);
+  late final i10.Sources sources = i10.Sources(this);
+  late final i11.MangaSync mangaSync = i11.MangaSync(this);
+  i6.CategoriesDrift get categoriesDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i6.CategoriesDrift>(i6.CategoriesDrift.new);
+  i2.ChaptersDrift get chaptersDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i2.ChaptersDrift>(i2.ChaptersDrift.new);
+  i4.ExcludedScanlatorsDrift get excludedScanlatorsDrift =>
+      i12.ReadDatabaseContainer(this)
+          .accessor<i4.ExcludedScanlatorsDrift>(i4.ExcludedScanlatorsDrift.new);
+  i5.HistoryDrift get historyDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i5.HistoryDrift>(i5.HistoryDrift.new);
+  i11.MangaSyncDrift get mangaSyncDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i11.MangaSyncDrift>(i11.MangaSyncDrift.new);
+  i1.MangasDrift get mangasDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i1.MangasDrift>(i1.MangasDrift.new);
+  i7.MangasCategoriesDrift get mangasCategoriesDrift =>
+      i12.ReadDatabaseContainer(this)
+          .accessor<i7.MangasCategoriesDrift>(i7.MangasCategoriesDrift.new);
+  i10.SourcesDrift get sourcesDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i10.SourcesDrift>(i10.SourcesDrift.new);
+  i9.HistoryViewDrift get historyViewDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i9.HistoryViewDrift>(i9.HistoryViewDrift.new);
+  i8.LibraryViewDrift get libraryViewDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i8.LibraryViewDrift>(i8.LibraryViewDrift.new);
+  i3.UpdatesViewDrift get updatesViewDrift => i12.ReadDatabaseContainer(this)
+      .accessor<i3.UpdatesViewDrift>(i3.UpdatesViewDrift.new);
   @override
   Iterable<i0.TableInfo<i0.Table, Object?>> get allTables =>
       allSchemaEntities.whereType<i0.TableInfo<i0.Table, Object?>>();
   @override
   List<i0.DatabaseSchemaEntity> get allSchemaEntities => [
+        mangas,
+        chapters,
         updatesView,
+        excludedScanlators,
+        history,
+        categories,
+        mangasCategories,
+        libraryView,
         historyView,
         sources,
-        categories,
-        mangas,
-        mangasCategories,
-        i6.updateLastModifiedAtMangasCategories,
-        i5.libraryFavoriteIndex,
-        i5.mangasUrlIndex,
-        i5.updateLastFavoritedAtMangas,
-        i5.updateLastModifiedAtMangas,
+        i7.updateLastModifiedAtMangasCategories,
+        i1.libraryFavoriteIndex,
+        i1.mangasUrlIndex,
+        i1.updateLastFavoritedAtMangas,
+        i1.updateLastModifiedAtMangas,
         mangaSync,
-        chapters,
-        history,
-        i9.historyHistoryChapterIdIndex,
-        excludedScanlators,
-        i10.excludedScanlatorsMangaIdIndex,
-        i8.chaptersMangaIdIndex,
-        i8.chaptersUnreadByMangaIndex,
-        i8.updateLastModifiedAtChapters,
-        i4.systemCategoryDeleteTrigger
+        i5.historyHistoryChapterIdIndex,
+        i4.excludedScanlatorsMangaIdIndex,
+        i2.chaptersMangaIdIndex,
+        i2.chaptersUnreadByMangaIndex,
+        i2.updateLastModifiedAtChapters,
+        i6.systemCategoryDeleteTrigger
       ];
   @override
   i0.StreamQueryUpdateRules get streamUpdateRules =>
       const i0.StreamQueryUpdateRules(
         [
+          i0.WritePropagation(
+            on: i0.TableUpdateQuery.onTableName('mangas',
+                limitUpdateKind: i0.UpdateKind.delete),
+            result: [
+              i0.TableUpdate('chapters', kind: i0.UpdateKind.delete),
+            ],
+          ),
+          i0.WritePropagation(
+            on: i0.TableUpdateQuery.onTableName('mangas',
+                limitUpdateKind: i0.UpdateKind.delete),
+            result: [
+              i0.TableUpdate('excluded_scanlators', kind: i0.UpdateKind.delete),
+            ],
+          ),
+          i0.WritePropagation(
+            on: i0.TableUpdateQuery.onTableName('chapters',
+                limitUpdateKind: i0.UpdateKind.delete),
+            result: [
+              i0.TableUpdate('history', kind: i0.UpdateKind.delete),
+            ],
+          ),
           i0.WritePropagation(
             on: i0.TableUpdateQuery.onTableName('categories',
                 limitUpdateKind: i0.UpdateKind.delete),
@@ -122,27 +145,6 @@ abstract class $AppDatabase extends i0.GeneratedDatabase {
                 limitUpdateKind: i0.UpdateKind.delete),
             result: [
               i0.TableUpdate('manga_sync', kind: i0.UpdateKind.delete),
-            ],
-          ),
-          i0.WritePropagation(
-            on: i0.TableUpdateQuery.onTableName('mangas',
-                limitUpdateKind: i0.UpdateKind.delete),
-            result: [
-              i0.TableUpdate('chapters', kind: i0.UpdateKind.delete),
-            ],
-          ),
-          i0.WritePropagation(
-            on: i0.TableUpdateQuery.onTableName('chapters',
-                limitUpdateKind: i0.UpdateKind.delete),
-            result: [
-              i0.TableUpdate('history', kind: i0.UpdateKind.delete),
-            ],
-          ),
-          i0.WritePropagation(
-            on: i0.TableUpdateQuery.onTableName('mangas',
-                limitUpdateKind: i0.UpdateKind.delete),
-            result: [
-              i0.TableUpdate('excluded_scanlators', kind: i0.UpdateKind.delete),
             ],
           ),
           i0.WritePropagation(
