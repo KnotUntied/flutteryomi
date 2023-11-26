@@ -651,12 +651,12 @@ class ChaptersDrift extends i2.ModularAccessor {
   }
 
   i0.Selectable<i1.Chapter> getChaptersByMangaId(
-      {required int mangaId, required int applyScanlatorFilter}) {
+      {required int mangaId, required bool applyScanlatorFilter}) {
     return customSelect(
         'SELECT C.* FROM chapters AS C LEFT JOIN excluded_scanlators AS ES ON C.manga_id = ES.manga_id AND C.scanlator = ES.scanlator WHERE C.manga_id = ?1 AND(?2 = 0 OR ES.scanlator IS NULL)',
         variables: [
           i0.Variable<int>(mangaId),
-          i0.Variable<int>(applyScanlatorFilter)
+          i0.Variable<bool>(applyScanlatorFilter)
         ],
         readsFrom: {
           chapters,

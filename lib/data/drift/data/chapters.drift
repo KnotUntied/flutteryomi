@@ -36,7 +36,7 @@ SELECT *
 FROM chapters
 WHERE _id = :id;
 
-getChaptersByMangaId:
+getChaptersByMangaId(:mangaId AS INTEGER, :applyScanlatorFilter AS BOOLEAN):
 SELECT C.*
 FROM chapters C
 LEFT JOIN excluded_scanlators ES
