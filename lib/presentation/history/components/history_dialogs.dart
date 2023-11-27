@@ -56,7 +56,6 @@ class _HistoryDeleteDialogState extends State<HistoryDeleteDialog> {
   }
 }
 
-
 class HistoryDeleteAllDialog extends StatelessWidget {
   const HistoryDeleteAllDialog({
     super.key,

@@ -4,7 +4,8 @@ import 'package:flutteryomi/presentation/components/settings_items.dart';
 
 import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
-import 'package:flutteryomi/presentation/theme/color_scheme.dart' as color_scheme;
+import 'package:flutteryomi/presentation/theme/color_scheme.dart'
+    as color_scheme;
 
 class ChapterSettingsDialog extends StatelessWidget {
   const ChapterSettingsDialog({

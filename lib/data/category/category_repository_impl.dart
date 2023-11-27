@@ -25,18 +25,16 @@ class CategoryRepositoryImpl implements CategoryRepository {
       await db.categoriesDrift.getCategories().get();
 
   @override
-  Stream<List<Category>> getAllAsStream() {
-    return db.categoriesDrift.getCategories().watch();
-  }
+  Stream<List<Category>> getAllAsStream() =>
+      db.categoriesDrift.getCategories().watch();
 
   @override
   Future<List<Category>> getCategoriesByMangaId(int mangaId) async =>
       await db.categoriesDrift.getCategoriesByMangaId(mangaId: mangaId).get();
 
   @override
-  Stream<List<Category>> getCategoriesByMangaIdAsStream(int mangaId) {
-    return db.categoriesDrift.getCategoriesByMangaId(mangaId: mangaId).watch();
-  }
+  Stream<List<Category>> getCategoriesByMangaIdAsStream(int mangaId) =>
+      db.categoriesDrift.getCategoriesByMangaId(mangaId: mangaId).watch();
 
   @override
   Future<void> insert(Category category) async =>

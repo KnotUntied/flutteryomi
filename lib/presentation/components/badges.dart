@@ -15,7 +15,6 @@ class BadgeGroup extends StatelessWidget {
   }
 }
 
-
 class Badge extends StatelessWidget {
   const Badge({
     super.key,
@@ -39,9 +38,9 @@ class Badge extends StatelessWidget {
         text,
         maxLines: 1,
         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-          color: textColor ?? Theme.of(context).colorScheme.onSecondary,
-          fontWeight: FontWeight.w500,
-        ),
+              color: textColor ?? Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.w500,
+            ),
       ),
     );
   }

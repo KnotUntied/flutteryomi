@@ -63,4 +63,3 @@ class LanguageBadge extends StatelessWidget {
     return const SizedBox.shrink();
   }
 }
-

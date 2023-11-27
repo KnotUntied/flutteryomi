@@ -40,7 +40,6 @@ class _BrowseTabState extends State<BrowseTab>
         _selectedIndex = _tabController.index;
       });
     });
-
   }
 
   @override

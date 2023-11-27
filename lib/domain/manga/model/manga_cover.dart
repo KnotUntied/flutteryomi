@@ -15,7 +15,7 @@ class MangaCover with _$MangaCover {
   }) = _MangaCover;
 }
 
-extension NumberParsing on Manga {
+extension MangaCoverMethods on Manga {
   MangaCover asMangaCover() {
     return MangaCover(
       mangaId: id,

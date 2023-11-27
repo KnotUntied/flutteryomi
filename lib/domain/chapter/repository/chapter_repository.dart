@@ -8,10 +8,10 @@ abstract interface class ChapterRepository {
   Future<List<Chapter>> getChapterByMangaId(
       {required int mangaId, bool applyScanlatorFilter = false});
   Future<List<String>> getScanlatorsByMangaId(int mangaId);
-  Stream<List<String>> getScanlatorsByMangaIdAsFlow(int mangaId);
+  Stream<List<String>> getScanlatorsByMangaIdAsStream(int mangaId);
   Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId);
   Future<Chapter?> getChapterById(int id);
-  Stream<List<Chapter>> getChapterByMangaIdAsFlow(
+  Stream<List<Chapter>> getChapterByMangaIdAsStream(
       {required int mangaId, bool applyScanlatorFilter = false});
   Future<Chapter?> getChapterByUrlAndMangaId(String url, int mangaId);
 }

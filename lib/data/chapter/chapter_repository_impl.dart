@@ -79,10 +79,9 @@ class ChapterRepositoryImpl implements ChapterRepository {
           as Future<List<String>>);
 
   @override
-  Stream<List<String>> getScanlatorsByMangaIdAsFlow(int mangaId) {
-    return (db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).watch()
-        as Stream<List<String>>);
-  }
+  Stream<List<String>> getScanlatorsByMangaIdAsStream(int mangaId) =>
+      (db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).watch()
+          as Stream<List<String>>);
 
   @override
   Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId) async =>
@@ -92,18 +91,15 @@ class ChapterRepositoryImpl implements ChapterRepository {
 
   @override
   Future<Chapter?> getChapterById(int id) async =>
-      await db.chaptersDrift
-          .getChapterById(id: id)
-          .getSingleOrNull();
+      await db.chaptersDrift.getChapterById(id: id).getSingleOrNull();
 
   @override
-  Stream<List<Chapter>> getChapterByMangaIdAsFlow(
-      {required int mangaId, bool applyScanlatorFilter = false}) {
-    return db.chaptersDrift
-        .getChaptersByMangaId(
-            mangaId: mangaId, applyScanlatorFilter: applyScanlatorFilter)
-        .watch();
-  }
+  Stream<List<Chapter>> getChapterByMangaIdAsStream(
+          {required int mangaId, bool applyScanlatorFilter = false}) =>
+      db.chaptersDrift
+          .getChaptersByMangaId(
+              mangaId: mangaId, applyScanlatorFilter: applyScanlatorFilter)
+          .watch();
 
   @override
   Future<Chapter?> getChapterByUrlAndMangaId(String url, int mangaId) async =>

@@ -38,10 +38,7 @@ class LibraryToolbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-    bottom != null
-      ? kToolbarHeight + kTextTabBarHeight
-      : kToolbarHeight
-  );
+      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {

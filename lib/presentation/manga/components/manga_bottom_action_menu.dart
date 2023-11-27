@@ -47,43 +47,50 @@ class MangaBottomActionMenu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (onBookmarkClicked != null) IconButton(
-              tooltip: lang.action_bookmark,
-              icon: const Icon(Icons.bookmark_add_outlined),
-              onPressed: onBookmarkClicked,
-            ),
-            if (onRemoveBookmarkClicked != null) IconButton(
-              tooltip: lang.action_remove_bookmark,
-              icon: const Icon(Icons.bookmark_remove_outlined),
-              onPressed: onRemoveBookmarkClicked,
-            ),
-            if (onMarkAsReadClicked != null) IconButton(
-              tooltip: lang.action_mark_as_read,
-              icon: const Icon(Icons.done_all_outlined),
-              onPressed: onMarkAsReadClicked,
-            ),
-            if (onMarkAsUnreadClicked != null) IconButton(
-              tooltip: lang.action_mark_as_unread,
-              icon: const Icon(Icons.remove_done_outlined),
-              onPressed: onMarkAsUnreadClicked,
-            ),
-            if (onMarkPreviousAsReadClicked != null) IconButton(
-              tooltip: lang.action_mark_previous_as_read,
-              // Tachiyomi uses a custom done icon with a small down arrow
-              // Use download_done for now :(
-              icon: const Icon(Icons.download_done_outlined),
-              onPressed: onMarkPreviousAsReadClicked,
-            ),
-            if (onDownloadClicked != null) IconButton(
-              tooltip: lang.action_download,
-              icon: const Icon(Icons.download_outlined),
-              onPressed: onDownloadClicked,
-            ),
-            if (onDeleteClicked != null) IconButton(
-              tooltip: lang.action_delete,
-              icon: const Icon(Icons.delete_outlined),
-              onPressed: onDeleteClicked,
-            ),
+            if (onBookmarkClicked != null)
+              IconButton(
+                tooltip: lang.action_bookmark,
+                icon: const Icon(Icons.bookmark_add_outlined),
+                onPressed: onBookmarkClicked,
+              ),
+            if (onRemoveBookmarkClicked != null)
+              IconButton(
+                tooltip: lang.action_remove_bookmark,
+                icon: const Icon(Icons.bookmark_remove_outlined),
+                onPressed: onRemoveBookmarkClicked,
+              ),
+            if (onMarkAsReadClicked != null)
+              IconButton(
+                tooltip: lang.action_mark_as_read,
+                icon: const Icon(Icons.done_all_outlined),
+                onPressed: onMarkAsReadClicked,
+              ),
+            if (onMarkAsUnreadClicked != null)
+              IconButton(
+                tooltip: lang.action_mark_as_unread,
+                icon: const Icon(Icons.remove_done_outlined),
+                onPressed: onMarkAsUnreadClicked,
+              ),
+            if (onMarkPreviousAsReadClicked != null)
+              IconButton(
+                tooltip: lang.action_mark_previous_as_read,
+                // Tachiyomi uses a custom done icon with a small down arrow
+                // Use download_done for now :(
+                icon: const Icon(Icons.download_done_outlined),
+                onPressed: onMarkPreviousAsReadClicked,
+              ),
+            if (onDownloadClicked != null)
+              IconButton(
+                tooltip: lang.action_download,
+                icon: const Icon(Icons.download_outlined),
+                onPressed: onDownloadClicked,
+              ),
+            if (onDeleteClicked != null)
+              IconButton(
+                tooltip: lang.action_delete,
+                icon: const Icon(Icons.delete_outlined),
+                onPressed: onDeleteClicked,
+              ),
           ],
         ),
       ),
@@ -130,29 +137,34 @@ class LibraryBottomActionMenu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (onChangeCategoryClicked != null) IconButton(
-              tooltip: lang.action_move_category,
-              icon: const Icon(Icons.label_outlined),
-              onPressed: onChangeCategoryClicked,
-            ),
-            if (onMarkAsReadClicked != null) IconButton(
-              tooltip: lang.action_mark_as_read,
-              icon: const Icon(Icons.done_all_outlined),
-              onPressed: onMarkAsReadClicked,
-            ),
-            if (onMarkAsUnreadClicked != null) IconButton(
-              tooltip: lang.action_mark_as_unread,
-              icon: const Icon(Icons.remove_done_outlined),
-              onPressed: onMarkAsUnreadClicked,
-            ),
-            if (onDownloadClicked != null) DownloadDropdownMenu(
-              onDownloadClicked: onDownloadClicked!,
-            ),
-            if (onDeleteClicked != null) IconButton(
-              tooltip: lang.action_delete,
-              icon: const Icon(Icons.delete_outlined),
-              onPressed: onDeleteClicked,
-            ),
+            if (onChangeCategoryClicked != null)
+              IconButton(
+                tooltip: lang.action_move_category,
+                icon: const Icon(Icons.label_outlined),
+                onPressed: onChangeCategoryClicked,
+              ),
+            if (onMarkAsReadClicked != null)
+              IconButton(
+                tooltip: lang.action_mark_as_read,
+                icon: const Icon(Icons.done_all_outlined),
+                onPressed: onMarkAsReadClicked,
+              ),
+            if (onMarkAsUnreadClicked != null)
+              IconButton(
+                tooltip: lang.action_mark_as_unread,
+                icon: const Icon(Icons.remove_done_outlined),
+                onPressed: onMarkAsUnreadClicked,
+              ),
+            if (onDownloadClicked != null)
+              DownloadDropdownMenu(
+                onDownloadClicked: onDownloadClicked!,
+              ),
+            if (onDeleteClicked != null)
+              IconButton(
+                tooltip: lang.action_delete,
+                icon: const Icon(Icons.delete_outlined),
+                onPressed: onDeleteClicked,
+              ),
           ],
         ),
       ),

@@ -23,7 +23,8 @@ class Pill extends StatelessWidget {
       child: Card(
         color: color ?? Theme.of(context).colorScheme.primary,
         elevation: elevation,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 1.0),
           child: Text(
