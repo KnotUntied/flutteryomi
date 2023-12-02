@@ -6,12 +6,12 @@ abstract interface class ChapterRepository {
   Future<void> updateAll(List<ChaptersCompanion> chapterUpdates);
   Future<void> removeChaptersWithIds(List<int> chapterIds);
   Future<List<Chapter>> getChapterByMangaId(
-      {required int mangaId, bool applyScanlatorFilter = false});
+      int mangaId, {bool applyScanlatorFilter = false});
   Future<List<String>> getScanlatorsByMangaId(int mangaId);
   Stream<List<String>> getScanlatorsByMangaIdAsStream(int mangaId);
   Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId);
   Future<Chapter?> getChapterById(int id);
   Stream<List<Chapter>> getChapterByMangaIdAsStream(
-      {required int mangaId, bool applyScanlatorFilter = false});
+      int mangaId, {bool applyScanlatorFilter = false});
   Future<Chapter?> getChapterByUrlAndMangaId(String url, int mangaId);
 }

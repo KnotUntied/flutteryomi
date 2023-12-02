@@ -67,7 +67,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
 
   @override
   Future<List<Chapter>> getChapterByMangaId(
-          {required int mangaId, bool applyScanlatorFilter = false}) async =>
+          int mangaId, {bool applyScanlatorFilter = false}) async =>
       await db.chaptersDrift
           .getChaptersByMangaId(
               mangaId: mangaId, applyScanlatorFilter: applyScanlatorFilter)
@@ -95,7 +95,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
 
   @override
   Stream<List<Chapter>> getChapterByMangaIdAsStream(
-          {required int mangaId, bool applyScanlatorFilter = false}) =>
+          int mangaId, {bool applyScanlatorFilter = false}) =>
       db.chaptersDrift
           .getChaptersByMangaId(
               mangaId: mangaId, applyScanlatorFilter: applyScanlatorFilter)
