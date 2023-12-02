@@ -3,7 +3,8 @@ import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/service/missing_chapters.dart';
 import 'package:test/test.dart';
 
-Chapter _chapter(double number) => ChapterUtils.create().copyWith(chapterNumber: number);
+Chapter _chapter(double number) =>
+    ChapterUtils.create().copyWith(chapterNumber: number);
 
 void main() {
   test('missingChaptersCount returns 0 when empty list', () {
@@ -19,7 +20,10 @@ void main() {
   });
 
   test('missingChaptersCount returns number of missing chapters', () {
-    expect(<double>[-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 11.0].missingChaptersCount(), 5);
+    expect(
+        <double>[-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 11.0]
+            .missingChaptersCount(),
+        5);
   });
 
   test('calculateChapterGap returns difference', () {
@@ -34,7 +38,8 @@ void main() {
     expect(calculateChapterGap(10.0, 1.1), 8.0);
   });
 
-  test('calculateChapterGap returns 0 if either are not valid chapter numbers', () {
+  test('calculateChapterGap returns 0 if either are not valid chapter numbers',
+      () {
     expect(calculateChapterGapUsingChapter(_chapter(-1.0), _chapter(10.0)), 0);
     expect(calculateChapterGapUsingChapter(_chapter(99.0), _chapter(-1.0)), 0);
 
