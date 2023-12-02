@@ -12,15 +12,29 @@ class LibrarySort implements FlagWithMask {
 
   LibrarySort(this.type, this.direction);
 
-  static final defaultLibrarySort =
+  static final default_ =
       LibrarySort(Type.alphabetical, Direction.ascending);
 
+  static final types = {
+    Type.alphabetical,
+    Type.lastRead,
+    Type.lastUpdate,
+    Type.unreadCount,
+    Type.totalChapters,
+    Type.latestChapter,
+    Type.chapterFetchDate,
+    Type.dateAdded,
+    Type.trackerMean,
+  };
+
+  static final directions = {Direction.ascending, Direction.descending};
+
   static LibrarySort valueOf(int? flag) => flag == null
-      ? defaultLibrarySort
+      ? default_
       : LibrarySort(Type.valueOf(flag), Direction.valueOf(flag));
 
   static LibrarySort deserialize(String serialized) {
-    if (serialized.isEmpty) return defaultLibrarySort;
+    if (serialized.isEmpty) return default_;
     try {
       List<String> values = serialized.split(",");
       Type type = switch (values[0]) {
@@ -40,7 +54,7 @@ class LibrarySort implements FlagWithMask {
           : Direction.descending;
       return LibrarySort(type, ascending);
     } catch (e) {
-      return defaultLibrarySort;
+      return default_;
     }
   }
 
@@ -73,18 +87,6 @@ class LibrarySort implements FlagWithMask {
   }
 }
 
-final types = {
-  Type.alphabetical,
-  Type.lastRead,
-  Type.lastUpdate,
-  Type.unreadCount,
-  Type.totalChapters,
-  Type.latestChapter,
-  Type.chapterFetchDate,
-  Type.dateAdded,
-  Type.trackerMean,
-};
-
 abstract class Type implements FlagWithMask {
   @override
   final int flag;
@@ -104,7 +106,7 @@ abstract class Type implements FlagWithMask {
   static final Type trackerMean = _TrackerMean();
 
   static Type valueOf(int flag) {
-    return types.firstWhere((type) => type.flag == (flag & type.mask),
+    return LibrarySort.types.firstWhere((type) => type.flag == (flag & type.mask),
         orElse: () => defaultType);
   }
 }
@@ -159,13 +161,11 @@ abstract class Direction implements FlagWithMask {
   static final Direction descending = _Descending();
 
   static Direction valueOf(int flag) {
-    return directions.firstWhere(
+    return LibrarySort.directions.firstWhere(
         (direction) => direction.flag == (flag & direction.mask),
         orElse: () => defaultDirection);
   }
 }
-
-final directions = {Direction.ascending, Direction.descending};
 
 class _Ascending extends Direction {
   _Ascending() : super(0x40);
