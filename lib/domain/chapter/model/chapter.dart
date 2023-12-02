@@ -17,7 +17,7 @@ extension ChapterUtils on Chapter {
             : const Value(null),
       );
 
-  Chapter create() => Chapter(
+  static Chapter create() => Chapter(
         id: -1,
         mangaId: -1,
         read: false,
