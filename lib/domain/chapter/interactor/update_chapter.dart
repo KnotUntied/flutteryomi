@@ -2,13 +2,13 @@ import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 
 class UpdateChapter {
-  final ChapterRepository chapterRepository;
+  final ChapterRepository repository;
 
-  UpdateChapter(this.chapterRepository);
+  UpdateChapter(this.repository);
 
   Future<void> await_(ChaptersCompanion chapterUpdate) async {
     try {
-      await chapterRepository.update(chapterUpdate);
+      await repository.update(chapterUpdate);
     } catch (e) {
       //Logger().e(e);
     }
@@ -16,7 +16,7 @@ class UpdateChapter {
 
   Future<void> awaitAll(List<ChaptersCompanion> chapterUpdates) async {
     try {
-      await chapterRepository.updateAll(chapterUpdates);
+      await repository.updateAll(chapterUpdates);
     } catch (e) {
       //Logger().e(e);
     }
