@@ -54,6 +54,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   url_launcher: ^6.2.1
   dartx: ^1.2.0
+  flutter_markdown: ^0.6.18+2
 
   # marquee: ^2.2.3
 
