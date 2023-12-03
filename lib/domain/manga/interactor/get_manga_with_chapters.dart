@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:dartx/dartx.dart';
 import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
@@ -12,19 +13,34 @@ class GetMangaByUrlAndSourceId {
     required this.chapterRepository,
   });
 
-  Future<Stream<(Manga, List<Chapter>)>> subscribe(int id,
-          {bool applyScanlationFilter = false}) async =>
-      StreamZip([
-        mangaRepository.getMangaByIdAsStream(id),
-        chapterRepository.getChapterByMangaIdAsStream(id,
-            applyScanlatorFilter: applyScanlationFilter),
-      ]).map((values) => (values[0] as Manga, values[1] as List<Chapter>));
+  Future<Stream<Pair<Manga, List<Chapter>>>> subscribe(
+    int id, {
+    bool applyScanlationFilter = false,
+  }) async =>
+      StreamZip(
+        [
+          mangaRepository.getMangaByIdAsStream(id),
+          chapterRepository.getChapterByMangaIdAsStream(
+            id,
+            applyScanlatorFilter: applyScanlationFilter,
+          ),
+        ],
+      ).map(
+        (values) => Pair(
+          values.first as Manga,
+          values.second as List<Chapter>,
+        ),
+      );
 
   Future<Manga> awaitManga(int id) async =>
       await mangaRepository.getMangaById(id);
 
-  Future<List<Chapter>> awaitChapters(int id,
-          {bool applyScanlationFilter = false}) async =>
-      await chapterRepository.getChapterByMangaId(id,
-          applyScanlatorFilter: applyScanlationFilter);
+  Future<List<Chapter>> awaitChapters(
+    int id, {
+    bool applyScanlationFilter = false,
+  }) async =>
+      await chapterRepository.getChapterByMangaId(
+        id,
+        applyScanlatorFilter: applyScanlationFilter,
+      );
 }
