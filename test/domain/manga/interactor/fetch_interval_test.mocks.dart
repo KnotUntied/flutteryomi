@@ -3,14 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i4;
 
-import 'package:dartx/dartx.dart' as _i3;
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as _i7;
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as _i6;
+import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as _i5;
 import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart'
+    as _i3;
+import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart'
     as _i2;
-import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -26,9 +25,9 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeGetChaptersByMangaId_0 extends _i1.SmartFake
-    implements _i2.GetChaptersByMangaId {
-  _FakeGetChaptersByMangaId_0(
+class _FakeChapterRepository_0 extends _i1.SmartFake
+    implements _i2.ChapterRepository {
+  _FakeChapterRepository_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -37,81 +36,37 @@ class _FakeGetChaptersByMangaId_0 extends _i1.SmartFake
         );
 }
 
-class _FakePair_1<A, B> extends _i1.SmartFake implements _i3.Pair<A, B> {
-  _FakePair_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-/// A class which mocks [FetchInterval].
+/// A class which mocks [GetChaptersByMangaId].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFetchInterval extends _i1.Mock implements _i4.FetchInterval {
+class MockGetChaptersByMangaId extends _i1.Mock
+    implements _i3.GetChaptersByMangaId {
   @override
-  _i2.GetChaptersByMangaId get getChapterByMangaId => (super.noSuchMethod(
-        Invocation.getter(#getChapterByMangaId),
-        returnValue: _FakeGetChaptersByMangaId_0(
+  _i2.ChapterRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeChapterRepository_0(
           this,
-          Invocation.getter(#getChapterByMangaId),
+          Invocation.getter(#repository),
         ),
-        returnValueForMissingStub: _FakeGetChaptersByMangaId_0(
+        returnValueForMissingStub: _FakeChapterRepository_0(
           this,
-          Invocation.getter(#getChapterByMangaId),
+          Invocation.getter(#repository),
         ),
-      ) as _i2.GetChaptersByMangaId);
+      ) as _i2.ChapterRepository);
 
   @override
-  _i5.Future<_i6.MangasCompanion?> toMangaUpdateOrNull(
-    _i6.Manga? manga,
-    DateTime? dateTime,
-    _i3.Pair<int, int>? window,
-  ) =>
+  _i4.Future<List<_i5.Chapter>> await_(
+    int? mangaId, {
+    bool? applyScanlatorFilter = false,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #toMangaUpdateOrNull,
-          [
-            manga,
-            dateTime,
-            window,
-          ],
+          #await_,
+          [mangaId],
+          {#applyScanlatorFilter: applyScanlatorFilter},
         ),
-        returnValue: _i5.Future<_i6.MangasCompanion?>.value(),
-        returnValueForMissingStub: _i5.Future<_i6.MangasCompanion?>.value(),
-      ) as _i5.Future<_i6.MangasCompanion?>);
-
-  @override
-  _i3.Pair<int, int> getWindow(DateTime? dateTime) => (super.noSuchMethod(
-        Invocation.method(
-          #getWindow,
-          [dateTime],
-        ),
-        returnValue: _FakePair_1<int, int>(
-          this,
-          Invocation.method(
-            #getWindow,
-            [dateTime],
-          ),
-        ),
-        returnValueForMissingStub: _FakePair_1<int, int>(
-          this,
-          Invocation.method(
-            #getWindow,
-            [dateTime],
-          ),
-        ),
-      ) as _i3.Pair<int, int>);
-
-  @override
-  int calculateInterval(List<_i7.Chapter>? chapters) => (super.noSuchMethod(
-        Invocation.method(
-          #calculateInterval,
-          [chapters],
-        ),
-        returnValue: 0,
-        returnValueForMissingStub: 0,
-      ) as int);
+        returnValue: _i4.Future<List<_i5.Chapter>>.value(<_i5.Chapter>[]),
+        returnValueForMissingStub:
+            _i4.Future<List<_i5.Chapter>>.value(<_i5.Chapter>[]),
+      ) as _i4.Future<List<_i5.Chapter>>);
 }

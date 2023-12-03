@@ -1,12 +1,13 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
+import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:test/test.dart';
 import 'package:mockito/annotations.dart';
 
 // Annotation which generates the cat.mocks.dart library and the MockCat class.
-@GenerateNiceMocks([MockSpec<FetchInterval>()])
+@GenerateNiceMocks([MockSpec<GetChaptersByMangaId>()])
 import 'fetch_interval_test.mocks.dart';
 
 //var _testTime = ZonedDateTime.parse("2020-01-01T00:00:00Z");
@@ -16,7 +17,7 @@ var _chapter = ChapterUtils.create().copyWith(
   dateUpload: _testTime,
 );
 
-var _fetchInterval = MockFetchInterval();
+var _fetchInterval = FetchInterval(MockGetChaptersByMangaId());
 
 Chapter _chapterWithTime(Chapter chapter, Duration duration) {
   var newTime = _testTime + duration;
@@ -98,7 +99,7 @@ void main() {
   test('returns interval of 2 days when chapters are released every 2 days',
       () {
     var chapters = IntRange(1, 20).map(
-      (i) => _chapterWithTime(_chapter, (2 * i).hours),
+      (i) => _chapterWithTime(_chapter, (2 * i).days),
     );
     expect(_fetchInterval.calculateInterval(chapters.toList()), 2);
   });
@@ -117,8 +118,10 @@ void main() {
         dateUpload: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
       ),
     );
-    expect(_fetchInterval.calculateInterval(chaptersWithoutUploadDate.toList()),
-        1);
+    expect(
+      _fetchInterval.calculateInterval(chaptersWithoutUploadDate.toList()),
+      1,
+    );
   });
 
   test(

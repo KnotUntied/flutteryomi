@@ -59,18 +59,18 @@ class FetchInterval {
         .toList();
     List<DateTime> fetchDates = chapters
         .filter((c) => c.dateFetch > _zeroDT)
-        .sortedByDescending((c) => c.dateUpload)
-        .map((c) => DateUtils.dateOnly(c.dateUpload))
+        .sortedByDescending((c) => c.dateFetch)
+        .map((c) => DateUtils.dateOnly(c.dateFetch))
         .distinct()
         .take(10)
         .toList();
     int interval;
     if (uploadDates.length > 3) {
-      int uploadDelta = uploadDates.last.difference(uploadDates.first).inDays;
+      int uploadDelta = uploadDates.first.difference(uploadDates.last).inDays;
       int uploadPeriod = uploadDates.indexOf(uploadDates.last);
       interval = uploadDelta ~/ uploadPeriod;
     } else if (fetchDates.length > 3) {
-      int fetchDelta = fetchDates.last.difference(fetchDates.first).inDays;
+      int fetchDelta = fetchDates.first.difference(fetchDates.last).inDays;
       int uploadPeriod = fetchDates.indexOf(fetchDates.last);
       interval = fetchDelta ~/ uploadPeriod;
     } else {
