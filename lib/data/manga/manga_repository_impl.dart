@@ -76,8 +76,11 @@ class MangaRepositoryImpl implements MangaRepository {
           .deleteMangaCategoryByMangaId(mangaId: mangaId);
       for (var categoryId in categoryIds) {
         await db.into(db.mangasCategories).insert(
-            MangasCategoriesCompanion.insert(
-                mangaId: mangaId, categoryId: categoryId));
+              MangasCategoriesCompanion.insert(
+                mangaId: mangaId,
+                categoryId: categoryId,
+              ),
+            );
       }
     });
   }
@@ -86,28 +89,29 @@ class MangaRepositoryImpl implements MangaRepository {
   Future<int?> insert(Manga manga) async {
     int? lastInsertedRowId;
     await db.transaction(() async {
-      Manga? lastInsertedRow =
-          await db.into(db.mangas).insertReturningOrNull(MangasCompanion.insert(
-                source: manga.source,
-                url: manga.url,
-                artist: Value(manga.artist),
-                author: Value(manga.author),
-                description: Value(manga.description),
-                genre: Value(manga.genre),
-                title: manga.title,
-                status: manga.status,
-                thumbnailUrl: Value(manga.thumbnailUrl),
-                favorite: manga.favorite,
-                lastUpdate: Value(manga.lastUpdate),
-                nextUpdate: Value(manga.nextUpdate),
-                calculateInterval: Value(manga.calculateInterval),
-                initialized: manga.initialized,
-                viewer: manga.viewer,
-                chapterFlags: manga.chapterFlags,
-                coverLastModified: manga.coverLastModified,
-                dateAdded: manga.dateAdded,
-                updateStrategy: Value(manga.updateStrategy),
-              ));
+      Manga? lastInsertedRow = await db.into(db.mangas).insertReturningOrNull(
+            MangasCompanion.insert(
+              source: manga.source,
+              url: manga.url,
+              artist: Value(manga.artist),
+              author: Value(manga.author),
+              description: Value(manga.description),
+              genre: Value(manga.genre),
+              title: manga.title,
+              status: manga.status,
+              thumbnailUrl: Value(manga.thumbnailUrl),
+              favorite: manga.favorite,
+              lastUpdate: Value(manga.lastUpdate),
+              nextUpdate: Value(manga.nextUpdate),
+              calculateInterval: Value(manga.calculateInterval),
+              initialized: manga.initialized,
+              viewer: manga.viewer,
+              chapterFlags: manga.chapterFlags,
+              coverLastModified: manga.coverLastModified,
+              dateAdded: manga.dateAdded,
+              updateStrategy: Value(manga.updateStrategy),
+            ),
+          );
       lastInsertedRowId = lastInsertedRow?.id;
     });
     return lastInsertedRowId;

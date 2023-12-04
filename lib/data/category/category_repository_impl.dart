@@ -1,20 +1,13 @@
 import 'package:riverpod/riverpod.dart';
-//import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/categories.drift.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 
-//class CategoryRepositoryImpl extends _$CategoryRepositoryImpl implements CategoryRepository {
 class CategoryRepositoryImpl implements CategoryRepository {
   CategoryRepositoryImpl(this.ref);
   final Ref ref;
   late final db = ref.read(AppDatabase.provider);
-
-  //@override
-  //Stream<List<Category>> build() {
-  //  return db.categoriesDrift.getCategories().watch();
-  //}
 
   @override
   Future<Category?> get(int id) async =>
@@ -38,11 +31,13 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
   @override
   Future<void> insert(Category category) async =>
-      await db.into(db.categories).insert(CategoriesCompanion.insert(
-            name: category.name,
-            sort: category.sort,
-            flags: category.flags,
-          ));
+      await db.into(db.categories).insert(
+            CategoriesCompanion.insert(
+              name: category.name,
+              sort: category.sort,
+              flags: category.flags,
+            ),
+          );
 
   @override
   Future<void> updatePartial(CategoriesCompanion update) async =>
