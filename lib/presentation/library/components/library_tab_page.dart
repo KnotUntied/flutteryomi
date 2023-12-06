@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutteryomi/presentation/components/empty_screen.dart';
 import 'package:flutteryomi/presentation/library/components/global_search_item.dart';
 import 'package:flutteryomi/presentation/library/components/library_compact_grid.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 
 class LibraryTabPage extends StatelessWidget {
   const LibraryTabPage({

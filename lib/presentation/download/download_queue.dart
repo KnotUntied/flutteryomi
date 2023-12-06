@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutteryomi/presentation/components/empty_screen.dart';
 import 'package:flutteryomi/presentation/components/pill.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 
 class DownloadQueueScreen extends StatelessWidget {
   const DownloadQueueScreen({super.key});

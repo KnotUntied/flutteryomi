@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutteryomi/data/utils/manga_cover.dart' as manga_cover_data;
+import 'package:flutteryomi/domain/manga/model/manga_cover.dart' as manga_cover_data;
 import 'package:flutteryomi/presentation/components/badges.dart' as badges;
 import 'package:flutteryomi/presentation/manga/components/manga_cover.dart';
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/presentation/components/app_bar.dart';
-import 'package:flutteryomi/presentation/components/empty_screen.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 
 class UpdatesTab extends StatefulWidget {
   const UpdatesTab({super.key});

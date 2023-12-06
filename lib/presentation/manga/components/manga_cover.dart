@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutteryomi/data/utils/manga_cover.dart' as manga_cover_data;
+import 'package:flutteryomi/domain/manga/model/manga_cover.dart' as manga_cover_data;
 
 class MangaCover extends StatelessWidget {
   static const squareRatio = 1.0;
