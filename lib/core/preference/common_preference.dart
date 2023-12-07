@@ -1,4 +1,4 @@
-import 'package:flutteryomi/core/preference.dart';
+import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 sealed class CommonPreference<T> extends Preference<T> {

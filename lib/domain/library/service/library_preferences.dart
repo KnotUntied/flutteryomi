@@ -1,6 +1,6 @@
-import 'package:flutteryomi/core/preference.dart';
-import 'package:flutteryomi/core/preference_store.dart';
-import 'package:flutteryomi/core/tri_state.dart';
+import 'package:flutteryomi/core/preference/preference.dart';
+import 'package:flutteryomi/core/preference/preference_store.dart';
+import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/library/model/library_display_mode.dart';
 import 'package:flutteryomi/domain/library/model/library_sort_mode.dart';

@@ -1,5 +1,5 @@
-import 'package:flutteryomi/core/preference.dart';
-import 'package:flutteryomi/core/preference_store.dart';
+import 'package:flutteryomi/core/preference/preference.dart';
+import 'package:flutteryomi/core/preference/preference_store.dart';
 
 class DownloadPreferences {
   DownloadPreferences(this.preferenceStore);

@@ -1,4 +1,4 @@
-import 'package:flutteryomi/core/preference.dart';
+import 'package:flutteryomi/core/preference/preference.dart';
 
 abstract class PreferenceStore {
   Preference<String> getString(String key, {String defaultValue = ''});
