@@ -1,10 +1,11 @@
-abstract interface class Preference<T> {
+abstract class Preference<T> {
   String key();
   T get();
-  //void set(T value);
+  void set(T value);
   bool isSet();
   void delete();
   T defaultValue();
+  void getAndSet(T Function(T) block) => set(block(get()));
 //  Stream<T> changes();
   static bool isPrivate(String key) => key.startsWith(_privatePrefix);
   static String privateKey(String key) => '$_privatePrefix$key';
@@ -15,23 +16,23 @@ abstract interface class Preference<T> {
 }
 
 // Currently not allowed to overload operators += and -=
-//extension PreferenceSet<T> on Preference<Set<T>> {
-//  void add(T item) {
-//    Set<T> mySet = get();
-//    mySet.add(item);
-//    set(mySet);
-//  }
+extension PreferenceSet<T> on Preference<Set<T>> {
+  void add(T item) {
+    Set<T> mySet = get();
+    mySet.add(item);
+    set(mySet);
+  }
 
-//  void remove(T item) {
-//    Set<T> mySet = get();
-//    mySet.remove(item);
-//    set(mySet);
-//  }
-//}
+  void remove(T item) {
+    Set<T> mySet = get();
+    mySet.remove(item);
+    set(mySet);
+  }
+}
 
-//extension Toggle on Preference<bool> {
-//  bool toggle() {
-//    set(!get());
-//    return get();
-//  }
-//}
+extension Toggle on Preference<bool> {
+  bool toggle() {
+    set(!get());
+    return get();
+  }
+}

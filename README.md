@@ -46,8 +46,6 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 ## Todo
 
 - License (esp. wrt. existing Tachiyomi license and permissions)
-- Folder structure and conventions
+  - Proper attribution
 - Feature parity with Tachiyomi
-- Desktop layout (?)
-  - Browser-like tabs (?)
 - Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp` rather than simply using `CupertinoIcons`

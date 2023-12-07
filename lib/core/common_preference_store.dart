@@ -4,7 +4,7 @@ import 'package:flutteryomi/core/common_preference.dart';
 import 'package:flutteryomi/core/preference.dart';
 import 'package:flutteryomi/core/preference_store.dart';
 
-class CommonPreferenceStore implements PreferenceStore {
+class CommonPreferenceStore extends PreferenceStore {
   CommonPreferenceStore(this.prefs);
   final SharedPreferences prefs;
 
@@ -39,4 +39,7 @@ class CommonPreferenceStore implements PreferenceStore {
     T Function(String) deserializer,
   ) =>
       ObjectPrimitive(prefs, key, defaultValue, serializer, deserializer);
+
+  @override
+  Map<String, dynamic> getAll() => { for (var k in prefs.getKeys()) k : prefs.get(k) };
 }

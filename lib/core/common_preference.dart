@@ -1,7 +1,7 @@
 import 'package:flutteryomi/core/preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-sealed class CommonPreference<T> implements Preference<T> {
+sealed class CommonPreference<T> extends Preference<T> {
   CommonPreference(
     this.preferences,
     //this.keyStream,
@@ -31,11 +31,8 @@ sealed class CommonPreference<T> implements Preference<T> {
     }
   }
 
-  //@override
-  //void set(T value) {
-  //  // TODO: implement set
-  //  throw UnimplementedError();
-  //}
+  @override
+  void set(T value) => write(key_, value);
 
   @override
   bool isSet() => preferences.containsKey(key_);

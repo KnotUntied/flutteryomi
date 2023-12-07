@@ -33,6 +33,8 @@ class LibrarySort implements FlagWithMask {
       ? default_
       : LibrarySort(Type.valueOf(flag), Direction.valueOf(flag));
 
+  static String serializer(LibrarySort value) => value.serialize();
+
   static LibrarySort deserialize(String serialized) {
     if (serialized.isEmpty) return default_;
     try {

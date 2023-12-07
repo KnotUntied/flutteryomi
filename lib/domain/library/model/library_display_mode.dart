@@ -18,6 +18,10 @@ class LibraryDisplayMode {
     coverOnlyGrid,
   };
 
+  static final default_ = compactGrid;
+
+  static String serializer(LibraryDisplayMode value) => value.serialize();
+
   static LibraryDisplayMode deserialize(String serialized) =>
       switch (serialized) {
         "COMFORTABLE_GRID" => comfortableGrid,
