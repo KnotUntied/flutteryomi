@@ -32,6 +32,16 @@ See [Drift's official documentation](https://drift.simonbinder.eu/docs/getting-s
 dart run build_runner build
 ```
 
+## Updating Custom Icons
+
+Configure generator using `icon_font.yaml`.
+
+See [`icon_font_generator`](https://github.com/ScerIO/icon_font_generator) for more information.
+
+```sh
+dart run icon_font_generator:generator
+```
+
 ## Migrations
 
 ```sh

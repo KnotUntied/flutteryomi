@@ -78,6 +78,7 @@ dev_dependencies:
   riverpod_generator: ^2.3.6
   riverpod_lint: ^2.3.4
   test: ^1.24.9
+  icon_font_generator: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -120,6 +121,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Custom Icons
+      fonts:
+        - asset: fonts/custom_icons.otf
 
   # https://docs.flutter.dev/ui/accessibility-and-localization/internationalization#adding-your-own-localized-messages
   generate: true

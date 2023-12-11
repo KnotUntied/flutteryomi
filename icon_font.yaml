@@ -1,0 +1,15 @@
+icon_font:
+  input_svg_dir: "assets/custom_icons/"
+  output_font_file: "assets/fonts/custom_icons.otf"
+  
+  output_class_file: "lib/presentation/icons/custom_icons.dart"
+  class_name: "CustomIcons"
+  # package: custom_icons_package
+  format: true
+
+  font_name: "Custom Icons"
+  normalize: true
+  ignore_shapes: true
+
+  recursive: true
+  verbose: false
