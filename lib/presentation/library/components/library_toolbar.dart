@@ -92,7 +92,7 @@ class LibraryRegularToolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
     final pillAlpha =
-        MediaQuery.of(context).platformBrightness == Brightness.dark ? 31 : 20;
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark ? 31 : 20;
     final filterTint =
         hasFilters ? Theme.of(context).colorScheme.primary : null;
     return SearchToolbar(

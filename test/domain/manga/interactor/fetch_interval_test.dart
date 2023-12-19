@@ -4,11 +4,9 @@ import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.d
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:test/test.dart';
-import 'package:mockito/annotations.dart';
+import 'package:mocktail/mocktail.dart';
 
-// Annotation which generates the cat.mocks.dart library and the MockCat class.
-@GenerateNiceMocks([MockSpec<GetChaptersByMangaId>()])
-import 'fetch_interval_test.mocks.dart';
+class MockGetChaptersByMangaId extends Mock implements GetChaptersByMangaId {}
 
 //var _testTime = ZonedDateTime.parse("2020-01-01T00:00:00Z");
 var _testTime = DateTime.parse("2020-01-01T00:00:00Z");

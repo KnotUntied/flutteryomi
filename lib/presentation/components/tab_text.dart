@@ -15,7 +15,7 @@ class TabText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pillAlpha =
-        MediaQuery.of(context).platformBrightness == Brightness.dark ? 31 : 20;
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark ? 31 : 20;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
