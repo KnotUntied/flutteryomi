@@ -39,7 +39,7 @@ void main() {
       ),
     );
 
-    var result = getApplicationRelease.await_(
+    var result = await getApplicationRelease.await_(
       Arguments(
         isPreview: false,
         isThirdParty: true,
@@ -49,115 +49,119 @@ void main() {
       ),
     );
 
-    expect(await result, ThirdPartyInstallation());
+    expect(result, ThirdPartyInstallation());
   });
 
-  //test('When has update but is preview expect new update', () {
-    //every { preference.get() } returns 0
-    //every { preference.set(any()) }.answers { }
+  test('When has update but is preview expect new update', () async {
+    when(() => preference.get()).thenReturn(0);
+    when(() => preference.set(any())).thenAnswer((_) {});
 
-    //val release = Release(
-    //    "r2000",
-    //    "info",
-    //    "http://example.com/release_link",
-    //    listOf("http://example.com/assets"),
-    //)
+    var release = Release(
+      "r2000",
+      "info",
+      "http://example.com/release_link",
+      <String>["http://example.com/assets"],
+    );
 
-    //coEvery { releaseService.latest(any()) } returns release
+    when(() => releaseService.latest(any())).thenAnswer(
+      (_) => Future<Release>.value(release),
+    );
 
-    //val result = getApplicationRelease.await(
-    //    GetApplicationRelease.Arguments(
-    //        isPreview = true,
-    //        isThirdParty = false,
-    //        commitCount = 1000,
-    //        versionName = "",
-    //        repository = "test",
-    //    ),
-    //)
+    var result = await getApplicationRelease.await_(
+      Arguments(
+        isPreview: true,
+        isThirdParty: false,
+        commitCount: 1000,
+        versionName: "",
+        repository: "test",
+      ),
+    );
 
-    //(result as GetApplicationRelease.Result.NewUpdate).release shouldBe GetApplicationRelease.Result.NewUpdate(
-    //    release,
-    //).release
-  //});
+    expect((result as NewUpdate).release, NewUpdate(release).release);
+  });
 
-  //test('When has update expect new update', () {
-    //every { preference.get() } returns 0
-    //every { preference.set(any()) }.answers { }
+  test('When has update expect new update', () async {
+    when(() => preference.get()).thenReturn(0);
+    when(() => preference.set(any())).thenAnswer((_) {});
 
-    //val release = Release(
-    //    "v2.0.0",
-    //    "info",
-    //    "http://example.com/release_link",
-    //    listOf("http://example.com/assets"),
-    //)
+    var release = Release(
+      "v2.0.0",
+      "info",
+      "http://example.com/release_link",
+      <String>["http://example.com/assets"],
+    );
 
-    //coEvery { releaseService.latest(any()) } returns release
+    when(() => releaseService.latest(any())).thenAnswer(
+      (_) => Future<Release>.value(release),
+    );
 
-    //val result = getApplicationRelease.await(
-    //    GetApplicationRelease.Arguments(
-    //        isPreview = false,
-    //        isThirdParty = false,
-    //        commitCount = 0,
-    //        versionName = "v1.0.0",
-    //        repository = "test",
-    //    ),
-    //)
+    var result = await getApplicationRelease.await_(
+      Arguments(
+        isPreview: false,
+        isThirdParty: false,
+        commitCount: 0,
+        versionName: "v1.0.0",
+        repository: "test",
+      ),
+    );
 
-    //(result as GetApplicationRelease.Result.NewUpdate).release shouldBe GetApplicationRelease.Result.NewUpdate(
-    //    release,
-    //).release
-  //});
+    expect((result as NewUpdate).release, NewUpdate(release).release);
+  });
 
-  //test('When has no update expect no new update', () {
-    //every { preference.get() } returns 0
-    //every { preference.set(any()) }.answers { }
+  test('When has no update expect no new update', () async {
+    when(() => preference.get()).thenReturn(0);
+    when(() => preference.set(any())).thenAnswer((_) {});
 
-    //val release = Release(
-    //    "v1.0.0",
-    //    "info",
-    //    "http://example.com/release_link",
-    //    listOf("http://example.com/assets"),
-    //)
+    var release = Release(
+      "v1.0.0",
+      "info",
+      "http://example.com/release_link",
+      <String>["http://example.com/assets"],
+    );
 
-    //coEvery { releaseService.latest(any()) } returns release
+    when(() => releaseService.latest(any())).thenAnswer(
+      (_) => Future<Release>.value(release),
+    );
 
-    //val result = getApplicationRelease.await(
-    //    GetApplicationRelease.Arguments(
-    //        isPreview = false,
-    //        isThirdParty = false,
-    //        commitCount = 0,
-    //        versionName = "v2.0.0",
-    //        repository = "test",
-    //    ),
-    //)
+    var result = await getApplicationRelease.await_(
+      Arguments(
+        isPreview: false,
+        isThirdParty: false,
+        commitCount: 0,
+        versionName: "v2.0.0",
+        repository: "test",
+      ),
+    );
 
-    //result shouldBe GetApplicationRelease.Result.NoNewUpdate
-  //});
+    expect(result, NoNewUpdate());
+  });
 
-  //test('When now is before three days expect no new update', () {
-    //every { preference.get() } returns Instant.now().toEpochMilli()
-    //every { preference.set(any()) }.answers { }
+  test('When now is before three days expect no new update', () async {
+    when(() => preference.get()).thenReturn(DateTime.now().millisecondsSinceEpoch);
+    when(() => preference.set(any())).thenAnswer((_) {});
 
-    //val release = Release(
-    //    "v1.0.0",
-    //    "info",
-    //    "http://example.com/release_link",
-    //    listOf("http://example.com/assets"),
-    //)
+    var release = Release(
+      "v1.0.0",
+      "info",
+      "http://example.com/release_link",
+      <String>["http://example.com/assets"],
+    );
 
-    //coEvery { releaseService.latest(any()) } returns release
+    when(() => releaseService.latest(any())).thenAnswer(
+      (_) => Future<Release>.value(release),
+    );
 
-    //val result = getApplicationRelease.await(
-    //    GetApplicationRelease.Arguments(
-    //        isPreview = false,
-    //        isThirdParty = false,
-    //        commitCount = 0,
-    //        versionName = "v2.0.0",
-    //        repository = "test",
-    //    ),
-    //)
+    var result = await getApplicationRelease.await_(
+      Arguments(
+        isPreview: false,
+        isThirdParty: false,
+        commitCount: 0,
+        versionName: "v2.0.0",
+        repository: "test",
+      ),
+    );
 
-    //coVerify(exactly = 0) { releaseService.latest(any()) }
-    //result shouldBe GetApplicationRelease.Result.NoNewUpdate
-  //});
+    verifyNever(() => releaseService.latest(any()));
+    expect(result, NoNewUpdate());
+  });
 }
