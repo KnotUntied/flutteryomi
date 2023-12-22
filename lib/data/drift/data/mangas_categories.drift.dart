@@ -2,9 +2,10 @@
 import 'package:drift/drift.dart' as i0;
 import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart' as i1;
 import 'package:drift/internal/modular.dart' as i2;
+import 'package:flutteryomi/data/drift/data/categories.drift.dart' as i3;
 
 class MangasCategories extends i0.Table
-    with i0.TableInfo<MangasCategories, i1.MangasCategorie> {
+    with i0.TableInfo<MangasCategories, i1.MangasCategory> {
   @override
   final i0.GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -47,7 +48,7 @@ class MangasCategories extends i0.Table
   static const String $name = 'mangas_categories';
   @override
   i0.VerificationContext validateIntegrity(
-      i0.Insertable<i1.MangasCategorie> instance,
+      i0.Insertable<i1.MangasCategory> instance,
       {bool isInserting = false}) {
     final context = i0.VerificationContext();
     final data = instance.toColumns(true);
@@ -80,9 +81,9 @@ class MangasCategories extends i0.Table
   @override
   Set<i0.GeneratedColumn> get $primaryKey => {id};
   @override
-  i1.MangasCategorie map(Map<String, dynamic> data, {String? tablePrefix}) {
+  i1.MangasCategory map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return i1.MangasCategorie(
+    return i1.MangasCategory(
       id: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}_id'])!,
       mangaId: attachedDatabase.typeMapping
@@ -109,13 +110,13 @@ class MangasCategories extends i0.Table
   bool get dontWriteConstraints => true;
 }
 
-class MangasCategorie extends i0.DataClass
-    implements i0.Insertable<i1.MangasCategorie> {
+class MangasCategory extends i0.DataClass
+    implements i0.Insertable<i1.MangasCategory> {
   final int id;
   final int mangaId;
   final int categoryId;
   final DateTime lastModifiedAt;
-  const MangasCategorie(
+  const MangasCategory(
       {required this.id,
       required this.mangaId,
       required this.categoryId,
@@ -139,10 +140,10 @@ class MangasCategorie extends i0.DataClass
     );
   }
 
-  factory MangasCategorie.fromJson(Map<String, dynamic> json,
+  factory MangasCategory.fromJson(Map<String, dynamic> json,
       {i0.ValueSerializer? serializer}) {
     serializer ??= i0.driftRuntimeOptions.defaultSerializer;
-    return MangasCategorie(
+    return MangasCategory(
       id: serializer.fromJson<int>(json['_id']),
       mangaId: serializer.fromJson<int>(json['manga_id']),
       categoryId: serializer.fromJson<int>(json['category_id']),
@@ -160,9 +161,9 @@ class MangasCategorie extends i0.DataClass
     };
   }
 
-  i1.MangasCategorie copyWith(
+  i1.MangasCategory copyWith(
           {int? id, int? mangaId, int? categoryId, DateTime? lastModifiedAt}) =>
-      i1.MangasCategorie(
+      i1.MangasCategory(
         id: id ?? this.id,
         mangaId: mangaId ?? this.mangaId,
         categoryId: categoryId ?? this.categoryId,
@@ -170,7 +171,7 @@ class MangasCategorie extends i0.DataClass
       );
   @override
   String toString() {
-    return (StringBuffer('MangasCategorie(')
+    return (StringBuffer('MangasCategory(')
           ..write('id: $id, ')
           ..write('mangaId: $mangaId, ')
           ..write('categoryId: $categoryId, ')
@@ -184,14 +185,14 @@ class MangasCategorie extends i0.DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is i1.MangasCategorie &&
+      (other is i1.MangasCategory &&
           other.id == this.id &&
           other.mangaId == this.mangaId &&
           other.categoryId == this.categoryId &&
           other.lastModifiedAt == this.lastModifiedAt);
 }
 
-class MangasCategoriesCompanion extends i0.UpdateCompanion<i1.MangasCategorie> {
+class MangasCategoriesCompanion extends i0.UpdateCompanion<i1.MangasCategory> {
   final i0.Value<int> id;
   final i0.Value<int> mangaId;
   final i0.Value<int> categoryId;
@@ -209,7 +210,7 @@ class MangasCategoriesCompanion extends i0.UpdateCompanion<i1.MangasCategorie> {
     this.lastModifiedAt = const i0.Value.absent(),
   })  : mangaId = i0.Value(mangaId),
         categoryId = i0.Value(categoryId);
-  static i0.Insertable<i1.MangasCategorie> custom({
+  static i0.Insertable<i1.MangasCategory> custom({
     i0.Expression<int>? id,
     i0.Expression<int>? mangaId,
     i0.Expression<int>? categoryId,
@@ -283,4 +284,6 @@ class MangasCategoriesDrift extends i2.ModularAccessor {
 
   i1.MangasCategories get mangasCategories =>
       this.resultSet<i1.MangasCategories>('mangas_categories');
+  i3.CategoriesDrift get categoriesDrift =>
+      this.accessor(i3.CategoriesDrift.new);
 }

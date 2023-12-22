@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart';
@@ -12,6 +13,7 @@ class MangaRepositoryImpl implements MangaRepository {
   MangaRepositoryImpl(this.ref);
   final Ref ref;
   late final db = ref.read(AppDatabase.provider);
+  late final logger = ref.read(loggerProvider);
 
   @override
   Future<Manga> getMangaById(int id) async =>
@@ -64,7 +66,7 @@ class MangaRepositoryImpl implements MangaRepository {
       await db.mangasDrift.resetViewerFlags();
       return true;
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
       return false;
     }
   }
@@ -124,6 +126,7 @@ class MangaRepositoryImpl implements MangaRepository {
           .write(update);
       return true;
     } catch (e) {
+      logger.e(e);
       return false;
     }
   }
@@ -140,6 +143,7 @@ class MangaRepositoryImpl implements MangaRepository {
       });
       return true;
     } catch (e) {
+      logger.e(e);
       return false;
     }
   }

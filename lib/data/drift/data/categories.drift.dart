@@ -315,4 +315,6 @@ class CategoriesDrift extends i2.ModularAccessor {
   i1.Categories get categories => this.resultSet<i1.Categories>('categories');
   i3.MangasCategories get mangasCategories =>
       this.resultSet<i3.MangasCategories>('mangas_categories');
+  i3.MangasCategoriesDrift get mangasCategoriesDrift =>
+      this.accessor(i3.MangasCategoriesDrift.new);
 }

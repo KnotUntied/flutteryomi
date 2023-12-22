@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
@@ -9,6 +10,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
   ChapterRepositoryImpl(this.ref);
   final Ref ref;
   late final db = ref.read(AppDatabase.provider);
+  late final logger = ref.read(loggerProvider);
 
   @override
   Future<List<Chapter>> addAll(List<Chapter> chapters) async {
@@ -35,7 +37,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
       });
       return returnedChapters;
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
       return [];
     }
   }
@@ -61,7 +63,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
     try {
       await db.chaptersDrift.removeChaptersWithIds(chapterIds: chapterIds);
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
     }
   }
 

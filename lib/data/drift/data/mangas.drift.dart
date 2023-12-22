@@ -463,8 +463,8 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       map['description'] = i0.Variable<String>(description);
     }
     if (!nullToAbsent || genre != null) {
-      final converter = i1.Mangas.$convertergenren;
-      map['genre'] = i0.Variable<String>(converter.toSql(genre));
+      map['genre'] =
+          i0.Variable<String>(i1.Mangas.$convertergenren.toSql(genre));
     }
     map['title'] = i0.Variable<String>(title);
     map['status'] = i0.Variable<int>(status);
@@ -928,9 +928,8 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       map['description'] = i0.Variable<String>(description.value);
     }
     if (genre.present) {
-      final converter = i1.Mangas.$convertergenren;
-
-      map['genre'] = i0.Variable<String>(converter.toSql(genre.value));
+      map['genre'] =
+          i0.Variable<String>(i1.Mangas.$convertergenren.toSql(genre.value));
     }
     if (title.present) {
       map['title'] = i0.Variable<String>(title.value);

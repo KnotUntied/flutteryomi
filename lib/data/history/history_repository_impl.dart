@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/history.drift.dart';
 import 'package:flutteryomi/data/history/history_mapper.dart';
@@ -10,6 +11,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
   HistoryRepositoryImpl(this.ref);
   final Ref ref;
   late final db = ref.read(AppDatabase.provider);
+  late final logger = ref.read(loggerProvider);
 
   @override
   Stream<List<HistoryWithRelations>> getHistory(String query) =>
@@ -38,7 +40,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
     try {
       await db.historyDrift.resetHistoryById(historyId: historyId);
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
     }
   }
 
@@ -47,7 +49,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
     try {
       await db.historyDrift.resetHistoryByMangaId(mangaId: mangaId);
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
     }
   }
 
@@ -57,7 +59,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
       await db.historyDrift.removeAllHistory();
       return true;
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
       return false;
     }
   }
@@ -67,7 +69,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
     try {
       await db.into(db.history).insertOnConflictUpdate(history);
     } catch (e) {
-      //logcat(LogPriority.ERROR, e);
+      logger.e(e);
     }
   }
 }
