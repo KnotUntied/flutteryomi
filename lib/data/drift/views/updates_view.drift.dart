@@ -19,7 +19,7 @@ class UpdatesViewData extends i0.DataClass {
   final String? thumbnailUrl;
   final DateTime coverLastModified;
   final DateTime dateUpload;
-  final DateTime datefetch;
+  final DateTime dateFetch;
   const UpdatesViewData(
       {required this.mangaId,
       required this.mangaTitle,
@@ -34,7 +34,7 @@ class UpdatesViewData extends i0.DataClass {
       this.thumbnailUrl,
       required this.coverLastModified,
       required this.dateUpload,
-      required this.datefetch});
+      required this.dateFetch});
   factory UpdatesViewData.fromJson(Map<String, dynamic> json,
       {i0.ValueSerializer? serializer}) {
     serializer ??= i0.driftRuntimeOptions.defaultSerializer;
@@ -53,7 +53,7 @@ class UpdatesViewData extends i0.DataClass {
       coverLastModified:
           serializer.fromJson<DateTime>(json['coverLastModified']),
       dateUpload: serializer.fromJson<DateTime>(json['dateUpload']),
-      datefetch: serializer.fromJson<DateTime>(json['datefetch']),
+      dateFetch: serializer.fromJson<DateTime>(json['dateFetch']),
     );
   }
   @override
@@ -73,7 +73,7 @@ class UpdatesViewData extends i0.DataClass {
       'thumbnailUrl': serializer.toJson<String?>(thumbnailUrl),
       'coverLastModified': serializer.toJson<DateTime>(coverLastModified),
       'dateUpload': serializer.toJson<DateTime>(dateUpload),
-      'datefetch': serializer.toJson<DateTime>(datefetch),
+      'dateFetch': serializer.toJson<DateTime>(dateFetch),
     };
   }
 
@@ -91,7 +91,7 @@ class UpdatesViewData extends i0.DataClass {
           i0.Value<String?> thumbnailUrl = const i0.Value.absent(),
           DateTime? coverLastModified,
           DateTime? dateUpload,
-          DateTime? datefetch}) =>
+          DateTime? dateFetch}) =>
       i1.UpdatesViewData(
         mangaId: mangaId ?? this.mangaId,
         mangaTitle: mangaTitle ?? this.mangaTitle,
@@ -107,7 +107,7 @@ class UpdatesViewData extends i0.DataClass {
             thumbnailUrl.present ? thumbnailUrl.value : this.thumbnailUrl,
         coverLastModified: coverLastModified ?? this.coverLastModified,
         dateUpload: dateUpload ?? this.dateUpload,
-        datefetch: datefetch ?? this.datefetch,
+        dateFetch: dateFetch ?? this.dateFetch,
       );
   @override
   String toString() {
@@ -125,7 +125,7 @@ class UpdatesViewData extends i0.DataClass {
           ..write('thumbnailUrl: $thumbnailUrl, ')
           ..write('coverLastModified: $coverLastModified, ')
           ..write('dateUpload: $dateUpload, ')
-          ..write('datefetch: $datefetch')
+          ..write('dateFetch: $dateFetch')
           ..write(')'))
         .toString();
   }
@@ -145,7 +145,7 @@ class UpdatesViewData extends i0.DataClass {
       thumbnailUrl,
       coverLastModified,
       dateUpload,
-      datefetch);
+      dateFetch);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -163,7 +163,7 @@ class UpdatesViewData extends i0.DataClass {
           other.thumbnailUrl == this.thumbnailUrl &&
           other.coverLastModified == this.coverLastModified &&
           other.dateUpload == this.dateUpload &&
-          other.datefetch == this.datefetch);
+          other.dateFetch == this.dateFetch);
 }
 
 class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
@@ -187,7 +187,7 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
         thumbnailUrl,
         coverLastModified,
         dateUpload,
-        datefetch
+        dateFetch
       ];
   @override
   String get aliasedName => _alias ?? entityName;
@@ -196,7 +196,7 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
   @override
   Map<i0.SqlDialect, String> get createViewStatements => {
         i0.SqlDialect.sqlite:
-            'CREATE VIEW updatesView AS SELECT mangas._id AS mangaId, mangas.title AS mangaTitle, chapters._id AS chapterId, chapters.name AS chapterName, chapters.scanlator, chapters.read, chapters.bookmark, chapters.last_page_read, mangas.source, mangas.favorite, mangas.thumbnail_url AS thumbnailUrl, mangas.cover_last_modified AS coverLastModified, chapters.date_upload AS dateUpload, chapters.date_fetch AS datefetch FROM mangas JOIN chapters ON mangas._id = chapters.manga_id WHERE favorite = 1 AND date_fetch > date_added ORDER BY date_fetch DESC',
+            'CREATE VIEW updatesView AS SELECT mangas._id AS mangaId, mangas.title AS mangaTitle, chapters._id AS chapterId, chapters.name AS chapterName, chapters.scanlator, chapters.read, chapters.bookmark, chapters.last_page_read, mangas.source, mangas.favorite, mangas.thumbnail_url AS thumbnailUrl, mangas.cover_last_modified AS coverLastModified, chapters.date_upload AS dateUpload, chapters.date_fetch AS dateFetch FROM mangas JOIN chapters ON mangas._id = chapters.manga_id WHERE favorite = 1 AND date_fetch > date_added ORDER BY date_fetch DESC',
       };
   @override
   UpdatesView get asDslTable => this;
@@ -231,8 +231,8 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
           data['${effectivePrefix}coverLastModified'])!,
       dateUpload: attachedDatabase.typeMapping.read(
           i0.DriftSqlType.dateTime, data['${effectivePrefix}dateUpload'])!,
-      datefetch: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.dateTime, data['${effectivePrefix}datefetch'])!,
+      dateFetch: attachedDatabase.typeMapping
+          .read(i0.DriftSqlType.dateTime, data['${effectivePrefix}dateFetch'])!,
     );
   }
 
@@ -281,8 +281,8 @@ class UpdatesView extends i0.ViewInfo<i1.UpdatesView, i1.UpdatesViewData>
   late final i0.GeneratedColumn<DateTime> dateUpload =
       i0.GeneratedColumn<DateTime>('dateUpload', aliasedName, false,
           type: i0.DriftSqlType.dateTime);
-  late final i0.GeneratedColumn<DateTime> datefetch =
-      i0.GeneratedColumn<DateTime>('datefetch', aliasedName, false,
+  late final i0.GeneratedColumn<DateTime> dateFetch =
+      i0.GeneratedColumn<DateTime>('dateFetch', aliasedName, false,
           type: i0.DriftSqlType.dateTime);
   @override
   UpdatesView createAlias(String alias) {
