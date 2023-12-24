@@ -1,10 +1,3 @@
-//enum LibraryDisplayMode {
-//  compactGrid,
-//  comfortableGrid,
-//  list,
-//  coverOnlyGrid,
-//}
-
 class LibraryDisplayMode {
   static final compactGrid = LibraryDisplayMode();
   static final comfortableGrid = LibraryDisplayMode();

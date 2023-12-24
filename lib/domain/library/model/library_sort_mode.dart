@@ -10,10 +10,12 @@ class LibrarySort implements FlagWithMask {
   final Type type;
   final Direction direction;
 
-  LibrarySort(this.type, this.direction);
+  const LibrarySort(this.type, this.direction);
 
-  static final default_ =
-      LibrarySort(Type.alphabetical, Direction.ascending);
+  static const default_ = LibrarySort(
+    Type.alphabetical,
+    Direction.ascending,
+  );
 
   static final types = {
     Type.alphabetical,
@@ -95,61 +97,62 @@ abstract class Type implements FlagWithMask {
   @override
   final int mask;
 
-  Type(this.flag) : mask = 0x3C;
+  const Type(this.flag) : mask = 0x3C;
 
-  static final Type alphabetical = _Alphabetical();
-  static final Type lastRead = _LastRead();
-  static final Type lastUpdate = _LastUpdate();
-  static final Type unreadCount = _UnreadCount();
-  static final Type totalChapters = _TotalChapters();
-  static final Type latestChapter = _LatestChapter();
-  static final Type chapterFetchDate = _ChapterFetchDate();
-  static final Type dateAdded = _DateAdded();
-  static final Type trackerMean = _TrackerMean();
+  static const Type alphabetical = _Alphabetical();
+  static const Type lastRead = _LastRead();
+  static const Type lastUpdate = _LastUpdate();
+  static const Type unreadCount = _UnreadCount();
+  static const Type totalChapters = _TotalChapters();
+  static const Type latestChapter = _LatestChapter();
+  static const Type chapterFetchDate = _ChapterFetchDate();
+  static const Type dateAdded = _DateAdded();
+  static const Type trackerMean = _TrackerMean();
 
   static Type valueOf(int flag) {
-    return LibrarySort.types.firstWhere((type) => type.flag == (flag & type.mask),
+    return LibrarySort.types.firstWhere(
+        (type) => type.flag == (flag & type.mask),
         orElse: () => defaultType);
   }
 }
 
 class _Alphabetical extends Type {
-  _Alphabetical() : super(0x00);
+  const _Alphabetical() : super(0x00);
 }
 
 class _LastRead extends Type {
-  _LastRead() : super(0x04);
+  const _LastRead() : super(0x04);
 }
 
 class _LastUpdate extends Type {
-  _LastUpdate() : super(0x08);
+  const _LastUpdate() : super(0x08);
 }
 
 class _UnreadCount extends Type {
-  _UnreadCount() : super(0x0C);
+  const _UnreadCount() : super(0x0C);
 }
 
 class _TotalChapters extends Type {
-  _TotalChapters() : super(0x10);
+  const _TotalChapters() : super(0x10);
 }
 
 class _LatestChapter extends Type {
-  _LatestChapter() : super(0x14);
+  const _LatestChapter() : super(0x14);
 }
 
 class _ChapterFetchDate extends Type {
-  _ChapterFetchDate() : super(0x18);
+  const _ChapterFetchDate() : super(0x18);
 }
 
 class _DateAdded extends Type {
-  _DateAdded() : super(0x1C);
+  const _DateAdded() : super(0x1C);
 }
 
 class _TrackerMean extends Type {
-  _TrackerMean() : super(0x20);
+  const _TrackerMean() : super(0x20);
 }
 
-final defaultType = Type.alphabetical;
+const defaultType = Type.alphabetical;
 
 abstract class Direction implements FlagWithMask {
   @override
@@ -157,10 +160,10 @@ abstract class Direction implements FlagWithMask {
   @override
   final int mask;
 
-  Direction(this.flag) : mask = 0x40;
+  const Direction(this.flag) : mask = 0x40;
 
-  static final Direction ascending = _Ascending();
-  static final Direction descending = _Descending();
+  static const Direction ascending = _Ascending();
+  static const Direction descending = _Descending();
 
   static Direction valueOf(int flag) {
     return LibrarySort.directions.firstWhere(
@@ -170,14 +173,14 @@ abstract class Direction implements FlagWithMask {
 }
 
 class _Ascending extends Direction {
-  _Ascending() : super(0x40);
+  const _Ascending() : super(0x40);
 }
 
 class _Descending extends Direction {
-  _Descending() : super(0x00);
+  const _Descending() : super(0x00);
 }
 
-final defaultDirection = Direction.descending;
+const defaultDirection = Direction.descending;
 
 extension CategorySort on Category {
   LibrarySort get sort => LibrarySort.valueOf(flags);
