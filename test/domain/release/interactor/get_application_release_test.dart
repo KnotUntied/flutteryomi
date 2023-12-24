@@ -30,7 +30,7 @@ void main() {
     when(() => preference.set(any())).thenAnswer((_) {});
     when(() => releaseService.latest(any())).thenAnswer(
       (_) => Future<Release>.value(
-        Release(
+        const Release(
           "v2.0.0",
           "info",
           "http://example.com/release_link",
@@ -49,14 +49,14 @@ void main() {
       ),
     );
 
-    expect(result, ThirdPartyInstallation());
+    expect(result, const Result.thirdPartyInstallation());
   });
 
   test('When has update but is preview expect new update', () async {
     when(() => preference.get()).thenReturn(0);
     when(() => preference.set(any())).thenAnswer((_) {});
 
-    var release = Release(
+    const release = Release(
       "r2000",
       "info",
       "http://example.com/release_link",
@@ -77,14 +77,14 @@ void main() {
       ),
     );
 
-    expect((result as NewUpdate).release, NewUpdate(release).release);
+    expect((result as NewUpdate).release, (const Result.newUpdate(release) as NewUpdate).release);
   });
 
   test('When has update expect new update', () async {
     when(() => preference.get()).thenReturn(0);
     when(() => preference.set(any())).thenAnswer((_) {});
 
-    var release = Release(
+    const release = Release(
       "v2.0.0",
       "info",
       "http://example.com/release_link",
@@ -105,14 +105,14 @@ void main() {
       ),
     );
 
-    expect((result as NewUpdate).release, NewUpdate(release).release);
+    expect((result as NewUpdate).release, (const Result.newUpdate(release) as NewUpdate).release);
   });
 
   test('When has no update expect no new update', () async {
     when(() => preference.get()).thenReturn(0);
     when(() => preference.set(any())).thenAnswer((_) {});
 
-    var release = Release(
+    const release = Release(
       "v1.0.0",
       "info",
       "http://example.com/release_link",
@@ -133,14 +133,14 @@ void main() {
       ),
     );
 
-    expect(result, NoNewUpdate());
+    expect(result, const Result.noNewUpdate());
   });
 
   test('When now is before three days expect no new update', () async {
     when(() => preference.get()).thenReturn(DateTime.now().millisecondsSinceEpoch);
     when(() => preference.set(any())).thenAnswer((_) {});
 
-    var release = Release(
+    const release = Release(
       "v1.0.0",
       "info",
       "http://example.com/release_link",
@@ -162,6 +162,6 @@ void main() {
     );
 
     verifyNever(() => releaseService.latest(any()));
-    expect(result, NoNewUpdate());
+    expect(result, const Result.noNewUpdate());
   });
 }

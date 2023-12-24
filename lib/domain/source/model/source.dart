@@ -1,14 +1,11 @@
-//import 'package:flutteryomi/data/drift/data/sources.drift.dart';
-
 import 'package:flutteryomi/domain/source/model/pin.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-//import 'package:flutteryomi/domain/manga/model/manga_cover.dart';
 
 part 'source.freezed.dart';
 
 @freezed
 class Source with _$Source {
+  const Source._();
   const factory Source({
     required int id,
     required String lang,
@@ -18,10 +15,7 @@ class Source with _$Source {
     @Default(Pins.unpinned) required Pins pin,
     @Default(false) required bool isUsedLast,
   }) = _Source;
+
+  String get visualName => lang.isEmpty ? name : '$name (${lang.toUpperCase()})';
+  String key() => isUsedLast ? name : '$name (${lang.toUpperCase()})';
 }
-
-
-//extension SourceUtils on Source {
-//  String get visualName => lang.isEmpty ? name : '$name (${lang.toUpperCase()})';
-//  String key() => isUsedLast ? name : '$name (${lang.toUpperCase()})';
-//}

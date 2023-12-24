@@ -181,7 +181,7 @@ class __$$SourceImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SourceImpl implements _Source {
+class _$SourceImpl extends _Source {
   const _$SourceImpl(
       {required this.id,
       required this.lang,
@@ -189,7 +189,8 @@ class _$SourceImpl implements _Source {
       required this.supportsLatest,
       required this.isStub,
       required this.pin = Pins.unpinned,
-      required this.isUsedLast = false});
+      required this.isUsedLast = false})
+      : super._();
 
   @override
   final int id;
@@ -240,7 +241,7 @@ class _$SourceImpl implements _Source {
       __$$SourceImplCopyWithImpl<_$SourceImpl>(this, _$identity);
 }
 
-abstract class _Source implements Source {
+abstract class _Source extends Source {
   const factory _Source(
       {required final int id,
       required final String lang,
@@ -249,6 +250,7 @@ abstract class _Source implements Source {
       required final bool isStub,
       required final Pins pin,
       required final bool isUsedLast}) = _$SourceImpl;
+  const _Source._() : super._();
 
   @override
   int get id;

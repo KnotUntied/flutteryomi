@@ -9,12 +9,12 @@ part 'release.freezed.dart';
 @freezed
 class Release with _$Release {
   const Release._();
-  const factory Release({
-    required String version,
-    required String info,
-    required String releaseInfo,
-    required List<String> assets,
-  }) = _Release;
+  const factory Release(
+    String version,
+    String info,
+    String releaseInfo,
+    List<String> assets,
+  ) = _Release;
 
   /// Get download link of latest release from the assets.
   /// Returns the download link of latest release.
@@ -28,7 +28,7 @@ class Release with _$Release {
         "armeabi-v7a" => "-armeabi-v7a",
         "x86" => "-x86",
         "x86_64" => "-x86_64",
-        _ => ""
+        _ => "",
       };
     } else {
       apkVariant = "";

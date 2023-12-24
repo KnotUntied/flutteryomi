@@ -1,10 +1,11 @@
-import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
 import 'package:flutteryomi/domain/release/model/release.dart';
 import 'package:flutteryomi/domain/release/service/release_service.dart';
+
+part 'get_application_release.freezed.dart';
 
 class GetApplicationRelease {
   final ReleaseService service;
@@ -26,7 +27,7 @@ class GetApplicationRelease {
         DateTime.fromMillisecondsSinceEpoch(lastChecked.get()).add(const Duration(days: 3)),
       )
     ) {
-      return NoNewUpdate();
+      return const Result.noNewUpdate();
     }
 
     Release release = await service.latest(arguments.repository);
@@ -41,11 +42,11 @@ class GetApplicationRelease {
       release.version,
     );
     if (isNewVersion && arguments.isThirdParty) {
-      return ThirdPartyInstallation();
+      return const Result.thirdPartyInstallation();
     } else if (isNewVersion) {
-      return NewUpdate(release);
+      return Result.newUpdate(release);
     } else {
-      return NoNewUpdate();
+      return const Result.noNewUpdate();
     }
   }
 
@@ -72,7 +73,7 @@ class GetApplicationRelease {
         if (newSemVer[index] > i) {
           return true;
         }
-      };
+      }
       return false;
     }
   }
@@ -96,28 +97,10 @@ class Arguments {
   });
 }
 
-sealed class Result extends Equatable {}
-
-class NewUpdate extends Result {
-  final Release release;
-
-  NewUpdate(this.release);
-
-  @override
-  List<Object> get props => [release];
-}
-
-class NoNewUpdate extends Result {
-  @override
-  List<Object> get props => [];
-}
-
-class OsTooOld extends Result {
-  @override
-  List<Object> get props => [];
-}
-
-class ThirdPartyInstallation extends Result {
-  @override
-  List<Object> get props => [];
+@freezed
+sealed class Result with _$Result {
+  const factory Result.newUpdate(Release release) = NewUpdate;
+  const factory Result.noNewUpdate() = NoNewUpdate;
+  const factory Result.osTooOld() = OsTooOld;
+  const factory Result.thirdPartyInstallation() = ThirdPartyInstallation;
 }

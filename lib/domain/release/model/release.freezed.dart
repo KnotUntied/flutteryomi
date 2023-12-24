@@ -101,19 +101,19 @@ class __$$ReleaseImplCopyWithImpl<$Res>
     Object? assets = null,
   }) {
     return _then(_$ReleaseImpl(
-      version: null == version
+      null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as String,
-      info: null == info
+      null == info
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as String,
-      releaseInfo: null == releaseInfo
+      null == releaseInfo
           ? _value.releaseInfo
           : releaseInfo // ignore: cast_nullable_to_non_nullable
               as String,
-      assets: null == assets
+      null == assets
           ? _value._assets
           : assets // ignore: cast_nullable_to_non_nullable
               as List<String>,
@@ -125,10 +125,7 @@ class __$$ReleaseImplCopyWithImpl<$Res>
 
 class _$ReleaseImpl extends _Release {
   const _$ReleaseImpl(
-      {required this.version,
-      required this.info,
-      required this.releaseInfo,
-      required final List<String> assets})
+      this.version, this.info, this.releaseInfo, final List<String> assets)
       : _assets = assets,
         super._();
 
@@ -175,11 +172,8 @@ class _$ReleaseImpl extends _Release {
 }
 
 abstract class _Release extends Release {
-  const factory _Release(
-      {required final String version,
-      required final String info,
-      required final String releaseInfo,
-      required final List<String> assets}) = _$ReleaseImpl;
+  const factory _Release(final String version, final String info,
+      final String releaseInfo, final List<String> assets) = _$ReleaseImpl;
   const _Release._() : super._();
 
   @override
