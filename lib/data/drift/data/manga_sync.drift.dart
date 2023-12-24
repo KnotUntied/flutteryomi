@@ -87,18 +87,18 @@ class MangaSync extends i0.Table
       $customConstraints: 'NOT NULL');
   static const i0.VerificationMeta _startDateMeta =
       const i0.VerificationMeta('startDate');
-  late final i0.GeneratedColumn<int> startDate = i0.GeneratedColumn<int>(
-      'start_date', aliasedName, false,
-      type: i0.DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+  late final i0.GeneratedColumn<DateTime> startDate =
+      i0.GeneratedColumn<DateTime>('start_date', aliasedName, false,
+          type: i0.DriftSqlType.dateTime,
+          requiredDuringInsert: true,
+          $customConstraints: 'NOT NULL');
   static const i0.VerificationMeta _finishDateMeta =
       const i0.VerificationMeta('finishDate');
-  late final i0.GeneratedColumn<int> finishDate = i0.GeneratedColumn<int>(
-      'finish_date', aliasedName, false,
-      type: i0.DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+  late final i0.GeneratedColumn<DateTime> finishDate =
+      i0.GeneratedColumn<DateTime>('finish_date', aliasedName, false,
+          type: i0.DriftSqlType.dateTime,
+          requiredDuringInsert: true,
+          $customConstraints: 'NOT NULL');
   @override
   List<i0.GeneratedColumn> get $columns => [
         id,
@@ -240,10 +240,10 @@ class MangaSync extends i0.Table
           .read(i0.DriftSqlType.double, data['${effectivePrefix}score'])!,
       remoteUrl: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.string, data['${effectivePrefix}remote_url'])!,
-      startDate: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.int, data['${effectivePrefix}start_date'])!,
-      finishDate: attachedDatabase.typeMapping
-          .read(i0.DriftSqlType.int, data['${effectivePrefix}finish_date'])!,
+      startDate: attachedDatabase.typeMapping.read(
+          i0.DriftSqlType.dateTime, data['${effectivePrefix}start_date'])!,
+      finishDate: attachedDatabase.typeMapping.read(
+          i0.DriftSqlType.dateTime, data['${effectivePrefix}finish_date'])!,
     );
   }
 
@@ -274,8 +274,8 @@ class MangaSyncData extends i0.DataClass
   final int status;
   final double score;
   final String remoteUrl;
-  final int startDate;
-  final int finishDate;
+  final DateTime startDate;
+  final DateTime finishDate;
   const MangaSyncData(
       {required this.id,
       required this.mangaId,
@@ -306,8 +306,8 @@ class MangaSyncData extends i0.DataClass
     map['status'] = i0.Variable<int>(status);
     map['score'] = i0.Variable<double>(score);
     map['remote_url'] = i0.Variable<String>(remoteUrl);
-    map['start_date'] = i0.Variable<int>(startDate);
-    map['finish_date'] = i0.Variable<int>(finishDate);
+    map['start_date'] = i0.Variable<DateTime>(startDate);
+    map['finish_date'] = i0.Variable<DateTime>(finishDate);
     return map;
   }
 
@@ -346,8 +346,8 @@ class MangaSyncData extends i0.DataClass
       status: serializer.fromJson<int>(json['status']),
       score: serializer.fromJson<double>(json['score']),
       remoteUrl: serializer.fromJson<String>(json['remote_url']),
-      startDate: serializer.fromJson<int>(json['start_date']),
-      finishDate: serializer.fromJson<int>(json['finish_date']),
+      startDate: serializer.fromJson<DateTime>(json['start_date']),
+      finishDate: serializer.fromJson<DateTime>(json['finish_date']),
     );
   }
   @override
@@ -365,8 +365,8 @@ class MangaSyncData extends i0.DataClass
       'status': serializer.toJson<int>(status),
       'score': serializer.toJson<double>(score),
       'remote_url': serializer.toJson<String>(remoteUrl),
-      'start_date': serializer.toJson<int>(startDate),
-      'finish_date': serializer.toJson<int>(finishDate),
+      'start_date': serializer.toJson<DateTime>(startDate),
+      'finish_date': serializer.toJson<DateTime>(finishDate),
     };
   }
 
@@ -382,8 +382,8 @@ class MangaSyncData extends i0.DataClass
           int? status,
           double? score,
           String? remoteUrl,
-          int? startDate,
-          int? finishDate}) =>
+          DateTime? startDate,
+          DateTime? finishDate}) =>
       i1.MangaSyncData(
         id: id ?? this.id,
         mangaId: mangaId ?? this.mangaId,
@@ -465,8 +465,8 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
   final i0.Value<int> status;
   final i0.Value<double> score;
   final i0.Value<String> remoteUrl;
-  final i0.Value<int> startDate;
-  final i0.Value<int> finishDate;
+  final i0.Value<DateTime> startDate;
+  final i0.Value<DateTime> finishDate;
   const MangaSyncCompanion({
     this.id = const i0.Value.absent(),
     this.mangaId = const i0.Value.absent(),
@@ -494,8 +494,8 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     required int status,
     required double score,
     required String remoteUrl,
-    required int startDate,
-    required int finishDate,
+    required DateTime startDate,
+    required DateTime finishDate,
   })  : mangaId = i0.Value(mangaId),
         syncId = i0.Value(syncId),
         remoteId = i0.Value(remoteId),
@@ -519,8 +519,8 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     i0.Expression<int>? status,
     i0.Expression<double>? score,
     i0.Expression<String>? remoteUrl,
-    i0.Expression<int>? startDate,
-    i0.Expression<int>? finishDate,
+    i0.Expression<DateTime>? startDate,
+    i0.Expression<DateTime>? finishDate,
   }) {
     return i0.RawValuesInsertable({
       if (id != null) '_id': id,
@@ -551,8 +551,8 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
       i0.Value<int>? status,
       i0.Value<double>? score,
       i0.Value<String>? remoteUrl,
-      i0.Value<int>? startDate,
-      i0.Value<int>? finishDate}) {
+      i0.Value<DateTime>? startDate,
+      i0.Value<DateTime>? finishDate}) {
     return i1.MangaSyncCompanion(
       id: id ?? this.id,
       mangaId: mangaId ?? this.mangaId,
@@ -607,10 +607,10 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
       map['remote_url'] = i0.Variable<String>(remoteUrl.value);
     }
     if (startDate.present) {
-      map['start_date'] = i0.Variable<int>(startDate.value);
+      map['start_date'] = i0.Variable<DateTime>(startDate.value);
     }
     if (finishDate.present) {
-      map['finish_date'] = i0.Variable<int>(finishDate.value);
+      map['finish_date'] = i0.Variable<DateTime>(finishDate.value);
     }
     return map;
   }

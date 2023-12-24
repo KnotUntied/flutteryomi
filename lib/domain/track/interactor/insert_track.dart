@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import 'package:flutteryomi/core/util/system/logger.dart';
-import 'package:flutteryomi/domain/track/model/track.dart';
+import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 
 class InsertTrack {
@@ -13,7 +13,7 @@ class InsertTrack {
   final TrackRepository repository;
   late final logger = ref.read(loggerProvider);
 
-  Future<void> await_(Track track) async {
+  Future<void> await_(MangaSyncData track) async {
     try {
       await repository.insert(track);
     } catch (e) {
@@ -21,7 +21,7 @@ class InsertTrack {
     }
   }
 
-  Future<void> awaitAll(List<Track> tracks) async {
+  Future<void> awaitAll(List<MangaSyncData> tracks) async {
     try {
       await repository.insertAll(tracks);
     } catch (e) {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart';
+import 'package:flutteryomi/presentation/icons/custom_icons.dart';
+import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
 
 class MangaBottomActionMenu extends StatelessWidget {
   const MangaBottomActionMenu({
@@ -74,9 +75,7 @@ class MangaBottomActionMenu extends StatelessWidget {
             if (onMarkPreviousAsReadClicked != null)
               IconButton(
                 tooltip: lang.action_mark_previous_as_read,
-                // Tachiyomi uses a custom done icon with a small down arrow
-                // Use download_done for now :(
-                icon: const Icon(Icons.download_done_outlined),
+                icon: const Icon(CustomIcons.donePrev),
                 onPressed: onMarkPreviousAsReadClicked,
               ),
             if (onDownloadClicked != null)

@@ -1,7 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import 'package:flutteryomi/core/util/system/logger.dart';
-import 'package:flutteryomi/domain/track/model/track.dart';
+import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 
 class GetTracks {
@@ -13,7 +13,7 @@ class GetTracks {
   final TrackRepository repository;
   late final logger = ref.read(loggerProvider);
 
-  Future<Track?> awaitOne(int id) async {
+  Future<MangaSyncData?> awaitOne(int id) async {
     try {
       return await repository.getTrackById(id);
     } catch (e) {
@@ -22,7 +22,7 @@ class GetTracks {
     }
   }
 
-  Future<List<Track>> await_(int mangaId) async {
+  Future<List<MangaSyncData>> await_(int mangaId) async {
     try {
       return await repository.getTracksByMangaId(mangaId);
     } catch (e) {
@@ -31,5 +31,5 @@ class GetTracks {
     }
   }
 
-  Stream<List<Track>> subscribe(int mangaId) => repository.getTracksByMangaIdAsStream(mangaId);
+  Stream<List<MangaSyncData>> subscribe(int mangaId) => repository.getTracksByMangaIdAsStream(mangaId);
 }

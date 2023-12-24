@@ -18,11 +18,9 @@ class LinkIcon extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: IconButton(
-        icon: Icon(
-          icon,
-          semanticLabel: label,
-        ),
+        icon: Icon(icon),
         style: IconButton.styleFrom(surfaceTintColor: Theme.of(context).colorScheme.primary),
+        tooltip: label,
         onPressed: _launchUrl,
       ),
     );

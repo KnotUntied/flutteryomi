@@ -12,8 +12,8 @@ CREATE TABLE manga_sync(
     status INTEGER NOT NULL,
     score REAL NOT NULL,
     remote_url TEXT NOT NULL,
-    start_date INTEGER NOT NULL,
-    finish_date INTEGER NOT NULL,
+    start_date DATETIME NOT NULL,
+    finish_date DATETIME NOT NULL,
     UNIQUE (manga_id, sync_id) ON CONFLICT REPLACE,
     FOREIGN KEY(manga_id) REFERENCES mangas (_id)
     ON DELETE CASCADE
