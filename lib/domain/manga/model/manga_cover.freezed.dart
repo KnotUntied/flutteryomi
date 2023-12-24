@@ -146,7 +146,7 @@ class __$$MangaCoverImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MangaCoverImpl implements _MangaCover {
-  _$MangaCoverImpl(
+  const _$MangaCoverImpl(
       {required this.mangaId,
       required this.sourceId,
       required this.isMangaFavorite,
@@ -196,7 +196,7 @@ class _$MangaCoverImpl implements _MangaCover {
 }
 
 abstract class _MangaCover implements MangaCover {
-  factory _MangaCover(
+  const factory _MangaCover(
       {required final int mangaId,
       required final int sourceId,
       required final bool isMangaFavorite,

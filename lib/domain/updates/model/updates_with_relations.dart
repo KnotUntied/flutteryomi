@@ -6,7 +6,7 @@ part 'updates_with_relations.freezed.dart';
 
 @freezed
 class UpdatesWithRelations with _$UpdatesWithRelations {
-  factory UpdatesWithRelations({
+  const factory UpdatesWithRelations({
     required int mangaId,
     required String mangaTitle,
     required int chapterId,

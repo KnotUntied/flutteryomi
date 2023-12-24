@@ -183,7 +183,7 @@ class __$$SChapterImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SChapterImpl implements _SChapter {
-  _$SChapterImpl(
+  const _$SChapterImpl(
       {required this.url,
       required this.name,
       this.dateUpload,
@@ -296,7 +296,7 @@ class _$SChapterImpl implements _SChapter {
 }
 
 abstract class _SChapter implements SChapter {
-  factory _SChapter(
+  const factory _SChapter(
       {required final String url,
       required final String name,
       final DateTime? dateUpload,

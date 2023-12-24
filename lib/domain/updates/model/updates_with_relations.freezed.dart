@@ -238,7 +238,7 @@ class __$$UpdatesWithRelationsImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UpdatesWithRelationsImpl implements _UpdatesWithRelations {
-  _$UpdatesWithRelationsImpl(
+  const _$UpdatesWithRelationsImpl(
       {required this.mangaId,
       required this.mangaTitle,
       required this.chapterId,
@@ -331,7 +331,7 @@ class _$UpdatesWithRelationsImpl implements _UpdatesWithRelations {
 }
 
 abstract class _UpdatesWithRelations implements UpdatesWithRelations {
-  factory _UpdatesWithRelations(
+  const factory _UpdatesWithRelations(
       {required final int mangaId,
       required final String mangaTitle,
       required final int chapterId,

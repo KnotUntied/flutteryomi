@@ -103,7 +103,7 @@ class __$$SourceWithCountImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SourceWithCountImpl extends _SourceWithCount {
-  _$SourceWithCountImpl({required this.source, required this.count})
+  const _$SourceWithCountImpl({required this.source, required this.count})
       : super._();
 
   @override
@@ -137,10 +137,10 @@ class _$SourceWithCountImpl extends _SourceWithCount {
 }
 
 abstract class _SourceWithCount extends SourceWithCount {
-  factory _SourceWithCount(
+  const factory _SourceWithCount(
       {required final Source source,
       required final int count}) = _$SourceWithCountImpl;
-  _SourceWithCount._() : super._();
+  const _SourceWithCount._() : super._();
 
   @override
   Source get source;

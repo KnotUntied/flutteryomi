@@ -7,7 +7,7 @@ part 'source_with_count.freezed.dart';
 @freezed
 class SourceWithCount with _$SourceWithCount {
   const SourceWithCount._();
-  factory SourceWithCount({
+  const factory SourceWithCount({
     required Source source,
     required int count,
   }) = _SourceWithCount;

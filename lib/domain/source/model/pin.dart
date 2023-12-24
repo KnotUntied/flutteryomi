@@ -1,31 +1,33 @@
-const int _unpinnedCode = 0x0;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Pin {
-  final int code;
+part 'pin.freezed.dart';
+
+enum Pin {
+  unpinned(0x0),
+  pinned(0x1),
+  actual(0x2);
+
   const Pin(this.code);
-  static const Pin unpinned = Pin(_unpinnedCode);
-  static const Pin pinned = Pin(0x1);
-  static const Pin actual = Pin(0x2);
+
+  final int code;
 }
 
-class Pins {
-  final int code;
-  Pins({this.code = _unpinnedCode});
-  
+@freezed
+class Pins with _$Pins {
+  const Pins._();
+  const factory Pins({@Default(0x0) required int code}) = _Pins;
+
   bool contains(Pin pin) => (pin.code & code) == pin.code;
   
   Pins operator +(Pin pin) => Pins(code: code | pin.code);
   
   Pins operator -(Pin pin) => Pins(code: code ^ pin.code);
-  
-  static final Pins unpinned = Pins(code: Pin.unpinned.code);
-  static final Pins pinned = Pins(code: Pin.pinned.code | Pin.actual.code);
+
+  factory Pins.unpinned() => _Pins(code: Pin.unpinned.code);
+  factory Pins.pinned() => _Pins(code: Pin.pinned.code | Pin.actual.code);
 }
 
 Pins pins(List<Pin> pins) {
-  int result = 0x0;
-  for (var pin in pins) {
-    result |= pin.code;
-  }
+  int result = pins.fold<int>(0x0, (p, e) => p |= e.code);
   return Pins(code: result);
 }

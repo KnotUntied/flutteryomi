@@ -6,7 +6,7 @@ part 'manga_cover.freezed.dart';
 
 @freezed
 class MangaCover with _$MangaCover {
-  factory MangaCover({
+  const factory MangaCover({
     required int mangaId,
     required int sourceId,
     required bool isMangaFavorite,

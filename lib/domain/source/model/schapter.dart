@@ -4,14 +4,7 @@ part 'schapter.freezed.dart';
 
 @freezed
 class SChapter with _$SChapter {
-  //factory SChapter({
-  //  required String url,
-  //  required String name,
-  //  @Default(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)) DateTime dateUpload,
-  //  @Default(-1.0) required double chapterNumber,
-  //  String? scanlator,
-  //}) = _SChapter;
-  factory SChapter.def({
+  const factory SChapter.def({
     required String url,
     required String name,
     DateTime? dateUpload,

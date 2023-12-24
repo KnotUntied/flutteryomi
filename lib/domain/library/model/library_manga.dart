@@ -6,7 +6,7 @@ part 'library_manga.freezed.dart';
 
 @freezed
 class LibraryManga with _$LibraryManga {
-  LibraryManga._();
+  const LibraryManga._();
   const factory LibraryManga({
     required Manga manga,
     required int category,
@@ -18,7 +18,7 @@ class LibraryManga with _$LibraryManga {
     required int lastRead,
   }) = _LibraryManga;
 
-  late final int id = manga.id;
+  int get id => manga.id;
 
   int get unreadCount => totalChapters - readCount;
   bool get hasBookmarks => bookmarkCount > 0;

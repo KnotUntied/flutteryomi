@@ -6,7 +6,7 @@
 
 //@freezed
 //class LibraryItem with _$LibraryItem {
-//  factory LibraryItem({
+//  const factory LibraryItem({
 //    required int mangaId,
 //    required int sourceId,
 //    required bool isMangaFavorite,

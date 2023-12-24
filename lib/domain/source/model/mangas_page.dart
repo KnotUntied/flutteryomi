@@ -5,7 +5,7 @@ part 'mangas_page.freezed.dart';
 
 @freezed
 class MangasPage with _$MangasPage {
-  factory MangasPage({
+  const factory MangasPage({
     required List<SManga> mangas,
     required bool hasNextPage,
   }) = _MangasPage;

@@ -1,29 +1,28 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'release.freezed.dart';
 
 /// Contains information about the latest release.
-class Release {
-  Release(
-    this.version,
-    this.info,
-    this.releaseLink,
-    this.assets,
-  );
-
-  final String version;
-  final String info;
-  final String releaseLink;
-  final List<String> assets;
-
-  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+@freezed
+class Release with _$Release {
+  const Release._();
+  const factory Release({
+    required String version,
+    required String info,
+    required String releaseInfo,
+    required List<String> assets,
+  }) = _Release;
 
   /// Get download link of latest release from the assets.
   /// Returns the download link of latest release.
   Future<String> getDownloadLink() async {
     String apkVariant;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       apkVariant = switch (androidInfo.supportedAbis[0]) {
         "arm64-v8a" => "-arm64-v8a",
         "armeabi-v7a" => "-armeabi-v7a",
@@ -42,7 +41,9 @@ class Release {
   }
 }
 
-class ReleaseAssets {
-  const ReleaseAssets({required this.downloadLink});
-  final String downloadLink;
+@freezed
+class ReleaseAssets with _$ReleaseAssets {
+  const factory ReleaseAssets({
+    required String downloadLink,
+  }) = _ReleaseAssets;
 }

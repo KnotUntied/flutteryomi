@@ -6,7 +6,7 @@ part 'history_with_relations.freezed.dart';
 
 @freezed
 class HistoryWithRelations with _$HistoryWithRelations {
-  factory HistoryWithRelations({
+  const factory HistoryWithRelations({
     required int id,
     required int chapterId,
     required int mangaId,

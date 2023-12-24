@@ -7,7 +7,7 @@ part 'smanga.freezed.dart';
 @freezed
 class SManga with _$SManga {
   const SManga._();
-  factory SManga({
+  const factory SManga({
     required String url,
     required String title,
     String? artist,

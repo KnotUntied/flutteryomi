@@ -199,7 +199,7 @@ class __$$HistoryWithRelationsImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HistoryWithRelationsImpl implements _HistoryWithRelations {
-  _$HistoryWithRelationsImpl(
+  const _$HistoryWithRelationsImpl(
       {required this.id,
       required this.chapterId,
       required this.mangaId,
@@ -264,7 +264,7 @@ class _$HistoryWithRelationsImpl implements _HistoryWithRelations {
 }
 
 abstract class _HistoryWithRelations implements HistoryWithRelations {
-  factory _HistoryWithRelations(
+  const factory _HistoryWithRelations(
       {required final int id,
       required final int chapterId,
       required final int mangaId,

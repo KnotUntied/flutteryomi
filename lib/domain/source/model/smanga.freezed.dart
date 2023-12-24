@@ -208,7 +208,7 @@ class __$$SMangaImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SMangaImpl extends _SManga {
-  _$SMangaImpl(
+  const _$SMangaImpl(
       {required this.url,
       required this.title,
       this.artist,
@@ -283,7 +283,7 @@ class _$SMangaImpl extends _SManga {
 }
 
 abstract class _SManga extends SManga {
-  factory _SManga(
+  const factory _SManga(
       {required final String url,
       required final String title,
       final String? artist,
@@ -294,7 +294,7 @@ abstract class _SManga extends SManga {
       final String? thumbnailUrl,
       final UpdateStrategy updateStrategy,
       final bool initialized}) = _$SMangaImpl;
-  _SManga._() : super._();
+  const _SManga._() : super._();
 
   @override
   String get url;

@@ -103,7 +103,7 @@ class __$$MangasPageImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MangasPageImpl implements _MangasPage {
-  _$MangasPageImpl(
+  const _$MangasPageImpl(
       {required final List<SManga> mangas, required this.hasNextPage})
       : _mangas = mangas;
 
@@ -145,7 +145,7 @@ class _$MangasPageImpl implements _MangasPage {
 }
 
 abstract class _MangasPage implements MangasPage {
-  factory _MangasPage(
+  const factory _MangasPage(
       {required final List<SManga> mangas,
       required final bool hasNextPage}) = _$MangasPageImpl;
 
