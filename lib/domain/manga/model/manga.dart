@@ -1,3 +1,4 @@
+import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/data/source/update_strategy.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
@@ -79,25 +80,19 @@ extension MangaUtils on Manga {
 
   int get readingMode => viewer & ReadingMode.mask;
   int get readerOrientation => viewer & ReaderOrientation.mask;
+  //TriState get downloadedFilter => forceDownloaded()
+  //    ? TriState.enabledIs
+  //    : switch (downloadedFilterRaw) {
+  //      chapterShowDownloaded => TriState.enabledIs,
+  //      chapterShowNotDownloaded => TriState.enabledNot,
+  //      _ => TriState.disabled,
+  //    };
+  //bool chaptersFiltered() => unreadFilter != TriState.disabled ||
+  //    downloadedFilter != TriState.disabled ||
+  //    bookmarkedFilter != TriState.disabled;
+  // TODO: Figure this one out
+  //bool forceDownloaded() => favorite && Injekt.get<BasePreferences>().downloadedOnly().get();
 }
-
-//val Manga.downloadedFilter: TriState
-//    get() {
-//        if (forceDownloaded()) return TriState.ENABLED_IS
-//        return when (downloadedFilterRaw) {
-//            Manga.CHAPTER_SHOW_DOWNLOADED -> TriState.ENABLED_IS
-//            Manga.CHAPTER_SHOW_NOT_DOWNLOADED -> TriState.ENABLED_NOT
-//            else -> TriState.DISABLED
-//        }
-//    }
-//fun Manga.chaptersFiltered(): Boolean {
-//    return unreadFilter != TriState.DISABLED ||
-//        downloadedFilter != TriState.DISABLED ||
-//        bookmarkedFilter != TriState.DISABLED
-//}
-//fun Manga.forceDownloaded(): Boolean {
-//    return favorite && Injekt.get<BasePreferences>().downloadedOnly().get()
-//}
 
 //fun Manga.toSManga(): SManga = SManga.create().also {
 //    it.url = url
