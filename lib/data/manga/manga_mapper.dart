@@ -1,5 +1,5 @@
-import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga.dart';
 
 class MangaMapper {
   static Manga mapManga(dynamic row) => Manga(

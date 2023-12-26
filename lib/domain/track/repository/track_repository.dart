@@ -1,11 +1,11 @@
-import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart';
+import 'package:flutteryomi/domain/track/model/track.dart';
 
 abstract interface class TrackRepository {
-  Future<MangaSyncData?> getTrackById(int id);
-  Future<List<MangaSyncData>> getTracksByMangaId(int mangaId);
-  Stream<List<MangaSyncData>> getTracksAsStream();
-  Stream<List<MangaSyncData>> getTracksByMangaIdAsStream(int mangaId);
+  Future<Track?> getTrackById(int id);
+  Future<List<Track>> getTracksByMangaId(int mangaId);
+  Stream<List<Track>> getTracksAsStream();
+  Stream<List<Track>> getTracksByMangaIdAsStream(int mangaId);
   Future<void> delete(int mangaId, int syncId);
-  Future<void> insert(MangaSyncData track);
-  Future<void> insertAll(List<MangaSyncData> tracks);
+  Future<void> insert(Track track);
+  Future<void> insertAll(List<Track> tracks);
 }
