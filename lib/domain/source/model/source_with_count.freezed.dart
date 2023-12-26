@@ -31,6 +31,8 @@ abstract class $SourceWithCountCopyWith<$Res> {
       _$SourceWithCountCopyWithImpl<$Res, SourceWithCount>;
   @useResult
   $Res call({Source source, int count});
+
+  $SourceCopyWith<$Res> get source;
 }
 
 /// @nodoc
@@ -60,6 +62,14 @@ class _$SourceWithCountCopyWithImpl<$Res, $Val extends SourceWithCount>
               as int,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SourceCopyWith<$Res> get source {
+    return $SourceCopyWith<$Res>(_value.source, (value) {
+      return _then(_value.copyWith(source: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -71,6 +81,9 @@ abstract class _$$SourceWithCountImplCopyWith<$Res>
   @override
   @useResult
   $Res call({Source source, int count});
+
+  @override
+  $SourceCopyWith<$Res> get source;
 }
 
 /// @nodoc

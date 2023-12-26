@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'logger.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Logger logger(LoggerRef ref) {
   Logger.level = Level.debug;
   return Logger(

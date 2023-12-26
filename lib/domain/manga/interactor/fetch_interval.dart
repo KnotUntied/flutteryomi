@@ -20,13 +20,13 @@ class FetchInterval {
         : window;
     List<Chapter> chapters =
         await getChapterByMangaId.await_(manga.id, applyScanlatorFilter: true);
-    int interval = manga.calculateInterval < 0
-        ? manga.calculateInterval
+    int interval = manga.fetchInterval < 0
+        ? manga.fetchInterval
         : calculateInterval(chapters);
     int nextUpdate =
         _calculateNextUpdate(manga, interval, dateTime, currentWindow);
     if (manga.nextUpdate!.millisecondsSinceEpoch == nextUpdate &&
-        manga.calculateInterval == interval) {
+        manga.fetchInterval == interval) {
       return null;
     } else {
       return MangasCompanion(
@@ -34,7 +34,7 @@ class FetchInterval {
         nextUpdate: Value(
           DateTime.fromMillisecondsSinceEpoch(nextUpdate, isUtc: true),
         ),
-        calculateInterval: Value(interval),
+        fetchInterval: Value(interval),
       );
     }
   }
@@ -88,7 +88,7 @@ class FetchInterval {
     if (window.first
             .rangeTo(window.second + 1)
             .contains(manga.nextUpdate!.millisecondsSinceEpoch) ||
-        manga.calculateInterval == 0) {
+        manga.fetchInterval == 0) {
       DateTime latestDate = DateUtils.dateOnly(manga.lastUpdate!);
       int timeSinceLatest = latestDate.difference(dateTime).inDays;
       int cycle = timeSinceLatest ~/

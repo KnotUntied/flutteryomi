@@ -76,7 +76,7 @@ class MangaRepositoryImpl implements MangaRepository {
     await db.transaction(() async {
       await db.mangasCategoriesDrift
           .deleteMangaCategoryByMangaId(mangaId: mangaId);
-      for (var categoryId in categoryIds) {
+      for (final categoryId in categoryIds) {
         await db.into(db.mangasCategories).insert(
               MangasCategoriesCompanion.insert(
                 mangaId: mangaId,
@@ -105,9 +105,9 @@ class MangaRepositoryImpl implements MangaRepository {
               favorite: manga.favorite,
               lastUpdate: Value(manga.lastUpdate),
               nextUpdate: Value(manga.nextUpdate),
-              calculateInterval: Value(manga.calculateInterval),
+              fetchInterval: Value(manga.fetchInterval),
               initialized: manga.initialized,
-              viewer: manga.viewer,
+              viewerFlags: manga.viewerFlags,
               chapterFlags: manga.chapterFlags,
               coverLastModified: manga.coverLastModified,
               dateAdded: manga.dateAdded,
@@ -135,7 +135,7 @@ class MangaRepositoryImpl implements MangaRepository {
   Future<bool> updateAll(List<MangasCompanion> mangaUpdates) async {
     try {
       await db.transaction(() async {
-        for (var update in mangaUpdates) {
+        for (final update in mangaUpdates) {
           await (db.update(db.mangas)
                 ..where((c) => c.id.equals(update.id.value)))
               .write(update);

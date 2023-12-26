@@ -16,14 +16,14 @@ CREATE TABLE mangas(
     last_update DATETIME,
     next_update DATETIME,
     initialized BOOLEAN NOT NULL,
-    viewer INTEGER NOT NULL,
+    viewer INTEGER NOT NULL AS viewerFlags,
     chapter_flags INTEGER NOT NULL,
     cover_last_modified DATETIME NOT NULL,
     date_added DATETIME NOT NULL,
     -- Built as DateTime for some reason
     -- update_strategy ENUM(UpdateStrategy) NOT NULL DEFAULT 0,
     update_strategy INTEGER NOT NULL DEFAULT 0,
-    calculate_interval INTEGER DEFAULT 0 NOT NULL,
+    calculate_interval INTEGER DEFAULT 0 NOT NULL AS fetchInterval,
     last_modified_at DATETIME NOT NULL DEFAULT 0,
     favorite_modified_at DATETIME
 );

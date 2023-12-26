@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
+
+part 'manga_repository.g.dart';
 
 abstract interface class MangaRepository {
   Future<Manga> getMangaById(int id);
@@ -16,4 +20,10 @@ abstract interface class MangaRepository {
   Future<int?> insert(Manga manga);
   Future<bool> update(MangasCompanion update);
   Future<bool> updateAll(List<MangasCompanion> mangaUpdates);
+}
+
+@Riverpod(keepAlive: true)
+MangaRepository mangaRepository(MangaRepositoryRef ref) {
+  // * Override this in the main method
+  throw UnimplementedError();
 }

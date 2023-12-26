@@ -106,9 +106,9 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
       type: i0.DriftSqlType.bool,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  static const i0.VerificationMeta _viewerMeta =
-      const i0.VerificationMeta('viewer');
-  late final i0.GeneratedColumn<int> viewer = i0.GeneratedColumn<int>(
+  static const i0.VerificationMeta _viewerFlagsMeta =
+      const i0.VerificationMeta('viewerFlags');
+  late final i0.GeneratedColumn<int> viewerFlags = i0.GeneratedColumn<int>(
       'viewer', aliasedName, false,
       type: i0.DriftSqlType.int,
       requiredDuringInsert: true,
@@ -142,14 +142,14 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT 0',
       defaultValue: const i0.CustomExpression('0'));
-  static const i0.VerificationMeta _calculateIntervalMeta =
-      const i0.VerificationMeta('calculateInterval');
-  late final i0.GeneratedColumn<int> calculateInterval =
-      i0.GeneratedColumn<int>('calculate_interval', aliasedName, false,
-          type: i0.DriftSqlType.int,
-          requiredDuringInsert: false,
-          $customConstraints: 'DEFAULT 0 NOT NULL',
-          defaultValue: const i0.CustomExpression('0'));
+  static const i0.VerificationMeta _fetchIntervalMeta =
+      const i0.VerificationMeta('fetchInterval');
+  late final i0.GeneratedColumn<int> fetchInterval = i0.GeneratedColumn<int>(
+      'calculate_interval', aliasedName, false,
+      type: i0.DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'DEFAULT 0 NOT NULL',
+      defaultValue: const i0.CustomExpression('0'));
   static const i0.VerificationMeta _lastModifiedAtMeta =
       const i0.VerificationMeta('lastModifiedAt');
   late final i0.GeneratedColumn<DateTime> lastModifiedAt =
@@ -181,12 +181,12 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
         lastUpdate,
         nextUpdate,
         initialized,
-        viewer,
+        viewerFlags,
         chapterFlags,
         coverLastModified,
         dateAdded,
         updateStrategy,
-        calculateInterval,
+        fetchInterval,
         lastModifiedAt,
         favoriteModifiedAt
       ];
@@ -275,10 +275,10 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
       context.missing(_initializedMeta);
     }
     if (data.containsKey('viewer')) {
-      context.handle(_viewerMeta,
-          viewer.isAcceptableOrUnknown(data['viewer']!, _viewerMeta));
+      context.handle(_viewerFlagsMeta,
+          viewerFlags.isAcceptableOrUnknown(data['viewer']!, _viewerFlagsMeta));
     } else if (isInserting) {
-      context.missing(_viewerMeta);
+      context.missing(_viewerFlagsMeta);
     }
     if (data.containsKey('chapter_flags')) {
       context.handle(
@@ -310,9 +310,9 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
     }
     if (data.containsKey('calculate_interval')) {
       context.handle(
-          _calculateIntervalMeta,
-          calculateInterval.isAcceptableOrUnknown(
-              data['calculate_interval']!, _calculateIntervalMeta));
+          _fetchIntervalMeta,
+          fetchInterval.isAcceptableOrUnknown(
+              data['calculate_interval']!, _fetchIntervalMeta));
     }
     if (data.containsKey('last_modified_at')) {
       context.handle(
@@ -363,7 +363,7 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           i0.DriftSqlType.dateTime, data['${effectivePrefix}next_update']),
       initialized: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.bool, data['${effectivePrefix}initialized'])!,
-      viewer: attachedDatabase.typeMapping
+      viewerFlags: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}viewer'])!,
       chapterFlags: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}chapter_flags'])!,
@@ -374,7 +374,7 @@ class Mangas extends i0.Table with i0.TableInfo<Mangas, i1.Manga> {
           i0.DriftSqlType.dateTime, data['${effectivePrefix}date_added'])!,
       updateStrategy: attachedDatabase.typeMapping.read(
           i0.DriftSqlType.int, data['${effectivePrefix}update_strategy'])!,
-      calculateInterval: attachedDatabase.typeMapping.read(
+      fetchInterval: attachedDatabase.typeMapping.read(
           i0.DriftSqlType.int, data['${effectivePrefix}calculate_interval'])!,
       lastModifiedAt: attachedDatabase.typeMapping.read(
           i0.DriftSqlType.dateTime,
@@ -413,7 +413,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
   final DateTime? lastUpdate;
   final DateTime? nextUpdate;
   final bool initialized;
-  final int viewer;
+  final int viewerFlags;
   final int chapterFlags;
   final DateTime coverLastModified;
   final DateTime dateAdded;
@@ -421,7 +421,7 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
   /// update_strategy ENUM(UpdateStrategy) NOT NULL DEFAULT 0,
   /// Built as DateTime for some reason
   final int updateStrategy;
-  final int calculateInterval;
+  final int fetchInterval;
   final DateTime lastModifiedAt;
   final DateTime? favoriteModifiedAt;
   const Manga(
@@ -439,12 +439,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       this.lastUpdate,
       this.nextUpdate,
       required this.initialized,
-      required this.viewer,
+      required this.viewerFlags,
       required this.chapterFlags,
       required this.coverLastModified,
       required this.dateAdded,
       required this.updateStrategy,
-      required this.calculateInterval,
+      required this.fetchInterval,
       required this.lastModifiedAt,
       this.favoriteModifiedAt});
   @override
@@ -479,12 +479,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       map['next_update'] = i0.Variable<DateTime>(nextUpdate);
     }
     map['initialized'] = i0.Variable<bool>(initialized);
-    map['viewer'] = i0.Variable<int>(viewer);
+    map['viewer'] = i0.Variable<int>(viewerFlags);
     map['chapter_flags'] = i0.Variable<int>(chapterFlags);
     map['cover_last_modified'] = i0.Variable<DateTime>(coverLastModified);
     map['date_added'] = i0.Variable<DateTime>(dateAdded);
     map['update_strategy'] = i0.Variable<int>(updateStrategy);
-    map['calculate_interval'] = i0.Variable<int>(calculateInterval);
+    map['calculate_interval'] = i0.Variable<int>(fetchInterval);
     map['last_modified_at'] = i0.Variable<DateTime>(lastModifiedAt);
     if (!nullToAbsent || favoriteModifiedAt != null) {
       map['favorite_modified_at'] = i0.Variable<DateTime>(favoriteModifiedAt);
@@ -522,12 +522,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
           ? const i0.Value.absent()
           : i0.Value(nextUpdate),
       initialized: i0.Value(initialized),
-      viewer: i0.Value(viewer),
+      viewerFlags: i0.Value(viewerFlags),
       chapterFlags: i0.Value(chapterFlags),
       coverLastModified: i0.Value(coverLastModified),
       dateAdded: i0.Value(dateAdded),
       updateStrategy: i0.Value(updateStrategy),
-      calculateInterval: i0.Value(calculateInterval),
+      fetchInterval: i0.Value(fetchInterval),
       lastModifiedAt: i0.Value(lastModifiedAt),
       favoriteModifiedAt: favoriteModifiedAt == null && nullToAbsent
           ? const i0.Value.absent()
@@ -553,13 +553,13 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       lastUpdate: serializer.fromJson<DateTime?>(json['last_update']),
       nextUpdate: serializer.fromJson<DateTime?>(json['next_update']),
       initialized: serializer.fromJson<bool>(json['initialized']),
-      viewer: serializer.fromJson<int>(json['viewer']),
+      viewerFlags: serializer.fromJson<int>(json['viewer']),
       chapterFlags: serializer.fromJson<int>(json['chapter_flags']),
       coverLastModified:
           serializer.fromJson<DateTime>(json['cover_last_modified']),
       dateAdded: serializer.fromJson<DateTime>(json['date_added']),
       updateStrategy: serializer.fromJson<int>(json['update_strategy']),
-      calculateInterval: serializer.fromJson<int>(json['calculate_interval']),
+      fetchInterval: serializer.fromJson<int>(json['calculate_interval']),
       lastModifiedAt: serializer.fromJson<DateTime>(json['last_modified_at']),
       favoriteModifiedAt:
           serializer.fromJson<DateTime?>(json['favorite_modified_at']),
@@ -583,12 +583,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
       'last_update': serializer.toJson<DateTime?>(lastUpdate),
       'next_update': serializer.toJson<DateTime?>(nextUpdate),
       'initialized': serializer.toJson<bool>(initialized),
-      'viewer': serializer.toJson<int>(viewer),
+      'viewer': serializer.toJson<int>(viewerFlags),
       'chapter_flags': serializer.toJson<int>(chapterFlags),
       'cover_last_modified': serializer.toJson<DateTime>(coverLastModified),
       'date_added': serializer.toJson<DateTime>(dateAdded),
       'update_strategy': serializer.toJson<int>(updateStrategy),
-      'calculate_interval': serializer.toJson<int>(calculateInterval),
+      'calculate_interval': serializer.toJson<int>(fetchInterval),
       'last_modified_at': serializer.toJson<DateTime>(lastModifiedAt),
       'favorite_modified_at': serializer.toJson<DateTime?>(favoriteModifiedAt),
     };
@@ -609,12 +609,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
           i0.Value<DateTime?> lastUpdate = const i0.Value.absent(),
           i0.Value<DateTime?> nextUpdate = const i0.Value.absent(),
           bool? initialized,
-          int? viewer,
+          int? viewerFlags,
           int? chapterFlags,
           DateTime? coverLastModified,
           DateTime? dateAdded,
           int? updateStrategy,
-          int? calculateInterval,
+          int? fetchInterval,
           DateTime? lastModifiedAt,
           i0.Value<DateTime?> favoriteModifiedAt = const i0.Value.absent()}) =>
       i1.Manga(
@@ -633,12 +633,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
         lastUpdate: lastUpdate.present ? lastUpdate.value : this.lastUpdate,
         nextUpdate: nextUpdate.present ? nextUpdate.value : this.nextUpdate,
         initialized: initialized ?? this.initialized,
-        viewer: viewer ?? this.viewer,
+        viewerFlags: viewerFlags ?? this.viewerFlags,
         chapterFlags: chapterFlags ?? this.chapterFlags,
         coverLastModified: coverLastModified ?? this.coverLastModified,
         dateAdded: dateAdded ?? this.dateAdded,
         updateStrategy: updateStrategy ?? this.updateStrategy,
-        calculateInterval: calculateInterval ?? this.calculateInterval,
+        fetchInterval: fetchInterval ?? this.fetchInterval,
         lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
         favoriteModifiedAt: favoriteModifiedAt.present
             ? favoriteModifiedAt.value
@@ -661,12 +661,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
           ..write('lastUpdate: $lastUpdate, ')
           ..write('nextUpdate: $nextUpdate, ')
           ..write('initialized: $initialized, ')
-          ..write('viewer: $viewer, ')
+          ..write('viewerFlags: $viewerFlags, ')
           ..write('chapterFlags: $chapterFlags, ')
           ..write('coverLastModified: $coverLastModified, ')
           ..write('dateAdded: $dateAdded, ')
           ..write('updateStrategy: $updateStrategy, ')
-          ..write('calculateInterval: $calculateInterval, ')
+          ..write('fetchInterval: $fetchInterval, ')
           ..write('lastModifiedAt: $lastModifiedAt, ')
           ..write('favoriteModifiedAt: $favoriteModifiedAt')
           ..write(')'))
@@ -689,12 +689,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
         lastUpdate,
         nextUpdate,
         initialized,
-        viewer,
+        viewerFlags,
         chapterFlags,
         coverLastModified,
         dateAdded,
         updateStrategy,
-        calculateInterval,
+        fetchInterval,
         lastModifiedAt,
         favoriteModifiedAt
       ]);
@@ -716,12 +716,12 @@ class Manga extends i0.DataClass implements i0.Insertable<i1.Manga> {
           other.lastUpdate == this.lastUpdate &&
           other.nextUpdate == this.nextUpdate &&
           other.initialized == this.initialized &&
-          other.viewer == this.viewer &&
+          other.viewerFlags == this.viewerFlags &&
           other.chapterFlags == this.chapterFlags &&
           other.coverLastModified == this.coverLastModified &&
           other.dateAdded == this.dateAdded &&
           other.updateStrategy == this.updateStrategy &&
-          other.calculateInterval == this.calculateInterval &&
+          other.fetchInterval == this.fetchInterval &&
           other.lastModifiedAt == this.lastModifiedAt &&
           other.favoriteModifiedAt == this.favoriteModifiedAt);
 }
@@ -741,12 +741,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
   final i0.Value<DateTime?> lastUpdate;
   final i0.Value<DateTime?> nextUpdate;
   final i0.Value<bool> initialized;
-  final i0.Value<int> viewer;
+  final i0.Value<int> viewerFlags;
   final i0.Value<int> chapterFlags;
   final i0.Value<DateTime> coverLastModified;
   final i0.Value<DateTime> dateAdded;
   final i0.Value<int> updateStrategy;
-  final i0.Value<int> calculateInterval;
+  final i0.Value<int> fetchInterval;
   final i0.Value<DateTime> lastModifiedAt;
   final i0.Value<DateTime?> favoriteModifiedAt;
   const MangasCompanion({
@@ -764,12 +764,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     this.lastUpdate = const i0.Value.absent(),
     this.nextUpdate = const i0.Value.absent(),
     this.initialized = const i0.Value.absent(),
-    this.viewer = const i0.Value.absent(),
+    this.viewerFlags = const i0.Value.absent(),
     this.chapterFlags = const i0.Value.absent(),
     this.coverLastModified = const i0.Value.absent(),
     this.dateAdded = const i0.Value.absent(),
     this.updateStrategy = const i0.Value.absent(),
-    this.calculateInterval = const i0.Value.absent(),
+    this.fetchInterval = const i0.Value.absent(),
     this.lastModifiedAt = const i0.Value.absent(),
     this.favoriteModifiedAt = const i0.Value.absent(),
   });
@@ -788,12 +788,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     this.lastUpdate = const i0.Value.absent(),
     this.nextUpdate = const i0.Value.absent(),
     required bool initialized,
-    required int viewer,
+    required int viewerFlags,
     required int chapterFlags,
     required DateTime coverLastModified,
     required DateTime dateAdded,
     this.updateStrategy = const i0.Value.absent(),
-    this.calculateInterval = const i0.Value.absent(),
+    this.fetchInterval = const i0.Value.absent(),
     this.lastModifiedAt = const i0.Value.absent(),
     this.favoriteModifiedAt = const i0.Value.absent(),
   })  : source = i0.Value(source),
@@ -802,7 +802,7 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
         status = i0.Value(status),
         favorite = i0.Value(favorite),
         initialized = i0.Value(initialized),
-        viewer = i0.Value(viewer),
+        viewerFlags = i0.Value(viewerFlags),
         chapterFlags = i0.Value(chapterFlags),
         coverLastModified = i0.Value(coverLastModified),
         dateAdded = i0.Value(dateAdded);
@@ -821,12 +821,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     i0.Expression<DateTime>? lastUpdate,
     i0.Expression<DateTime>? nextUpdate,
     i0.Expression<bool>? initialized,
-    i0.Expression<int>? viewer,
+    i0.Expression<int>? viewerFlags,
     i0.Expression<int>? chapterFlags,
     i0.Expression<DateTime>? coverLastModified,
     i0.Expression<DateTime>? dateAdded,
     i0.Expression<int>? updateStrategy,
-    i0.Expression<int>? calculateInterval,
+    i0.Expression<int>? fetchInterval,
     i0.Expression<DateTime>? lastModifiedAt,
     i0.Expression<DateTime>? favoriteModifiedAt,
   }) {
@@ -845,12 +845,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       if (lastUpdate != null) 'last_update': lastUpdate,
       if (nextUpdate != null) 'next_update': nextUpdate,
       if (initialized != null) 'initialized': initialized,
-      if (viewer != null) 'viewer': viewer,
+      if (viewerFlags != null) 'viewer': viewerFlags,
       if (chapterFlags != null) 'chapter_flags': chapterFlags,
       if (coverLastModified != null) 'cover_last_modified': coverLastModified,
       if (dateAdded != null) 'date_added': dateAdded,
       if (updateStrategy != null) 'update_strategy': updateStrategy,
-      if (calculateInterval != null) 'calculate_interval': calculateInterval,
+      if (fetchInterval != null) 'calculate_interval': fetchInterval,
       if (lastModifiedAt != null) 'last_modified_at': lastModifiedAt,
       if (favoriteModifiedAt != null)
         'favorite_modified_at': favoriteModifiedAt,
@@ -872,12 +872,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       i0.Value<DateTime?>? lastUpdate,
       i0.Value<DateTime?>? nextUpdate,
       i0.Value<bool>? initialized,
-      i0.Value<int>? viewer,
+      i0.Value<int>? viewerFlags,
       i0.Value<int>? chapterFlags,
       i0.Value<DateTime>? coverLastModified,
       i0.Value<DateTime>? dateAdded,
       i0.Value<int>? updateStrategy,
-      i0.Value<int>? calculateInterval,
+      i0.Value<int>? fetchInterval,
       i0.Value<DateTime>? lastModifiedAt,
       i0.Value<DateTime?>? favoriteModifiedAt}) {
     return i1.MangasCompanion(
@@ -895,12 +895,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
       lastUpdate: lastUpdate ?? this.lastUpdate,
       nextUpdate: nextUpdate ?? this.nextUpdate,
       initialized: initialized ?? this.initialized,
-      viewer: viewer ?? this.viewer,
+      viewerFlags: viewerFlags ?? this.viewerFlags,
       chapterFlags: chapterFlags ?? this.chapterFlags,
       coverLastModified: coverLastModified ?? this.coverLastModified,
       dateAdded: dateAdded ?? this.dateAdded,
       updateStrategy: updateStrategy ?? this.updateStrategy,
-      calculateInterval: calculateInterval ?? this.calculateInterval,
+      fetchInterval: fetchInterval ?? this.fetchInterval,
       lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
       favoriteModifiedAt: favoriteModifiedAt ?? this.favoriteModifiedAt,
     );
@@ -952,8 +952,8 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     if (initialized.present) {
       map['initialized'] = i0.Variable<bool>(initialized.value);
     }
-    if (viewer.present) {
-      map['viewer'] = i0.Variable<int>(viewer.value);
+    if (viewerFlags.present) {
+      map['viewer'] = i0.Variable<int>(viewerFlags.value);
     }
     if (chapterFlags.present) {
       map['chapter_flags'] = i0.Variable<int>(chapterFlags.value);
@@ -968,8 +968,8 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
     if (updateStrategy.present) {
       map['update_strategy'] = i0.Variable<int>(updateStrategy.value);
     }
-    if (calculateInterval.present) {
-      map['calculate_interval'] = i0.Variable<int>(calculateInterval.value);
+    if (fetchInterval.present) {
+      map['calculate_interval'] = i0.Variable<int>(fetchInterval.value);
     }
     if (lastModifiedAt.present) {
       map['last_modified_at'] = i0.Variable<DateTime>(lastModifiedAt.value);
@@ -998,12 +998,12 @@ class MangasCompanion extends i0.UpdateCompanion<i1.Manga> {
           ..write('lastUpdate: $lastUpdate, ')
           ..write('nextUpdate: $nextUpdate, ')
           ..write('initialized: $initialized, ')
-          ..write('viewer: $viewer, ')
+          ..write('viewerFlags: $viewerFlags, ')
           ..write('chapterFlags: $chapterFlags, ')
           ..write('coverLastModified: $coverLastModified, ')
           ..write('dateAdded: $dateAdded, ')
           ..write('updateStrategy: $updateStrategy, ')
-          ..write('calculateInterval: $calculateInterval, ')
+          ..write('fetchInterval: $fetchInterval, ')
           ..write('lastModifiedAt: $lastModifiedAt, ')
           ..write('favoriteModifiedAt: $favoriteModifiedAt')
           ..write(')'))

@@ -15,6 +15,8 @@ class UpdateManga {
   Future<bool> awaitAll(List<MangasCompanion> mangaUpdates) async =>
       await repository.updateAll(mangaUpdates);
 
+  // TODO awaitUpdateFromSource
+
   Future<bool> awaitUpdateFetchInterval(
     Manga manga, {
     DateTime? dateTime,
