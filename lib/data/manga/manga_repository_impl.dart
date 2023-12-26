@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:logger/logger.dart';
 
-import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart';
@@ -10,10 +9,9 @@ import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 
 class MangaRepositoryImpl implements MangaRepository {
-  MangaRepositoryImpl(this.ref);
-  final Ref ref;
-  late final db = ref.read(AppDatabase.provider);
-  late final logger = ref.read(loggerProvider);
+  MangaRepositoryImpl({required this.db, required this.logger});
+  final Database db;
+  final Logger logger;
 
   @override
   Future<Manga> getMangaById(int id) async =>

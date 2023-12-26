@@ -1,14 +1,10 @@
-import 'package:drift/drift.dart';
-import 'package:riverpod/riverpod.dart';
-
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 
 class TrackRepositoryImpl implements TrackRepository {
-  TrackRepositoryImpl(this.ref);
-  final Ref ref;
-  late final db = ref.read(AppDatabase.provider);
+  TrackRepositoryImpl({required this.db});
+  final Database db;
 
   @override
   Future<MangaSyncData?> getTrackById(int id) async =>

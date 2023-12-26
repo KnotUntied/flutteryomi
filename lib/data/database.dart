@@ -24,8 +24,8 @@ import 'package:flutteryomi/data/drift/data/categories.drift.dart';
     'drift/views/updates_view.drift',
   },
 )
-class AppDatabase extends $AppDatabase {
-  AppDatabase() : super(_openConnection());
+class Database extends $Database {
+  Database() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
@@ -50,8 +50,8 @@ class AppDatabase extends $AppDatabase {
     );
   }
 
-  static final StateProvider<AppDatabase> provider = StateProvider((ref) {
-    final database = AppDatabase();
+  static final StateProvider<Database> provider = StateProvider((ref) {
+    final database = Database();
     ref.onDispose(database.close);
 
     return database;

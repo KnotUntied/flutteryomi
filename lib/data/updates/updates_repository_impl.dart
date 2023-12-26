@@ -1,5 +1,3 @@
-import 'package:riverpod/riverpod.dart';
-
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/views/updates_view.drift.dart';
 import 'package:flutteryomi/domain/manga/model/manga_cover.dart';
@@ -7,9 +5,8 @@ import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
 import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
 
 class UpdatesRepositoryImpl implements UpdatesRepository {
-  UpdatesRepositoryImpl(this.ref);
-  final Ref ref;
-  late final db = ref.read(AppDatabase.provider);
+  UpdatesRepositoryImpl({required this.db});
+  final Database db;
 
   @override
   Future<List<UpdatesWithRelations>> awaitWithRead(bool read, DateTime after, int limit) async =>

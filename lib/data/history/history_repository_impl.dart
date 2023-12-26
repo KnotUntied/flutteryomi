@@ -1,6 +1,5 @@
-import 'package:riverpod/riverpod.dart';
+import 'package:logger/logger.dart';
 
-import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/history.drift.dart';
 import 'package:flutteryomi/data/history/history_mapper.dart';
@@ -8,10 +7,9 @@ import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
 import 'package:flutteryomi/domain/history/repository/history_repository.dart';
 
 class HistoryRepositoryImpl implements HistoryRepository {
-  HistoryRepositoryImpl(this.ref);
-  final Ref ref;
-  late final db = ref.read(AppDatabase.provider);
-  late final logger = ref.read(loggerProvider);
+  HistoryRepositoryImpl({required this.db, required this.logger});
+  final Database db;
+  final Logger logger;
 
   @override
   Stream<List<HistoryWithRelations>> getHistory(String query) =>

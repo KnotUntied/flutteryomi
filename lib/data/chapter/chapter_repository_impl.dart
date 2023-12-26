@@ -1,16 +1,14 @@
 import 'package:drift/drift.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:logger/logger.dart';
 
-import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 
 class ChapterRepositoryImpl implements ChapterRepository {
-  ChapterRepositoryImpl(this.ref);
-  final Ref ref;
-  late final db = ref.read(AppDatabase.provider);
-  late final logger = ref.read(loggerProvider);
+  ChapterRepositoryImpl({required this.db, required this.logger});
+  final Database db;
+  final Logger logger;
 
   @override
   Future<List<Chapter>> addAll(List<Chapter> chapters) async {

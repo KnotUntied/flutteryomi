@@ -14,8 +14,8 @@ import 'package:flutteryomi/data/drift/data/sources.drift.dart' as i10;
 import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart' as i11;
 import 'package:drift/internal/modular.dart' as i12;
 
-abstract class $AppDatabase extends i0.GeneratedDatabase {
-  $AppDatabase(i0.QueryExecutor e) : super(e);
+abstract class $Database extends i0.GeneratedDatabase {
+  $Database(i0.QueryExecutor e) : super(e);
   late final i1.Mangas mangas = i1.Mangas(this);
   late final i2.Chapters chapters = i2.Chapters(this);
   late final i3.UpdatesView updatesView = i3.UpdatesView(this);

@@ -7,7 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+
+  runApp(
+    const ProviderScope(
+      overrides: [
+        //mangaRepositoryProvider.overrideWithValue(mangaRepositoryImpl),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {

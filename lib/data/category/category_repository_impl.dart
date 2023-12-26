@@ -1,13 +1,10 @@
-import 'package:riverpod/riverpod.dart';
-
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/categories.drift.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
-  CategoryRepositoryImpl(this.ref);
-  final Ref ref;
-  late final db = ref.read(AppDatabase.provider);
+  CategoryRepositoryImpl({required this.db});
+  final Database db;
 
   @override
   Future<Category?> get(int id) async =>
