@@ -22,9 +22,7 @@ class DownloadQueueScreen extends StatelessWidget {
         ),
       ),
       body: downloadCount > 0
-          ? ListView(
-              children: const <Widget>[],
-            )
+          ? ListView(children: const <Widget>[])
           : EmptyScreen(message: lang.information_no_downloads),
       floatingActionButton: downloadCount > 0
           ? FloatingActionButton.extended(

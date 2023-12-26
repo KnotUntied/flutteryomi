@@ -13,7 +13,7 @@ void main() {
     ProviderScope(
       overrides: [
         // Might be better to ditch the abstract repositories in the future
-        mangaRepositoryProvider.overrideWith((ref) => ref.read(mangaRepositoryImplProvider)),
+        mangaRepositoryProvider.overrideWith((ref) => ref.watch(mangaRepositoryImplProvider)),
       ],
       child: const MyApp(),
     ),
