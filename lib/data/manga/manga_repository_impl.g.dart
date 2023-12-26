@@ -1,25 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'manga_repository.dart';
+part of 'manga_repository_impl.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mangaRepositoryHash() => r'16c4ed0ccab52296a6beb04bd55f47f55e5bc02e';
+String _$mangaRepositoryImplHash() =>
+    r'abc8d55322891f441c2bbd97dce2112ee11635ce';
 
-/// See also [mangaRepository].
-@ProviderFor(mangaRepository)
-final mangaRepositoryProvider = AutoDisposeProvider<MangaRepository>.internal(
-  mangaRepository,
-  name: r'mangaRepositoryProvider',
+/// See also [mangaRepositoryImpl].
+@ProviderFor(mangaRepositoryImpl)
+final mangaRepositoryImplProvider =
+    AutoDisposeProvider<MangaRepository>.internal(
+  mangaRepositoryImpl,
+  name: r'mangaRepositoryImplProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$mangaRepositoryHash,
+      : _$mangaRepositoryImplHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef MangaRepositoryRef = AutoDisposeProviderRef<MangaRepository>;
+typedef MangaRepositoryImplRef = AutoDisposeProviderRef<MangaRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

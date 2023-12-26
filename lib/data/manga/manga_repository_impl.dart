@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/mangas_categories.drift.dart';
 import 'package:flutteryomi/data/manga/manga_mapper.dart';
@@ -8,6 +10,8 @@ import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+
+part 'manga_repository_impl.g.dart';
 
 class MangaRepositoryImpl implements MangaRepository {
   MangaRepositoryImpl({required this.db, required this.logger});
@@ -77,7 +81,11 @@ class MangaRepositoryImpl implements MangaRepository {
         mangaId: mangaId,
       );
       for (final categoryId in categoryIds) {
-        await db.into(db.mangasCategories).insert(
+        await db
+            .into(
+              db.mangasCategories,
+            )
+            .insert(
               MangasCategoriesCompanion.insert(
                 mangaId: mangaId,
                 categoryId: categoryId,
@@ -91,7 +99,11 @@ class MangaRepositoryImpl implements MangaRepository {
   Future<int?> insert(Manga manga) async {
     int? lastInsertedRowId;
     await db.transaction(() async {
-      Manga? lastInsertedRow = await db.into(db.mangas).insertReturningOrNull(
+      Manga? lastInsertedRow = await db
+          .into(
+            db.mangas,
+          )
+          .insertReturningOrNull(
             MangaUpdate.insert(
               source: manga.source,
               url: manga.url,
@@ -148,3 +160,10 @@ class MangaRepositoryImpl implements MangaRepository {
     }
   }
 }
+
+@riverpod
+MangaRepository mangaRepositoryImpl(MangaRepositoryImplRef ref) =>
+    MangaRepositoryImpl(
+      db: ref.read(Database.provider),
+      logger: ref.read(loggerProvider),
+    );

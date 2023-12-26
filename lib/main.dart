@@ -4,16 +4,18 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutteryomi/data/manga/manga_repository_impl.dart';
+import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
 
 void main() {
-
   runApp(
-    const ProviderScope(
+    ProviderScope(
       overrides: [
-        //mangaRepositoryProvider.overrideWithValue(mangaRepositoryImpl),
+        // Might be better to ditch the abstract repositories in the future
+        mangaRepositoryProvider.overrideWith((ref) => ref.read(mangaRepositoryImplProvider)),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
