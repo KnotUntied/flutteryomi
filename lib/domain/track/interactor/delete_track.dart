@@ -1,16 +1,14 @@
-import 'package:riverpod/riverpod.dart';
+import 'package:logger/logger.dart';
 
-import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 
 class DeleteTrack {
   DeleteTrack({
+    required this.logger,
     required this.repository,
-    required this.ref,
   });
-  final Ref ref;
+  final Logger logger;
   final TrackRepository repository;
-  late final logger = ref.read(loggerProvider);
 
   Future<void> await_(int mangaId, int syncId) async {
     try {
