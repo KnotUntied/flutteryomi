@@ -11,23 +11,25 @@ void main() {
   });
 
   test('Test Flag plus operator (LibrarySort)', () {
-    LibrarySort current = LibrarySort(Type.lastRead, Direction.ascending);
-    LibrarySort new_ = LibrarySort(Type.dateAdded, Direction.ascending);
+    LibrarySort current = const LibrarySort(Type.lastRead, Direction.ascending);
+    LibrarySort new_ = const LibrarySort(Type.dateAdded, Direction.ascending);
     int flag = current + new_;
     expect(flag, 0x5C);
   });
 
   test('Test Flag plus operator', () {
-    LibrarySort sort = LibrarySort(Type.dateAdded, Direction.ascending);
+    LibrarySort sort = const LibrarySort(Type.dateAdded, Direction.ascending);
     expect(sort.flag, 0x5C);
   });
 
   test('Test Flag plus operator with old flag as base', () {
-    LibrarySort currentSort =
-        LibrarySort(Type.unreadCount, Direction.descending);
+    LibrarySort currentSort = const LibrarySort(
+      Type.unreadCount,
+      Direction.descending,
+    );
     expect(currentSort.flag, 0xC);
 
-    LibrarySort sort = LibrarySort(Type.dateAdded, Direction.ascending);
+    LibrarySort sort = const LibrarySort(Type.dateAdded, Direction.ascending);
     int flag = currentSort.flag.addFlag(sort);
 
     expect(flag, 0x5C);

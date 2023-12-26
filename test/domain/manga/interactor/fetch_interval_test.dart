@@ -1,5 +1,4 @@
 import 'package:dartx/dartx.dart';
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
