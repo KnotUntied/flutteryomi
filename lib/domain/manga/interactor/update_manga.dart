@@ -1,6 +1,8 @@
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
+
+import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 
@@ -9,10 +11,10 @@ class UpdateManga {
   final FetchInterval fetchInterval;
   UpdateManga(this.repository, this.fetchInterval);
 
-  Future<bool> await_(MangasCompanion mangaUpdate) async =>
+  Future<bool> await_(MangaUpdate mangaUpdate) async =>
       await repository.update(mangaUpdate);
 
-  Future<bool> awaitAll(List<MangasCompanion> mangaUpdates) async =>
+  Future<bool> awaitAll(List<MangaUpdate> mangaUpdates) async =>
       await repository.updateAll(mangaUpdates);
 
   // TODO awaitUpdateFromSource
@@ -24,7 +26,7 @@ class UpdateManga {
   }) async {
     dateTime ??= DateTime.now();
     window ??= fetchInterval.getWindow(dateTime);
-    MangasCompanion? mangaUpdate = await fetchInterval.toMangaUpdateOrNull(
+    MangaUpdate? mangaUpdate = await fetchInterval.toMangaUpdateOrNull(
       manga,
       dateTime,
       window,
@@ -34,7 +36,7 @@ class UpdateManga {
 
   Future<bool> awaitUpdateLastUpdate(int mangaId) async =>
       await repository.update(
-        MangasCompanion(
+        MangaUpdate(
           id: Value(mangaId),
           lastUpdate: Value(DateTime.now()),
         ),
@@ -42,7 +44,7 @@ class UpdateManga {
 
   Future<bool> awaitUpdateCoverLastModified(int mangaId) async =>
       await repository.update(
-        MangasCompanion(
+        MangaUpdate(
           id: Value(mangaId),
           coverLastModified: Value(DateTime.now()),
         ),
@@ -50,7 +52,7 @@ class UpdateManga {
 
   Future<bool> awaitUpdateFavorite(int mangaId, bool favorite) async =>
       await repository.update(
-        MangasCompanion(
+        MangaUpdate(
           id: Value(mangaId),
           favorite: Value(favorite),
           dateAdded: Value(

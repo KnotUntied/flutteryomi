@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
+import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
 import 'package:flutteryomi/domain/reader/setting/reading_mode.dart';
@@ -12,7 +13,7 @@ class SetMangaViewerFlags {
   Future<void> awaitSetReadingMode(int id, int flag) async {
     Manga manga = await repository.getMangaById(id);
     await repository.update(
-      MangasCompanion(
+      MangaUpdate(
         id: Value(manga.id),
         viewerFlags: Value(
           manga.viewerFlags.setFlag(flag, ReadingMode.mask),
@@ -24,7 +25,7 @@ class SetMangaViewerFlags {
   Future<void> awaitSetOrientation(int id, int flag) async {
     Manga manga = await repository.getMangaById(id);
     await repository.update(
-      MangasCompanion(
+      MangaUpdate(
         id: Value(manga.id),
         viewerFlags: Value(
           manga.viewerFlags.setFlag(flag, ReaderOrientation.mask),

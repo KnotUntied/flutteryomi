@@ -9,6 +9,7 @@ class SetMangaCategories {
     try {
       await repository.setMangaCategories(mangaId, categoryIds);
     } catch (e) {
+      // TODO: logger
       //Logger().e(e);
     }
   }

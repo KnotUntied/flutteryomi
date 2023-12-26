@@ -1,8 +1,8 @@
 import 'package:logger/logger.dart';
 
 import 'package:flutteryomi/data/database.dart';
-import 'package:flutteryomi/data/drift/data/history.drift.dart';
 import 'package:flutteryomi/data/history/history_mapper.dart';
+import 'package:flutteryomi/domain/history/model/history.dart';
 import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
 import 'package:flutteryomi/domain/history/repository/history_repository.dart';
 
@@ -30,7 +30,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
       await db.historyDrift.getReadDuration().getSingle();
 
   @override
-  Future<List<HistoryData>> getHistoryByMangaId(int mangaId) async =>
+  Future<List<History>> getHistoryByMangaId(int mangaId) async =>
       await db.historyDrift.getHistoryByMangaId(mangaId: mangaId).get();
 
   @override
@@ -63,7 +63,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
   }
 
   @override
-  Future<void> upsertHistory(HistoryData history) async {
+  Future<void> upsertHistory(History history) async {
     try {
       await db.into(db.history).insertOnConflictUpdate(history);
     } catch (e) {

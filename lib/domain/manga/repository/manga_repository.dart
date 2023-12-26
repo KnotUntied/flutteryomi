@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 
 part 'manga_repository.g.dart';
 
@@ -18,8 +19,8 @@ abstract interface class MangaRepository {
   Future<bool> resetViewerFlags();
   Future<void> setMangaCategories(int mangaId, List<int> categoryIds);
   Future<int?> insert(Manga manga);
-  Future<bool> update(MangasCompanion update);
-  Future<bool> updateAll(List<MangasCompanion> mangaUpdates);
+  Future<bool> update(MangaUpdate update);
+  Future<bool> updateAll(List<MangaUpdate> mangaUpdates);
 }
 
 @Riverpod(keepAlive: true)

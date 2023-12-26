@@ -1,9 +1,10 @@
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
 
 abstract interface class ChapterRepository {
   Future<List<Chapter>> addAll(List<Chapter> chapters);
-  Future<void> update(ChaptersCompanion chapterUpdate);
-  Future<void> updateAll(List<ChaptersCompanion> chapterUpdates);
+  Future<void> update(ChapterUpdate chapterUpdate);
+  Future<void> updateAll(List<ChapterUpdate> chapterUpdates);
   Future<void> removeChaptersWithIds(List<int> chapterIds);
   Future<List<Chapter>> getChapterByMangaId(
       int mangaId, {bool applyScanlatorFilter = false});

@@ -2,7 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
 
 import 'package:flutteryomi/data/database.dart';
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 
 class ChapterRepositoryImpl implements ChapterRepository {
@@ -18,7 +19,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
         for (var chapter in chapters) {
           returnedChapters.add(await db
               .into(db.chapters)
-              .insertReturning(ChaptersCompanion.insert(
+              .insertReturning(ChapterUpdate.insert(
                 mangaId: chapter.mangaId,
                 url: chapter.url,
                 name: chapter.name,
@@ -41,13 +42,13 @@ class ChapterRepositoryImpl implements ChapterRepository {
   }
 
   @override
-  Future<void> update(ChaptersCompanion chapterUpdate) async =>
+  Future<void> update(ChapterUpdate chapterUpdate) async =>
       await (db.update(db.chapters)
             ..where((c) => c.id.equals(chapterUpdate.id.value)))
           .write(chapterUpdate);
 
   @override
-  Future<void> updateAll(List<ChaptersCompanion> chapterUpdates) async =>
+  Future<void> updateAll(List<ChapterUpdate> chapterUpdates) async =>
       await db.transaction(() async {
         for (var update in chapterUpdates) {
           await (db.update(db.chapters)

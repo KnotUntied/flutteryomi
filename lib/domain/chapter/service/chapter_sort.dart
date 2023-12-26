@@ -1,6 +1,5 @@
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 
 int Function(Chapter, Chapter) getChapterSort(
     {required Manga manga, bool? sortDescending}) {

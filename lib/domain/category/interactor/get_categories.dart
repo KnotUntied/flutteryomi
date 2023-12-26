@@ -1,4 +1,4 @@
-import 'package:flutteryomi/data/drift/data/categories.drift.dart';
+import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 
 class GetCategories {

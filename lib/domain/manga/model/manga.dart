@@ -1,8 +1,12 @@
 //import 'package:flutteryomi/core/preference/tri_state.dart';
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
+import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as drift;
 import 'package:flutteryomi/data/source/update_strategy.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
 import 'package:flutteryomi/domain/reader/setting/reading_mode.dart';
+
+// Drift already generates convenient classes
+// Typedef here so dependents will depend on domain instead of data
+typedef Manga = drift.Manga;
 
 extension MangaUtils on Manga {
   int get sorting => chapterFlags & chapterSortingMask;
@@ -72,7 +76,7 @@ extension MangaUtils on Manga {
         genre: null,
         status: 0,
         thumbnailUrl: null,
-        updateStrategy: UpdateStrategy.alwaysUpdate as int,
+        updateStrategy: UpdateStrategy.alwaysUpdate.index,
         initialized: false,
         lastModifiedAt: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
         favoriteModifiedAt: null,

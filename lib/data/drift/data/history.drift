@@ -4,8 +4,8 @@ import 'mangas.drift';
 CREATE TABLE history(
     _id INTEGER NOT NULL PRIMARY KEY,
     chapter_id INTEGER NOT NULL UNIQUE,
-    last_read DATETIME,
-    time_read INTEGER NOT NULL,
+    last_read DATETIME AS readAt,
+    time_read INTEGER NOT NULL AS readDuration,
     FOREIGN KEY(chapter_id) REFERENCES chapters (_id)
     ON DELETE CASCADE
 );

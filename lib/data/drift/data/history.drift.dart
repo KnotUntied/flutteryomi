@@ -23,22 +23,23 @@ class History extends i0.Table with i0.TableInfo<History, i1.HistoryData> {
       type: i0.DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL UNIQUE');
-  static const i0.VerificationMeta _lastReadMeta =
-      const i0.VerificationMeta('lastRead');
-  late final i0.GeneratedColumn<DateTime> lastRead =
-      i0.GeneratedColumn<DateTime>('last_read', aliasedName, true,
-          type: i0.DriftSqlType.dateTime,
-          requiredDuringInsert: false,
-          $customConstraints: '');
-  static const i0.VerificationMeta _timeReadMeta =
-      const i0.VerificationMeta('timeRead');
-  late final i0.GeneratedColumn<int> timeRead = i0.GeneratedColumn<int>(
+  static const i0.VerificationMeta _readAtMeta =
+      const i0.VerificationMeta('readAt');
+  late final i0.GeneratedColumn<DateTime> readAt = i0.GeneratedColumn<DateTime>(
+      'last_read', aliasedName, true,
+      type: i0.DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const i0.VerificationMeta _readDurationMeta =
+      const i0.VerificationMeta('readDuration');
+  late final i0.GeneratedColumn<int> readDuration = i0.GeneratedColumn<int>(
       'time_read', aliasedName, false,
       type: i0.DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
   @override
-  List<i0.GeneratedColumn> get $columns => [id, chapterId, lastRead, timeRead];
+  List<i0.GeneratedColumn> get $columns =>
+      [id, chapterId, readAt, readDuration];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -60,14 +61,16 @@ class History extends i0.Table with i0.TableInfo<History, i1.HistoryData> {
       context.missing(_chapterIdMeta);
     }
     if (data.containsKey('last_read')) {
-      context.handle(_lastReadMeta,
-          lastRead.isAcceptableOrUnknown(data['last_read']!, _lastReadMeta));
+      context.handle(_readAtMeta,
+          readAt.isAcceptableOrUnknown(data['last_read']!, _readAtMeta));
     }
     if (data.containsKey('time_read')) {
-      context.handle(_timeReadMeta,
-          timeRead.isAcceptableOrUnknown(data['time_read']!, _timeReadMeta));
+      context.handle(
+          _readDurationMeta,
+          readDuration.isAcceptableOrUnknown(
+              data['time_read']!, _readDurationMeta));
     } else if (isInserting) {
-      context.missing(_timeReadMeta);
+      context.missing(_readDurationMeta);
     }
     return context;
   }
@@ -82,9 +85,9 @@ class History extends i0.Table with i0.TableInfo<History, i1.HistoryData> {
           .read(i0.DriftSqlType.int, data['${effectivePrefix}_id'])!,
       chapterId: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}chapter_id'])!,
-      lastRead: attachedDatabase.typeMapping
+      readAt: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.dateTime, data['${effectivePrefix}last_read']),
-      timeRead: attachedDatabase.typeMapping
+      readDuration: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}time_read'])!,
     );
   }
@@ -106,22 +109,22 @@ class HistoryData extends i0.DataClass
     implements i0.Insertable<i1.HistoryData> {
   final int id;
   final int chapterId;
-  final DateTime? lastRead;
-  final int timeRead;
+  final DateTime? readAt;
+  final int readDuration;
   const HistoryData(
       {required this.id,
       required this.chapterId,
-      this.lastRead,
-      required this.timeRead});
+      this.readAt,
+      required this.readDuration});
   @override
   Map<String, i0.Expression> toColumns(bool nullToAbsent) {
     final map = <String, i0.Expression>{};
     map['_id'] = i0.Variable<int>(id);
     map['chapter_id'] = i0.Variable<int>(chapterId);
-    if (!nullToAbsent || lastRead != null) {
-      map['last_read'] = i0.Variable<DateTime>(lastRead);
+    if (!nullToAbsent || readAt != null) {
+      map['last_read'] = i0.Variable<DateTime>(readAt);
     }
-    map['time_read'] = i0.Variable<int>(timeRead);
+    map['time_read'] = i0.Variable<int>(readDuration);
     return map;
   }
 
@@ -129,10 +132,10 @@ class HistoryData extends i0.DataClass
     return i1.HistoryCompanion(
       id: i0.Value(id),
       chapterId: i0.Value(chapterId),
-      lastRead: lastRead == null && nullToAbsent
+      readAt: readAt == null && nullToAbsent
           ? const i0.Value.absent()
-          : i0.Value(lastRead),
-      timeRead: i0.Value(timeRead),
+          : i0.Value(readAt),
+      readDuration: i0.Value(readDuration),
     );
   }
 
@@ -142,8 +145,8 @@ class HistoryData extends i0.DataClass
     return HistoryData(
       id: serializer.fromJson<int>(json['_id']),
       chapterId: serializer.fromJson<int>(json['chapter_id']),
-      lastRead: serializer.fromJson<DateTime?>(json['last_read']),
-      timeRead: serializer.fromJson<int>(json['time_read']),
+      readAt: serializer.fromJson<DateTime?>(json['last_read']),
+      readDuration: serializer.fromJson<int>(json['time_read']),
     );
   }
   @override
@@ -152,87 +155,87 @@ class HistoryData extends i0.DataClass
     return <String, dynamic>{
       '_id': serializer.toJson<int>(id),
       'chapter_id': serializer.toJson<int>(chapterId),
-      'last_read': serializer.toJson<DateTime?>(lastRead),
-      'time_read': serializer.toJson<int>(timeRead),
+      'last_read': serializer.toJson<DateTime?>(readAt),
+      'time_read': serializer.toJson<int>(readDuration),
     };
   }
 
   i1.HistoryData copyWith(
           {int? id,
           int? chapterId,
-          i0.Value<DateTime?> lastRead = const i0.Value.absent(),
-          int? timeRead}) =>
+          i0.Value<DateTime?> readAt = const i0.Value.absent(),
+          int? readDuration}) =>
       i1.HistoryData(
         id: id ?? this.id,
         chapterId: chapterId ?? this.chapterId,
-        lastRead: lastRead.present ? lastRead.value : this.lastRead,
-        timeRead: timeRead ?? this.timeRead,
+        readAt: readAt.present ? readAt.value : this.readAt,
+        readDuration: readDuration ?? this.readDuration,
       );
   @override
   String toString() {
     return (StringBuffer('HistoryData(')
           ..write('id: $id, ')
           ..write('chapterId: $chapterId, ')
-          ..write('lastRead: $lastRead, ')
-          ..write('timeRead: $timeRead')
+          ..write('readAt: $readAt, ')
+          ..write('readDuration: $readDuration')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, chapterId, lastRead, timeRead);
+  int get hashCode => Object.hash(id, chapterId, readAt, readDuration);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is i1.HistoryData &&
           other.id == this.id &&
           other.chapterId == this.chapterId &&
-          other.lastRead == this.lastRead &&
-          other.timeRead == this.timeRead);
+          other.readAt == this.readAt &&
+          other.readDuration == this.readDuration);
 }
 
 class HistoryCompanion extends i0.UpdateCompanion<i1.HistoryData> {
   final i0.Value<int> id;
   final i0.Value<int> chapterId;
-  final i0.Value<DateTime?> lastRead;
-  final i0.Value<int> timeRead;
+  final i0.Value<DateTime?> readAt;
+  final i0.Value<int> readDuration;
   const HistoryCompanion({
     this.id = const i0.Value.absent(),
     this.chapterId = const i0.Value.absent(),
-    this.lastRead = const i0.Value.absent(),
-    this.timeRead = const i0.Value.absent(),
+    this.readAt = const i0.Value.absent(),
+    this.readDuration = const i0.Value.absent(),
   });
   HistoryCompanion.insert({
     this.id = const i0.Value.absent(),
     required int chapterId,
-    this.lastRead = const i0.Value.absent(),
-    required int timeRead,
+    this.readAt = const i0.Value.absent(),
+    required int readDuration,
   })  : chapterId = i0.Value(chapterId),
-        timeRead = i0.Value(timeRead);
+        readDuration = i0.Value(readDuration);
   static i0.Insertable<i1.HistoryData> custom({
     i0.Expression<int>? id,
     i0.Expression<int>? chapterId,
-    i0.Expression<DateTime>? lastRead,
-    i0.Expression<int>? timeRead,
+    i0.Expression<DateTime>? readAt,
+    i0.Expression<int>? readDuration,
   }) {
     return i0.RawValuesInsertable({
       if (id != null) '_id': id,
       if (chapterId != null) 'chapter_id': chapterId,
-      if (lastRead != null) 'last_read': lastRead,
-      if (timeRead != null) 'time_read': timeRead,
+      if (readAt != null) 'last_read': readAt,
+      if (readDuration != null) 'time_read': readDuration,
     });
   }
 
   i1.HistoryCompanion copyWith(
       {i0.Value<int>? id,
       i0.Value<int>? chapterId,
-      i0.Value<DateTime?>? lastRead,
-      i0.Value<int>? timeRead}) {
+      i0.Value<DateTime?>? readAt,
+      i0.Value<int>? readDuration}) {
     return i1.HistoryCompanion(
       id: id ?? this.id,
       chapterId: chapterId ?? this.chapterId,
-      lastRead: lastRead ?? this.lastRead,
-      timeRead: timeRead ?? this.timeRead,
+      readAt: readAt ?? this.readAt,
+      readDuration: readDuration ?? this.readDuration,
     );
   }
 
@@ -245,11 +248,11 @@ class HistoryCompanion extends i0.UpdateCompanion<i1.HistoryData> {
     if (chapterId.present) {
       map['chapter_id'] = i0.Variable<int>(chapterId.value);
     }
-    if (lastRead.present) {
-      map['last_read'] = i0.Variable<DateTime>(lastRead.value);
+    if (readAt.present) {
+      map['last_read'] = i0.Variable<DateTime>(readAt.value);
     }
-    if (timeRead.present) {
-      map['time_read'] = i0.Variable<int>(timeRead.value);
+    if (readDuration.present) {
+      map['time_read'] = i0.Variable<int>(readDuration.value);
     }
     return map;
   }
@@ -259,8 +262,8 @@ class HistoryCompanion extends i0.UpdateCompanion<i1.HistoryData> {
     return (StringBuffer('HistoryCompanion(')
           ..write('id: $id, ')
           ..write('chapterId: $chapterId, ')
-          ..write('lastRead: $lastRead, ')
-          ..write('timeRead: $timeRead')
+          ..write('readAt: $readAt, ')
+          ..write('readDuration: $readDuration')
           ..write(')'))
         .toString();
   }

@@ -1,4 +1,4 @@
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
+import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
 
 class MangaMapper {

@@ -1,4 +1,4 @@
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 
 class GetChaptersByMangaId {

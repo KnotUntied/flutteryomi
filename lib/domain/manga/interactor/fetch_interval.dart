@@ -2,15 +2,16 @@ import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart';
 
 class FetchInterval {
   final GetChaptersByMangaId getChapterByMangaId;
   FetchInterval(this.getChapterByMangaId);
 
-  Future<MangasCompanion?> toMangaUpdateOrNull(
+  Future<MangaUpdate?> toMangaUpdateOrNull(
     Manga manga,
     DateTime dateTime,
     Pair<int, int> window,
@@ -29,7 +30,7 @@ class FetchInterval {
         manga.fetchInterval == interval) {
       return null;
     } else {
-      return MangasCompanion(
+      return MangaUpdate(
         id: Value(manga.id),
         nextUpdate: Value(
           DateTime.fromMillisecondsSinceEpoch(nextUpdate, isUtc: true),
@@ -105,6 +106,7 @@ class FetchInterval {
   int _doubleInterval(int delta, int timeSinceLatest, int doubleWhenOver) {
     if (delta >= maxInterval) return maxInterval;
     int cycle = (timeSinceLatest ~/ delta) + 1;
+    // no tail-call optimization in dart oof
     if (cycle > doubleWhenOver) {
       return _doubleInterval(delta * 2, timeSinceLatest, doubleWhenOver);
     } else {

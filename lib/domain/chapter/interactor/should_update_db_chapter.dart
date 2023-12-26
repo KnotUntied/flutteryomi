@@ -1,4 +1,4 @@
-import 'package:flutteryomi/data/drift/data/chapters.drift.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 
 class ShouldUpdateDbChapter {
   ShouldUpdateDbChapter();

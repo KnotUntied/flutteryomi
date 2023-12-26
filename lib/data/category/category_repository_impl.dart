@@ -1,5 +1,6 @@
 import 'package:flutteryomi/data/database.dart';
-import 'package:flutteryomi/data/drift/data/categories.drift.dart';
+import 'package:flutteryomi/domain/category/model/category.dart';
+import 'package:flutteryomi/domain/category/model/category_update.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
@@ -29,7 +30,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
   @override
   Future<void> insert(Category category) async =>
       await db.into(db.categories).insert(
-            CategoriesCompanion.insert(
+            CategoryUpdate.insert(
               name: category.name,
               sort: category.sort,
               flags: category.flags,
@@ -37,13 +38,13 @@ class CategoryRepositoryImpl implements CategoryRepository {
           );
 
   @override
-  Future<void> updatePartial(CategoriesCompanion update) async =>
+  Future<void> updatePartial(CategoryUpdate update) async =>
       await (db.update(db.categories)
             ..where((c) => c.id.equals(update.id.value)))
           .write(update);
 
   @override
-  Future<void> updatePartialMultiple(List<CategoriesCompanion> updates) async =>
+  Future<void> updatePartialMultiple(List<CategoryUpdate> updates) async =>
       await db.transaction(() async {
         for (var update in updates) {
           await (db.update(db.categories)

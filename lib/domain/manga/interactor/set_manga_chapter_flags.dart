@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 
 class SetMangaChapterFlags {
@@ -10,7 +10,7 @@ class SetMangaChapterFlags {
 
   Future<bool> awaitSetDownloadedFilter(Manga manga, int flag) async =>
       await repository.update(
-        MangasCompanion(
+        MangaUpdate(
           id: Value(manga.id),
           chapterFlags: Value(
             manga.chapterFlags.setFlag(flag, MangaUtils.chapterDownloadedMask),
@@ -20,7 +20,7 @@ class SetMangaChapterFlags {
 
   Future<bool> awaitSetUnreadFilter(Manga manga, int flag) async =>
       await repository.update(
-        MangasCompanion(
+        MangaUpdate(
           id: Value(manga.id),
           chapterFlags: Value(
             manga.chapterFlags.setFlag(flag, MangaUtils.chapterUnreadMask),
@@ -29,7 +29,7 @@ class SetMangaChapterFlags {
       );
 
   Future<bool> awaitSetBookmarkFilter(Manga manga, int flag) async =>
-      await repository.update(MangasCompanion(
+      await repository.update(MangaUpdate(
         id: Value(manga.id),
         chapterFlags: Value(
           manga.chapterFlags.setFlag(flag, MangaUtils.chapterBookmarkedMask),
@@ -37,7 +37,7 @@ class SetMangaChapterFlags {
       ));
 
   Future<bool> awaitSetDisplayMode(Manga manga, int flag) async =>
-      await repository.update(MangasCompanion(
+      await repository.update(MangaUpdate(
         id: Value(manga.id),
         chapterFlags: Value(
           manga.chapterFlags.setFlag(flag, MangaUtils.chapterDisplayMask),
@@ -57,7 +57,7 @@ class SetMangaChapterFlags {
           .setFlag(MangaUtils.chapterSortAsc, MangaUtils.chapterSortDirMask);
     }
     return await repository.update(
-      MangasCompanion(id: Value(manga.id), chapterFlags: Value(newFlags)),
+      MangaUpdate(id: Value(manga.id), chapterFlags: Value(newFlags)),
     );
   }
 
@@ -71,7 +71,7 @@ class SetMangaChapterFlags {
     required int displayMode,
   }) async =>
       await repository.update(
-        MangasCompanion(
+        MangaUpdate(
           id: Value(mangaId),
           chapterFlags: Value(
             0
