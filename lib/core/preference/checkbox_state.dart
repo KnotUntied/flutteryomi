@@ -1,61 +1,52 @@
-abstract class CheckboxState<T> {
-  T value;
-  CheckboxState(this.value);
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'checkbox_state.freezed.dart';
+
+sealed class CheckboxState<T> {
+  final T value;
+  const CheckboxState(this.value);
   CheckboxState<T> next();
 }
 
-class CheckboxRegularState<T> extends CheckboxState<T> {
-  CheckboxRegularState(super.value);
+@freezed
+sealed class CheckboxRegularState<T>
+    with _$CheckboxRegularState<T>
+    implements CheckboxState<T> {
+  const CheckboxRegularState._();
+  const factory CheckboxRegularState.checked(T value) =
+      CheckboxRegularStateChecked;
+  const factory CheckboxRegularState.none(T value) = CheckboxRegularStateNone;
 
   bool get isChecked => this is CheckboxRegularStateChecked<T>;
 
   @override
-  CheckboxState<T> next() {
-    if (this is CheckboxRegularStateChecked<T>) {
-      return CheckboxRegularStateNone<T>(value);
-    } else if (this is CheckboxRegularStateNone<T>) {
-      return CheckboxRegularStateChecked<T>(value);
-    } else {
-      throw Exception("Invalid state");
-    }
-  }
+  CheckboxState<T> next() => switch (this) {
+        CheckboxRegularStateChecked<T>() => CheckboxRegularStateNone<T>(value),
+        CheckboxRegularStateNone<T>() => CheckboxRegularStateChecked<T>(value),
+      };
 }
 
-class CheckboxRegularStateChecked<T> extends CheckboxRegularState<T> {
-  CheckboxRegularStateChecked(super.value);
-}
-
-class CheckboxRegularStateNone<T> extends CheckboxRegularState<T> {
-  CheckboxRegularStateNone(super.value);
-}
-
-class CheckboxTriState<T> extends CheckboxState<T> {
-  CheckboxTriState(super.value);
+@freezed
+sealed class CheckboxTriState<T>
+    with _$CheckboxTriState<T>
+    implements CheckboxState<T> {
+  const CheckboxTriState._();
+  const factory CheckboxTriState.include(T value) = CheckboxTriStateInclude;
+  const factory CheckboxTriState.exclude(T value) = CheckboxTriStateExclude;
+  const factory CheckboxTriState.none(T value) = CheckboxTriStateNone;
 
   @override
-  CheckboxState<T> next() {
-    if (this is CheckboxTriStateExclude<T>) {
-      return CheckboxTriStateNone<T>(value);
-    } else if (this is CheckboxTriStateInclude<T>) {
-      return CheckboxTriStateExclude<T>(value);
-    } else if (this is CheckboxTriStateNone<T>) {
-      return CheckboxTriStateInclude<T>(value);
-    } else {
-      throw Exception("Invalid state");
-    }
-  }
-}
+  CheckboxState<T> next() => switch (this) {
+        CheckboxTriStateExclude<T>() => CheckboxTriStateNone<T>(value),
+        CheckboxTriStateInclude<T>() => CheckboxTriStateExclude<T>(value),
+        CheckboxTriStateNone<T>() => CheckboxTriStateInclude<T>(value),
+      };
 
-class CheckboxTriStateInclude<T> extends CheckboxTriState<T> {
-  CheckboxTriStateInclude(super.value);
-}
-
-class CheckboxTriStateExclude<T> extends CheckboxTriState<T> {
-  CheckboxTriStateExclude(super.value);
-}
-
-class CheckboxTriStateNone<T> extends CheckboxTriState<T> {
-  CheckboxTriStateNone(super.value);
+  bool? asBool() => switch (this) {
+        CheckboxTriStateExclude<T>() => null,
+        CheckboxTriStateInclude<T>() => true,
+        CheckboxTriStateNone<T>() => false,
+      };
 }
 
 extension GenericAsCheckboxState<T> on T {
@@ -69,5 +60,7 @@ extension GenericMapAsCheckboxState<T> on Iterable<T> {
   Iterable<CheckboxRegularState<T>> mapAsCheckboxState(
     bool Function(T) condition,
   ) =>
-      map((e) => e.asCheckboxState(condition));
+      map(
+        (it) => it.asCheckboxState(condition),
+      );
 }

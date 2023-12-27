@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/core/preference/checkbox_state.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
+import 'package:flutteryomi/presentation/category/category_extensions.dart';
 
 class CategoryCreateDialog extends StatefulWidget {
   const CategoryCreateDialog({
@@ -72,8 +74,6 @@ class _CategoryCreateDialogState extends State<CategoryCreateDialog> {
   }
 }
 
-
-
 class CategoryRenameDialog extends StatefulWidget {
   const CategoryRenameDialog({
     super.key,
@@ -101,7 +101,7 @@ class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _nameController = TextEditingController(text: name);
   }
 
   @override
@@ -212,7 +212,110 @@ class CategorySortAlphabeticallyDialog extends StatelessWidget {
   }
 }
 
-// TODO: ChangeCategoryDialog
+// Might be better to ditch CheckboxState
+class ChangeCategoryDialog extends StatefulWidget {
+  const ChangeCategoryDialog({
+    super.key,
+    required this.initialSelection,
+    required this.onEditCategories,
+    required this.onConfirm,
+  });
+
+  final List<CheckboxState<Category>> initialSelection;
+  final VoidCallback onEditCategories;
+  final Function(List<int>, List<int>) onConfirm;
+
+  @override
+  State<ChangeCategoryDialog> createState() => _ChangeCategoryDialogState();
+}
+
+class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
+  late List<CheckboxState<Category>> selection;
+
+  @override
+  void initState() {
+    super.initState();
+    selection = widget.initialSelection;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context);
+    if (widget.initialSelection.isEmpty) {
+      return AlertDialog.adaptive(
+        title: Text(lang.action_move_category),
+        content: Text(lang.information_empty_category_dialog),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              widget.onEditCategories();
+            },
+            child: Text(lang.action_edit_categories),
+          ),
+        ],
+      );
+    }
+    return AlertDialog.adaptive(
+      title: Text(lang.action_move_category),
+      content: ListView.builder(
+        itemCount: selection.length,
+        itemBuilder: (BuildContext context, int index) {
+          final checkbox = selection[index];
+          bool? value;
+          if (checkbox is CheckboxTriState) {
+            value = (checkbox as CheckboxTriState).asBool();
+          } else if (checkbox is CheckboxRegularState) {
+            value = (checkbox as CheckboxRegularState).isChecked;
+          }
+          return CheckboxListTile(
+            title: Text(checkbox.value.visualName(context)),
+            value: value,
+            onChanged: (bool? _) => setState(() {
+              selection = selection
+                  .map((it) => it == checkbox ? checkbox.next() : it)
+                  .toList();
+            }),
+          );
+        },
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onEditCategories();
+          },
+          child: Text(lang.action_edit),
+        ),
+        const Spacer(),
+        TextButton(
+          child: Text(lang.action_cancel),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onConfirm(
+              selection
+                  .where((it) =>
+                      it is CheckboxRegularStateChecked ||
+                      it is CheckboxTriStateInclude)
+                  .map((it) => it.value.id)
+                  .toList(),
+              selection
+                  .where((it) =>
+                      it is CheckboxRegularStateNone ||
+                      it is CheckboxTriStateNone)
+                  .map((it) => it.value.id)
+                  .toList(),
+            );
+          },
+          child: Text(lang.action_ok),
+        ),
+      ],
+    );
+  }
+}
 
 extension _CategoryListExtensions on List<Category> {
   bool anyWithName(String name) => any((it) => name == it.name);

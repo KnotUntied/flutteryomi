@@ -5,10 +5,8 @@ enum TriState {
   /// Enabled with "is" filter
   enabledIs,
   /// Enabled with "not" filter
-  enabledNot,
-}
+  enabledNot;
 
-extension TriStateNext on TriState {
   TriState next() => switch (this) {
     TriState.disabled => TriState.enabledIs,
     TriState.enabledIs => TriState.enabledNot,
