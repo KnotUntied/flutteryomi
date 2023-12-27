@@ -19,6 +19,7 @@ class PageIndicatorText extends StatelessWidget {
         Text(
           text,
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.bold,
             foreground: Paint()
               ..style = PaintingStyle.stroke
               ..strokeWidth = 4.0

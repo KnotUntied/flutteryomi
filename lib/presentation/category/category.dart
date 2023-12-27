@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/domain/category/model/category.dart';
+import 'package:flutteryomi/presentation/category/components/category_list_item.dart';
+import 'package:flutteryomi/presentation/components/app_bar.dart';
+import 'package:flutteryomi/presentation/components/material/constants.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
+
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
+  const CategoryScreen({
+    super.key,
+    required this.state,
+    required this.onClickCreate,
+    required this.onClickSortAlphabetically,
+    required this.onClickRename,
+    required this.onClickDelete,
+    required this.onClickMoveUp,
+    required this.onClickMoveDown,
+  });
+
+  //final CategoryScreenState.Success state;
+  final List<Category> state;
+  final VoidCallback onClickCreate;
+  final VoidCallback onClickSortAlphabetically;
+  final ValueChanged<Category> onClickRename;
+  final ValueChanged<Category> onClickDelete;
+  final ValueChanged<Category> onClickMoveUp;
+  final ValueChanged<Category> onClickMoveDown;
 
   @override
   Widget build(BuildContext context) {
@@ -10,229 +34,75 @@ class CategoryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(lang.action_edit_categories),
-      ),
-      body: ListView(
-        children: const <CategoryListItem>[
-          CategoryListItem("Curated"),
-          CategoryListItem("Example"),
+        actions: <Widget>[
+          AppBarAction(
+            title: lang.action_sort,
+            iconData: Icons.sort_by_alpha_outlined,
+            onClick: onClickSortAlphabetically,
+          ),
         ],
       ),
+      body: state.isEmpty
+          ? EmptyScreen(message: lang.information_empty_category)
+          : Padding(
+              padding: topSmallPaddingValues.add(
+                const EdgeInsets.symmetric(horizontal: MaterialPadding.medium),
+              ),
+              child: _CategoryContent(
+                // TODO: Use state
+                //categories: state.categories,
+                categories: state,
+                onClickRename: onClickRename,
+                onClickDelete: onClickDelete,
+                onMoveUp: onClickMoveUp,
+                onMoveDown: onClickMoveDown,
+              ),
+            ),
+      // TODO: Create or wait for dynamically extending FAB
       floatingActionButton: FloatingActionButton.extended(
         label: Text(lang.action_add),
         icon: const Icon(Icons.add),
-        onPressed: () => _showCategoryAddDialog(context),
+        onPressed: onClickCreate,
       ),
-    );
-  }
-
-  Future<void> _showCategoryAddDialog(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const CategoryAddDialog();
-      },
-    );
-  }
-
-  Future<void> _showCategoryRenameDialog(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const CategoryRenameDialog();
-      },
     );
   }
 }
 
-class CategoryListItem extends StatelessWidget {
-  const CategoryListItem(this.label, {super.key});
+class _CategoryContent extends StatelessWidget {
+  const _CategoryContent({
+    super.key,
+    required this.categories,
+    required this.onClickRename,
+    required this.onClickDelete,
+    required this.onMoveUp,
+    required this.onMoveDown,
+  });
 
-  final String label;
+  final List<Category> categories;
+  final ValueChanged<Category> onClickRename;
+  final ValueChanged<Category> onClickDelete;
+  final ValueChanged<Category> onMoveUp;
+  final ValueChanged<Category> onMoveDown;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Card(
-        //child: Padding(
-        //  padding: const EdgeInsets.all(16),
-        //  child: Column(
-        //    children: <Widget>[
-        //      ListTile(
-        //        leading: const Icon(Icons.label_outlined),
-        //        title: Text(label, style: Theme.of(context).textTheme.titleSmall),
-        //      ),
-        //      Row(
-        //        children: <Widget>[
-        //          IconButton(
-        //            icon: const Icon(Icons.arrow_drop_up),
-        //            onPressed: () {  },
-        //          ),
-        //          IconButton(
-        //            icon: const Icon(Icons.arrow_drop_down),
-        //            onPressed: () {  },
-        //          ),
-        //          const Spacer(),
-        //          IconButton(
-        //            icon: const Icon(Icons.edit_outlined),
-        //            onPressed: () {  },
-        //          ),
-        //          IconButton(
-        //            icon: const Icon(Icons.delete_outlined),
-        //            onPressed: () {  },
-        //          ),
-        //        ],
-        //      ),
-        //    ],
-        //  ),
-        //),
-        child: Column(
-          children: <Widget>[
-            //ListTile(
-            //  leading: const Icon(Icons.label_outlined),
-            //  title: Text(label, style: Theme.of(context).textTheme.titleSmall),
-            //),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-              child: Row(children: <Widget>[
-                const Icon(Icons.label_outlined),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Text(label,
-                      style: Theme.of(context).textTheme.titleSmall),
-                ),
-              ]),
-            ),
-            Row(children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.arrow_drop_up),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.arrow_drop_down),
-                onPressed: () {},
-              ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete_outlined),
-                onPressed: () {},
-              ),
-            ]),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CategoryAddDialog extends StatefulWidget {
-  const CategoryAddDialog({super.key});
-
-  @override
-  State<CategoryAddDialog> createState() => _CategoryAddDialogState();
-}
-
-class _CategoryAddDialogState extends State<CategoryAddDialog> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return AlertDialog.adaptive(
-      title: Text(lang.action_add_category),
-      content: TextField(
-        autofocus: true,
-        controller: _controller,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: lang.name, // *required
-          labelText: lang.name,
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(lang.action_cancel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text(lang.action_add),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class CategoryRenameDialog extends StatefulWidget {
-  const CategoryRenameDialog({super.key});
-
-  @override
-  State<CategoryRenameDialog> createState() => _CategoryRenameDialogState();
-}
-
-class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return AlertDialog.adaptive(
-      title: Text(lang.action_rename_category),
-      content: TextField(
-        autofocus: true,
-        controller: _controller,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: lang.name, // *required
-          labelText: lang.name,
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(lang.action_cancel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text(lang.action_add),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
+    return ListView.builder(
+        //padding: const EdgeInsets.all(8),
+        //padding: paddingValues,
+        // TODO: Animate on move
+        itemCount: categories.length,
+        itemBuilder: (BuildContext context, int index) {
+          final category = categories[index];
+          return CategoryListItem(
+            key: Key('category-${category.id}'),
+            category: category,
+            canMoveUp: index != 0,
+            canMoveDown: index != categories.length - 1,
+            onMoveUp: onMoveUp,
+            onMoveDown: onMoveDown,
+            onRename: () => onClickRename(category),
+            onDelete: () => onClickDelete(category),
+          );
+        });
   }
 }
