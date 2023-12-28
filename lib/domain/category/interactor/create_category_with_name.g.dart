@@ -7,7 +7,7 @@ part of 'create_category_with_name.dart';
 // **************************************************************************
 
 String _$createCategoryWithNameHash() =>
-    r'782a5a8bc3f25b430c9f8bcc8cf1b83b90156f20';
+    r'1848b8265ae7c36818f9c01060829e677f3ef8e6';
 
 /// See also [createCategoryWithName].
 @ProviderFor(createCategoryWithName)

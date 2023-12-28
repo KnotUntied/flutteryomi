@@ -1,16 +1,20 @@
-import 'package:flutteryomi/data/drift/data/categories.drift.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/library/model/flag.dart';
 
-class LibrarySort implements FlagWithMask {
+part 'library_sort_mode.freezed.dart';
+
+@freezed
+class LibrarySort with _$LibrarySort implements FlagWithMask {
   @override
   int get flag => type + direction;
   @override
   int get mask => type.mask | direction.mask;
   bool get isAscending => direction == Direction.ascending;
-  final Type type;
-  final Direction direction;
 
-  const LibrarySort(this.type, this.direction);
+  const LibrarySort._();
+  const factory LibrarySort(Type type, Direction direction) = _LibrarySort;
 
   static const default_ = LibrarySort(
     Type.alphabetical,
@@ -63,35 +67,25 @@ class LibrarySort implements FlagWithMask {
   }
 
   String serialize() {
-    String serializedType;
-    if (type == Type.alphabetical) {
-      serializedType = "ALPHABETICAL";
-    } else if (type == Type.alphabetical) {
-      serializedType = "LAST_READ";
-    } else if (type == Type.alphabetical) {
-      serializedType = "LAST_MANGA_UPDATE";
-    } else if (type == Type.alphabetical) {
-      serializedType = "UNREAD_COUNT";
-    } else if (type == Type.alphabetical) {
-      serializedType = "TOTAL_CHAPTERS";
-    } else if (type == Type.alphabetical) {
-      serializedType = "LATEST_CHAPTER";
-    } else if (type == Type.alphabetical) {
-      serializedType = "CHAPTER_FETCH_DATE";
-    } else if (type == Type.alphabetical) {
-      serializedType = "DATE_ADDED";
-    } else if (type == Type.alphabetical) {
-      serializedType = "TRACKER_MEAN";
-    } else {
-      serializedType = "ALPHABETICAL";
-    }
+    String serializedType = switch (type) {
+      _Alphabetical() => "ALPHABETICAL",
+      _LastRead() => "LAST_READ",
+      _LastUpdate() => "LAST_MANGA_UPDATE",
+      _UnreadCount() => "UNREAD_COUNT",
+      _TotalChapters() => "TOTAL_CHAPTERS",
+      _LatestChapter() => "LATEST_CHAPTER",
+      _ChapterFetchDate() => "CHAPTER_FETCH_DATE",
+      _DateAdded() => "DATE_ADDED",
+      _TrackerMean() => "TRACKER_MEAN",
+      //_ => "ALPHABETICAL",
+    };
     String serializedDirection =
         (direction == Direction.ascending) ? "ASCENDING" : "DESCENDING";
     return "$serializedType,$serializedDirection";
   }
 }
 
-abstract class Type implements FlagWithMask {
+sealed class Type implements FlagWithMask {
   @override
   final int flag;
   @override
@@ -154,7 +148,7 @@ class _TrackerMean extends Type {
 
 const defaultType = Type.alphabetical;
 
-abstract class Direction implements FlagWithMask {
+sealed class Direction implements FlagWithMask {
   @override
   final int flag;
   @override

@@ -9,6 +9,7 @@ import 'package:flutteryomi/presentation/category/components/category_list_item.
 import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/components/material/constants.dart';
 import 'package:flutteryomi/presentation/screens/empty_screen.dart';
+import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 
 class CategoryScreen extends ConsumerWidget {
   const CategoryScreen({super.key});
@@ -16,14 +17,15 @@ class CategoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenModel = ref.watch(categoryScreenModelProvider.notifier);
-    final state = ref.watch(categoryScreenModelProvider).value!;
+    final state = ref.watch(categoryScreenModelProvider);
+    if (state is AsyncLoading) return const LoadingScreen();
     return CategoryScreenContent(
-      state: state,
+      state: state.value!,
       onClickCreate: () => showDialog(
         context: context,
         builder: (BuildContext context) => CategoryCreateDialog(
           onCreate: screenModel.createCategory,
-          categories: state,
+          categories: state.value!,
         ),
       ),
       onClickSortAlphabetically: () => showDialog(
@@ -36,7 +38,7 @@ class CategoryScreen extends ConsumerWidget {
         context: context,
         builder: (BuildContext context) => CategoryCreateDialog(
           onCreate: screenModel.createCategory,
-          categories: state,
+          categories: state.value!,
         ),
         //builder: (BuildContext context) => CategoryRenameDialog(
         //  onRename: (String name) => screenModel.renameCategory(category, name),
@@ -48,7 +50,7 @@ class CategoryScreen extends ConsumerWidget {
         context: context,
         builder: (BuildContext context) => CategoryCreateDialog(
           onCreate: screenModel.createCategory,
-          categories: state,
+          categories: state.value!,
         ),
       ),
       onClickMoveUp: screenModel.moveUp,

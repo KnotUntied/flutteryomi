@@ -28,39 +28,43 @@ class EmptyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            _errorFaces[Random().nextInt(_errorFaces.length)],
-            style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 24.0),
-            child: Text(
-              message,
-              style: Theme.of(context).textTheme.bodyMedium,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              _errorFaces[Random().nextInt(_errorFaces.length)],
+              style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
             ),
-          ),
-          if (actions?.isNotEmpty ?? false)
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Row(
-                children: [
-                  for (var action in actions!)
-                    ActionButton(
-                      title: action.text,
-                      icon: action.icon,
-                      onClick: action.onClick,
-                    )
-                ],
+            Baseline(
+              baseline: 24.0,
+              baselineType: TextBaseline.alphabetic,
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
-        ],
+            if (actions?.isNotEmpty ?? false)
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Row(
+                  children: [
+                    for (final action in actions!)
+                      ActionButton(
+                        title: action.text,
+                        icon: action.icon,
+                        onClick: action.onClick,
+                      )
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

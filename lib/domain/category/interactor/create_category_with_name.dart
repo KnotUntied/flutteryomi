@@ -2,6 +2,7 @@ import 'package:dartx/dartx.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 import 'package:flutteryomi/domain/library/model/library_sort_mode.dart';
@@ -20,6 +21,7 @@ class CreateCategoryWithName {
   });
 
   int get _initialFlags {
+    // TODO: Check library preferences
     //final sort = preferences.sortingMode().get();
     //return sort.type.flag | sort.direction.flag;
     return LibrarySort.default_.flag;
@@ -47,7 +49,7 @@ class CreateCategoryWithName {
 @riverpod
 CreateCategoryWithName createCategoryWithName(CreateCategoryWithNameRef ref) =>
     CreateCategoryWithName(
-      ref.read(categoryRepositoryProvider),
+      repository: ref.read(categoryRepositoryProvider),
       //ref.read(libraryPreferencesProvider),
-      //ref.read(categoryRepositoryProvider),
+      logger: ref.read(loggerProvider),
     );

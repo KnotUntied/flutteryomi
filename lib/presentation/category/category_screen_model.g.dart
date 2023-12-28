@@ -7,11 +7,11 @@ part of 'category_screen_model.dart';
 // **************************************************************************
 
 String _$categoryScreenModelHash() =>
-    r'6399f89d07fedd852b08c53003cb47a6cbb1794c';
+    r'c857f07a39452684072a813d630249d68af1bda2';
 
 /// See also [CategoryScreenModel].
 @ProviderFor(CategoryScreenModel)
-final categoryScreenModelProvider = AutoDisposeStreamNotifierProvider<
+final categoryScreenModelProvider = AutoDisposeAsyncNotifierProvider<
     CategoryScreenModel, List<Category>>.internal(
   CategoryScreenModel.new,
   name: r'categoryScreenModelProvider',
@@ -22,6 +22,6 @@ final categoryScreenModelProvider = AutoDisposeStreamNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$CategoryScreenModel = AutoDisposeStreamNotifier<List<Category>>;
+typedef _$CategoryScreenModel = AutoDisposeAsyncNotifier<List<Category>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
