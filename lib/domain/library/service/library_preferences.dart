@@ -1,7 +1,8 @@
+//import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
 import 'package:flutteryomi/core/preference/tri_state.dart';
-import 'package:flutteryomi/data/drift/data/mangas.drift.dart';
 import 'package:flutteryomi/domain/library/model/library_display_mode.dart';
 import 'package:flutteryomi/domain/library/model/library_sort_mode.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
@@ -294,3 +295,6 @@ enum ChapterSwipeAction {
   download,
   disabled,
 }
+
+//@riverpod
+//LibraryPreferences libraryPreferences(LibraryPreferencesRef ref) => LibraryPreferences();

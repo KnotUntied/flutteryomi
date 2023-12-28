@@ -3,6 +3,7 @@ import 'mangas_categories.drift';
 CREATE TABLE categories(
     _id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
+    -- Cannot alias as 'order' due to drift limitation
     sort INTEGER NOT NULL,
     flags INTEGER NOT NULL
 ) AS Category;

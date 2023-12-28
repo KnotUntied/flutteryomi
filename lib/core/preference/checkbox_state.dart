@@ -60,7 +60,5 @@ extension GenericMapAsCheckboxState<T> on Iterable<T> {
   Iterable<CheckboxRegularState<T>> mapAsCheckboxState(
     bool Function(T) condition,
   ) =>
-      map(
-        (it) => it.asCheckboxState(condition),
-      );
+      map((it) => it.asCheckboxState(condition));
 }

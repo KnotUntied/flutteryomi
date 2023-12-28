@@ -81,10 +81,8 @@ class MangaRepositoryImpl implements MangaRepository {
         mangaId: mangaId,
       );
       for (final categoryId in categoryIds) {
-        await db
-            .into(
-              db.mangasCategories,
-            )
+        await db //
+            .into(db.mangasCategories)
             .insert(
               MangasCategoriesCompanion.insert(
                 mangaId: mangaId,
@@ -99,10 +97,8 @@ class MangaRepositoryImpl implements MangaRepository {
   Future<int?> insert(Manga manga) async {
     int? lastInsertedRowId;
     await db.transaction(() async {
-      Manga? lastInsertedRow = await db
-          .into(
-            db.mangas,
-          )
+      Manga? lastInsertedRow = await db //
+          .into(db.mangas)
           .insertReturningOrNull(
             MangaUpdate.insert(
               source: manga.source,
@@ -164,6 +160,6 @@ class MangaRepositoryImpl implements MangaRepository {
 @riverpod
 MangaRepository mangaRepositoryImpl(MangaRepositoryImplRef ref) =>
     MangaRepositoryImpl(
-      db: ref.read(Database.provider),
+      db: ref.read(databaseProvider),
       logger: ref.read(loggerProvider),
     );

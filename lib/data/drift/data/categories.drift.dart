@@ -101,6 +101,8 @@ class Categories extends i0.Table with i0.TableInfo<Categories, i1.Category> {
 class Category extends i0.DataClass implements i0.Insertable<i1.Category> {
   final int id;
   final String name;
+
+  /// Cannot alias as 'order' due to drift limitation
   final int sort;
   final int flags;
   const Category(

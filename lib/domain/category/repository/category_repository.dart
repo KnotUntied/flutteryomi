@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/category/model/category_update.dart';
+
+part 'category_repository.g.dart';
 
 abstract interface class CategoryRepository {
   Future<Category?> get(int id);
@@ -15,4 +19,10 @@ abstract interface class CategoryRepository {
   Future<void> updatePartialMultiple(List<CategoryUpdate> updates);
   Future<void> updateAllFlags(int? flags);
   Future<void> delete(int categoryId);
+}
+
+@riverpod
+CategoryRepository categoryRepository(CategoryRepositoryRef ref) {
+  // * Override this in the main method
+  throw UnimplementedError();
 }

@@ -1,14 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutteryomi/domain/category/model/category.dart';
+import 'package:flutteryomi/presentation/category/category_screen_model.dart';
+import 'package:flutteryomi/presentation/category/components/category_dialogs.dart';
 import 'package:flutteryomi/presentation/category/components/category_list_item.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/components/material/constants.dart';
 import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({
+class CategoryScreen extends ConsumerWidget {
+  const CategoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenModel = ref.watch(categoryScreenModelProvider.notifier);
+    final state = ref.watch(categoryScreenModelProvider).value!;
+    return CategoryScreenContent(
+      state: state,
+      onClickCreate: () => showDialog(
+        context: context,
+        builder: (BuildContext context) => CategoryCreateDialog(
+          onCreate: screenModel.createCategory,
+          categories: state,
+        ),
+      ),
+      onClickSortAlphabetically: () => showDialog(
+        context: context,
+        builder: (BuildContext context) => CategorySortAlphabeticallyDialog(
+          onSort: screenModel.sortAlphabetically,
+        ),
+      ),
+      onClickRename: (Category category) => showDialog(
+        context: context,
+        builder: (BuildContext context) => CategoryCreateDialog(
+          onCreate: screenModel.createCategory,
+          categories: state,
+        ),
+        //builder: (BuildContext context) => CategoryRenameDialog(
+        //  onRename: (String name) => screenModel.renameCategory(category, name),
+        //  categories: [],
+        //  category: null,
+        //),
+      ),
+      onClickDelete: (Category category) => showDialog(
+        context: context,
+        builder: (BuildContext context) => CategoryCreateDialog(
+          onCreate: screenModel.createCategory,
+          categories: state,
+        ),
+      ),
+      onClickMoveUp: screenModel.moveUp,
+      onClickMoveDown: screenModel.moveDown,
+    );
+  }
+}
+
+class CategoryScreenContent extends StatelessWidget {
+  const CategoryScreenContent({
     super.key,
     required this.state,
     required this.onClickCreate,
@@ -19,7 +69,6 @@ class CategoryScreen extends StatelessWidget {
     required this.onClickMoveDown,
   });
 
-  //final CategoryScreenState.Success state;
   final List<Category> state;
   final VoidCallback onClickCreate;
   final VoidCallback onClickSortAlphabetically;
@@ -50,6 +99,7 @@ class CategoryScreen extends StatelessWidget {
               ),
               child: _CategoryContent(
                 // TODO: Use state
+                // Or not, maybe dialog is optional
                 //categories: state.categories,
                 categories: state,
                 onClickRename: onClickRename,
@@ -87,22 +137,21 @@ class _CategoryContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        //padding: const EdgeInsets.all(8),
-        //padding: paddingValues,
-        // TODO: Animate on move
-        itemCount: categories.length,
-        itemBuilder: (BuildContext context, int index) {
-          final category = categories[index];
-          return CategoryListItem(
-            key: Key('category-${category.id}'),
-            category: category,
-            canMoveUp: index != 0,
-            canMoveDown: index != categories.length - 1,
-            onMoveUp: onMoveUp,
-            onMoveDown: onMoveDown,
-            onRename: () => onClickRename(category),
-            onDelete: () => onClickDelete(category),
-          );
-        });
+      // TODO: Animate on move
+      itemCount: categories.length,
+      itemBuilder: (BuildContext context, int index) {
+        final category = categories[index];
+        return CategoryListItem(
+          key: Key('category-${category.id}'),
+          category: category,
+          canMoveUp: index != 0,
+          canMoveDown: index != categories.length - 1,
+          onMoveUp: onMoveUp,
+          onMoveDown: onMoveDown,
+          onRename: () => onClickRename(category),
+          onDelete: () => onClickDelete(category),
+        );
+      },
+    );
   }
 }

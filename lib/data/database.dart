@@ -4,10 +4,12 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:riverpod/riverpod.dart';
 
 import 'package:flutteryomi/data/database.drift.dart';
 import 'package:flutteryomi/data/drift/data/categories.drift.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'database.g.dart';
 
 @DriftDatabase(
   include: {
@@ -49,13 +51,14 @@ class Database extends $Database {
       },
     );
   }
+}
 
-  static final StateProvider<Database> provider = StateProvider((ref) {
-    final database = Database();
-    ref.onDispose(database.close);
+@riverpod
+Database database(DatabaseRef ref) {
+  final db = Database();
+  ref.onDispose(db.close);
 
-    return database;
-  });
+  return db;
 }
 
 LazyDatabase _openConnection() {

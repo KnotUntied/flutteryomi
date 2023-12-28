@@ -16,22 +16,26 @@ class ChapterRepositoryImpl implements ChapterRepository {
     try {
       List<Chapter> returnedChapters = [];
       await db.transaction(() async {
-        for (var chapter in chapters) {
-          returnedChapters.add(await db
-              .into(db.chapters)
-              .insertReturning(ChapterUpdate.insert(
-                mangaId: chapter.mangaId,
-                url: chapter.url,
-                name: chapter.name,
-                scanlator: Value(chapter.scanlator),
-                read: chapter.read,
-                bookmark: chapter.bookmark,
-                lastPageRead: chapter.lastPageRead,
-                chapterNumber: chapter.chapterNumber,
-                sourceOrder: chapter.sourceOrder,
-                dateFetch: chapter.dateFetch,
-                dateUpload: chapter.dateUpload,
-              )));
+        for (final chapter in chapters) {
+          returnedChapters.add(
+            await db //
+                .into(db.chapters)
+                .insertReturning(
+                  ChapterUpdate.insert(
+                    mangaId: chapter.mangaId,
+                    url: chapter.url,
+                    name: chapter.name,
+                    scanlator: Value(chapter.scanlator),
+                    read: chapter.read,
+                    bookmark: chapter.bookmark,
+                    lastPageRead: chapter.lastPageRead,
+                    chapterNumber: chapter.chapterNumber,
+                    sourceOrder: chapter.sourceOrder,
+                    dateFetch: chapter.dateFetch,
+                    dateUpload: chapter.dateUpload,
+                  ),
+                ),
+          );
         }
       });
       return returnedChapters;
@@ -67,11 +71,13 @@ class ChapterRepositoryImpl implements ChapterRepository {
   }
 
   @override
-  Future<List<Chapter>> getChapterByMangaId(
-          int mangaId, {bool applyScanlatorFilter = false}) async =>
+  Future<List<Chapter>> getChapterByMangaId(int mangaId,
+          {bool applyScanlatorFilter = false}) async =>
       await db.chaptersDrift
           .getChaptersByMangaId(
-              mangaId: mangaId, applyScanlatorFilter: applyScanlatorFilter)
+            mangaId: mangaId,
+            applyScanlatorFilter: applyScanlatorFilter,
+          )
           .get();
 
   @override
@@ -95,11 +101,13 @@ class ChapterRepositoryImpl implements ChapterRepository {
       await db.chaptersDrift.getChapterById(id: id).getSingleOrNull();
 
   @override
-  Stream<List<Chapter>> getChapterByMangaIdAsStream(
-          int mangaId, {bool applyScanlatorFilter = false}) =>
+  Stream<List<Chapter>> getChapterByMangaIdAsStream(int mangaId,
+          {bool applyScanlatorFilter = false}) =>
       db.chaptersDrift
           .getChaptersByMangaId(
-              mangaId: mangaId, applyScanlatorFilter: applyScanlatorFilter)
+            mangaId: mangaId,
+            applyScanlatorFilter: applyScanlatorFilter,
+          )
           .watch();
 
   @override

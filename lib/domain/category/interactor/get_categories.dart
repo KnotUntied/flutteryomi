@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
+
+part 'get_categories.g.dart';
 
 class GetCategories {
   final CategoryRepository repository;
@@ -14,3 +18,7 @@ class GetCategories {
       ? await repository.getCategoriesByMangaId(mangaId)
       : await repository.getAll();
 }
+
+@riverpod
+GetCategories getCategories(GetCategoriesRef ref) =>
+    GetCategories(ref.read(categoryRepositoryProvider));

@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'manga_repository_impl.dart';
+part of 'create_category_with_name.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mangaRepositoryImplHash() =>
-    r'960f19f8588a8246e5872beaec21b97f8e3f31f8';
+String _$createCategoryWithNameHash() =>
+    r'782a5a8bc3f25b430c9f8bcc8cf1b83b90156f20';
 
-/// See also [mangaRepositoryImpl].
-@ProviderFor(mangaRepositoryImpl)
-final mangaRepositoryImplProvider =
-    AutoDisposeProvider<MangaRepository>.internal(
-  mangaRepositoryImpl,
-  name: r'mangaRepositoryImplProvider',
+/// See also [createCategoryWithName].
+@ProviderFor(createCategoryWithName)
+final createCategoryWithNameProvider =
+    AutoDisposeProvider<CreateCategoryWithName>.internal(
+  createCategoryWithName,
+  name: r'createCategoryWithNameProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$mangaRepositoryImplHash,
+      : _$createCategoryWithNameHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef MangaRepositoryImplRef = AutoDisposeProviderRef<MangaRepository>;
+typedef CreateCategoryWithNameRef
+    = AutoDisposeProviderRef<CreateCategoryWithName>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
