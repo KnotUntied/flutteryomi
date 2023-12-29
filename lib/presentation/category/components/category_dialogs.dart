@@ -8,12 +8,10 @@ import 'package:flutteryomi/presentation/category/category_extensions.dart';
 class CategoryCreateDialog extends StatefulWidget {
   const CategoryCreateDialog({
     super.key,
-    //required this.onDismissRequest,
     required this.onCreate,
     required this.categories,
   });
 
-  //final VoidCallback onDismissRequest;
   final ValueChanged<String> onCreate;
   final List<Category> categories;
 
@@ -22,15 +20,7 @@ class CategoryCreateDialog extends StatefulWidget {
 }
 
 class _CategoryCreateDialogState extends State<CategoryCreateDialog> {
-  late TextEditingController _nameController;
-  String get name => _nameController.text;
-  bool get nameAlreadyExists => widget.categories.anyWithName(name);
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-  }
+  final _nameController = TextEditingController();
 
   @override
   void dispose() {
@@ -40,36 +30,43 @@ class _CategoryCreateDialogState extends State<CategoryCreateDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return AlertDialog.adaptive(
-      title: Text(lang.action_add_category),
-      content: TextField(
-        autofocus: true,
-        controller: _nameController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          errorText: (name.isNotEmpty && nameAlreadyExists)
-              ? lang.error_category_exists
-              : null,
-          helperText: lang.information_required_plain,
-          labelText: lang.name,
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        TextButton(
-          onPressed: name.isNotEmpty && !nameAlreadyExists
-              ? () {
-                  Navigator.of(context).pop();
-                  widget.onCreate(name);
-                }
-              : null,
-          child: Text(lang.action_add),
-        ),
-      ],
+    return ValueListenableBuilder(
+      valueListenable: _nameController,
+      builder: (context, TextEditingValue value, __) {
+        final lang = AppLocalizations.of(context);
+        final name = _nameController.text;
+        final nameAlreadyExists = widget.categories.anyWithName(name);
+        return AlertDialog.adaptive(
+          title: Text(lang.action_add_category),
+          content: TextField(
+            autofocus: true,
+            controller: _nameController,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              errorText: (name.isNotEmpty && nameAlreadyExists)
+                  ? lang.error_category_exists
+                  : null,
+              helperText: lang.information_required_plain,
+              labelText: lang.name,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(lang.action_cancel),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              onPressed: (name.isNotEmpty && !nameAlreadyExists)
+                  ? () {
+                      Navigator.of(context).pop();
+                      widget.onCreate(name);
+                    }
+                  : null,
+              child: Text(lang.action_add),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -93,16 +90,7 @@ class CategoryRenameDialog extends StatefulWidget {
 }
 
 class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
-  late TextEditingController _nameController;
-  String get name => _nameController.text;
-  bool get nameAlreadyExists => widget.categories.anyWithName(name);
-  bool get valueHasChanged => widget.category.name != name;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: name);
-  }
+  final _nameController = TextEditingController();
 
   @override
   void dispose() {
@@ -112,38 +100,44 @@ class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    final String name = _nameController.text;
-    final bool nameAlreadyExists = widget.categories.anyWithName(name);
-    return AlertDialog.adaptive(
-      title: Text(lang.action_rename_category),
-      content: TextField(
-        autofocus: true,
-        controller: _nameController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          errorText: (valueHasChanged && nameAlreadyExists)
-              ? lang.error_category_exists
-              : null,
-          helperText: lang.information_required_plain,
-          labelText: lang.name,
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        TextButton(
-          onPressed: valueHasChanged && !nameAlreadyExists
-              ? () {
-                  Navigator.of(context).pop();
-                  widget.onRename(name);
-                }
-              : null,
-          child: Text(lang.action_ok),
-        ),
-      ],
+    return ValueListenableBuilder(
+      valueListenable: _nameController,
+      builder: (context, TextEditingValue value, __) {
+        final lang = AppLocalizations.of(context);
+        final String name = _nameController.text;
+        final bool nameAlreadyExists = widget.categories.anyWithName(name);
+        final bool valueHasChanged = widget.category.name != name;
+        return AlertDialog.adaptive(
+          title: Text(lang.action_rename_category),
+          content: TextField(
+            autofocus: true,
+            controller: _nameController,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              errorText: (valueHasChanged && nameAlreadyExists)
+                  ? lang.error_category_exists
+                  : null,
+              helperText: lang.information_required_plain,
+              labelText: lang.name,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(lang.action_cancel),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              onPressed: valueHasChanged && !nameAlreadyExists
+                  ? () {
+                      Navigator.of(context).pop();
+                      widget.onRename(name);
+                    }
+                  : null,
+              child: Text(lang.action_ok),
+            ),
+          ],
+        );
+      },
     );
   }
 }
