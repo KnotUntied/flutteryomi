@@ -23,7 +23,7 @@ final sharedPreferencesProvider =
 
 typedef SharedPreferencesRef = AutoDisposeProviderRef<SharedPreferences>;
 String _$commonPreferenceStoreHash() =>
-    r'4bb650414fe87e2855cefd0e5d10e51d1d4d9708';
+    r'5ca0afff0ae0fc37449fe7f09d3ab50668504704';
 
 /// See also [commonPreferenceStore].
 @ProviderFor(commonPreferenceStore)

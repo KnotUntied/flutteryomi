@@ -1,28 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'create_category_with_name.dart';
+part of 'should_update_db_chapter.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createCategoryWithNameHash() =>
-    r'8df7610a9c899d742d2a9214acc04be0dfc0f754';
+String _$shouldUpdateDbChapterHash() =>
+    r'336fa409aedb81e64ce43a0bf4ff40b365f240f5';
 
-/// See also [createCategoryWithName].
-@ProviderFor(createCategoryWithName)
-final createCategoryWithNameProvider =
-    AutoDisposeProvider<CreateCategoryWithName>.internal(
-  createCategoryWithName,
-  name: r'createCategoryWithNameProvider',
+/// See also [shouldUpdateDbChapter].
+@ProviderFor(shouldUpdateDbChapter)
+final shouldUpdateDbChapterProvider =
+    AutoDisposeProvider<ShouldUpdateDbChapter>.internal(
+  shouldUpdateDbChapter,
+  name: r'shouldUpdateDbChapterProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$createCategoryWithNameHash,
+      : _$shouldUpdateDbChapterHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef CreateCategoryWithNameRef
-    = AutoDisposeProviderRef<CreateCategoryWithName>;
+typedef ShouldUpdateDbChapterRef
+    = AutoDisposeProviderRef<ShouldUpdateDbChapter>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,8 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+
+part 'set_manga_chapter_flags.g.dart';
 
 class SetMangaChapterFlags {
   final MangaRepository repository;
@@ -85,6 +88,10 @@ class SetMangaChapterFlags {
         ),
       );
 }
+
+@riverpod
+SetMangaChapterFlags setMangaChapterFlags(SetMangaChapterFlagsRef ref) =>
+    SetMangaChapterFlags(ref.watch(mangaRepositoryProvider));
 
 extension _SetFlag on int {
   int setFlag(int flag, int mask) => this & ~mask | (flag & mask);

@@ -6,7 +6,7 @@ part of 'rename_category.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$renameCategoryHash() => r'871fc29d3b08249f9419759b802555c4d9e82ccc';
+String _$renameCategoryHash() => r'a24f0a0f4f45c56ecb5e0f20f883e9af272827fe';
 
 /// See also [renameCategory].
 @ProviderFor(renameCategory)

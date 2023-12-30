@@ -46,9 +46,9 @@ abstract class PreferenceStore {
       );
 }
 
+// Override this in the main method
 @riverpod
 PreferenceStore preferenceStore(PreferenceStoreRef ref) {
-  // * Override this in the main method
   throw UnimplementedError();
 }
 

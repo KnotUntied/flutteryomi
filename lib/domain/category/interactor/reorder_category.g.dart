@@ -6,7 +6,7 @@ part of 'reorder_category.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reorderCategoryHash() => r'74c570c9daeb77702fe0f7f1d5d39b0572b6e37a';
+String _$reorderCategoryHash() => r'5668972d367c38a197761f786972f9ca22dbba59';
 
 /// See also [reorderCategory].
 @ProviderFor(reorderCategory)

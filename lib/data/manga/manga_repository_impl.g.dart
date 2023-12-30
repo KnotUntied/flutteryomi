@@ -7,7 +7,7 @@ part of 'manga_repository_impl.dart';
 // **************************************************************************
 
 String _$mangaRepositoryImplHash() =>
-    r'960f19f8588a8246e5872beaec21b97f8e3f31f8';
+    r'754173aef1b4fb1cde15f8fcbeae163e49b6c622';
 
 /// See also [mangaRepositoryImpl].
 @ProviderFor(mangaRepositoryImpl)

@@ -1,10 +1,14 @@
 import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
+
+part 'chapter_repository_impl.g.dart';
 
 class ChapterRepositoryImpl implements ChapterRepository {
   ChapterRepositoryImpl({required this.db, required this.logger});
@@ -71,8 +75,10 @@ class ChapterRepositoryImpl implements ChapterRepository {
   }
 
   @override
-  Future<List<Chapter>> getChapterByMangaId(int mangaId,
-          {bool applyScanlatorFilter = false}) async =>
+  Future<List<Chapter>> getChapterByMangaId(
+    int mangaId, {
+    bool applyScanlatorFilter = false,
+  }) async =>
       await db.chaptersDrift
           .getChaptersByMangaId(
             mangaId: mangaId,
@@ -82,13 +88,13 @@ class ChapterRepositoryImpl implements ChapterRepository {
 
   @override
   Future<List<String>> getScanlatorsByMangaId(int mangaId) async =>
-      await (db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).get()
-          as Future<List<String>>);
+      await db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).get()
+          as Future<List<String>>;
 
   @override
   Stream<List<String>> getScanlatorsByMangaIdAsStream(int mangaId) =>
-      (db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).watch()
-          as Stream<List<String>>);
+      db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).watch()
+          as Stream<List<String>>;
 
   @override
   Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId) async =>
@@ -101,8 +107,10 @@ class ChapterRepositoryImpl implements ChapterRepository {
       await db.chaptersDrift.getChapterById(id: id).getSingleOrNull();
 
   @override
-  Stream<List<Chapter>> getChapterByMangaIdAsStream(int mangaId,
-          {bool applyScanlatorFilter = false}) =>
+  Stream<List<Chapter>> getChapterByMangaIdAsStream(
+    int mangaId, {
+    bool applyScanlatorFilter = false,
+  }) =>
       db.chaptersDrift
           .getChaptersByMangaId(
             mangaId: mangaId,
@@ -116,3 +124,10 @@ class ChapterRepositoryImpl implements ChapterRepository {
           .getChapterByUrlAndMangaId(chapterUrl: url, mangaId: mangaId)
           .getSingleOrNull();
 }
+
+@riverpod
+ChapterRepository chapterRepositoryImpl(ChapterRepositoryImplRef ref) =>
+    ChapterRepositoryImpl(
+      db: ref.watch(databaseProvider),
+      logger: ref.watch(loggerProvider),
+    );

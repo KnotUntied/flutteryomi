@@ -1,28 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'create_category_with_name.dart';
+part of 'set_manga_categories.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createCategoryWithNameHash() =>
-    r'8df7610a9c899d742d2a9214acc04be0dfc0f754';
+String _$setMangaCategoriesHash() =>
+    r'7484885b237c43411fdc875eb8f7d13bc2610338';
 
-/// See also [createCategoryWithName].
-@ProviderFor(createCategoryWithName)
-final createCategoryWithNameProvider =
-    AutoDisposeProvider<CreateCategoryWithName>.internal(
-  createCategoryWithName,
-  name: r'createCategoryWithNameProvider',
+/// See also [setMangaCategories].
+@ProviderFor(setMangaCategories)
+final setMangaCategoriesProvider =
+    AutoDisposeProvider<SetMangaCategories>.internal(
+  setMangaCategories,
+  name: r'setMangaCategoriesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$createCategoryWithNameHash,
+      : _$setMangaCategoriesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef CreateCategoryWithNameRef
-    = AutoDisposeProviderRef<CreateCategoryWithName>;
+typedef SetMangaCategoriesRef = AutoDisposeProviderRef<SetMangaCategories>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

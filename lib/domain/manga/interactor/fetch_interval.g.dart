@@ -1,28 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'create_category_with_name.dart';
+part of 'fetch_interval.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createCategoryWithNameHash() =>
-    r'8df7610a9c899d742d2a9214acc04be0dfc0f754';
+String _$fetchIntervalHash() => r'a2dfcaaf5fc585965603b030d488e3ce8762a614';
 
-/// See also [createCategoryWithName].
-@ProviderFor(createCategoryWithName)
-final createCategoryWithNameProvider =
-    AutoDisposeProvider<CreateCategoryWithName>.internal(
-  createCategoryWithName,
-  name: r'createCategoryWithNameProvider',
+/// See also [fetchInterval].
+@ProviderFor(fetchInterval)
+final fetchIntervalProvider = AutoDisposeProvider<FetchInterval>.internal(
+  fetchInterval,
+  name: r'fetchIntervalProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$createCategoryWithNameHash,
+      : _$fetchIntervalHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef CreateCategoryWithNameRef
-    = AutoDisposeProviderRef<CreateCategoryWithName>;
+typedef FetchIntervalRef = AutoDisposeProviderRef<FetchInterval>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

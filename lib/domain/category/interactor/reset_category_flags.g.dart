@@ -7,7 +7,7 @@ part of 'reset_category_flags.dart';
 // **************************************************************************
 
 String _$resetCategoryFlagsHash() =>
-    r'0ba7af1c9c452d9bfb4dd855e8849ebdcdab567c';
+    r'2abe7a9fae83b09b627599477df0fd156e530a87';
 
 /// See also [resetCategoryFlags].
 @ProviderFor(resetCategoryFlags)

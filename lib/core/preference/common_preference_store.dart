@@ -44,11 +44,13 @@ class CommonPreferenceStore extends PreferenceStore {
       ObjectPrimitive(prefs, key, defaultValue, serializer, deserializer);
 
   @override
-  Map<String, dynamic> getAll() => { for (var k in prefs.getKeys()) k : prefs.get(k) };
+  Map<String, dynamic> getAll() =>
+      {for (var k in prefs.getKeys()) k: prefs.get(k)};
 }
 
 @riverpod
-SharedPreferences sharedPreferences(SharedPreferencesRef ref) => throw UnimplementedError();
+SharedPreferences sharedPreferences(SharedPreferencesRef ref) =>
+    throw UnimplementedError();
 
 @riverpod
 CommonPreferenceStore commonPreferenceStore(CommonPreferenceStoreRef ref) =>

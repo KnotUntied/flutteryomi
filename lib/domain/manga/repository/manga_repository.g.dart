@@ -6,7 +6,7 @@ part of 'manga_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mangaRepositoryHash() => r'16c4ed0ccab52296a6beb04bd55f47f55e5bc02e';
+String _$mangaRepositoryHash() => r'6194e65bc908cf27a3c016115a2060e5cf27ed73';
 
 /// See also [mangaRepository].
 @ProviderFor(mangaRepository)

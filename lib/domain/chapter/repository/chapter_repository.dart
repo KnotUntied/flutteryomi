@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
+
+part 'chapter_repository.g.dart';
 
 abstract interface class ChapterRepository {
   Future<List<Chapter>> addAll(List<Chapter> chapters);
@@ -16,3 +20,8 @@ abstract interface class ChapterRepository {
       int mangaId, {bool applyScanlatorFilter = false});
   Future<Chapter?> getChapterByUrlAndMangaId(String url, int mangaId);
 }
+
+// Override this in the main method
+@riverpod
+ChapterRepository chapterRepository(ChapterRepositoryRef ref) =>
+    throw UnimplementedError();
