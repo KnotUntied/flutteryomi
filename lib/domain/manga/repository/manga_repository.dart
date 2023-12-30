@@ -23,8 +23,7 @@ abstract interface class MangaRepository {
   Future<bool> updateAll(List<MangaUpdate> mangaUpdates);
 }
 
+// Override this in the main method
 @riverpod
-MangaRepository mangaRepository(MangaRepositoryRef ref) {
-  // * Override this in the main method
-  throw UnimplementedError();
-}
+MangaRepository mangaRepository(MangaRepositoryRef ref) =>
+    throw UnimplementedError();

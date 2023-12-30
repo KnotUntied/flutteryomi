@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category_screen_model.dart';
+part of 'reset_category_flags.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$categoryScreenModelHash() =>
-    r'c662186bb4474e18e4616e1e8ecbaaf479780c30';
+String _$resetCategoryFlagsHash() =>
+    r'0ba7af1c9c452d9bfb4dd855e8849ebdcdab567c';
 
-/// See also [CategoryScreenModel].
-@ProviderFor(CategoryScreenModel)
-final categoryScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    CategoryScreenModel, List<Category>>.internal(
-  CategoryScreenModel.new,
-  name: r'categoryScreenModelProvider',
+/// See also [resetCategoryFlags].
+@ProviderFor(resetCategoryFlags)
+final resetCategoryFlagsProvider =
+    AutoDisposeProvider<ResetCategoryFlags>.internal(
+  resetCategoryFlags,
+  name: r'resetCategoryFlagsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$categoryScreenModelHash,
+      : _$resetCategoryFlagsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CategoryScreenModel = AutoDisposeStreamNotifier<List<Category>>;
+typedef ResetCategoryFlagsRef = AutoDisposeProviderRef<ResetCategoryFlags>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

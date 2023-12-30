@@ -1,4 +1,8 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/core/preference/preference.dart';
+
+part 'preference_store.g.dart';
 
 abstract class PreferenceStore {
   Preference<String> getString(String key, {String defaultValue = ''});
@@ -41,3 +45,10 @@ abstract class PreferenceStore {
         },
       );
 }
+
+@riverpod
+PreferenceStore preferenceStore(PreferenceStoreRef ref) {
+  // * Override this in the main method
+  throw UnimplementedError();
+}
+

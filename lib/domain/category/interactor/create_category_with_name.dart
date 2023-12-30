@@ -12,22 +12,19 @@ part 'create_category_with_name.g.dart';
 
 class CreateCategoryWithName {
   final CategoryRepository repository;
-  //final LibraryPreferences preferences;
+  final LibraryPreferences preferences;
   final Logger logger;
   CreateCategoryWithName({
     required this.repository,
     required this.logger,
-    //required this.preferences,
+    required this.preferences,
   });
 
   int get _initialFlags {
-    // TODO: Check library preferences
-    //final sort = preferences.sortingMode().get();
-    //return sort.type.flag | sort.direction.flag;
-    return LibrarySort.default_.flag;
+    final sort = preferences.sortingMode().get();
+    return sort.type.flag | sort.direction.flag;
   }
 
-  // TODO: Error handling
   Future<void> await_(String name) async {
     final categories = await repository.getAll();
     final nextOrder = categories.maxBy((it) => it.sort)?.sort.plus(1) ?? 0;
@@ -39,9 +36,10 @@ class CreateCategoryWithName {
     );
 
     try {
-      repository.insert(newCategory);
+      await repository.insert(newCategory);
     } catch (e) {
       logger.e(e);
+      rethrow;
     }
   }
 }
@@ -49,7 +47,7 @@ class CreateCategoryWithName {
 @riverpod
 CreateCategoryWithName createCategoryWithName(CreateCategoryWithNameRef ref) =>
     CreateCategoryWithName(
-      repository: ref.read(categoryRepositoryProvider),
-      //ref.read(libraryPreferencesProvider),
-      logger: ref.read(loggerProvider),
+      repository: ref.watch(categoryRepositoryProvider),
+      preferences: ref.watch(libraryPreferencesProvider),
+      logger: ref.watch(loggerProvider),
     );

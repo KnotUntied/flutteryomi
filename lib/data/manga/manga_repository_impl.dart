@@ -160,6 +160,6 @@ class MangaRepositoryImpl implements MangaRepository {
 @riverpod
 MangaRepository mangaRepositoryImpl(MangaRepositoryImplRef ref) =>
     MangaRepositoryImpl(
-      db: ref.read(databaseProvider),
-      logger: ref.read(loggerProvider),
+      db: ref.watch(databaseProvider),
+      logger: ref.watch(loggerProvider),
     );

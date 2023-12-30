@@ -1,8 +1,11 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutteryomi/core/preference/common_preference.dart';
 import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
+
+part 'common_preference_store.g.dart';
 
 class CommonPreferenceStore extends PreferenceStore {
   CommonPreferenceStore(this.prefs);
@@ -43,3 +46,10 @@ class CommonPreferenceStore extends PreferenceStore {
   @override
   Map<String, dynamic> getAll() => { for (var k in prefs.getKeys()) k : prefs.get(k) };
 }
+
+@riverpod
+SharedPreferences sharedPreferences(SharedPreferencesRef ref) => throw UnimplementedError();
+
+@riverpod
+CommonPreferenceStore commonPreferenceStore(CommonPreferenceStoreRef ref) =>
+    CommonPreferenceStore(ref.watch(sharedPreferencesProvider));

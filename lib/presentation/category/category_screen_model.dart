@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/domain/category/interactor/create_category_with_name.dart';
+import 'package:flutteryomi/domain/category/interactor/delete_category.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
+import 'package:flutteryomi/domain/category/interactor/rename_category.dart';
+import 'package:flutteryomi/domain/category/interactor/reorder_category.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
 
 part 'category_screen_model.g.dart';
@@ -22,28 +25,34 @@ class CategoryScreenModel extends _$CategoryScreenModel {
         );
   }
 
+  // TODO: Forward errors to toast/snackbar
   Future<void> createCategory(String name) async {
     final createCategoryWithName = ref.watch(createCategoryWithNameProvider);
     await AsyncValue.guard(() => createCategoryWithName.await_(name));
   }
 
   Future<void> deleteCategory(int categoryId) async {
-    //await AsyncValue.guard(() => deleteCategory.await_(categoryId));
+    final deleteCategory = ref.watch(deleteCategoryProvider);
+    await AsyncValue.guard(() => deleteCategory.await_(categoryId));
   }
 
   Future<void> sortAlphabetically() async {
-    //await AsyncValue.guard(() => reorderCategory.sortAlphabetically());
+    final reorderCategory = ref.watch(reorderCategoryProvider);
+    await AsyncValue.guard(() => reorderCategory.sortAlphabetically());
   }
 
   Future<void> moveUp(Category category) async {
-    //await AsyncValue.guard(() => reorderCategory.moveUp(category));
+    final reorderCategory = ref.watch(reorderCategoryProvider);
+    await AsyncValue.guard(() => reorderCategory.moveUp(category));
   }
 
   Future<void> moveDown(Category category) async {
-    //await AsyncValue.guard(() => reorderCategory.moveDown(category));
+    final reorderCategory = ref.watch(reorderCategoryProvider);
+    await AsyncValue.guard(() => reorderCategory.moveDown(category));
   }
 
   Future<void> renameCategory(Category category, String name) async {
-    //await AsyncValue.guard(() => renameCategory.await_(categoryId));
+    final renameCategory = ref.watch(renameCategoryProvider);
+    await AsyncValue.guard(() => renameCategory.awaitWithCategory(category, name));
   }
 }

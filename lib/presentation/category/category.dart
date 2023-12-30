@@ -46,21 +46,17 @@ class CategoryScreen extends ConsumerWidget {
           ),
           onClickRename: (Category category) => showDialog(
             context: context,
-            builder: (BuildContext context) => CategoryCreateDialog(
-              onCreate: screenModel.createCategory,
+            builder: (BuildContext context) => CategoryRenameDialog(
+              onRename: (String name) => screenModel.renameCategory(category, name),
               categories: data,
+              category: category,
             ),
-            //builder: (BuildContext context) => CategoryRenameDialog(
-            //  onRename: (String name) => screenModel.renameCategory(category, name),
-            //  categories: [],
-            //  category: null,
-            //),
           ),
           onClickDelete: (Category category) => showDialog(
             context: context,
-            builder: (BuildContext context) => CategoryCreateDialog(
-              onCreate: screenModel.createCategory,
-              categories: data,
+            builder: (BuildContext context) => CategoryDeleteDialog(
+              onDelete: () => screenModel.deleteCategory(category.id),
+              category: category,
             ),
           ),
           onClickMoveUp: screenModel.moveUp,
@@ -112,9 +108,6 @@ class CategoryScreenContent extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: MaterialPadding.medium),
               ),
               child: _CategoryContent(
-                // TODO: Use state
-                // Or not, maybe dialog is optional
-                //categories: state.categories,
                 categories: state,
                 onClickRename: onClickRename,
                 onClickDelete: onClickDelete,

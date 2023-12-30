@@ -1,27 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category_screen_model.dart';
+part of 'reorder_category.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$categoryScreenModelHash() =>
-    r'c662186bb4474e18e4616e1e8ecbaaf479780c30';
+String _$reorderCategoryHash() => r'74c570c9daeb77702fe0f7f1d5d39b0572b6e37a';
 
-/// See also [CategoryScreenModel].
-@ProviderFor(CategoryScreenModel)
-final categoryScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    CategoryScreenModel, List<Category>>.internal(
-  CategoryScreenModel.new,
-  name: r'categoryScreenModelProvider',
+/// See also [reorderCategory].
+@ProviderFor(reorderCategory)
+final reorderCategoryProvider = AutoDisposeProvider<ReorderCategory>.internal(
+  reorderCategory,
+  name: r'reorderCategoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$categoryScreenModelHash,
+      : _$reorderCategoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CategoryScreenModel = AutoDisposeStreamNotifier<List<Category>>;
+typedef ReorderCategoryRef = AutoDisposeProviderRef<ReorderCategory>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
