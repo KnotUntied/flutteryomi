@@ -71,5 +71,5 @@ class CategoryRepositoryImpl implements CategoryRepository {
 @riverpod
 CategoryRepository categoryRepositoryImpl(CategoryRepositoryImplRef ref) =>
     CategoryRepositoryImpl(
-      db: ref.read(databaseProvider),
+      db: ref.watch(databaseProvider),
     );

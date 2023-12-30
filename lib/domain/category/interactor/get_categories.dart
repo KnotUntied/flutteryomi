@@ -21,4 +21,4 @@ class GetCategories {
 
 @riverpod
 GetCategories getCategories(GetCategoriesRef ref) =>
-    GetCategories(ref.read(categoryRepositoryProvider));
+    GetCategories(ref.watch(categoryRepositoryProvider));

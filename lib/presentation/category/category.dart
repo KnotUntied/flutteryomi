@@ -18,43 +18,55 @@ class CategoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenModel = ref.watch(categoryScreenModelProvider.notifier);
     final state = ref.watch(categoryScreenModelProvider);
-    if (state is AsyncLoading) return const LoadingScreen();
-    return CategoryScreenContent(
-      state: state.value!,
-      onClickCreate: () => showDialog(
-        context: context,
-        builder: (BuildContext context) => CategoryCreateDialog(
-          onCreate: screenModel.createCategory,
-          categories: state.value!,
-        ),
-      ),
-      onClickSortAlphabetically: () => showDialog(
-        context: context,
-        builder: (BuildContext context) => CategorySortAlphabeticallyDialog(
-          onSort: screenModel.sortAlphabetically,
-        ),
-      ),
-      onClickRename: (Category category) => showDialog(
-        context: context,
-        builder: (BuildContext context) => CategoryCreateDialog(
-          onCreate: screenModel.createCategory,
-          categories: state.value!,
-        ),
-        //builder: (BuildContext context) => CategoryRenameDialog(
-        //  onRename: (String name) => screenModel.renameCategory(category, name),
-        //  categories: [],
-        //  category: null,
-        //),
-      ),
-      onClickDelete: (Category category) => showDialog(
-        context: context,
-        builder: (BuildContext context) => CategoryCreateDialog(
-          onCreate: screenModel.createCategory,
-          categories: state.value!,
-        ),
-      ),
-      onClickMoveUp: screenModel.moveUp,
-      onClickMoveDown: screenModel.moveDown,
+    return state.when(
+      loading: () => const LoadingScreen(),
+      // TODO: Error handling
+      error: (Object error, StackTrace stackTrace) {
+        debugPrintStack(
+          label: error.toString(),
+          stackTrace: stackTrace,
+        );
+        return const LoadingScreen();
+      },
+      data: (data) {
+        return CategoryScreenContent(
+          state: data,
+          onClickCreate: () => showDialog(
+            context: context,
+            builder: (BuildContext context) => CategoryCreateDialog(
+              onCreate: screenModel.createCategory,
+              categories: data,
+            ),
+          ),
+          onClickSortAlphabetically: () => showDialog(
+            context: context,
+            builder: (BuildContext context) => CategorySortAlphabeticallyDialog(
+              onSort: screenModel.sortAlphabetically,
+            ),
+          ),
+          onClickRename: (Category category) => showDialog(
+            context: context,
+            builder: (BuildContext context) => CategoryCreateDialog(
+              onCreate: screenModel.createCategory,
+              categories: data,
+            ),
+            //builder: (BuildContext context) => CategoryRenameDialog(
+            //  onRename: (String name) => screenModel.renameCategory(category, name),
+            //  categories: [],
+            //  category: null,
+            //),
+          ),
+          onClickDelete: (Category category) => showDialog(
+            context: context,
+            builder: (BuildContext context) => CategoryCreateDialog(
+              onCreate: screenModel.createCategory,
+              categories: data,
+            ),
+          ),
+          onClickMoveUp: screenModel.moveUp,
+          onClickMoveDown: screenModel.moveDown,
+        );
+      },
     );
   }
 }

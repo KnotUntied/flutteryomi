@@ -27,61 +27,59 @@ class CategoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    return ListTile(
-      title: Card(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                left: MaterialPadding.medium,
-                top: MaterialPadding.medium,
-                right: MaterialPadding.medium,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(Icons.label_outlined),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: MaterialPadding.medium,
-                    ),
-                    child: Text(
-                      category.name,
-                      //style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                ],
-              ),
+    return Card(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+              left: MaterialPadding.medium,
+              top: MaterialPadding.medium,
+              right: MaterialPadding.medium,
             ),
-            Row(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.arrow_drop_up),
-                  onPressed: () => onMoveUp(category),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onPressed: () => onMoveDown(category),
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: Icon(
-                    Icons.edit_outlined,
-                    semanticLabel: lang.action_rename_category,
+                const Icon(Icons.label_outlined),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: MaterialPadding.medium,
                   ),
-                  onPressed: onRename,
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.delete_outlined,
-                    semanticLabel: lang.action_cancel,
+                  child: Text(
+                    category.name,
+                    //style: Theme.of(context).textTheme.titleSmall,
                   ),
-                  onPressed: onDelete,
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          Row(
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.arrow_drop_up),
+                onPressed: () => onMoveUp(category),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_drop_down),
+                onPressed: () => onMoveDown(category),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: Icon(
+                  Icons.edit_outlined,
+                  semanticLabel: lang.action_rename_category,
+                ),
+                onPressed: onRename,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.delete_outlined,
+                  semanticLabel: lang.action_cancel,
+                ),
+                onPressed: onDelete,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
