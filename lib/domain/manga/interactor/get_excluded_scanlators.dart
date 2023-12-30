@@ -2,15 +2,23 @@
 // In master but not in latest release, wait and see how it goes
 // Uses db handler instead of repo, hmm
 
-//import 'package:flutteryomi/data/drift/data/excluded_scanlators.drift.dart';
-//import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+import 'dart:async';
 
-//class GetExcludedScanlators {
-//  final MangaRepository repository;
-//  GetExcludedScanlators(this.repository);
+import 'package:flutteryomi/data/database.dart';
 
-//  Future<List<Manga>> await_() async => await repository.getFavorites();
+class GetExcludedScanlators {
+  final Database db;
+  GetExcludedScanlators(this.db);
 
-//  Stream<List<Manga>> subscribe(int sourceId) =>
-//      repository.getFavoritesBySourceId(sourceId);
-//}
+  Future<Set<String>> await_(int mangaId) async {
+    final excludedScanlators = await db.excludedScanlatorsDrift //
+        .getExcludedScanlatorsByMangaId(mangaId: mangaId)
+        .get();
+    return excludedScanlators.toSet();
+  }
+
+  Stream<Set<String>> subscribe(int mangaId) => db.excludedScanlatorsDrift
+      .getExcludedScanlatorsByMangaId(mangaId: mangaId)
+      .watch()
+      .map((list) => list.toSet());
+}

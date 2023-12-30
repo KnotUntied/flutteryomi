@@ -1,4 +1,8 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/domain/track/model/track.dart';
+
+part 'track_repository.g.dart';
 
 abstract interface class TrackRepository {
   Future<Track?> getTrackById(int id);
@@ -9,3 +13,8 @@ abstract interface class TrackRepository {
   Future<void> insert(Track track);
   Future<void> insertAll(List<Track> tracks);
 }
+
+// Override this in the main method
+@riverpod
+TrackRepository trackRepository(TrackRepositoryRef ref) =>
+    throw UnimplementedError();

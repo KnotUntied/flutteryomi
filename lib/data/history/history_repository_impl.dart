@@ -1,10 +1,14 @@
 import 'package:logger/logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/history/history_mapper.dart';
 import 'package:flutteryomi/domain/history/model/history.dart';
 import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
 import 'package:flutteryomi/domain/history/repository/history_repository.dart';
+
+part 'history_repository_impl.g.dart';
 
 class HistoryRepositoryImpl implements HistoryRepository {
   HistoryRepositoryImpl({required this.db, required this.logger});
@@ -71,3 +75,10 @@ class HistoryRepositoryImpl implements HistoryRepository {
     }
   }
 }
+
+@riverpod
+HistoryRepository historyRepositoryImpl(HistoryRepositoryImplRef ref) =>
+    HistoryRepositoryImpl(
+      db: ref.watch(databaseProvider),
+      logger: ref.watch(loggerProvider),
+    );

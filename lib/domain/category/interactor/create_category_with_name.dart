@@ -5,7 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
-import 'package:flutteryomi/domain/library/model/library_sort_mode.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 
 part 'create_category_with_name.g.dart';

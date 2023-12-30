@@ -1,8 +1,12 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/views/updates_view.drift.dart';
 import 'package:flutteryomi/domain/manga/model/manga_cover.dart';
 import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
 import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
+
+part 'updates_repository_impl.g.dart';
 
 class UpdatesRepositoryImpl implements UpdatesRepository {
   UpdatesRepositoryImpl({required this.db});
@@ -49,3 +53,9 @@ class UpdatesRepositoryImpl implements UpdatesRepository {
     ),
   );
 }
+
+@riverpod
+UpdatesRepository updatesRepositoryImpl(UpdatesRepositoryImplRef ref) =>
+    UpdatesRepositoryImpl(
+      db: ref.watch(databaseProvider),
+    );

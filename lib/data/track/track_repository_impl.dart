@@ -1,9 +1,12 @@
 import 'package:drift/drift.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/manga_sync.drift.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
+
+part 'track_repository_impl.g.dart';
 
 class TrackRepositoryImpl implements TrackRepository {
   TrackRepositoryImpl({required this.db});
@@ -76,3 +79,7 @@ class TrackRepositoryImpl implements TrackRepository {
     });
   }
 }
+
+@riverpod
+TrackRepository trackRepositoryImpl(TrackRepositoryImplRef ref) =>
+    TrackRepositoryImpl(db: ref.watch(databaseProvider));

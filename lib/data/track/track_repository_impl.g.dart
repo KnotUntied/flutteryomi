@@ -1,25 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'fetch_interval.dart';
+part of 'track_repository_impl.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchIntervalHash() => r'bde5321692ccb937ad247a111d1efeaf6da98d1d';
+String _$trackRepositoryImplHash() =>
+    r'7e310d3219decd0d23999fcf0c93a26ab49afec7';
 
-/// See also [fetchInterval].
-@ProviderFor(fetchInterval)
-final fetchIntervalProvider = AutoDisposeProvider<FetchInterval>.internal(
-  fetchInterval,
-  name: r'fetchIntervalProvider',
+/// See also [trackRepositoryImpl].
+@ProviderFor(trackRepositoryImpl)
+final trackRepositoryImplProvider =
+    AutoDisposeProvider<TrackRepository>.internal(
+  trackRepositoryImpl,
+  name: r'trackRepositoryImplProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$fetchIntervalHash,
+      : _$trackRepositoryImplHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef FetchIntervalRef = AutoDisposeProviderRef<FetchInterval>;
+typedef TrackRepositoryImplRef = AutoDisposeProviderRef<TrackRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

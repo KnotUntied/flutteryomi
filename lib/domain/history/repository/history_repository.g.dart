@@ -1,25 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'fetch_interval.dart';
+part of 'history_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchIntervalHash() => r'bde5321692ccb937ad247a111d1efeaf6da98d1d';
+String _$historyRepositoryHash() => r'16d463dd2ff44c509bea2589453b645d7c4f7519';
 
-/// See also [fetchInterval].
-@ProviderFor(fetchInterval)
-final fetchIntervalProvider = AutoDisposeProvider<FetchInterval>.internal(
-  fetchInterval,
-  name: r'fetchIntervalProvider',
+/// See also [historyRepository].
+@ProviderFor(historyRepository)
+final historyRepositoryProvider =
+    AutoDisposeProvider<HistoryRepository>.internal(
+  historyRepository,
+  name: r'historyRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$fetchIntervalHash,
+      : _$historyRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef FetchIntervalRef = AutoDisposeProviderRef<FetchInterval>;
+typedef HistoryRepositoryRef = AutoDisposeProviderRef<HistoryRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
