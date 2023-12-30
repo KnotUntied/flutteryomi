@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+
+part 'network_to_local_manga.g.dart';
 
 class NetworkToLocalManga {
   final MangaRepository repository;
@@ -23,3 +27,7 @@ class NetworkToLocalManga {
   Future<int?> _insertManga(Manga manga) async =>
       await repository.insert(manga);
 }
+
+@riverpod
+NetworkToLocalManga networkToLocalManga(NetworkToLocalMangaRef ref) =>
+    NetworkToLocalManga(ref.watch(mangaRepositoryProvider));

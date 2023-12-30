@@ -4,7 +4,11 @@
 
 import 'dart:async';
 
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/data/database.dart';
+
+part 'get_excluded_scanlators.g.dart';
 
 class GetExcludedScanlators {
   final Database db;
@@ -22,3 +26,7 @@ class GetExcludedScanlators {
       .watch()
       .map((list) => list.toSet());
 }
+
+@riverpod
+GetExcludedScanlators getExcludedScanlators(GetExcludedScanlatorsRef ref) =>
+    GetExcludedScanlators(ref.watch(databaseProvider));

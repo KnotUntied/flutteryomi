@@ -1,10 +1,13 @@
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+
+part 'update_manga.g.dart';
 
 class UpdateManga {
   final MangaRepository repository;
@@ -56,11 +59,16 @@ class UpdateManga {
           id: Value(mangaId),
           favorite: Value(favorite),
           dateAdded: Value(
-            switch (favorite) {
-              true => DateTime.now(),
-              false => DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-            },
+            favorite
+                ? DateTime.now()
+                : DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
           ),
         ),
       );
 }
+
+@riverpod
+UpdateManga updateManga(UpdateMangaRef ref) => UpdateManga(
+      ref.watch(mangaRepositoryProvider),
+      ref.watch(fetchIntervalProvider),
+    );

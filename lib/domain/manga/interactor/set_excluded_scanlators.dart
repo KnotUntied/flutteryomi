@@ -5,9 +5,12 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/data/database.dart';
 import 'package:flutteryomi/data/drift/data/excluded_scanlators.drift.dart';
+
+part 'set_excluded_scanlators.g.dart';
 
 class SetExcludedScanlators {
   final Database db;
@@ -37,3 +40,7 @@ class SetExcludedScanlators {
     });
   }
 }
+
+@riverpod
+SetExcludedScanlators setExcludedScanlators(SetExcludedScanlatorsRef ref) =>
+    SetExcludedScanlators(ref.watch(databaseProvider));

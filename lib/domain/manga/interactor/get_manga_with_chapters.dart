@@ -1,14 +1,18 @@
 import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 
-class GetMangaByUrlAndSourceId {
+part 'get_manga_with_chapters.g.dart';
+
+class GetMangaWithChapters {
   final MangaRepository mangaRepository;
   final ChapterRepository chapterRepository;
-  GetMangaByUrlAndSourceId({
+  GetMangaWithChapters({
     required this.mangaRepository,
     required this.chapterRepository,
   });
@@ -44,3 +48,10 @@ class GetMangaByUrlAndSourceId {
         applyScanlatorFilter: applyScanlationFilter,
       );
 }
+
+@riverpod
+GetMangaWithChapters getMangaWithChapters(GetMangaWithChaptersRef ref) =>
+    GetMangaWithChapters(
+      mangaRepository: ref.watch(mangaRepositoryProvider),
+      chapterRepository: ref.watch(chapterRepositoryProvider),
+    );
