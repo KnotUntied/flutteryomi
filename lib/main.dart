@@ -20,6 +20,7 @@ import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   return runApp(
     ProviderScope(
