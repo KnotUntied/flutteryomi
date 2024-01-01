@@ -11,8 +11,6 @@ class ActionAppBarWithCounter extends StatelessWidget
     this.backgroundColor,
     this.title,
     this.subtitle,
-    this.navigateUp,
-    this.navigationIcon,
     required this.actions,
     this.actionModeCounter = 0,
     required this.onCancelActionMode,
@@ -23,8 +21,6 @@ class ActionAppBarWithCounter extends StatelessWidget
   final Color? backgroundColor;
   final String? title;
   final String? subtitle;
-  final VoidCallback? navigateUp;
-  final Icon? navigationIcon;
   final List<Widget> actions;
   final int actionModeCounter;
   final VoidCallback onCancelActionMode;
@@ -33,11 +29,11 @@ class ActionAppBarWithCounter extends StatelessWidget
 
   @override
   Size get preferredSize => Size.fromHeight(
-      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
+        bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight,
+      );
 
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
     final bool isActionMode = actionModeCounter > 0;
     return AppBar(
       actions: actions,
@@ -48,13 +44,7 @@ class ActionAppBarWithCounter extends StatelessWidget
       title: isActionMode
           ? Text(actionModeCounter.toString())
           : AppBarTitle(title, subtitle),
-      leading: isActionMode
-          ? IconButton(
-              icon: const Icon(Icons.close_outlined),
-              tooltip: lang.action_cancel,
-              onPressed: onCancelActionMode,
-            )
-          : null,
+      leading: isActionMode ? CloseButton(onPressed: onCancelActionMode) : null,
     );
   }
 }
@@ -64,10 +54,9 @@ class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.backgroundColor,
     this.titleContent,
-    this.navigateUp,
-    this.navigationIcon,
     required this.actions,
     this.isActionMode = false,
+    this.leading,
     required this.onCancelActionMode,
     this.actionModeActions,
     this.bottom,
@@ -75,21 +64,20 @@ class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final Color? backgroundColor;
   final Widget? titleContent;
-  final VoidCallback? navigateUp;
-  final Icon? navigationIcon;
   final List<Widget> actions;
   final bool isActionMode;
+  final Widget? leading;
   final VoidCallback onCancelActionMode;
   final List<Widget>? actionModeActions;
   final PreferredSizeWidget? bottom;
 
   @override
   Size get preferredSize => Size.fromHeight(
-      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
+        bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight,
+      );
 
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
     return AppBar(
       actions: actions,
       automaticallyImplyLeading: true,
@@ -97,13 +85,8 @@ class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
       bottom: bottom,
       elevation: isActionMode ? 3.0 : 0.0,
       title: titleContent,
-      leading: isActionMode
-          ? IconButton(
-              icon: const Icon(Icons.close_outlined),
-              tooltip: lang.action_cancel,
-              onPressed: onCancelActionMode,
-            )
-          : null,
+      leading: leading ??
+          (isActionMode ? CloseButton(onPressed: onCancelActionMode) : null),
     );
   }
 }
@@ -142,8 +125,6 @@ class AppBarAction extends StatelessWidget {
   final IconData iconData;
   final Color? iconTint;
   final VoidCallback? onClick;
-  // enabled/disabled is managed by onPressed being null
-  //final bool enabled;
 
   const AppBarAction({
     super.key,
@@ -151,16 +132,12 @@ class AppBarAction extends StatelessWidget {
     required this.iconData,
     this.iconTint,
     this.onClick,
-    //this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(
-        iconData,
-        semanticLabel: title,
-      ),
+      icon: Icon(iconData, semanticLabel: title),
       style: IconButton.styleFrom(surfaceTintColor: iconTint),
       tooltip: title,
       onPressed: onClick,
@@ -202,18 +179,15 @@ class AppBarOverflowActions extends StatelessWidget {
     final lang = AppLocalizations.of(context);
     return actions.isNotEmpty
         ? MenuAnchor(
-            builder: (BuildContext context, MenuController controller,
-                Widget? child) {
-              return IconButton(
-                onPressed: () {
-                  controller.isOpen ? controller.close() : controller.open();
-                },
-                icon: Icon(
-                  Icons.adaptive.more_outlined,
-                  semanticLabel: lang.label_more,
-                ),
-              );
-            },
+            builder: (context, controller, child) => IconButton(
+              onPressed: () => controller.isOpen //
+                  ? controller.close()
+                  : controller.open(),
+              icon: Icon(
+                Icons.adaptive.more_outlined,
+                semanticLabel: lang.label_more,
+              ),
+            ),
             menuChildren: actions
                 .map((action) => MenuItemButton(
                       onPressed: action.onClick,
@@ -229,7 +203,6 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
   const SearchToolbar({
     super.key,
     required this.titleContent,
-    this.navigateUp,
     this.searchEnabled = true,
     this.searchQuery,
     required this.onChangeSearchQuery,
@@ -241,7 +214,6 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   final Widget titleContent;
-  final VoidCallback? navigateUp;
   final bool searchEnabled;
   final String? searchQuery;
   final ValueChanged<String?> onChangeSearchQuery;
@@ -253,7 +225,8 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
+        bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -288,22 +261,11 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
           Icons.search_outlined,
           semanticLabel: lang.action_search,
         ),
-        onPressed: () {
-          onChangeSearchQuery("");
-        },
+        onPressed: () => onChangeSearchQuery(""),
         tooltip: lang.action_search,
       );
     } else if (searchQuery!.isNotEmpty) {
-      searchWidget = IconButton(
-        icon: Icon(
-          Icons.close_outlined,
-          semanticLabel: lang.action_reset,
-        ),
-        onPressed: () {
-          onChangeSearchQuery("");
-        },
-        tooltip: lang.action_reset,
-      );
+      searchWidget = CloseButton(onPressed: () => onChangeSearchQuery(""));
     } else {
       searchWidget = const SizedBox.shrink();
     }
@@ -312,8 +274,9 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [searchWidget, ...actions],
       bottom: bottom,
       isActionMode: false,
-      navigateUp: searchQuery == null ? navigateUp : onClickCloseSearch,
-      navigationIcon: const Icon(Icons.arrow_back_outlined),
+      leading: searchQuery == null
+          ? null
+          : BackButton(onPressed: onClickCloseSearch),
       onCancelActionMode: () {},
       titleContent: titleContentWidget,
     );
