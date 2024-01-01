@@ -238,8 +238,6 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
     this.onClickCloseSearch,
     required this.actions,
     this.bottom,
-    //this.visualTransformation: VisualTransformation = VisualTransformation.None,
-    //this.interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   });
 
   final Widget titleContent;
@@ -252,8 +250,6 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onClickCloseSearch;
   final List<Widget> actions;
   final PreferredSizeWidget? bottom;
-  //final VisualTransformation visualTransformation = VisualTransformation.None;
-  //final MutableInteractionSource interactionSource = remember { MutableInteractionSource() };
 
   @override
   Size get preferredSize => Size.fromHeight(

@@ -30,14 +30,14 @@ class CategoryListItem extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-              left: MaterialPadding.medium,
-              top: MaterialPadding.medium,
-              right: MaterialPadding.medium,
-            ),
-            child: InkWell(
-              onTap: onRename,
+          InkWell(
+            onTap: onRename,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: MaterialPadding.medium,
+                top: MaterialPadding.medium,
+                right: MaterialPadding.medium,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
