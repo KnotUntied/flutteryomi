@@ -19,14 +19,14 @@ class CategoryScreen extends ConsumerWidget {
     final screenModel = ref.watch(categoryScreenModelProvider.notifier);
     final state = ref.watch(categoryScreenModelProvider);
     return state.when(
-      loading: () => const LoadingScreen(),
+      loading: () => const Scaffold(body: LoadingScreen()),
       // TODO: Error handling
       error: (Object error, StackTrace stackTrace) {
         debugPrintStack(
           label: error.toString(),
           stackTrace: stackTrace,
         );
-        return const LoadingScreen();
+        return const Scaffold(body: LoadingScreen());
       },
       data: (data) {
         return CategoryScreenContent(
@@ -144,9 +144,11 @@ class _CategoryContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      // TODO: Animate on move
       itemCount: categories.length,
       itemBuilder: (BuildContext context, int index) {
+        // TODO: Animate on move
+        // Unfortunately no straightforward equivalent
+        // for Modifier.animateItemPlacement()
         final category = categories[index];
         return CategoryListItem(
           key: Key('category-${category.id}'),

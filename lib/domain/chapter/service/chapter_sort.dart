@@ -1,8 +1,10 @@
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 
-int Function(Chapter, Chapter) getChapterSort(
-    {required Manga manga, bool? sortDescending}) {
+int Function(Chapter, Chapter) getChapterSort({
+  required Manga manga,
+  bool? sortDescending,
+}) {
   sortDescending = sortDescending ?? manga.sortDescending();
   return switch (manga.sorting) {
     MangaUtils.chapterSortingSource => sortDescending
@@ -18,6 +20,7 @@ int Function(Chapter, Chapter) getChapterSort(
         ? (c1, c2) => c1.name.compareTo(c2.name)
         : (c2, c1) => c2.name.compareTo(c1.name),
     _ => throw UnimplementedError(
-        'Invalid chapter sorting method: ${manga.sorting}'),
+        'Invalid chapter sorting method: ${manga.sorting}',
+      ),
   };
 }

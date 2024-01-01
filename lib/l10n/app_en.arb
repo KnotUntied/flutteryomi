@@ -789,8 +789,7 @@
   "@recent_manga_time": {
     "placeholders": {
       "number": {
-        "type": "num",
-        "format": "compact"
+        "type": "num"
       },
       "time": {
         "type": "DateTime",

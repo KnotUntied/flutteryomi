@@ -30,9 +30,7 @@ class _HistoryDeleteDialogState extends State<HistoryDeleteDialog> {
             title: Text(lang.dialog_with_checkbox_reset),
             value: _removeEverything,
             onChanged: (bool? value) {
-              setState(() {
-                _removeEverything = value ?? false;
-              });
+              setState(() => _removeEverything = value ?? false);
             },
           ),
         ],

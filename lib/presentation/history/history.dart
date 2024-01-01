@@ -1,111 +1,144 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
+import 'package:flutteryomi/presentation/components/date_text.dart';
+import 'package:flutteryomi/presentation/components/list_group_header.dart';
+import 'package:flutteryomi/presentation/history/components/history_dialogs.dart';
+import 'package:flutteryomi/presentation/history/components/history_item.dart';
+import 'package:flutteryomi/presentation/history/history_screen_model.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
+import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 
-class HistoryTab extends StatelessWidget {
+part 'history.freezed.dart';
+
+class HistoryTab extends ConsumerWidget {
   const HistoryTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return HistoryScreen(
-      onSearchQueryChange: (String? value) {},
-      onClickCover: (int mangaId) {},
-      onClickResume: (int mangaId, int chapterId) {},
-    );
-  }
-
-  Future<void> _askDeleteHistory(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog.adaptive(
-          title: Text(lang.action_remove_everything),
-          content: Text(lang.clear_history_confirmation),
-          actions: <Widget>[
-            TextButton(
-              child: Text(lang.action_cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
+    final screenModel = ref.watch(historyScreenModelProvider.notifier);
+    final state = ref.watch(historyScreenModelProvider);
+    return Scaffold(
+      appBar: SearchToolbar(
+        titleContent: Text(lang.history),
+        searchQuery: state.valueOrNull?.searchQuery,
+        onChangeSearchQuery: screenModel.updateSearchQuery,
+        actions: [
+          AppBarAction(
+            title: lang.pref_clear_history,
+            iconData: Icons.delete_sweep_outlined,
+            onClick: () => showDialog(
+              context: context,
+              builder: (BuildContext context) => HistoryDeleteAllDialog(
+                onDelete: screenModel.removeAllHistory,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: state.when(
+        loading: () => const LoadingScreen(),
+        // TODO: Error handling
+        error: (Object error, StackTrace stackTrace) {
+          debugPrintStack(
+            label: error.toString(),
+            stackTrace: stackTrace,
+          );
+          return const LoadingScreen();
+        },
+        data: (data) {
+          if (data.list == null) {
+            return const LoadingScreen();
+          } else if (data.list!.isEmpty) {
+            return EmptyScreen(
+              message: !data.searchQuery.isNullOrEmpty
+                  ? lang.no_results_found
+                  : lang.information_no_recent_manga,
+            );
+          } else {
+            return _HistoryScreenContent(
+              history: data.list!,
+              onClickCover: (mangaId) {
+                //TODO
+                //Navigator.push(
+                //  context,
+                //  MaterialPageRoute(
+                //    builder: (context) => MangaScreen(mangaId),
+                //  ),
+                //);
               },
-            ),
-            TextButton(
-              child: Text(lang.action_ok),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onClickResume: (history) {
+                //TODO
+                //screenModel.getNextChapterForManga(
+                //  history.mangaId,
+                //  history.chapterId,
+                //);
               },
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({
-    super.key,
-    //required this.state,
-    required this.onSearchQueryChange,
-    required this.onClickCover,
-    required this.onClickResume,
-    //required this.onDialogChange,
-    //this.preferences = Injekt.get(),
-  });
-
-  //final HistoryScreenModel.State state;
-  final ValueChanged<String?> onSearchQueryChange;
-  final Function(int mangaId) onClickCover;
-  final Function(int mangaId, int chapterId) onClickResume;
-  //final ValueChanged<HistoryScreenModel.Dialog?> onDialogChange;
-  //final UiPreferences preferences;
-
-  @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return DefaultTabController(
-      length: 1,
-      child: Scaffold(
-        appBar: SearchToolbar(
-          titleContent: Text(lang.history),
-          //searchQuery: '',
-          onChangeSearchQuery: onSearchQueryChange,
-          actions: [
-            AppBarAction(
-              iconData: Icons.delete_sweep_outlined,
-              //onClick: () {onDialogChange(HistoryScreenModel.Dialog.DeleteAll)},
-              onClick: () {},
-              title: lang.pref_clear_history,
-            ),
-          ],
-        ),
-        body: HistoryScreenContent(),
+              onClickDelete: (item) => showDialog(
+                context: context,
+                builder: (BuildContext context) => HistoryDeleteDialog(
+                  onDelete: (all) => all
+                      ? screenModel.removeAllFromHistory(item.mangaId)
+                      : screenModel.removeFromHistory(item),
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
 }
 
-class HistoryScreenContent extends StatelessWidget {
-  const HistoryScreenContent({
+class _HistoryScreenContent extends StatelessWidget {
+  const _HistoryScreenContent({
     super.key,
-    //required this.history,
-    //required this.onClickCover,
-    //required this.onClickResume,
-    //required this.onClickDelete,
-    //required this.preferences,
+    required this.history,
+    required this.onClickCover,
+    required this.onClickResume,
+    required this.onClickDelete,
   });
 
-  //final List<HistoryUiModel> history;
-  //final ValueChanged(HistoryWithRelations) onClickCover;
-  //final ValueChanged(HistoryWithRelations) onClickResume;
-  //final ValueChanged(HistoryWithRelations) onClickDelete;
-  //final UiPreferences preferences;
+  final List<HistoryUiModel> history;
+  final ValueChanged<HistoryWithRelations> onClickCover;
+  final ValueChanged<HistoryWithRelations> onClickResume;
+  final ValueChanged<HistoryWithRelations> onClickDelete;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: const [],
+    return ListView.builder(
+      itemCount: history.length,
+      itemBuilder: (BuildContext context, int index) {
+        // TODO: Animate on move
+        // Unfortunately no straightforward equivalent
+        // for Modifier.animateItemPlacement()
+        final item = history[index];
+        return switch (item) {
+          Header() => ListGroupHeader(
+              relativeDateText(context: context, date: item.date),
+              key: Key('history-${item.hashCode}'),
+            ),
+          Item() => HistoryItem(
+              key: Key('history-${item.hashCode}'),
+              history: item.item,
+              onClickCover: () => onClickCover(item.item),
+              onClickResume: () => onClickResume(item.item),
+              onClickDelete: () => onClickDelete(item.item),
+            ),
+        };
+      },
     );
   }
+}
+
+@freezed
+sealed class HistoryUiModel with _$HistoryUiModel {
+  const factory HistoryUiModel.header(DateTime date) = Header;
+  const factory HistoryUiModel.item(HistoryWithRelations item) = Item;
 }
