@@ -2,6 +2,7 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutteryomi/domain/ui/ui_preferences.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
@@ -96,7 +97,7 @@ class HistoryTab extends ConsumerWidget {
   }
 }
 
-class _HistoryScreenContent extends StatelessWidget {
+class _HistoryScreenContent extends ConsumerWidget {
   const _HistoryScreenContent({
     super.key,
     required this.history,
@@ -111,7 +112,8 @@ class _HistoryScreenContent extends StatelessWidget {
   final ValueChanged<HistoryWithRelations> onClickDelete;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final preferences = ref.watch(uiPreferencesProvider);
     return ListView.builder(
       itemCount: history.length,
       itemBuilder: (BuildContext context, int index) {
@@ -121,7 +123,12 @@ class _HistoryScreenContent extends StatelessWidget {
         final item = history[index];
         return switch (item) {
           Header() => ListGroupHeader(
-              relativeDateText(context: context, date: item.date),
+              relativeDateText(
+                context: context,
+                date: item.date,
+                relativeTime: preferences.relativeTime().get(),
+                dateFormat: preferences.dateFormat().get(),
+              ),
               key: Key('history-${item.hashCode}'),
             ),
           Item() => HistoryItem(

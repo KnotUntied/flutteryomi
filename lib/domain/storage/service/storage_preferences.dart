@@ -10,6 +10,6 @@ class StoragePreferences {
   Future<Preference<String>> baseStorageDirectory() async =>
       preferenceStore.getString(
         "pref_display_mode_library",
-        defaultValue: await folderProvider.path() ?? '',
+        await folderProvider.path() ?? '',
       );
 }

@@ -12,21 +12,18 @@ class GetApplicationRelease {
   final PreferenceStore preferenceStore;
   GetApplicationRelease(this.service, this.preferenceStore);
 
-  late Preference<int> lastChecked = preferenceStore.getInt(
-    Preference.appStateKey("last_app_check"),
-    defaultValue: 0,
-  );
+  late Preference<int> lastChecked =
+      preferenceStore.getInt(Preference.appStateKey("last_app_check"), 0);
 
   Future<Result> await_(Arguments arguments) async {
     DateTime now = DateTime.now();
 
     // Limit checks to once every 3 days at most
-    if (
-      !arguments.forceCheck
-      && now.isBefore(
-        DateTime.fromMillisecondsSinceEpoch(lastChecked.get()).add(const Duration(days: 3)),
-      )
-    ) {
+    if (!arguments.forceCheck &&
+        now.isBefore(
+          DateTime.fromMillisecondsSinceEpoch(lastChecked.get())
+              .add(const Duration(days: 3)),
+        )) {
       return const Result.noNewUpdate();
     }
 
@@ -66,8 +63,10 @@ class GetApplicationRelease {
       // Release builds: based on releases in "tachiyomiorg/tachiyomi" repo
       // tagged as something like "v0.1.2"
       String oldVersion = versionName.replaceAll(RegExp(r"[^\d.]"), "");
-      List<int> newSemVer = newVersion.split(".").map((it) => int.parse(it)).toList();
-      List<int> oldSemVer = oldVersion.split(".").map((it) => int.parse(it)).toList();
+      List<int> newSemVer =
+          newVersion.split(".").map((it) => int.parse(it)).toList();
+      List<int> oldSemVer =
+          oldVersion.split(".").map((it) => int.parse(it)).toList();
 
       for (final (index, i) in oldSemVer.indexed) {
         if (newSemVer[index] > i) {

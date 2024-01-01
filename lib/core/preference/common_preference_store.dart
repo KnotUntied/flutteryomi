@@ -12,26 +12,26 @@ class CommonPreferenceStore extends PreferenceStore {
   final SharedPreferences prefs;
 
   @override
-  Preference<String> getString(String key, {String defaultValue = ''}) =>
+  Preference<String> getString(String key, [String defaultValue = '']) =>
       StringPrimitive(prefs, key, defaultValue);
 
   @override
-  Preference<int> getInt(String key, {int defaultValue = 0}) =>
+  Preference<int> getInt(String key, [int defaultValue = 0]) =>
       IntPrimitive(prefs, key, defaultValue);
 
   @override
-  Preference<double> getDouble(String key, {double defaultValue = 0.0}) =>
+  Preference<double> getDouble(String key, [double defaultValue = 0.0]) =>
       DoublePrimitive(prefs, key, defaultValue);
 
   @override
-  Preference<bool> getBool(String key, {bool defaultValue = false}) =>
+  Preference<bool> getBool(String key, [bool defaultValue = false]) =>
       BoolPrimitive(prefs, key, defaultValue);
 
   @override
   Preference<Set<String>> getStringSet(
-    String key, {
+    String key, [
     Set<String> defaultValue = const <String>{},
-  }) =>
+  ]) =>
       StringSetPrimitive(prefs, key, defaultValue);
 
   @override

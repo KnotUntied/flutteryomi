@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//import 'package:freezed_annotation/freezed_annotation.dart';
 //import 'package:marquee/marquee.dart';
+
+//part 'app_bar.freezed.dart';
 
 const searchDebounceMillis = 250;
 
@@ -282,3 +285,17 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+
+//@freezed
+//sealed class AppBarAction with _$AppBarAction {
+//  const factory AppBarAction.action(
+//    String title,
+//    IconData icon,
+//    Color? iconTint,
+//    VoidCallback? onClick,
+//  ) = AppBarRegularAction;
+//  const factory AppBarAction.overflowAction(
+//    String title,
+//    VoidCallback? onClick,
+//  ) = AppBarOverflowAction;
+//}

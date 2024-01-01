@@ -27,34 +27,25 @@ class LibraryPreferences {
         LibrarySort.deserialize,
       );
 
-  Preference<int> portraitColumns() => preferenceStore.getInt(
-        "pref_library_columns_portrait_key",
-        defaultValue: 0,
-      );
+  Preference<int> portraitColumns() =>
+      preferenceStore.getInt("pref_library_columns_portrait_key", 0);
 
-  Preference<int> landscapeColumns() => preferenceStore.getInt(
-        "pref_library_columns_landscape_key",
-        defaultValue: 0,
-      );
+  Preference<int> landscapeColumns() =>
+      preferenceStore.getInt("pref_library_columns_landscape_key", 0);
 
   Preference<int> lastUpdatedTimestamp() => preferenceStore.getInt(
         Preference.appStateKey("library_update_last_timestamp"),
-        defaultValue: 0,
+        0,
       );
-  Preference<int> autoUpdateInterval() => preferenceStore.getInt(
-        "pref_library_update_interval_key",
-        defaultValue: 0,
-      );
+  Preference<int> autoUpdateInterval() =>
+      preferenceStore.getInt("pref_library_update_interval_key", 0);
 
-  Preference<Set<String>> autoUpdateDeviceRestrictions() =>
-      preferenceStore.getStringSet(
-        "library_update_restriction",
-        defaultValue: <String>{deviceOnlyOnWifi},
-      );
+  Preference<Set<String>> autoUpdateDeviceRestrictions() => preferenceStore
+      .getStringSet("library_update_restriction", {deviceOnlyOnWifi});
   Preference<Set<String>> autoUpdateMangaRestrictions() =>
       preferenceStore.getStringSet(
         "library_update_manga_restriction",
-        defaultValue: <String>{
+        {
           mangaHasUnread,
           mangaNonCompleted,
           mangaNonRead,
@@ -62,44 +53,28 @@ class LibraryPreferences {
         },
       );
 
-  Preference<bool> autoUpdateMetadata() => preferenceStore.getBool(
-        "auto_update_metadata",
-        defaultValue: false,
-      );
+  Preference<bool> autoUpdateMetadata() =>
+      preferenceStore.getBool("auto_update_metadata", false);
 
-  Preference<bool> showContinueReadingButton() => preferenceStore.getBool(
-        "display_continue_reading_button",
-        defaultValue: false,
-      );
+  Preference<bool> showContinueReadingButton() =>
+      preferenceStore.getBool("display_continue_reading_button", false);
 
   // region Filter
 
   Preference<TriState> filterDownloaded() => preferenceStore.getEnum(
-        "pref_filter_library_downloaded_v2",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_downloaded", TriState.disabled, TriState.values);
 
   Preference<TriState> filterUnread() => preferenceStore.getEnum(
-        "pref_filter_library_unread_v2",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_unread", TriState.disabled, TriState.values);
 
   Preference<TriState> filterStarted() => preferenceStore.getEnum(
-        "pref_filter_library_started_v2",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_started", TriState.disabled, TriState.values);
 
   Preference<TriState> filterBookmarked() => preferenceStore.getEnum(
-        "pref_filter_library_bookmarked_v2",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_bookmarked", TriState.disabled, TriState.values);
 
   Preference<TriState> filterCompleted() => preferenceStore.getEnum(
-        "pref_filter_library_completed_v2",
+        "pref_filter_library_completed",
         TriState.disabled,
         TriState.values,
       );
@@ -135,7 +110,7 @@ class LibraryPreferences {
       );
 
   Preference<TriState> filterTracking(int id) => preferenceStore.getEnum(
-        "pref_filter_library_tracked_${id}_v2",
+        "pref_filter_library_tracked_$id",
         TriState.disabled,
         TriState.values,
       );
@@ -144,69 +119,48 @@ class LibraryPreferences {
 
   // region Badges
 
-  Preference<bool> downloadBadge() => preferenceStore.getBool(
-        "display_download_badge",
-        defaultValue: false,
-      );
+  Preference<bool> downloadBadge() =>
+      preferenceStore.getBool("display_download_badge", false);
 
-  Preference<bool> localBadge() => preferenceStore.getBool(
-        "display_local_badge",
-        defaultValue: true,
-      );
+  Preference<bool> localBadge() =>
+      preferenceStore.getBool("display_local_badge", true);
 
-  Preference<bool> languageBadge() => preferenceStore.getBool(
-        "display_language_badge",
-        defaultValue: false,
-      );
+  Preference<bool> languageBadge() =>
+      preferenceStore.getBool("display_language_badge", false);
 
-  Preference<bool> newShowUpdatesCount() => preferenceStore.getBool(
-        "library_show_updates_count",
-        defaultValue: true,
-      );
+  Preference<bool> newShowUpdatesCount() =>
+      preferenceStore.getBool("library_show_updates_count", true);
   Preference<int> newUpdatesCount() => preferenceStore.getInt(
         Preference.appStateKey("library_unseen_updates_count"),
-        defaultValue: 0,
+        0,
       );
 
   // endregion
 
   // region Category
 
-  Preference<int> defaultCategory() => preferenceStore.getInt(
-        "default_category",
-        defaultValue: -1,
-      );
+  Preference<int> defaultCategory() =>
+      preferenceStore.getInt("default_category", -1);
 
   Preference<int> lastUsedCategory() => preferenceStore.getInt(
         Preference.appStateKey("last_used_category"),
-        defaultValue: 0,
+        0,
       );
 
-  Preference<bool> categoryTabs() => preferenceStore.getBool(
-        "display_category_tabs",
-        defaultValue: true,
-      );
+  Preference<bool> categoryTabs() =>
+      preferenceStore.getBool("display_category_tabs", true);
 
-  Preference<bool> categoryNumberOfItems() => preferenceStore.getBool(
-        "display_number_of_items",
-        defaultValue: false,
-      );
+  Preference<bool> categoryNumberOfItems() =>
+      preferenceStore.getBool("display_number_of_items", false);
 
-  Preference<bool> categorizedDisplaySettings() => preferenceStore.getBool(
-        "categorized_display",
-        defaultValue: false,
-      );
+  Preference<bool> categorizedDisplaySettings() =>
+      preferenceStore.getBool("categorized_display", false);
 
-  Preference<Set<String>> updateCategories() => preferenceStore.getStringSet(
-        "library_update_categories",
-        defaultValue: <String>{},
-      );
+  Preference<Set<String>> updateCategories() =>
+      preferenceStore.getStringSet("library_update_categories", {});
 
   Preference<Set<String>> updateCategoriesExclude() =>
-      preferenceStore.getStringSet(
-        "library_update_categories_exclude",
-        defaultValue: <String>{},
-      );
+      preferenceStore.getStringSet("library_update_categories_exclude", {});
 
   // endregion
 
@@ -214,34 +168,34 @@ class LibraryPreferences {
 
   Preference<int> filterChapterByRead() => preferenceStore.getInt(
         "default_chapter_filter_by_read",
-        defaultValue: MangaUtils.showAll,
+        MangaUtils.showAll,
       );
 
   Preference<int> filterChapterByDownloaded() => preferenceStore.getInt(
         "default_chapter_filter_by_downloaded",
-        defaultValue: MangaUtils.showAll,
+        MangaUtils.showAll,
       );
 
   Preference<int> filterChapterByBookmarked() => preferenceStore.getInt(
         "default_chapter_filter_by_bookmarked",
-        defaultValue: MangaUtils.showAll,
+        MangaUtils.showAll,
       );
 
   // and upload date
   Preference<int> sortChapterBySourceOrNumber() => preferenceStore.getInt(
         "default_chapter_sort_by_source_or_number",
-        defaultValue: MangaUtils.chapterSortingSource,
+        MangaUtils.chapterSortingSource,
       );
 
   Preference<int> displayChapterByNameOrNumber() => preferenceStore.getInt(
         "default_chapter_display_by_name_or_number",
-        defaultValue: MangaUtils.chapterDisplayName,
+        MangaUtils.chapterDisplayName,
       );
 
   Preference<int> sortChapterByAscendingOrDescending() =>
       preferenceStore.getInt(
         "default_chapter_sort_by_ascending_or_descending",
-        defaultValue: MangaUtils.chapterSortDesc,
+        MangaUtils.chapterSortDesc,
       );
 
   void setChapterSettingsDefault(Manga manga) {
@@ -257,10 +211,8 @@ class LibraryPreferences {
     );
   }
 
-  Preference<bool> autoClearChapterCache() => preferenceStore.getBool(
-        "auto_clear_chapter_cache",
-        defaultValue: false,
-      );
+  Preference<bool> autoClearChapterCache() =>
+      preferenceStore.getBool("auto_clear_chapter_cache", false);
 
   // endregion
 

@@ -8,7 +8,6 @@ import 'package:flutteryomi/core/util/collection_utils.dart';
 import 'package:flutteryomi/domain/history/interactor/get_history.dart';
 import 'package:flutteryomi/domain/history/interactor/get_next_chapters.dart';
 import 'package:flutteryomi/domain/history/interactor/remove_history.dart';
-import 'package:flutteryomi/domain/history/model/history.dart';
 import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
 import 'package:flutteryomi/presentation/history/history.dart';
 import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
