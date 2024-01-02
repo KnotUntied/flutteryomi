@@ -22,9 +22,9 @@ class MangaSync extends i0.Table
       type: i0.DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  static const i0.VerificationMeta _syncIdMeta =
-      const i0.VerificationMeta('syncId');
-  late final i0.GeneratedColumn<int> syncId = i0.GeneratedColumn<int>(
+  static const i0.VerificationMeta _trackerIdMeta =
+      const i0.VerificationMeta('trackerId');
+  late final i0.GeneratedColumn<int> trackerId = i0.GeneratedColumn<int>(
       'sync_id', aliasedName, false,
       type: i0.DriftSqlType.int,
       requiredDuringInsert: true,
@@ -103,7 +103,7 @@ class MangaSync extends i0.Table
   List<i0.GeneratedColumn> get $columns => [
         id,
         mangaId,
-        syncId,
+        trackerId,
         remoteId,
         libraryId,
         title,
@@ -136,10 +136,10 @@ class MangaSync extends i0.Table
       context.missing(_mangaIdMeta);
     }
     if (data.containsKey('sync_id')) {
-      context.handle(_syncIdMeta,
-          syncId.isAcceptableOrUnknown(data['sync_id']!, _syncIdMeta));
+      context.handle(_trackerIdMeta,
+          trackerId.isAcceptableOrUnknown(data['sync_id']!, _trackerIdMeta));
     } else if (isInserting) {
-      context.missing(_syncIdMeta);
+      context.missing(_trackerIdMeta);
     }
     if (data.containsKey('remote_id')) {
       context.handle(_remoteIdMeta,
@@ -212,7 +212,7 @@ class MangaSync extends i0.Table
   Set<i0.GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<i0.GeneratedColumn>> get uniqueKeys => [
-        {mangaId, syncId},
+        {mangaId, trackerId},
       ];
   @override
   i1.MangaSyncData map(Map<String, dynamic> data, {String? tablePrefix}) {
@@ -222,7 +222,7 @@ class MangaSync extends i0.Table
           .read(i0.DriftSqlType.int, data['${effectivePrefix}_id'])!,
       mangaId: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}manga_id'])!,
-      syncId: attachedDatabase.typeMapping
+      trackerId: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}sync_id'])!,
       remoteId: attachedDatabase.typeMapping
           .read(i0.DriftSqlType.int, data['${effectivePrefix}remote_id'])!,
@@ -265,7 +265,7 @@ class MangaSyncData extends i0.DataClass
     implements i0.Insertable<i1.MangaSyncData> {
   final int id;
   final int mangaId;
-  final int syncId;
+  final int trackerId;
   final int remoteId;
   final int? libraryId;
   final String title;
@@ -279,7 +279,7 @@ class MangaSyncData extends i0.DataClass
   const MangaSyncData(
       {required this.id,
       required this.mangaId,
-      required this.syncId,
+      required this.trackerId,
       required this.remoteId,
       this.libraryId,
       required this.title,
@@ -295,7 +295,7 @@ class MangaSyncData extends i0.DataClass
     final map = <String, i0.Expression>{};
     map['_id'] = i0.Variable<int>(id);
     map['manga_id'] = i0.Variable<int>(mangaId);
-    map['sync_id'] = i0.Variable<int>(syncId);
+    map['sync_id'] = i0.Variable<int>(trackerId);
     map['remote_id'] = i0.Variable<int>(remoteId);
     if (!nullToAbsent || libraryId != null) {
       map['library_id'] = i0.Variable<int>(libraryId);
@@ -315,7 +315,7 @@ class MangaSyncData extends i0.DataClass
     return i1.MangaSyncCompanion(
       id: i0.Value(id),
       mangaId: i0.Value(mangaId),
-      syncId: i0.Value(syncId),
+      trackerId: i0.Value(trackerId),
       remoteId: i0.Value(remoteId),
       libraryId: libraryId == null && nullToAbsent
           ? const i0.Value.absent()
@@ -337,7 +337,7 @@ class MangaSyncData extends i0.DataClass
     return MangaSyncData(
       id: serializer.fromJson<int>(json['_id']),
       mangaId: serializer.fromJson<int>(json['manga_id']),
-      syncId: serializer.fromJson<int>(json['sync_id']),
+      trackerId: serializer.fromJson<int>(json['sync_id']),
       remoteId: serializer.fromJson<int>(json['remote_id']),
       libraryId: serializer.fromJson<int?>(json['library_id']),
       title: serializer.fromJson<String>(json['title']),
@@ -356,7 +356,7 @@ class MangaSyncData extends i0.DataClass
     return <String, dynamic>{
       '_id': serializer.toJson<int>(id),
       'manga_id': serializer.toJson<int>(mangaId),
-      'sync_id': serializer.toJson<int>(syncId),
+      'sync_id': serializer.toJson<int>(trackerId),
       'remote_id': serializer.toJson<int>(remoteId),
       'library_id': serializer.toJson<int?>(libraryId),
       'title': serializer.toJson<String>(title),
@@ -373,7 +373,7 @@ class MangaSyncData extends i0.DataClass
   i1.MangaSyncData copyWith(
           {int? id,
           int? mangaId,
-          int? syncId,
+          int? trackerId,
           int? remoteId,
           i0.Value<int?> libraryId = const i0.Value.absent(),
           String? title,
@@ -387,7 +387,7 @@ class MangaSyncData extends i0.DataClass
       i1.MangaSyncData(
         id: id ?? this.id,
         mangaId: mangaId ?? this.mangaId,
-        syncId: syncId ?? this.syncId,
+        trackerId: trackerId ?? this.trackerId,
         remoteId: remoteId ?? this.remoteId,
         libraryId: libraryId.present ? libraryId.value : this.libraryId,
         title: title ?? this.title,
@@ -404,7 +404,7 @@ class MangaSyncData extends i0.DataClass
     return (StringBuffer('MangaSyncData(')
           ..write('id: $id, ')
           ..write('mangaId: $mangaId, ')
-          ..write('syncId: $syncId, ')
+          ..write('trackerId: $trackerId, ')
           ..write('remoteId: $remoteId, ')
           ..write('libraryId: $libraryId, ')
           ..write('title: $title, ')
@@ -423,7 +423,7 @@ class MangaSyncData extends i0.DataClass
   int get hashCode => Object.hash(
       id,
       mangaId,
-      syncId,
+      trackerId,
       remoteId,
       libraryId,
       title,
@@ -440,7 +440,7 @@ class MangaSyncData extends i0.DataClass
       (other is i1.MangaSyncData &&
           other.id == this.id &&
           other.mangaId == this.mangaId &&
-          other.syncId == this.syncId &&
+          other.trackerId == this.trackerId &&
           other.remoteId == this.remoteId &&
           other.libraryId == this.libraryId &&
           other.title == this.title &&
@@ -456,7 +456,7 @@ class MangaSyncData extends i0.DataClass
 class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
   final i0.Value<int> id;
   final i0.Value<int> mangaId;
-  final i0.Value<int> syncId;
+  final i0.Value<int> trackerId;
   final i0.Value<int> remoteId;
   final i0.Value<int?> libraryId;
   final i0.Value<String> title;
@@ -470,7 +470,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
   const MangaSyncCompanion({
     this.id = const i0.Value.absent(),
     this.mangaId = const i0.Value.absent(),
-    this.syncId = const i0.Value.absent(),
+    this.trackerId = const i0.Value.absent(),
     this.remoteId = const i0.Value.absent(),
     this.libraryId = const i0.Value.absent(),
     this.title = const i0.Value.absent(),
@@ -485,7 +485,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
   MangaSyncCompanion.insert({
     this.id = const i0.Value.absent(),
     required int mangaId,
-    required int syncId,
+    required int trackerId,
     required int remoteId,
     this.libraryId = const i0.Value.absent(),
     required String title,
@@ -497,7 +497,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     required DateTime startDate,
     required DateTime finishDate,
   })  : mangaId = i0.Value(mangaId),
-        syncId = i0.Value(syncId),
+        trackerId = i0.Value(trackerId),
         remoteId = i0.Value(remoteId),
         title = i0.Value(title),
         lastChapterRead = i0.Value(lastChapterRead),
@@ -510,7 +510,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
   static i0.Insertable<i1.MangaSyncData> custom({
     i0.Expression<int>? id,
     i0.Expression<int>? mangaId,
-    i0.Expression<int>? syncId,
+    i0.Expression<int>? trackerId,
     i0.Expression<int>? remoteId,
     i0.Expression<int>? libraryId,
     i0.Expression<String>? title,
@@ -525,7 +525,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     return i0.RawValuesInsertable({
       if (id != null) '_id': id,
       if (mangaId != null) 'manga_id': mangaId,
-      if (syncId != null) 'sync_id': syncId,
+      if (trackerId != null) 'sync_id': trackerId,
       if (remoteId != null) 'remote_id': remoteId,
       if (libraryId != null) 'library_id': libraryId,
       if (title != null) 'title': title,
@@ -542,7 +542,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
   i1.MangaSyncCompanion copyWith(
       {i0.Value<int>? id,
       i0.Value<int>? mangaId,
-      i0.Value<int>? syncId,
+      i0.Value<int>? trackerId,
       i0.Value<int>? remoteId,
       i0.Value<int?>? libraryId,
       i0.Value<String>? title,
@@ -556,7 +556,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     return i1.MangaSyncCompanion(
       id: id ?? this.id,
       mangaId: mangaId ?? this.mangaId,
-      syncId: syncId ?? this.syncId,
+      trackerId: trackerId ?? this.trackerId,
       remoteId: remoteId ?? this.remoteId,
       libraryId: libraryId ?? this.libraryId,
       title: title ?? this.title,
@@ -579,8 +579,8 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     if (mangaId.present) {
       map['manga_id'] = i0.Variable<int>(mangaId.value);
     }
-    if (syncId.present) {
-      map['sync_id'] = i0.Variable<int>(syncId.value);
+    if (trackerId.present) {
+      map['sync_id'] = i0.Variable<int>(trackerId.value);
     }
     if (remoteId.present) {
       map['remote_id'] = i0.Variable<int>(remoteId.value);
@@ -620,7 +620,7 @@ class MangaSyncCompanion extends i0.UpdateCompanion<i1.MangaSyncData> {
     return (StringBuffer('MangaSyncCompanion(')
           ..write('id: $id, ')
           ..write('mangaId: $mangaId, ')
-          ..write('syncId: $syncId, ')
+          ..write('trackerId: $trackerId, ')
           ..write('remoteId: $remoteId, ')
           ..write('libraryId: $libraryId, ')
           ..write('title: $title, ')

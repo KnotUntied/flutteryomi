@@ -3,7 +3,7 @@ import 'mangas.drift';
 CREATE TABLE manga_sync(
     _id INTEGER NOT NULL PRIMARY KEY,
     manga_id INTEGER NOT NULL,
-    sync_id INTEGER NOT NULL,
+    sync_id INTEGER NOT NULL as trackerId,
     remote_id INTEGER NOT NULL,
     library_id INTEGER,
     title TEXT NOT NULL,

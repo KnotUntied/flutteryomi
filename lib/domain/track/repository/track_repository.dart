@@ -9,7 +9,7 @@ abstract interface class TrackRepository {
   Future<List<Track>> getTracksByMangaId(int mangaId);
   Stream<List<Track>> getTracksAsStream();
   Stream<List<Track>> getTracksByMangaIdAsStream(int mangaId);
-  Future<void> delete(int mangaId, int syncId);
+  Future<void> delete(int mangaId, int trackerId);
   Future<void> insert(Track track);
   Future<void> insertAll(List<Track> tracks);
 }

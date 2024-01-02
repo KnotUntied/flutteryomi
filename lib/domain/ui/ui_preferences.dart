@@ -14,16 +14,10 @@ class UiPreferences {
   final PreferenceStore preferenceStore;
 
   Preference<ThemeMode> themeMode() => preferenceStore.getEnum(
-        "pref_theme_mode_key",
-        ThemeMode.system,
-        ThemeMode.values
-      );
+      "pref_theme_mode_key", ThemeMode.system, ThemeMode.values);
 
   Preference<AppTheme> appTheme() => preferenceStore.getEnum(
-        "pref_app_theme",
-        AppTheme.default_,
-        AppTheme.values,
-      );
+      "pref_app_theme", AppTheme.default_, AppTheme.values);
 
   Preference<bool> themeDarkAmoled() =>
       preferenceStore.getBool("pref_theme_dark_amoled_key", false);
@@ -37,16 +31,15 @@ class UiPreferences {
   Preference<TabletUiMode> tabletUiMode() => preferenceStore.getEnum(
         "tablet_ui_mode",
         TabletUiMode.automatic,
-        TabletUiMode.values,
+        TabletUiMode.values
       );
 
   static DateFormat dateFormatFromString(String format) => switch (format) {
-    '' => DateFormat.yMd(),
-    _ => DateFormat(format),
-  };
+        '' => DateFormat.yMd(),
+        _ => DateFormat(format),
+      };
 }
 
 @riverpod
-UiPreferences uiPreferences(UiPreferencesRef ref) => UiPreferences(
-      ref.watch(preferenceStoreProvider),
-    );
+UiPreferences uiPreferences(UiPreferencesRef ref) =>
+    UiPreferences(ref.watch(preferenceStoreProvider));

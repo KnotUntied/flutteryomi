@@ -829,10 +829,38 @@
   "label_mean_score": "Mean score",
   "label_used": "Used",
   "not_applicable": "N/A",
-  "day_short": "%dd",
-  "hour_short": "%dh",
-  "minute_short": "%dm",
-  "seconds_short": "%ds",
+  "day_short": "{count}d",
+  "@day_short": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "hour_short": "{count}h",
+  "@hour_short": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "minute_short": "{count}m",
+  "@minute_short": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "seconds_short": "{count}s",
+  "@seconds_short": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
 
   "download_queue_error": "Couldn't download chapters. You can try again in the downloads section",
   "download_insufficient_space": "Couldn't download chapters due to low storage space",
