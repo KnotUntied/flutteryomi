@@ -47,7 +47,8 @@ class CategoryScreen extends ConsumerWidget {
           onClickRename: (Category category) => showDialog(
             context: context,
             builder: (BuildContext context) => CategoryRenameDialog(
-              onRename: (String name) => screenModel.renameCategory(category, name),
+              onRename: (String name) =>
+                  screenModel.renameCategory(category, name),
               categories: data,
               category: category,
             ),
@@ -104,9 +105,10 @@ class CategoryScreenContent extends StatelessWidget {
       body: state.isEmpty
           ? EmptyScreen(message: lang.information_empty_category)
           : Padding(
-              padding: topSmallPaddingValues.add(
-                const EdgeInsets.symmetric(horizontal: MaterialPadding.medium),
-              ),
+              padding: topSmallPaddingValues +
+                  const EdgeInsets.symmetric(
+                    horizontal: MaterialPadding.medium,
+                  ),
               child: _CategoryContent(
                 categories: state,
                 onClickRename: onClickRename,

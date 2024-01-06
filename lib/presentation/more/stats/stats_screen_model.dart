@@ -11,6 +11,7 @@ import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_library_manga.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
+import 'package:flutteryomi/presentation/more/stats/data/stats_data.dart';
 
 part 'stats_screen_model.freezed.dart';
 part 'stats_screen_model.g.dart';
@@ -56,7 +57,8 @@ class StatsScreenModel extends _$StatsScreenModel {
     final titlesStatData = Titles(
       globalUpdateItemCount: _getGlobalUpdateItemCount(libraryManga),
       startedMangaCount: distinctLibraryManga.count((it) => it.hasStarted),
-      localMangaCount: distinctLibraryManga.count((it) => it.manga.isLocal()),
+      //localMangaCount: distinctLibraryManga.count((it) => it.manga.isLocal()),
+      localMangaCount: 0,
     );
 
     final chaptersStatData = Chapters(
@@ -67,7 +69,7 @@ class StatsScreenModel extends _$StatsScreenModel {
       //downloadCount: downloadManager.getDownloadCount(),
     );
 
-    final trackersStatData = Trackers(
+    const trackersStatData = Trackers(
       trackedTitleCount: 0,
       meanScore: 0,
       trackerCount: 0,
@@ -151,28 +153,4 @@ class StatsScreenState with _$StatsScreenState {
     Chapters chapters,
     Trackers trackers,
   }) = _StatsScreenState;
-}
-
-@freezed
-class StatsData with _$StatsData {
-  const factory StatsData.overview({
-    required int libraryMangaCount,
-    required int completedMangaCount,
-    required int totalReadDuration,
-  }) = Overview;
-  const factory StatsData.titles({
-    required int globalUpdateItemCount,
-    required int startedMangaCount,
-    required int localMangaCount,
-  }) = Titles;
-  const factory StatsData.chapters({
-    required int totalChapterCount,
-    required int readChapterCount,
-    required int downloadCount,
-  }) = Chapters;
-  const factory StatsData.trackers({
-    required int trackedTitleCount,
-    required double meanScore,
-    required int trackerCount,
-  }) = Trackers;
 }

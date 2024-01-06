@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:flutteryomi/presentation/components/list_heading.dart';
 import 'package:flutteryomi/presentation/components/material/constants.dart';
+import 'package:flutteryomi/presentation/components/section_card.dart';
+import 'package:flutteryomi/presentation/more/stats/components/stats_item.dart';
+import 'package:flutteryomi/presentation/more/stats/data/stats_data.dart';
 import 'package:flutteryomi/presentation/more/stats/stats_screen_model.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 import 'package:flutteryomi/presentation/util/time_utils.dart';
@@ -14,7 +16,6 @@ class StatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
-    final screenModel = ref.watch(statsScreenModelProvider.notifier);
     final state = ref.watch(statsScreenModelProvider);
     return Scaffold(
       appBar: AppBar(title: Text(lang.label_stats)),
@@ -41,84 +42,15 @@ class StatsScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return ListView(
-      children: <Widget>[
-        ListHeading(lang.label_overview_section),
-        StatisticsCard(
-          children: <StatisticsItemLarge>[
-            StatisticsItemLarge(
-              value: '0',
-              label: lang.in_library,
-              icon: const Icon(Icons.collections_bookmark_outlined),
-            ),
-            StatisticsItemLarge(
-              value: '0',
-              label: lang.label_completed_titles,
-              icon: const Icon(Icons.local_library_outlined),
-            ),
-            StatisticsItemLarge(
-              //value: const Duration(days: 1, hours: 1, minutes: 33, microseconds: 500).toString(),
-              value: '0 m',
-              label: lang.label_read_duration,
-              icon: const Icon(Icons.schedule_outlined),
-            ),
-          ],
-        ),
+    return Column(
+      children: [
+        OverviewSection(state.overview),
         const SizedBox.square(dimension: MaterialPadding.small),
-        ListHeading(lang.label_titles_section),
-        StatisticsCard(
-          children: <StatisticsItem>[
-            StatisticsItem(
-              value: '0',
-              label: lang.label_titles_in_global_update,
-            ),
-            StatisticsItem(
-              value: '0',
-              label: lang.label_started,
-            ),
-            StatisticsItem(
-              value: '0',
-              label: lang.label_local,
-            ),
-          ],
-        ),
+        TitlesStats(state.titles),
         const SizedBox.square(dimension: MaterialPadding.small),
-        ListHeading(lang.chapters),
-        StatisticsCard(
-          children: <StatisticsItem>[
-            StatisticsItem(
-              value: '0',
-              label: lang.label_total_chapters,
-            ),
-            StatisticsItem(
-              value: '0',
-              label: lang.label_read_chapters,
-            ),
-            StatisticsItem(
-              value: '0',
-              label: lang.label_downloaded,
-            ),
-          ],
-        ),
+        ChapterStats(state.chapters),
         const SizedBox.square(dimension: MaterialPadding.small),
-        ListHeading(lang.label_tracker_section),
-        StatisticsCard(
-          children: <StatisticsItem>[
-            StatisticsItem(
-              value: '0',
-              label: lang.label_tracked_titles,
-            ),
-            StatisticsItem(
-              value: '0 ★',
-              label: lang.label_mean_score,
-            ),
-            StatisticsItem(
-              value: '0',
-              label: lang.label_used,
-            ),
-          ],
-        ),
+        TrackerStats(state.trackers),
       ],
     );
   }
@@ -133,89 +65,132 @@ class OverviewSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
     final none = lang.none;
-    final read = Duration(milliseconds: data.totalReadDuration)
+    final readDurationString = Duration(milliseconds: data.totalReadDuration)
         .toDurationString(context: context, fallback: none);
-    return const Placeholder();
-  }
-}
-
-class StatisticsCard extends StatelessWidget {
-  const StatisticsCard({
-    super.key,
-    required this.children,
-  });
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: children,
-          ),
+    return SectionCard(
+      title: lang.label_overview_section,
+      content: [
+        Row(
+          children: [
+            StatsOverviewItem(
+              title: data.libraryMangaCount.toString(),
+              subtitle: lang.in_library,
+              icon: Icons.collections_bookmark_outlined,
+            ),
+            StatsOverviewItem(
+              title: readDurationString,
+              subtitle: lang.label_read_duration,
+              icon: Icons.schedule_outlined,
+            ),
+            StatsOverviewItem(
+              title: data.completedMangaCount.toString(),
+              subtitle: lang.label_completed_titles,
+              icon: Icons.local_library_outlined,
+            ),
+          ],
         ),
-      ),
+      ],
     );
   }
 }
 
-class StatisticsItemLarge extends StatelessWidget {
-  const StatisticsItemLarge({
-    super.key,
-    required this.value,
-    required this.label,
-    required this.icon,
-  });
+class TitlesStats extends StatelessWidget {
+  const TitlesStats(this.data, {super.key});
 
-  final String value;
-  final String label;
-  final Icon icon;
+  final Titles data;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleLarge,
+    final lang = AppLocalizations.of(context);
+    return SectionCard(
+      title: lang.label_titles_section,
+      content: [
+        Row(
+          children: [
+            StatsItem(
+              data.globalUpdateItemCount.toString(),
+              lang.label_titles_in_global_update,
+            ),
+            StatsItem(
+              data.startedMangaCount.toString(),
+              lang.label_started,
+            ),
+            StatsItem(
+              data.localMangaCount.toString(),
+              lang.label_local,
+            ),
+          ],
         ),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-        icon,
       ],
-    ));
+    );
   }
 }
 
-class StatisticsItem extends StatelessWidget {
-  const StatisticsItem({
-    super.key,
-    required this.value,
-    required this.label,
-  });
+class ChapterStats extends StatelessWidget {
+  const ChapterStats(this.data, {super.key});
 
-  final String value;
-  final String label;
+  final Chapters data;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(value, style: Theme.of(context).textTheme.titleMedium),
-        Text(label, style: Theme.of(context).textTheme.labelMedium),
+    final lang = AppLocalizations.of(context);
+    return SectionCard(
+      title: lang.chapters,
+      content: [
+        Row(
+          children: [
+            StatsItem(
+              data.totalChapterCount.toString(),
+              lang.label_total_chapters,
+            ),
+            StatsItem(
+              data.readChapterCount.toString(),
+              lang.label_read_chapters,
+            ),
+            StatsItem(
+              data.downloadCount.toString(),
+              lang.label_downloaded,
+            ),
+          ],
+        ),
       ],
-    ));
+    );
+  }
+}
+
+class TrackerStats extends StatelessWidget {
+  const TrackerStats(this.data, {super.key});
+
+  final Trackers data;
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context);
+    final notApplicable = lang.not_applicable;
+    final meanScoreStr = (data.trackedTitleCount > 0 && !data.meanScore.isNaN)
+        // All other numbers are localized in English
+        ? "{${data.meanScore.toStringAsFixed(2)}} ★"
+        : notApplicable;
+    return SectionCard(
+      title: lang.label_tracker_section,
+      content: [
+        Row(
+          children: [
+            StatsItem(
+              data.trackedTitleCount.toString(),
+              lang.label_tracked_titles,
+            ),
+            StatsItem(
+              meanScoreStr,
+              lang.label_mean_score,
+            ),
+            StatsItem(
+              data.trackerCount.toString(),
+              lang.label_used,
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
