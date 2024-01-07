@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
+
+part 'download_preferences.g.dart';
 
 class DownloadPreferences {
   DownloadPreferences(this.preferenceStore);
@@ -37,3 +41,7 @@ class DownloadPreferences {
   Preference<Set<String>> downloadNewChapterCategoriesExclude() =>
       preferenceStore.getStringSet("download_new_categories_exclude", {});
 }
+
+@riverpod
+DownloadPreferences downloadPreferences(DownloadPreferencesRef ref) =>
+    DownloadPreferences(ref.watch(preferenceStoreProvider));

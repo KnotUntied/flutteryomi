@@ -31,10 +31,7 @@ class UpdateChapter {
 }
 
 @riverpod
-UpdateChapter updateChapter(
-  UpdateChapterRef ref
-) =>
-    UpdateChapter(
+UpdateChapter updateChapter(UpdateChapterRef ref) => UpdateChapter(
       ref.watch(chapterRepositoryProvider),
       ref.watch(loggerProvider),
     );

@@ -1,27 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'updates_screen_model.dart';
+part of 'source_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updatesScreenModelHash() =>
-    r'27358745ec0f89a38079e73880f4e73e0937e4bf';
+String _$sourceManagerHash() => r'51161d70f275be5fda9d652bee9c8ec892e3d40a';
 
-/// See also [UpdatesScreenModel].
-@ProviderFor(UpdatesScreenModel)
-final updatesScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    UpdatesScreenModel, UpdatesScreenState>.internal(
-  UpdatesScreenModel.new,
-  name: r'updatesScreenModelProvider',
+/// See also [sourceManager].
+@ProviderFor(sourceManager)
+final sourceManagerProvider = AutoDisposeProvider<SourceManager>.internal(
+  sourceManager,
+  name: r'sourceManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$updatesScreenModelHash,
+      : _$sourceManagerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$UpdatesScreenModel = AutoDisposeStreamNotifier<UpdatesScreenState>;
+typedef SourceManagerRef = AutoDisposeProviderRef<SourceManager>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

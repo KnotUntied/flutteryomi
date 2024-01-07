@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'updates_screen_model.dart';
+part of 'get_available_scanlators.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updatesScreenModelHash() =>
-    r'27358745ec0f89a38079e73880f4e73e0937e4bf';
+String _$getAvailableScanlatorsHash() =>
+    r'4cc282a91feeee80abee40e81f6958b41c4ebb84';
 
-/// See also [UpdatesScreenModel].
-@ProviderFor(UpdatesScreenModel)
-final updatesScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    UpdatesScreenModel, UpdatesScreenState>.internal(
-  UpdatesScreenModel.new,
-  name: r'updatesScreenModelProvider',
+/// See also [getAvailableScanlators].
+@ProviderFor(getAvailableScanlators)
+final getAvailableScanlatorsProvider =
+    AutoDisposeProvider<GetAvailableScanlators>.internal(
+  getAvailableScanlators,
+  name: r'getAvailableScanlatorsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$updatesScreenModelHash,
+      : _$getAvailableScanlatorsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$UpdatesScreenModel = AutoDisposeStreamNotifier<UpdatesScreenState>;
+typedef GetAvailableScanlatorsRef
+    = AutoDisposeProviderRef<GetAvailableScanlators>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
