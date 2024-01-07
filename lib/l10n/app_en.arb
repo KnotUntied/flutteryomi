@@ -40,7 +40,6 @@
 
   "unlock_app_title": "Unlock {title}",
   "@unlock_app_title": {
-    "description": "Purpose to be identified.",
     "placeholders": {
       "title": {
         "type": "String"
@@ -538,8 +537,8 @@
   "restoring_backup_error": "Restoring backup failed",
   "restoring_backup_canceled": "Canceled restore",
   "backup_info": "You should keep copies of backups in other places as well. Backups may contain sensitive data including any stored passwords; be careful if sharing.",
-  "last_auto_backup_info": "Last automatically backed up: %s",
-  "@exclude": {
+  "last_auto_backup_info": "Last automatically backed up: {text}",
+  "@last_auto_backup_info": {
     "placeholders": {
       "text": {
         "type": "String"
@@ -602,7 +601,14 @@
   "licenses": "Open source licenses",
   "privacy_policy": "Privacy policy",
   "check_for_updates": "Check for updates",
-  "updated_version": "Updated to v%1$s",
+  "updated_version": "Updated to v{version}",
+  "@updated_version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
 
   "pref_enable_acra": "Send crash reports",
   "pref_acra_summary": "Helps fix any bugs. No sensitive data will be sent",
@@ -614,13 +620,27 @@
   "notification_incognito_text": "Disable incognito mode",
   "downloaded_only_summary": "Filters all entries in your library",
 
-  "login_title": "Log in to %1$s",
+  "login_title": "Log in to {title}",
+  "@login_title": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "username": "Username",
   "email": "Email address",
   "password": "Password",
   "login": "Login",
   "login_success": "Logged in",
-  "logout_title": "Log out from %1$s?",
+  "logout_title": "Log out from {title}?",
+  "@logout_title": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "logout": "Log out",
   "logout_success": "You are now logged out",
   "unknown_error": "Unknown error",
@@ -640,7 +660,14 @@
   "last_used_source": "Last used",
   "pinned_sources": "Pinned",
   "action_global_search_hint": "Global search…",
-  "action_global_search_query": "Search for \"%1$s\" globally",
+  "action_global_search_query": "Search for \"{query}\" globally",
+  "@action_global_search_query": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
   "latest": "Latest",
   "popular": "Popular",
   "browse": "Browse",
@@ -671,17 +698,48 @@
   "manga_info_collapse": "Less",
   "delete_downloads_for_manga": "Delete downloaded chapters?",
   "copied_to_clipboard_plain": "Copied to clipboard",
-  "copied_to_clipboard": "Copied to clipboard:\n%1$s",
+  "copied_to_clipboard": "Copied to clipboard:\n{text}",
+  "@copied_to_clipboard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
   "clipboard_copy_error": "Failed to copy to clipboard",
-  "source_not_installed": "Source not installed: %1$s",
+  "source_not_installed": "Source not installed: {source}",
+  "@source_not_installed": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
   "snack_add_to_library": "Add to library?",
   "description_placeholder": "No description",
 
-  "display_mode_chapter": "Chapter %1$s",
+  "display_mode_chapter": "Chapter {text}",
+  "@display_mode_chapter": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
   "manga_display_interval_title": "Estimate every",
   "manga_display_modified_interval_title": "Set to update every",
   "manga_modify_calculated_interval_title": "Customize interval",
-  "chapter_downloading_progress": "Downloading (%1$d/%2$d)",
+  "chapter_downloading_progress": "Downloading ({current}/{total})",
+  "@chapter_downloading_progress": {
+    "placeholders": {
+      "current": {
+        "type": "num"
+      },
+      "total": {
+        "type": "num"
+      }
+    }
+  },
   "chapter_error": "Error",
   "chapter_paused": "Paused",
   "show_title": "Source title",
@@ -733,11 +791,39 @@
   "error_no_match": "No match found",
   "track_error": "%1$s error: %2$s",
   "track_remove_date_conf_title": "Remove date?",
-  "track_remove_start_date_conf_text": "This will remove your previously selected start date from %s",
-  "track_remove_finish_date_conf_text": "This will remove your previously selected finish date from %s",
-  "track_delete_title": "Remove %s tracking?",
+  "track_remove_start_date_conf_text": "This will remove your previously selected start date from {tracker}",
+  "@track_remove_start_date_conf_text": {
+    "placeholders": {
+      "tracker": {
+        "type": "String"
+      }
+    }
+  },
+  "track_remove_finish_date_conf_text": "This will remove your previously selected finish date from {tracker}",
+  "@track_remove_finish_date_conf_text": {
+    "placeholders": {
+      "tracker": {
+        "type": "String"
+      }
+    }
+  },
+  "track_delete_title": "Remove {tracker} tracking?",
+  "@track_delete_title": {
+    "placeholders": {
+      "tracker": {
+        "type": "String"
+      }
+    }
+  },
   "track_delete_text": "This will remove the tracking locally.",
-  "track_delete_remote_text": "Also remove from %s",
+  "track_delete_remote_text": "Also remove from {remote}",
+  "@track_delete_remote_text": {
+    "placeholders": {
+      "remote": {
+        "type": "String"
+      }
+    }
+  },
 
   "error_category_exists": "A category with this name already exists!",
   "snack_categories_deleted": "Categories deleted",
@@ -814,7 +900,14 @@
   "not_installed": "Not installed",
 
   "crash_screen_title": "Whoops!",
-  "crash_screen_description": "%s ran into an unexpected error. We suggest you share the crash logs in our support channel on Discord.",
+  "crash_screen_description": "{name} ran into an unexpected error. We suggest you share the crash logs in our support channel on Discord.",
+  "@day_short": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "crash_screen_restart_application": "Restart the application",
 
   "label_overview_section": "Overview",

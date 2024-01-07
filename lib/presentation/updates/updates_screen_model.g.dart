@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'stats_screen_model.dart';
+part of 'updates_screen_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$statsScreenModelHash() => r'd7ebb2ee84f2979b16486a7dc132fef39812c6f5';
+String _$updatesScreenModelHash() =>
+    r'ec1ee8f975460fb59b61d937a9b065b04584c957';
 
-/// See also [StatsScreenModel].
-@ProviderFor(StatsScreenModel)
-final statsScreenModelProvider = AutoDisposeAsyncNotifierProvider<
-    StatsScreenModel, StatsScreenState>.internal(
-  StatsScreenModel.new,
-  name: r'statsScreenModelProvider',
+/// See also [UpdatesScreenModel].
+@ProviderFor(UpdatesScreenModel)
+final updatesScreenModelProvider = AutoDisposeStreamNotifierProvider<
+    UpdatesScreenModel, UpdatesScreenState>.internal(
+  UpdatesScreenModel.new,
+  name: r'updatesScreenModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$statsScreenModelHash,
+      : _$updatesScreenModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$StatsScreenModel = AutoDisposeAsyncNotifier<StatsScreenState>;
+typedef _$UpdatesScreenModel = AutoDisposeStreamNotifier<UpdatesScreenState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -59,3 +59,4 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
   - Proper attribution
 - Feature parity with Tachiyomi
 - Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp` rather than simply using `CupertinoIcons`
+- XML to ARB for localization

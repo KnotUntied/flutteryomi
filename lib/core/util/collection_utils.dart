@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 extension InsertSeparators<T> on List<T> {
   List<R> insertSeparators<R>(R? Function(T?, T?) generator) {
     if (isEmpty) return [];
@@ -10,5 +12,15 @@ extension InsertSeparators<T> on List<T> {
       if (separator != null) newList.add(separator);
     }
     return newList;
+  }
+}
+
+extension HashSetAddOrRemove<T> on HashSet<T> {
+  void addOrRemove(T value, bool shouldAdd) {
+    if (shouldAdd) {
+      add(value);
+    } else {
+      remove(value);
+    }
   }
 }
