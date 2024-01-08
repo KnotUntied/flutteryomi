@@ -7,7 +7,7 @@ part of 'updates_screen_model.dart';
 // **************************************************************************
 
 String _$updatesScreenModelHash() =>
-    r'27358745ec0f89a38079e73880f4e73e0937e4bf';
+    r'eb2af59fb117df5d4c5a0eab706ec89973f8ce56';
 
 /// See also [UpdatesScreenModel].
 @ProviderFor(UpdatesScreenModel)

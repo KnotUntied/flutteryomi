@@ -6,6 +6,7 @@ import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+import 'package:flutteryomi/domain/source/model/smanga.dart';
 
 part 'update_manga.g.dart';
 
@@ -20,13 +21,71 @@ class UpdateManga {
   Future<bool> awaitAll(List<MangaUpdate> mangaUpdates) async =>
       await repository.updateAll(mangaUpdates);
 
-  // TODO awaitUpdateFromSource
+  // TODO
+  Future<bool> awaitUpdateFromSource(
+    Manga localManga,
+    SManga remoteManga,
+    bool manualFetch,
+    //CoverCache coverCache,
+  ) async {
+    String remoteTitle;
+    try {
+      remoteTitle = remoteManga.title;
+      //UninitializedPropertyAccessException
+    } catch (_) {
+      remoteTitle = '';
+    }
+
+    // if the manga isn't a favorite, set its title from source and update in db
+    final title = (remoteTitle.isEmpty || localManga.favorite) //
+        ? null
+        : remoteTitle;
+
+    DateTime? coverLastModified;
+    // Never refresh covers if the url is empty to avoid "losing" existing covers
+    //if (remoteManga.thumbnailUrl.isNullOrEmpty) {
+    //  coverLastModified = null;
+    //} else if (!manualFetch &&
+    //    localManga.thumbnailUrl == remoteManga.thumbnailUrl) {
+    //  coverLastModified = null;
+    //} else if (localManga.isLocal) {
+    //  coverLastModified = DateTime.now();
+    //} else if (localManga.hasCustomCover(coverCache)) {
+    //  coverCache.deleteFromCache(localManga, false);
+    //  coverLastModified = null;
+    //} else {
+    //  coverCache.deleteFromCache(localManga, false);
+    //  coverLastModified = DateTime.now();
+    //}
+
+    final thumbnailUrl = remoteManga.thumbnailUrl.isNotNullOrEmpty
+        ? remoteManga.thumbnailUrl
+        : null;
+
+    return await repository.update(
+      MangaUpdate(
+        id: Value(localManga.id),
+        title: title != null ? Value(title) : const Value.absent(),
+        coverLastModified: coverLastModified != null
+            ? Value(coverLastModified)
+            : const Value.absent(),
+        author: Value(remoteManga.author),
+        artist: Value(remoteManga.artist),
+        description: Value(remoteManga.description),
+        genre: Value(remoteManga.getGenres()),
+        thumbnailUrl: Value(thumbnailUrl),
+        status: Value(remoteManga.status),
+        updateStrategy: Value(remoteManga.updateStrategy.index),
+        initialized: const Value(true),
+      ),
+    );
+  }
 
   Future<bool> awaitUpdateFetchInterval(
-    Manga manga, {
+    Manga manga, [
     DateTime? dateTime,
     Pair<int, int>? window,
-  }) async {
+  ]) async {
     dateTime ??= DateTime.now();
     window ??= fetchInterval.getWindow(dateTime);
     MangaUpdate? mangaUpdate = await fetchInterval.toMangaUpdateOrNull(
