@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutteryomi/presentation/components/app_bar.dart';
+import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
-import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 import 'package:flutteryomi/presentation/updates/updates_screen_model.dart';
 
@@ -222,18 +222,18 @@ class UpdatesAppBar extends StatelessWidget implements PreferredSizeWidget {
 class UpdatesBottomBar extends StatelessWidget {
   const UpdatesBottomBar({
     super.key,
-    //required this.selected,
-    //required this.onDownloadChapter,
-    //required this.onMultiBookmarkClicked,
-    //required this.onMultiMarkAsReadClicked,
-    //required this.onMultiDeleteClicked,
+    required this.selected,
+    required this.onDownloadChapter,
+    required this.onMultiBookmarkClicked,
+    required this.onMultiMarkAsReadClicked,
+    required this.onMultiDeleteClicked,
   });
 
-  //final List<UpdatesItem> selected;
-  //final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
-  //final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
-  //final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
-  //final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
+  final List<UpdatesItem> selected;
+  final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
+  final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
+  final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
+  final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
 
   @override
   Widget build(BuildContext context) {

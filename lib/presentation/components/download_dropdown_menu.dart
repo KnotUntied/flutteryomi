@@ -47,12 +47,11 @@ class DownloadDropdownMenu extends StatelessWidget {
       ),
     ];
     return MenuAnchor(
-      builder:
-          (BuildContext context, MenuController controller, Widget? child) {
+      builder: (context, controller, child) {
         return IconButton(
-          onPressed: () {
-            controller.isOpen ? controller.close() : controller.open();
-          },
+          onPressed: () => controller.isOpen //
+              ? controller.close()
+              : controller.open(),
           icon: Icon(
             Icons.download_outlined,
             semanticLabel: lang.action_download,
@@ -62,9 +61,7 @@ class DownloadDropdownMenu extends StatelessWidget {
       },
       menuChildren: dropdownItems
           .map((item) => MenuItemButton(
-                onPressed: () {
-                  onDownloadClicked(item.value);
-                },
+                onPressed: () => onDownloadClicked(item.value),
                 child: Text(item.label),
               ))
           .toList(),
