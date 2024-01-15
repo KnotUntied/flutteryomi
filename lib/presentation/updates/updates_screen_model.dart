@@ -10,7 +10,8 @@ import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_read_status.dart';
 import 'package:flutteryomi/domain/chapter/interactor/update_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
-import 'package:flutteryomi/domain/download/model/download_manager.dart';
+import 'package:flutteryomi/domain/download/model/download.dart';
+import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
@@ -361,32 +362,35 @@ class UpdatesScreenState with _$UpdatesScreenState {
 class UpdatesItem with _$UpdatesItem {
   const factory UpdatesItem({
     required UpdatesWithRelations update,
-    //TODO
-    //DownloadState Function() downloadStateProvider,
-    //int Function() downloadProgressProvider,
+    required DownloadState Function() downloadStateProvider,
+    required int Function() downloadProgressProvider,
     @Default(false) bool selected,
   }) = _UpdatesItem;
 }
 
 extension _UpdatesWithRelationsToUpdateItems on List<UpdatesWithRelations> {
-  List<UpdatesItem> toUpdateItems(HashSet<int> selectedChapterIds) =>
+  List<UpdatesItem> toUpdateItems(DownloadManager downloadManager, HashSet<int> selectedChapterIds) =>
       map((update) {
         // TODO: Fetch downloads
-        //final activeDownload = downloadManager.getQueuedDownloadOrNull(update.chapterId);
-        //final downloaded = downloadManager.isChapterDownloaded(
-        //  update.chapterName,
-        //  update.scanlator,
-        //  update.mangaTitle,
-        //  update.sourceId,
-        //);
-        //var downloadState;
-        //final downloadState = when {
-        //  activeDownload != null -> activeDownload.status
-        //  downloaded -> Download.State.DOWNLOADED
-        //  else -> Download.State.NOT_DOWNLOADED
-        //};
+        final activeDownload = downloadManager.getQueuedDownloadOrNull(update.chapterId);
+        final downloaded = downloadManager.isChapterDownloaded(
+          update.chapterName,
+          update.scanlator,
+          update.mangaTitle,
+          update.sourceId,
+        );
+        var downloadState;
+        if (activeDownload != null) {
+          downloadState = activeDownload.status;
+        } else if (downloaded) {
+          downloadState = DownloadState.downloaded;
+        } else {
+          downloadState = DownloadState.notDownloaded;
+        }
         return UpdatesItem(
           update: update,
+          downloadStateProvider: () => downloadState,
+          downloadProgressProvider: () => activeDownload?.progress ?? 0,
           selected: selectedChapterIds.contains(update.chapterId),
         );
       }).toList();

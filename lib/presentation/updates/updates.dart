@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
@@ -94,34 +95,34 @@ class UpdatesTab extends ConsumerWidget {
 class UpdatesScreen extends StatelessWidget {
   const UpdatesScreen({
     super.key,
-    //required this.state,
+    required this.state,
     required this.lastUpdated,
     required this.relativeTime,
-    //required this.onClickCover,
+    required this.onClickCover,
     required this.onSelectAll,
     required this.onInvertSelection,
     required this.onUpdateLibrary,
-    //required this.onDownloadChapter,
-    //required this.onMultiBookmarkClicked,
-    //required this.onMultiMarkAsReadClicked,
-    //required this.onMultiDeleteClicked,
-    //required this.onUpdateSelected,
-    //required this.onOpenChapter,
+    required this.onDownloadChapter,
+    required this.onMultiBookmarkClicked,
+    required this.onMultiMarkAsReadClicked,
+    required this.onMultiDeleteClicked,
+    required this.onUpdateSelected,
+    required this.onOpenChapter,
   });
 
-  //final UpdatesScreenModel.State state;
+  final UpdatesScreenState state;
   final DateTime lastUpdated;
   final bool relativeTime;
-  //final ValueChanged<UpdatesItem> onClickCover;
+  final ValueChanged<UpdatesItem> onClickCover;
   final ValueChanged<bool> onSelectAll;
   final VoidCallback onInvertSelection;
   final bool Function() onUpdateLibrary;
-  //final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
-  //final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
-  //final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
-  //final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
-  //final Function(UpdatesItem, bool, bool, bool) onUpdateSelected;
-  //final ValueChanged<UpdatesItem> onOpenChapter;
+  final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
+  final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
+  final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
+  final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
+  final Function(UpdatesItem, bool, bool, bool) onUpdateSelected;
+  final ValueChanged<UpdatesItem> onOpenChapter;
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +166,7 @@ class UpdatesScreen extends StatelessWidget {
         },
       ),
       body: body,
-      bottomNavigationBar: const UpdatesBottomBar(),
+      bottomNavigationBar: const _UpdatesBottomBar(),
     );
   }
 }
@@ -219,8 +220,8 @@ class UpdatesAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class UpdatesBottomBar extends StatelessWidget {
-  const UpdatesBottomBar({
+class _UpdatesBottomBar extends StatelessWidget {
+  const _UpdatesBottomBar({
     super.key,
     required this.selected,
     required this.onDownloadChapter,
@@ -230,15 +231,33 @@ class UpdatesBottomBar extends StatelessWidget {
   });
 
   final List<UpdatesItem> selected;
-  final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
-  final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
-  final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
+  final void Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
+  final void Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
+  final void Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
   final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
 
   @override
   Widget build(BuildContext context) {
-    return const MangaBottomActionMenu(
-      visible: true,
+    return MangaBottomActionMenu(
+      visible: selected.isNotEmpty,
+      onBookmarkClicked: selected.any((it) => !it.update.bookmark)
+          ? () => onMultiBookmarkClicked(selected, true)
+          : null,
+      onRemoveBookmarkClicked: selected.every((it) => it.update.bookmark)
+          ? () => onMultiBookmarkClicked(selected, false)
+          : null,
+      onMarkAsReadClicked: selected.any((it) => !it.update.read)
+          ? () => onMultiMarkAsReadClicked(selected, true)
+          : null,
+      onMarkAsUnreadClicked: selected.any((it) => it.update.read || it.update.lastPageRead > 0)
+          ? () => onMultiMarkAsReadClicked(selected, false)
+          : null,
+      onDownloadClicked: selected.any((it) => it.downloadStateProvider() != DownloadState.downloaded)
+          ? () => onDownloadChapter(selected, ChapterDownloadAction.start)
+          : null,
+      onDeleteClicked: selected.any((it) => it.downloadStateProvider() == DownloadState.downloaded)
+          ? () => onMultiDeleteClicked(selected)
+          : null,
     );
   }
 }

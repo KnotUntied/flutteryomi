@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,6 +9,8 @@ import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/model/category_update.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/download/downloader.dart';
+import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/source.dart';
@@ -20,7 +23,7 @@ part 'download_manager.g.dart';
 /// and retrieved through dependency injection. You can use this class to queue new chapters or query
 /// downloaded chapters.
 class DownloadManager {
-  //final Context context;
+  //final BuildContext context;
   //final DownloadProvider provider;
   //final DownloadCache cache;
   final GetCategories getCategories;
@@ -39,6 +42,11 @@ class DownloadManager {
 
   /// Downloader whose only task is to download chapters.
   //late final _downloader = Downloader(context, provider, cache);
+  //late final _downloader = Downloader(
+  //  sourceManager: null,
+  //  downloadPreferences: null,
+  //  getCategories: null,
+  //);
 
   //bool get isRunning => _downloader.isRunning;
 
@@ -78,8 +86,8 @@ class DownloadManager {
 
   /// Returns the download from queue if the chapter with [chapterId] is queued for download
   /// else it will return null which means that the chapter is not queued for download
-  //Download? getQueuedDownloadOrNull(int chapterId) =>
-  //    queueState.value.firstWhereOrNull((it) => it.chapter.id == chapterId);
+  Download? getQueuedDownloadOrNull(int chapterId) => null;
+      //queueState.value.firstWhereOrNull((it) => it.chapter.id == chapterId);
 
   void startDownloadNow(int chapterId) {
     //final existingDownload = getQueuedDownloadOrNull(chapterId);

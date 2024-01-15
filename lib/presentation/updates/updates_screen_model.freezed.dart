@@ -324,9 +324,11 @@ abstract class _UpdatesScreenState extends UpdatesScreenState {
 
 /// @nodoc
 mixin _$UpdatesItem {
-  UpdatesWithRelations get update => throw _privateConstructorUsedError; //TODO
-//DownloadState Function() downloadStateProvider,
-//int Function() downloadProgressProvider,
+  UpdatesWithRelations get update => throw _privateConstructorUsedError;
+  DownloadState Function() get downloadStateProvider =>
+      throw _privateConstructorUsedError;
+  int Function() get downloadProgressProvider =>
+      throw _privateConstructorUsedError;
   bool get selected => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -340,7 +342,11 @@ abstract class $UpdatesItemCopyWith<$Res> {
           UpdatesItem value, $Res Function(UpdatesItem) then) =
       _$UpdatesItemCopyWithImpl<$Res, UpdatesItem>;
   @useResult
-  $Res call({UpdatesWithRelations update, bool selected});
+  $Res call(
+      {UpdatesWithRelations update,
+      DownloadState Function() downloadStateProvider,
+      int Function() downloadProgressProvider,
+      bool selected});
 
   $UpdatesWithRelationsCopyWith<$Res> get update;
 }
@@ -359,6 +365,8 @@ class _$UpdatesItemCopyWithImpl<$Res, $Val extends UpdatesItem>
   @override
   $Res call({
     Object? update = null,
+    Object? downloadStateProvider = null,
+    Object? downloadProgressProvider = null,
     Object? selected = null,
   }) {
     return _then(_value.copyWith(
@@ -366,6 +374,14 @@ class _$UpdatesItemCopyWithImpl<$Res, $Val extends UpdatesItem>
           ? _value.update
           : update // ignore: cast_nullable_to_non_nullable
               as UpdatesWithRelations,
+      downloadStateProvider: null == downloadStateProvider
+          ? _value.downloadStateProvider
+          : downloadStateProvider // ignore: cast_nullable_to_non_nullable
+              as DownloadState Function(),
+      downloadProgressProvider: null == downloadProgressProvider
+          ? _value.downloadProgressProvider
+          : downloadProgressProvider // ignore: cast_nullable_to_non_nullable
+              as int Function(),
       selected: null == selected
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
@@ -390,7 +406,11 @@ abstract class _$$UpdatesItemImplCopyWith<$Res>
       __$$UpdatesItemImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UpdatesWithRelations update, bool selected});
+  $Res call(
+      {UpdatesWithRelations update,
+      DownloadState Function() downloadStateProvider,
+      int Function() downloadProgressProvider,
+      bool selected});
 
   @override
   $UpdatesWithRelationsCopyWith<$Res> get update;
@@ -408,6 +428,8 @@ class __$$UpdatesItemImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? update = null,
+    Object? downloadStateProvider = null,
+    Object? downloadProgressProvider = null,
     Object? selected = null,
   }) {
     return _then(_$UpdatesItemImpl(
@@ -415,6 +437,14 @@ class __$$UpdatesItemImplCopyWithImpl<$Res>
           ? _value.update
           : update // ignore: cast_nullable_to_non_nullable
               as UpdatesWithRelations,
+      downloadStateProvider: null == downloadStateProvider
+          ? _value.downloadStateProvider
+          : downloadStateProvider // ignore: cast_nullable_to_non_nullable
+              as DownloadState Function(),
+      downloadProgressProvider: null == downloadProgressProvider
+          ? _value.downloadProgressProvider
+          : downloadProgressProvider // ignore: cast_nullable_to_non_nullable
+              as int Function(),
       selected: null == selected
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
@@ -426,20 +456,25 @@ class __$$UpdatesItemImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UpdatesItemImpl implements _UpdatesItem {
-  const _$UpdatesItemImpl({required this.update, this.selected = false});
+  const _$UpdatesItemImpl(
+      {required this.update,
+      required this.downloadStateProvider,
+      required this.downloadProgressProvider,
+      this.selected = false});
 
   @override
   final UpdatesWithRelations update;
-//TODO
-//DownloadState Function() downloadStateProvider,
-//int Function() downloadProgressProvider,
+  @override
+  final DownloadState Function() downloadStateProvider;
+  @override
+  final int Function() downloadProgressProvider;
   @override
   @JsonKey()
   final bool selected;
 
   @override
   String toString() {
-    return 'UpdatesItem(update: $update, selected: $selected)';
+    return 'UpdatesItem(update: $update, downloadStateProvider: $downloadStateProvider, downloadProgressProvider: $downloadProgressProvider, selected: $selected)';
   }
 
   @override
@@ -448,12 +483,18 @@ class _$UpdatesItemImpl implements _UpdatesItem {
         (other.runtimeType == runtimeType &&
             other is _$UpdatesItemImpl &&
             (identical(other.update, update) || other.update == update) &&
+            (identical(other.downloadStateProvider, downloadStateProvider) ||
+                other.downloadStateProvider == downloadStateProvider) &&
+            (identical(
+                    other.downloadProgressProvider, downloadProgressProvider) ||
+                other.downloadProgressProvider == downloadProgressProvider) &&
             (identical(other.selected, selected) ||
                 other.selected == selected));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, update, selected);
+  int get hashCode => Object.hash(runtimeType, update, downloadStateProvider,
+      downloadProgressProvider, selected);
 
   @JsonKey(ignore: true)
   @override
@@ -465,13 +506,17 @@ class _$UpdatesItemImpl implements _UpdatesItem {
 abstract class _UpdatesItem implements UpdatesItem {
   const factory _UpdatesItem(
       {required final UpdatesWithRelations update,
+      required final DownloadState Function() downloadStateProvider,
+      required final int Function() downloadProgressProvider,
       final bool selected}) = _$UpdatesItemImpl;
 
   @override
   UpdatesWithRelations get update;
-  @override //TODO
-//DownloadState Function() downloadStateProvider,
-//int Function() downloadProgressProvider,
+  @override
+  DownloadState Function() get downloadStateProvider;
+  @override
+  int Function() get downloadProgressProvider;
+  @override
   bool get selected;
   @override
   @JsonKey(ignore: true)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutteryomi/core/preference/preference_store.dart';
@@ -22,6 +23,7 @@ import 'package:flutteryomi/presentation/home/home.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
+  await Hive.initFlutter();
   return runApp(
     ProviderScope(
       overrides: [

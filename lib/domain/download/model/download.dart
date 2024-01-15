@@ -1,8 +1,12 @@
+import 'package:dartx/dartx.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/page.dart';
+import 'package:flutteryomi/domain/source/service/source_manager.dart';
 
 part 'download.freezed.dart';
 
@@ -29,26 +33,29 @@ class Download with _$Download {
     return 0;
   }
 
-  int get status {
-    return 0;
+  DownloadState get status {
+    return DownloadState.notDownloaded;
   }
 
   int get progress {
-    return 0;
+    if (pages == null || pages!.isEmpty) return 0;
+    return pages!.map((it) => it.progress).average().toInt();
   }
 
-  //static Download? fromChapterId({
-  //  chapterId: Long,
-  //  getChapter: GetChapter,
-  //  getManga: GetManga,
-  //  sourceManager: SourceManager,
-  //}) {
-  //  final chapter = getChapter.await(chapterId) ?? return null
-  //  final manga = getManga.await(chapter.mangaId) ?? return null
-  //  final source = (sourceManager.get(manga.source) as HttpSource?) ?? return null
+  static Future<Download?> fromChapterId({
+    required int chapterId,
+    required GetChapter getChapter,
+    required GetManga getManga,
+    required SourceManager sourceManager,
+  }) async {
+    //final chapter = await getChapter.await_(chapterId);
+    //if (chapter == null) return null;
+    //final manga = await getManga.await_(chapter.mangaId);
+    //if (manga == null) return null;
+    //final source = (sourceManager.get(manga.source) as HttpSource?) ?? return null;
 
-  //  return Download(source, manga, chapter);
-  //}
+    //return Download(source, manga, chapter);
+  }
 }
 
 enum DownloadState {
