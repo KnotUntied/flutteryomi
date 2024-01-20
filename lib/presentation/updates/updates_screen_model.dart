@@ -17,6 +17,7 @@ import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/updates/interactor/get_updates.dart';
 import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
+import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/updates/updates.dart';
 import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
 
@@ -53,7 +54,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   }
 
   /// Update [download] status of chapters.
-  //Future<void> _updateDownloadState(Download download) {
+  Future<void> _updateDownloadState(Download download) async {
   //  mutableState.update { state ->
   //    final newItems = state.items.mutate { list ->
   //      val modifiedIndex = list.indexOfFirst { it.update.chapterId == download.chapter.id }
@@ -67,31 +68,29 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   //    }
   //    state.copyWith(items: newItems);
   //  }
-  //}
+  }
 
-  //Future<void> downloadChapters(List<UpdatesItem> items, ChapterDownloadAction action) async {
-  //  if (items.isEmpty) return;
-  //  switch (action) {
-  //    ChapterDownloadAction.start => {
-  //      await _downloadChapters(items);
-  //      if (items.any((it) => it.downloadStateProvider() == DownloadState.error)) {
-  //        downloadManager.startDownloads();
-  //      }
-  //    },
-  //    ChapterDownloadAction.startNow => {
-  //      final chapterId = items.singleOrNull()?.update?.chapterId;
-  //      if (chapterId == null) return;
-  //      await startDownloadingNow(chapterId);
-  //    },
-  //    ChapterDownloadAction.cancel => {
-  //      final chapterId = items.singleOrNull()?.update?.chapterId;
-  //      if (chapterId == null) return;
-  //      await cancelDownload(chapterId);
-  //    },
-  //    ChapterDownloadAction.delete => await deleteChapters(items),
-  //  };
-  //  await toggleAllSelection(false);
-  //}
+  Future<void> downloadChapters(List<UpdatesItem> items, ChapterDownloadAction action) async {
+    if (items.isEmpty) return;
+    final downloadManager = ref.watch(downloadManagerProvider);
+    if (action == ChapterDownloadAction.start) {
+      await _downloadChapters(items);
+      if (items.any((it) => it.downloadStateProvider() == DownloadState.error)) {
+        downloadManager.startDownloads();
+      }
+    } else if (action == ChapterDownloadAction.startNow) {
+      final chapterId = items.singleOrNull?.update.chapterId;
+      if (chapterId == null) return;
+      await _startDownloadingNow(chapterId);
+    } else if (action == ChapterDownloadAction.cancel) {
+      final chapterId = items.singleOrNull?.update.chapterId;
+      if (chapterId == null) return;
+      await _cancelDownload(chapterId);
+    } else if (action == ChapterDownloadAction.delete) {
+      await deleteChapters(items);
+    }
+    await toggleAllSelection(false);
+  }
 
   Future<void> _startDownloadingNow(int chapterId) async {
     //await downloadManager.startDownloadNow(chapterId);
@@ -379,7 +378,7 @@ extension _UpdatesWithRelationsToUpdateItems on List<UpdatesWithRelations> {
           update.mangaTitle,
           update.sourceId,
         );
-        var downloadState;
+        DownloadState downloadState;
         if (activeDownload != null) {
           downloadState = activeDownload.status;
         } else if (downloaded) {

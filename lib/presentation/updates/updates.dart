@@ -38,6 +38,13 @@ class UpdatesTab extends ConsumerWidget {
       //    ),
       //  ],
       //),
+      appBar: _UpdatesAppBar(
+        onUpdateLibrary: () => screenModel.updateLibrary(),
+        actionModeCounter: state.unwrapPrevious().valueOrNull?.selected.length ?? 0,
+        onSelectAll: () => screenModel.toggleAllSelection(true),
+        onInvertSelection: () => screenModel.invertSelection(),
+        onCancelActionMode: () => screenModel.toggleAllSelection(false),
+      ),
       body: state.when(
         loading: () => const LoadingScreen(),
         // TODO: Error handling
@@ -87,6 +94,13 @@ class UpdatesTab extends ConsumerWidget {
           //  );
           //}
         },
+      ),
+      bottomNavigationBar: _UpdatesBottomBar(
+        selected: state.unwrapPrevious().valueOrNull?.selected.toList() ?? [],
+        onDownloadChapter: (items, action) => screenModel.downloadChapters(items, action),
+        onMultiBookmarkClicked: onMultiBookmarkClicked,
+        onMultiMarkAsReadClicked: onMultiMarkAsReadClicked,
+        onMultiDeleteClicked: onMultiDeleteClicked,
       ),
     );
   }
@@ -153,26 +167,13 @@ class UpdatesScreen extends StatelessWidget {
       ),
     );
     return Scaffold(
-      appBar: UpdatesAppBar(
-        onUpdateLibrary: onUpdateLibrary,
-        // TEMP
-        actionModeCounter: 0,
-        onSelectAll: () {
-          onSelectAll(true);
-        },
-        onInvertSelection: onInvertSelection,
-        onCancelActionMode: () {
-          onSelectAll(false);
-        },
-      ),
       body: body,
-      bottomNavigationBar: const _UpdatesBottomBar(),
     );
   }
 }
 
-class UpdatesAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const UpdatesAppBar({
+class _UpdatesAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _UpdatesAppBar({
     super.key,
     required this.onUpdateLibrary,
     required this.actionModeCounter,
