@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutteryomi/domain/source/model/source.dart';
 import 'package:flutteryomi/domain/source/model/source_with_count.dart';
 
-//part 'source_repository.g.dart';
+part 'source_repository.g.dart';
 
 //typedef SourcePagingSourceType = PagingSource<int, SManga>;
 

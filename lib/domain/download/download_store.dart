@@ -111,7 +111,7 @@ class DownloadStore {
 /// [order] refers to the order of the download in the queue.
 @freezed
 class DownloadObject with _$DownloadObject {
-  DownloadObject._();
+  const DownloadObject._();
   const factory DownloadObject(
     int mangaId,
     int chapterId,

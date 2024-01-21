@@ -19,7 +19,7 @@ void main() {
   setUp(() {
     PreferenceStore preferenceStore = MockPreferenceStore();
     preference = MockPreference<int>();
-    when(() => preferenceStore.getInt(any(), defaultValue: any(named: 'defaultValue')))
+    when(() => preferenceStore.getInt(any(), any()))
         .thenReturn(preference);
     releaseService = MockReleaseService();
     getApplicationRelease = GetApplicationRelease(releaseService, preferenceStore);
@@ -39,7 +39,7 @@ void main() {
       ),
     );
 
-    var result = await getApplicationRelease.await_(
+    final result = await getApplicationRelease.await_(
       Arguments(
         isPreview: false,
         isThirdParty: true,
@@ -67,7 +67,7 @@ void main() {
       (_) => Future<Release>.value(release),
     );
 
-    var result = await getApplicationRelease.await_(
+    final result = await getApplicationRelease.await_(
       Arguments(
         isPreview: true,
         isThirdParty: false,
@@ -95,7 +95,7 @@ void main() {
       (_) => Future<Release>.value(release),
     );
 
-    var result = await getApplicationRelease.await_(
+    final result = await getApplicationRelease.await_(
       Arguments(
         isPreview: false,
         isThirdParty: false,
@@ -123,7 +123,7 @@ void main() {
       (_) => Future<Release>.value(release),
     );
 
-    var result = await getApplicationRelease.await_(
+    final result = await getApplicationRelease.await_(
       Arguments(
         isPreview: false,
         isThirdParty: false,
@@ -151,7 +151,7 @@ void main() {
       (_) => Future<Release>.value(release),
     );
 
-    var result = await getApplicationRelease.await_(
+    final result = await getApplicationRelease.await_(
       Arguments(
         isPreview: false,
         isThirdParty: false,

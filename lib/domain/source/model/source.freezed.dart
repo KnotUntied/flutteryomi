@@ -41,8 +41,6 @@ abstract class $SourceCopyWith<$Res> {
       bool isStub,
       Pins pin,
       bool isUsedLast});
-
-  $PinsCopyWith<$Res> get pin;
 }
 
 /// @nodoc
@@ -97,14 +95,6 @@ class _$SourceCopyWithImpl<$Res, $Val extends Source>
               as bool,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $PinsCopyWith<$Res> get pin {
-    return $PinsCopyWith<$Res>(_value.pin, (value) {
-      return _then(_value.copyWith(pin: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -122,9 +112,6 @@ abstract class _$$SourceImplCopyWith<$Res> implements $SourceCopyWith<$Res> {
       bool isStub,
       Pins pin,
       bool isUsedLast});
-
-  @override
-  $PinsCopyWith<$Res> get pin;
 }
 
 /// @nodoc
@@ -188,8 +175,8 @@ class _$SourceImpl extends _Source {
       required this.name,
       required this.supportsLatest,
       required this.isStub,
-      required this.pin = Pins.unpinned,
-      required this.isUsedLast = false})
+      this.pin = Pins.unpinned,
+      this.isUsedLast = false})
       : super._();
 
   @override
@@ -248,8 +235,8 @@ abstract class _Source extends Source {
       required final String name,
       required final bool supportsLatest,
       required final bool isStub,
-      required final Pins pin,
-      required final bool isUsedLast}) = _$SourceImpl;
+      final Pins pin,
+      final bool isUsedLast}) = _$SourceImpl;
   const _Source._() : super._();
 
   @override

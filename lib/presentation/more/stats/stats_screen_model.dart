@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
+import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/history/interactor/get_total_read_duration.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
@@ -23,8 +24,7 @@ class StatsScreenModel extends _$StatsScreenModel {
 
   @override
   Future<StatsScreenState> build() async {
-    //TODO
-    //final downloadManager = ref.watch(downloadManagerProvider);
+    final downloadManager = ref.watch(downloadManagerProvider);
     final getLibraryManga = ref.watch(getLibraryMangaProvider);
     final getTotalReadDuration = ref.watch(getTotalReadDurationProvider);
     //TODO
@@ -148,9 +148,9 @@ class StatsScreenModel extends _$StatsScreenModel {
 @freezed
 class StatsScreenState with _$StatsScreenState {
   const factory StatsScreenState({
-    Overview overview,
-    Titles titles,
-    Chapters chapters,
-    Trackers trackers,
+    required Overview overview,
+    required Titles titles,
+    required Chapters chapters,
+    required Trackers trackers,
   }) = _StatsScreenState;
 }

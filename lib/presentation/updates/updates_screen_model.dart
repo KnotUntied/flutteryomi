@@ -1,7 +1,9 @@
 import 'dart:collection';
 
 import 'package:dartx/dartx.dart';
-import 'package:drift/drift.dart';
+// Alias to prevent conflict with Freezed
+import 'package:drift/drift.dart' as drift;
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -39,7 +41,11 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     return getUpdates //
         .subscribe(limit)
         .distinct()
-        .map((it) => UpdatesScreenState(items: [], lastUpdated: lastUpdated));
+        .map((it) => UpdatesScreenState(
+              items: const [],
+              lastUpdated: lastUpdated,
+              selectedChapterIds: HashSet(),
+            ));
   }
 
   // TODO: Forward messages to toast/snackbar
@@ -55,27 +61,29 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
 
   /// Update [download] status of chapters.
   Future<void> _updateDownloadState(Download download) async {
-  //  mutableState.update { state ->
-  //    final newItems = state.items.mutate { list ->
-  //      val modifiedIndex = list.indexOfFirst { it.update.chapterId == download.chapter.id }
-  //      if (modifiedIndex < 0) return@mutate
+    //  mutableState.update { state ->
+    //    final newItems = state.items.mutate { list ->
+    //      val modifiedIndex = list.indexOfFirst { it.update.chapterId == download.chapter.id }
+    //      if (modifiedIndex < 0) return@mutate
 
-  //      val item = list[modifiedIndex]
-  //      list[modifiedIndex] = item.copy(
-  //        downloadStateProvider = { download.status },
-  //        downloadProgressProvider = { download.progress },
-  //      )
-  //    }
-  //    state.copyWith(items: newItems);
-  //  }
+    //      val item = list[modifiedIndex]
+    //      list[modifiedIndex] = item.copy(
+    //        downloadStateProvider = { download.status },
+    //        downloadProgressProvider = { download.progress },
+    //      )
+    //    }
+    //    state.copyWith(items: newItems);
+    //  }
   }
 
-  Future<void> downloadChapters(List<UpdatesItem> items, ChapterDownloadAction action) async {
+  Future<void> downloadChapters(
+      List<UpdatesItem> items, ChapterDownloadAction action) async {
     if (items.isEmpty) return;
     final downloadManager = ref.watch(downloadManagerProvider);
     if (action == ChapterDownloadAction.start) {
       await _downloadChapters(items);
-      if (items.any((it) => it.downloadStateProvider() == DownloadState.error)) {
+      if (items
+          .any((it) => it.downloadStateProvider() == DownloadState.error)) {
         downloadManager.startDownloads();
       }
     } else if (action == ChapterDownloadAction.startNow) {
@@ -120,8 +128,12 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     final updateChapter = ref.watch(updateChapterProvider);
     final chapterUpdates = updates
         .filterNot((it) => it.update.bookmark == bookmark)
-        .map((it) => ChapterUpdate(
-            id: Value(it.update.chapterId), bookmark: Value(bookmark)))
+        .map(
+          (it) => ChapterUpdate(
+            id: drift.Value(it.update.chapterId),
+            bookmark: drift.Value(bookmark),
+          ),
+        )
         .toList();
     await updateChapter.awaitAll(chapterUpdates);
     await toggleAllSelection(false);
@@ -311,28 +323,42 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   }
 }
 
-@freezed
-class UpdatesScreenState with _$UpdatesScreenState {
-  UpdatesScreenState._();
-  factory UpdatesScreenState.def({
-    required List<UpdatesItem> items,
-    required DateTime lastUpdated,
-    required List<int> selectedPositions,
-    required HashSet<int> selectedChapterIds,
-  }) = _UpdatesScreenState;
-  factory UpdatesScreenState({
-    required List<UpdatesItem> items,
-    required DateTime lastUpdated,
-    List<int>? selectedPositions,
-    HashSet<int>? selectedChapterIds,
-  }) {
-    return _UpdatesScreenState(
-      items: items,
-      lastUpdated: lastUpdated,
-      selectedPositions: selectedPositions ?? [-1, -1],
-      selectedChapterIds: selectedChapterIds ?? HashSet(),
-    );
-  }
+//@freezed
+//class UpdatesScreenState with _$UpdatesScreenState {
+class UpdatesScreenState extends Equatable {
+  //UpdatesScreenState._();
+  //factory UpdatesScreenState.def({
+  //  required List<UpdatesItem> items,
+  //  required DateTime lastUpdated,
+  //  required List<int> selectedPositions,
+  //  required HashSet<int> selectedChapterIds,
+  //}) = _UpdatesScreenState;
+  //factory UpdatesScreenState({
+  //  required List<UpdatesItem> items,
+  //  required DateTime lastUpdated,
+  //  List<int>? selectedPositions,
+  //  HashSet<int>? selectedChapterIds,
+  //}) {
+  //  return _UpdatesScreenState(
+  //    items: items,
+  //    lastUpdated: lastUpdated,
+  //    selectedPositions: selectedPositions ?? [-1, -1],
+  //    selectedChapterIds: selectedChapterIds ?? HashSet(),
+  //  );
+  //}
+
+  UpdatesScreenState({
+    required this.items,
+    required this.lastUpdated,
+    this.selectedPositions = const [-1, -1],
+    // Can't use HashSet as a default param :(
+    required this.selectedChapterIds,
+  });
+
+  final List<UpdatesItem> items;
+  final DateTime lastUpdated;
+  final List<int> selectedPositions;
+  final HashSet<int> selectedChapterIds;
 
   late final selected = items.where((it) => it.selected);
   late final selectionMode = selected.isNotEmpty;
@@ -355,6 +381,23 @@ class UpdatesScreenState with _$UpdatesScreenState {
       })
       .whereNotNull()
       .toList();
+
+  @override
+  List<Object?> get props =>
+      [items, lastUpdated, selectedPositions, selectedChapterIds];
+
+  UpdatesScreenState copyWith({
+    List<UpdatesItem>? items,
+    DateTime? lastUpdated,
+    List<int>? selectedPositions,
+    HashSet<int>? selectedChapterIds,
+  }) =>
+      UpdatesScreenState(
+        items: items ?? this.items,
+        lastUpdated: lastUpdated ?? this.lastUpdated,
+        selectedPositions: selectedPositions ?? this.selectedPositions,
+        selectedChapterIds: selectedChapterIds ?? this.selectedChapterIds,
+      );
 }
 
 @freezed
@@ -368,10 +411,12 @@ class UpdatesItem with _$UpdatesItem {
 }
 
 extension _UpdatesWithRelationsToUpdateItems on List<UpdatesWithRelations> {
-  List<UpdatesItem> toUpdateItems(DownloadManager downloadManager, HashSet<int> selectedChapterIds) =>
+  List<UpdatesItem> toUpdateItems(
+          DownloadManager downloadManager, HashSet<int> selectedChapterIds) =>
       map((update) {
         // TODO: Fetch downloads
-        final activeDownload = downloadManager.getQueuedDownloadOrNull(update.chapterId);
+        final activeDownload =
+            downloadManager.getQueuedDownloadOrNull(update.chapterId);
         final downloaded = downloadManager.isChapterDownloaded(
           update.chapterName,
           update.scanlator,

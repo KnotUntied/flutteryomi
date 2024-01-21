@@ -1,6 +1,8 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 extension DurationToDurationString on Duration {
   String toDurationString({
@@ -60,4 +62,16 @@ class DurationComponents {
     this.minutes = 0,
     this.seconds = 0,
   });
+}
+
+String relativeTimeSpanString(BuildContext context, DateTime dateTime) {
+  final now = DateTime.now();
+  final lang = AppLocalizations.of(context);
+  if (dateTime.millisecondsSinceEpoch <= 0) {
+    return lang.relative_time_span_never;
+  } else if (now.difference(dateTime) < 1.minutes) {
+    return lang.updates_last_update_info_just_now;
+  } else {
+    return timeago.format(dateTime);
+  }
 }

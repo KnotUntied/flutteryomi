@@ -4,10 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutteryomi/domain/download/model/download.dart';
+import 'package:flutteryomi/domain/ui/ui_preferences.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
+import 'package:flutteryomi/presentation/components/date_text.dart';
+import 'package:flutteryomi/presentation/components/list_group_header.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
+import 'package:flutteryomi/presentation/updates/updates_dialog.dart';
+import 'package:flutteryomi/presentation/updates/updates_ui_item.dart';
 import 'package:flutteryomi/presentation/updates/updates_screen_model.dart';
 
 part 'updates.freezed.dart';
@@ -21,153 +27,144 @@ class UpdatesTab extends ConsumerWidget {
     final screenModel = ref.watch(updatesScreenModelProvider.notifier);
     final state = ref.watch(updatesScreenModelProvider);
     return Scaffold(
-      //appBar: SearchToolbar(
-      //  titleContent: Text(lang.history),
-      //  searchQuery: state.valueOrNull?.searchQuery,
-      //  onChangeSearchQuery: screenModel.updateSearchQuery,
-      //  actions: [
-      //    AppBarAction(
-      //      title: lang.pref_clear_history,
-      //      iconData: Icons.delete_sweep_outlined,
-      //      onClick: () => showDialog(
-      //        context: context,
-      //        builder: (BuildContext context) => HistoryDeleteAllDialog(
-      //          onDelete: screenModel.removeAllHistory,
-      //        ),
-      //      ),
-      //    ),
-      //  ],
-      //),
       appBar: _UpdatesAppBar(
-        onUpdateLibrary: () => screenModel.updateLibrary(),
-        actionModeCounter: state.unwrapPrevious().valueOrNull?.selected.length ?? 0,
+        onUpdateLibrary: screenModel.updateLibrary,
+        actionModeCounter:
+            state.unwrapPrevious().valueOrNull?.selected.length ?? 0,
         onSelectAll: () => screenModel.toggleAllSelection(true),
-        onInvertSelection: () => screenModel.invertSelection(),
+        onInvertSelection: screenModel.invertSelection,
         onCancelActionMode: () => screenModel.toggleAllSelection(false),
       ),
       body: state.when(
         loading: () => const LoadingScreen(),
         // TODO: Error handling
-        error: (Object error, StackTrace stackTrace) {
+        error: (error, stackTrace) {
           debugPrintStack(
             label: error.toString(),
             stackTrace: stackTrace,
           );
           return const LoadingScreen();
         },
-        data: (data) {
-          //if (data.list == null) {
-            return const LoadingScreen();
-          //} else if (data.list!.isEmpty) {
-          //  return EmptyScreen(
-          //    message: !data.searchQuery.isNullOrEmpty
-          //        ? lang.no_results_found
-          //        : lang.information_no_recent_manga,
-          //  );
-          //} else {
-          //  return _HistoryScreenContent(
-          //    history: data.list!,
-          //    onClickCover: (mangaId) {
-          //      //TODO
-          //      //Navigator.push(
-          //      //  context,
-          //      //  MaterialPageRoute(
-          //      //    builder: (context) => MangaScreen(mangaId),
-          //      //  ),
-          //      //);
-          //    },
-          //    onClickResume: (history) {
-          //      //TODO
-          //      //screenModel.getNextChapterForManga(
-          //      //  history.mangaId,
-          //      //  history.chapterId,
-          //      //);
-          //    },
-          //    onClickDelete: (item) => showDialog(
-          //      context: context,
-          //      builder: (BuildContext context) => HistoryDeleteDialog(
-          //        onDelete: (all) => all
-          //            ? screenModel.removeAllFromHistory(item.mangaId)
-          //            : screenModel.removeFromHistory(item),
-          //      ),
-          //    ),
-          //  );
-          //}
-        },
+        data: (data) => data.items.isEmpty
+            ? EmptyScreen(message: lang.information_no_recent)
+            : UpdatesScreenContent(
+                state: data,
+                lastUpdated: data.lastUpdated,
+                onClickCover: (item) {
+                  //TODO
+                  //Navigator.push(
+                  //  context,
+                  //  MaterialPageRoute(
+                  //    builder: (context) => MangaScreen(item.update.mangaId),
+                  //  ),
+                  //);
+                },
+                onUpdateLibrary: screenModel.updateLibrary,
+                onDownloadChapter: screenModel.downloadChapters,
+                onUpdateSelected: screenModel.toggleSelection,
+                // TODO
+                onOpenChapter: (item) {},
+              ),
       ),
       bottomNavigationBar: _UpdatesBottomBar(
         selected: state.unwrapPrevious().valueOrNull?.selected.toList() ?? [],
-        onDownloadChapter: (items, action) => screenModel.downloadChapters(items, action),
-        onMultiBookmarkClicked: onMultiBookmarkClicked,
-        onMultiMarkAsReadClicked: onMultiMarkAsReadClicked,
-        onMultiDeleteClicked: onMultiDeleteClicked,
+        onDownloadChapter: (items, action) =>
+            screenModel.downloadChapters(items, action),
+        onMultiBookmarkClicked: screenModel.bookmarkUpdates,
+        onMultiMarkAsReadClicked: screenModel.markUpdatesRead,
+        onMultiDeleteClicked: (updatesItem) => showDialog(
+          context: context,
+          builder: (context) => UpdatesDeleteConfirmationDialog(
+            onConfirm: () => screenModel.deleteChapters(updatesItem),
+          ),
+        ),
       ),
     );
   }
 }
 
-class UpdatesScreen extends StatelessWidget {
-  const UpdatesScreen({
+class UpdatesScreenContent extends ConsumerWidget {
+  const UpdatesScreenContent({
     super.key,
     required this.state,
     required this.lastUpdated,
-    required this.relativeTime,
     required this.onClickCover,
-    required this.onSelectAll,
-    required this.onInvertSelection,
     required this.onUpdateLibrary,
     required this.onDownloadChapter,
-    required this.onMultiBookmarkClicked,
-    required this.onMultiMarkAsReadClicked,
-    required this.onMultiDeleteClicked,
     required this.onUpdateSelected,
     required this.onOpenChapter,
   });
 
   final UpdatesScreenState state;
   final DateTime lastUpdated;
-  final bool relativeTime;
   final ValueChanged<UpdatesItem> onClickCover;
-  final ValueChanged<bool> onSelectAll;
-  final VoidCallback onInvertSelection;
   final bool Function() onUpdateLibrary;
   final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
-  final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
-  final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
-  final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
   final Function(UpdatesItem, bool, bool, bool) onUpdateSelected;
   final ValueChanged<UpdatesItem> onOpenChapter;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
-    Widget body;
-    //if (state.isLoading) {
-    //  body = LoadingScreen();
-    //} else if (state.items.isEmpty) {
-    //  body = EmptyScreen(message: lang.information_no_recent);
-    //} else {
-    //  body = <real body here>;
-    //}
-    body = RefreshIndicator(
-      onRefresh: () async {},
-      child: ListView(
-        children: [
-          ListTile(
-            title: Text(
-              lang.updates_last_update_info(
-                  lang.updates_last_update_info_just_now),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontStyle: FontStyle.italic),
-            ),
-          ),
-        ],
+    final preferences = ref.watch(uiPreferencesProvider);
+    final relativeTime = preferences.relativeTime().get();
+    final dateFormat = preferences.dateFormat().get();
+
+    final uiModels = state.getUiModel();
+    final selectionMode = state.selectionMode;
+    final onClickUpdate = onOpenChapter;
+    return RefreshIndicator.adaptive(
+      onRefresh: () async => onUpdateLibrary(),
+      notificationPredicate: !state.selectionMode ? (_) => true : (_) => false,
+      child: ListView.builder(
+        itemCount: uiModels.length + 1,
+        itemBuilder: (_, index) {
+          if (index == 0) {
+            return UpdatesLastUpdatedItem(
+              key: const Key('updates-lastUpdated'),
+              lastUpdated: lastUpdated,
+            );
+          }
+          final item = uiModels[index - 1];
+          return switch (item) {
+            Header() => ListGroupHeader(
+                relativeDateText(
+                  context: context,
+                  date: item.date,
+                  relativeTime: relativeTime,
+                  dateFormat: dateFormat,
+                ),
+                key: Key('updates-${item.hashCode}'),
+              ),
+            Item() => UpdatesUiItem(
+                key: Key(
+                  'updates-${item.item.update.mangaId}-${item.item.update.chapterId}',
+                ),
+                update: item.item.update,
+                selected: item.item.selected,
+                readProgress: (!item.item.update.read &&
+                        item.item.update.lastPageRead > 0)
+                    ? lang.chapter_progress(item.item.update.lastPageRead + 1)
+                    : null,
+                onLongClick: () {
+                  onUpdateSelected(item.item, !item.item.selected, true, true);
+                },
+                onClick: () => selectionMode
+                    ? onUpdateSelected(
+                        item.item, !item.item.selected, true, false)
+                    : onClickUpdate(item.item),
+                onClickCover: !selectionMode //
+                    ? () => onClickCover(item.item)
+                    : null,
+                onDownloadChapter: !selectionMode
+                    ? (action) => onDownloadChapter([item.item], action)
+                    : null,
+                downloadStateProvider: item.item.downloadStateProvider,
+                downloadProgressProvider: item.item.downloadProgressProvider,
+              ),
+          };
+        },
       ),
-    );
-    return Scaffold(
-      body: body,
     );
   }
 }
@@ -232,7 +229,8 @@ class _UpdatesBottomBar extends StatelessWidget {
   });
 
   final List<UpdatesItem> selected;
-  final void Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
+  final void Function(List<UpdatesItem>, ChapterDownloadAction)
+      onDownloadChapter;
   final void Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
   final void Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
   final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
@@ -250,13 +248,19 @@ class _UpdatesBottomBar extends StatelessWidget {
       onMarkAsReadClicked: selected.any((it) => !it.update.read)
           ? () => onMultiMarkAsReadClicked(selected, true)
           : null,
-      onMarkAsUnreadClicked: selected.any((it) => it.update.read || it.update.lastPageRead > 0)
+      onMarkAsUnreadClicked: selected.any(
+        (it) => it.update.read || it.update.lastPageRead > 0,
+      )
           ? () => onMultiMarkAsReadClicked(selected, false)
           : null,
-      onDownloadClicked: selected.any((it) => it.downloadStateProvider() != DownloadState.downloaded)
+      onDownloadClicked: selected.any(
+        (it) => it.downloadStateProvider() != DownloadState.downloaded,
+      )
           ? () => onDownloadChapter(selected, ChapterDownloadAction.start)
           : null,
-      onDeleteClicked: selected.any((it) => it.downloadStateProvider() == DownloadState.downloaded)
+      onDeleteClicked: selected.any(
+        (it) => it.downloadStateProvider() == DownloadState.downloaded,
+      )
           ? () => onMultiDeleteClicked(selected)
           : null,
     );

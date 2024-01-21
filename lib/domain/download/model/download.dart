@@ -14,7 +14,7 @@ part 'download.freezed.dart';
 @unfreezed
 class Download with _$Download {
   Download._();
-  const factory Download(
+  factory Download(
     //HttpSource source,
     Manga manga,
     Chapter chapter, [

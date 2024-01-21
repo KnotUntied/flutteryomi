@@ -114,6 +114,8 @@ class _HistoryScreenContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final preferences = ref.watch(uiPreferencesProvider);
+    final relativeTime = preferences.relativeTime().get();
+    final dateFormat = preferences.dateFormat().get();
     return ListView.builder(
       itemCount: history.length,
       itemBuilder: (BuildContext context, int index) {
@@ -126,8 +128,8 @@ class _HistoryScreenContent extends ConsumerWidget {
               relativeDateText(
                 context: context,
                 date: item.date,
-                relativeTime: preferences.relativeTime().get(),
-                dateFormat: preferences.dateFormat().get(),
+                relativeTime: relativeTime,
+                dateFormat: dateFormat,
               ),
               key: Key('history-${item.hashCode}'),
             ),

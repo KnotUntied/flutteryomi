@@ -11,18 +11,16 @@ void main() {
   });
 
   test('missingChaptersCount returns 0 when all unknown chapter numbers', () {
-    expect(<double>[-1.0, -1.0, -1.0].missingChaptersCount(), 0);
+    expect([-1.0, -1.0, -1.0].missingChaptersCount(), 0);
   });
 
   test('missingChaptersCount handles repeated base chapter numbers', () {
-    expect(<double>[1.0, 1.0, 1.1, 1.5, 1.6, 1.99].missingChaptersCount(), 0);
+    expect([1.0, 1.0, 1.1, 1.5, 1.6, 1.99].missingChaptersCount(), 0);
   });
 
   test('missingChaptersCount returns number of missing chapters', () {
     expect(
-        <double>[-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 11.0]
-            .missingChaptersCount(),
-        5);
+        [-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 11.0].missingChaptersCount(), 5);
   });
 
   test('calculateChapterGap returns difference', () {

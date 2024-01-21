@@ -12,8 +12,8 @@ class Source with _$Source {
     required String name,
     required bool supportsLatest,
     required bool isStub,
-    @Default(Pins.unpinned) required Pins pin,
-    @Default(false) required bool isUsedLast,
+    @Default(Pins.unpinned) Pins pin,
+    @Default(false) bool isUsedLast,
   }) = _Source;
 
   String get visualName => lang.isEmpty ? name : '$name (${lang.toUpperCase()})';

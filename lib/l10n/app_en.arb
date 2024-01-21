@@ -549,7 +549,14 @@
   "pref_storage_usage": "Storage usage",
   "pref_clear_chapter_cache": "Clear chapter cache",
   "used_cache": "Used: %1$s",
-  "cache_deleted": "Cache cleared. %1$d files have been deleted",
+  "cache_deleted": "Cache cleared. {number} files have been deleted",
+  "@cache_deleted": {
+    "placeholders": {
+      "number": {
+        "type": "num"
+      }
+    }
+  },
   "cache_delete_error": "Error occurred while clearing",
   "pref_auto_clear_chapter_cache": "Clear chapter cache on app launch",
 
@@ -570,7 +577,14 @@
   "download_cache_invalidated": "Downloads index invalidated",
   "pref_clear_database": "Clear database",
   "pref_clear_database_summary": "Delete history for entries that are not saved in your library",
-  "clear_database_source_item_count": "%1$d non-library entries in database",
+  "clear_database_source_item_count": "{number} non-library entries in database",
+  "@clear_database_source_item_count": {
+    "placeholders": {
+      "number": {
+        "type": "num"
+      }
+    }
+  },
   "clear_database_confirmation": "Are you sure? Read chapters and progress of non-library entries will be lost",
   "clear_database_completed": "Entries deleted",
   "database_clean": "Nothing to clear",
@@ -838,7 +852,14 @@
   "set_as_cover": "Set as cover",
   "cover_updated": "Cover updated",
   "share_page_info": "%1$s: %2$s, page %3$d",
-  "chapter_progress": "Page: %1$d",
+  "chapter_progress": "Page: {number}",
+  "@chapter_progress": {
+    "placeholders": {
+      "number": {
+        "type": "num"
+      }
+    }
+  },
   "no_next_chapter": "Next chapter not found",
   "decode_image_error": "The image couldn't be loaded",
   "confirm_set_image_as_cover": "Use this image as cover art?",
@@ -1016,8 +1037,22 @@
   "download_notifier_text_only_wifi": "No Wi-Fi connection available",
   "download_notifier_no_network": "No network connection available",
   "download_notifier_download_paused": "Downloads paused",
-  "download_notifier_split_page_not_found": "Page %d not found while splitting",
-  "download_notifier_split_page_path_not_found": "Couldn't find file path of page %d",
+  "download_notifier_split_page_not_found": "Page {number} not found while splitting",
+  "@download_notifier_split_page_not_found": {
+    "placeholders": {
+      "number": {
+        "type": "num"
+      }
+    }
+  },
+  "download_notifier_split_page_path_not_found": "Couldn't find file path of page {number}",
+  "@download_notifier_split_page_path_not_found": {
+    "placeholders": {
+      "number": {
+        "type": "num"
+      }
+    }
+  },
   "download_notifier_cache_renewal": "Checking downloads",
 
   "channel_common": "Common",
@@ -1043,7 +1078,14 @@
     }
   },
 
-  "exception_http": "HTTP %d, check website in WebView",
+  "exception_http": "HTTP {number}, check website in WebView",
+  "@exception_http": {
+    "placeholders": {
+      "number": {
+        "type": "num"
+      }
+    }
+  },
   "exception_offline": "No Internet connection",
   "exception_unknown_host": "Couldn't reach {host}",
   "@exception_unknown_host": {

@@ -13,7 +13,7 @@ void main() {
   test('Test Flag plus operator (LibrarySort)', () {
     LibrarySort current = const LibrarySort(Type.lastRead, Direction.ascending);
     LibrarySort new_ = const LibrarySort(Type.dateAdded, Direction.ascending);
-    int flag = current + new_;
+    final flag = current + new_;
     expect(flag, 0x5C);
   });
 
@@ -30,7 +30,7 @@ void main() {
     expect(currentSort.flag, 0xC);
 
     LibrarySort sort = const LibrarySort(Type.dateAdded, Direction.ascending);
-    int flag = currentSort.flag.addFlag(sort);
+    final flag = currentSort.flag.addFlag(sort);
 
     expect(flag, 0x5C);
     expect(flag, isNot(currentSort.flag));
@@ -38,7 +38,7 @@ void main() {
 
   test('Test default flags', () {
     LibrarySort sort = LibrarySort.default_;
-    int flag = sort.type + sort.direction;
+    final flag = sort.type + sort.direction;
     expect(flag, 0x40);
   });
 }

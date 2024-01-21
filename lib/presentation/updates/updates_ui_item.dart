@@ -1,175 +1,164 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutteryomi/presentation/components/app_bar.dart';
-import 'package:flutteryomi/presentation/screens/empty_screen.dart';
+import 'package:flutteryomi/domain/download/model/download.dart';
+import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
+import 'package:flutteryomi/presentation/components/material/constants.dart';
+import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
+import 'package:flutteryomi/presentation/manga/components/dot_separator_text.dart';
+import 'package:flutteryomi/presentation/manga/components/manga_cover.dart';
+import 'package:flutteryomi/presentation/updates/updates.dart';
+import 'package:flutteryomi/presentation/updates/updates_screen_model.dart';
+import 'package:flutteryomi/presentation/util/modifier.dart';
+import 'package:flutteryomi/presentation/util/time_utils.dart';
 
-class UpdatesTab extends StatefulWidget {
-  const UpdatesTab({super.key});
+class UpdatesLastUpdatedItem extends StatelessWidget {
+  const UpdatesLastUpdatedItem({super.key, required this.lastUpdated});
 
-  @override
-  State<UpdatesTab> createState() => _UpdatesTabState();
-}
-
-class _UpdatesTabState extends State<UpdatesTab> {
-  @override
-  Widget build(BuildContext context) {
-    return UpdatesScreen(
-      lastUpdated: DateTime.now(),
-      relativeTime: true,
-      onSelectAll: (bool x) {},
-      onInvertSelection: () {},
-      onUpdateLibrary: () => true,
-    );
-  }
-}
-
-class UpdatesScreen extends StatelessWidget {
-  const UpdatesScreen({
-    super.key,
-    //required this.state,
-    required this.lastUpdated,
-    required this.relativeTime,
-    //required this.onClickCover,
-    required this.onSelectAll,
-    required this.onInvertSelection,
-    required this.onUpdateLibrary,
-    //required this.onDownloadChapter,
-    //required this.onMultiBookmarkClicked,
-    //required this.onMultiMarkAsReadClicked,
-    //required this.onMultiDeleteClicked,
-    //required this.onUpdateSelected,
-    //required this.onOpenChapter,
-  });
-
-  //final UpdatesScreenModel.State state;
   final DateTime lastUpdated;
-  final bool relativeTime;
-  //final ValueChanged<UpdatesItem> onClickCover;
-  final ValueChanged<bool> onSelectAll;
-  final VoidCallback onInvertSelection;
-  final bool Function() onUpdateLibrary;
-  //final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
-  //final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
-  //final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
-  //final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
-  //final Function(UpdatesItem, bool, bool, bool) onUpdateSelected;
-  //final ValueChanged<UpdatesItem> onOpenChapter;
 
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    Widget body;
-    //if (state.isLoading) {
-    //  body = LoadingScreen();
-    //} else if (state.items.isEmpty) {
-    //  body = EmptyScreen(message: lang.information_no_recent);
-    //} else {
-    //  body = <real body here>;
-    //}
-    body = RefreshIndicator(
-      onRefresh: () async {},
-      child: ListView(
-        children: [
-          ListTile(
-            title: Text(
-              lang.updates_last_update_info(
-                  lang.updates_last_update_info_just_now),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontStyle: FontStyle.italic),
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: MaterialPadding.medium,
+        vertical: MaterialPadding.small,
+      ),
+      child: Text(
+        lang.updates_last_update_info(
+          relativeTimeSpanString(context, lastUpdated),
+        ),
+      ),
+    );
+  }
+}
+
+class UpdatesUiItem extends StatelessWidget {
+  const UpdatesUiItem({
+    super.key,
+    required this.update,
+    required this.selected,
+    this.readProgress,
+    required this.onClick,
+    required this.onLongClick,
+    this.onClickCover,
+    this.onDownloadChapter,
+    // Download indicator
+    required this.downloadStateProvider,
+    required this.downloadProgressProvider,
+  });
+
+  final UpdatesWithRelations update;
+  final bool selected;
+  final String? readProgress;
+  final VoidCallback onClick;
+  final VoidCallback onLongClick;
+  final VoidCallback? onClickCover;
+  final ValueChanged<ChapterDownloadAction>? onDownloadChapter;
+  final DownloadState Function() downloadStateProvider;
+  final int Function() downloadProgressProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context);
+    final textAlpha = update.read ? readItemAlpha : 1.0;
+    //TODO: Check if ListTile can replace this widget
+    return InkWell(
+      onTap: onClick,
+      onLongPress: onLongClick,
+      child: Container(
+        color: selected ? selectedBackground(context) : null,
+        padding: const EdgeInsets.symmetric(horizontal: MaterialPadding.medium),
+        child: SizedBox(
+          height: 56.0,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: MangaCover.square(
+                  data: update.coverData,
+                  onClick: onClickCover,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: MaterialPadding.medium,
+                  ),
+                  child: Column(
+                    children: [
+                      Opacity(
+                        opacity: textAlpha,
+                        child: Text(
+                          update.mangaTitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          if (!update.read)
+                            Icon(
+                              Icons.circle,
+                              semanticLabel: lang.unread,
+                              size: 8.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          //TODO: Make bookmark's height equal to subtitle height
+                          if (update.bookmark) ...[
+                            Icon(
+                              Icons.bookmark,
+                              semanticLabel: lang.action_filter_bookmarked,
+                              size: 12.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(width: 2.0),
+                          ],
+                          Flexible(
+                            child: Opacity(
+                              opacity: textAlpha,
+                              child: Text(
+                                update.chapterName,
+                                maxLines: 1,
+                                style: Theme.of(context).textTheme.bodySmall,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          if (readProgress != null) ...[
+                            const DotSeparatorText(),
+                            Opacity(
+                              opacity: readItemAlpha,
+                              child: Text(
+                                readProgress!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 4.0),
+                child: ChapterDownloadIndicator(
+                  enabled: onDownloadChapter != null,
+                  downloadStateProvider: downloadStateProvider,
+                  downloadProgressProvider: downloadProgressProvider,
+                  onClick: onDownloadChapter != null //
+                      ? onDownloadChapter!
+                      : (_) {},
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
-    return Scaffold(
-      appBar: UpdatesAppBar(
-        onUpdateLibrary: onUpdateLibrary,
-        // TEMP
-        actionModeCounter: 0,
-        onSelectAll: () {
-          onSelectAll(true);
-        },
-        onInvertSelection: onInvertSelection,
-        onCancelActionMode: () {
-          onSelectAll(false);
-        },
-      ),
-      body: body,
-      bottomNavigationBar: const UpdatesBottomBar(),
-    );
-  }
-}
-
-class UpdatesAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const UpdatesAppBar({
-    super.key,
-    required this.onUpdateLibrary,
-    required this.actionModeCounter,
-    required this.onSelectAll,
-    required this.onInvertSelection,
-    required this.onCancelActionMode,
-  });
-
-  final VoidCallback onUpdateLibrary;
-  final int actionModeCounter;
-  final VoidCallback onSelectAll;
-  final VoidCallback onInvertSelection;
-  final VoidCallback onCancelActionMode;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return ActionAppBarWithCounter(
-      title: lang.label_recent_updates,
-      actions: [
-        AppBarAction(
-          iconData: Icons.refresh_outlined,
-          onClick: onUpdateLibrary,
-          title: lang.action_update_library,
-        ),
-      ],
-      actionModeCounter: actionModeCounter,
-      onCancelActionMode: onCancelActionMode,
-      actionModeActions: [
-        AppBarAction(
-          iconData: Icons.select_all_outlined,
-          onClick: onSelectAll,
-          title: lang.action_select_all,
-        ),
-        AppBarAction(
-          iconData: Icons.flip_to_back_outlined,
-          onClick: onInvertSelection,
-          title: lang.action_select_inverse,
-        ),
-      ],
-    );
-  }
-}
-
-class UpdatesBottomBar extends StatelessWidget {
-  const UpdatesBottomBar({
-    super.key,
-    //required this.selected,
-    //required this.onDownloadChapter,
-    //required this.onMultiBookmarkClicked,
-    //required this.onMultiMarkAsReadClicked,
-    //required this.onMultiDeleteClicked,
-  });
-
-  //final List<UpdatesItem> selected;
-  //final Function(List<UpdatesItem>, ChapterDownloadAction) onDownloadChapter;
-  //final Function(List<UpdatesItem>, bool bookmark) onMultiBookmarkClicked;
-  //final Function(List<UpdatesItem>, bool read) onMultiMarkAsReadClicked;
-  //final ValueChanged<List<UpdatesItem>> onMultiDeleteClicked;
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

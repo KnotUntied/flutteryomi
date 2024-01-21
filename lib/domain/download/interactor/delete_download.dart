@@ -1,11 +1,7 @@
-import 'package:collection/collection.dart';
-import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:flutteryomi/domain/category/model/category_update.dart';
-import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
-import 'package:flutteryomi/domain/download/model/download_manager.dart';
+import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 

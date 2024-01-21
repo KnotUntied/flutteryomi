@@ -128,7 +128,10 @@ class __$$StatsScreenStateImplCopyWithImpl<$Res>
 
 class _$StatsScreenStateImpl implements _StatsScreenState {
   const _$StatsScreenStateImpl(
-      {this.overview, this.titles, this.chapters, this.trackers});
+      {required this.overview,
+      required this.titles,
+      required this.chapters,
+      required this.trackers});
 
   @override
   final Overview overview;
@@ -173,10 +176,10 @@ class _$StatsScreenStateImpl implements _StatsScreenState {
 
 abstract class _StatsScreenState implements StatsScreenState {
   const factory _StatsScreenState(
-      {final Overview overview,
-      final Titles titles,
-      final Chapters chapters,
-      final Trackers trackers}) = _$StatsScreenStateImpl;
+      {required final Overview overview,
+      required final Titles titles,
+      required final Chapters chapters,
+      required final Trackers trackers}) = _$StatsScreenStateImpl;
 
   @override
   Overview get overview;

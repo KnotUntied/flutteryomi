@@ -117,7 +117,7 @@ class __$$DownloadImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DownloadImpl extends _Download {
-  const _$DownloadImpl(this.manga, this.chapter, [this.pages]) : super._();
+  _$DownloadImpl(this.manga, this.chapter, [this.pages]) : super._();
 
 //HttpSource source,
   @override
@@ -140,9 +140,9 @@ class _$DownloadImpl extends _Download {
 }
 
 abstract class _Download extends Download {
-  const factory _Download(Manga manga, Chapter chapter, [List<Page>? pages]) =
+  factory _Download(Manga manga, Chapter chapter, [List<Page>? pages]) =
       _$DownloadImpl;
-  const _Download._() : super._();
+  _Download._() : super._();
 
   @override //HttpSource source,
   Manga get manga; //HttpSource source,

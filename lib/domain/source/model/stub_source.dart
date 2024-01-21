@@ -6,6 +6,7 @@ import 'package:flutteryomi/domain/source/model/schapter.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/source/model/source.dart';
 
+// Currently cannot extend or implement a Freezed class
 //class StubSource implements Source {
 class StubSource {
   StubSource({
