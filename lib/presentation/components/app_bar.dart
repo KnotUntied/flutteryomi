@@ -32,8 +32,7 @@ class ActionAppBarWithCounter extends StatelessWidget
 
   @override
   Size get preferredSize => Size.fromHeight(
-        bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight,
-      );
+      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +75,7 @@ class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-        bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight,
-      );
+      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -228,8 +226,7 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-        bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight,
-      );
+      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +237,7 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       titleContentWidget = TextField(
         decoration: InputDecoration(
-          hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+          hintStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.normal,
                 fontSize: 18.0,
                 overflow: TextOverflow.ellipsis,
@@ -248,7 +245,7 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
           hintText: placeholderText ?? lang.action_search_hint,
         ),
         onChanged: onChangeSearchQuery,
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Theme.of(context).colorScheme.onBackground,
               fontWeight: FontWeight.normal,
               fontSize: 18.0,

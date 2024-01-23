@@ -56,7 +56,7 @@ class _BrowseTabState extends State<BrowseTab>
     // depend on context
     List<TabContent> tabs = [
       TabContent(
-        titleRes: lang.label_sources,
+        title: lang.label_sources,
         actions: [
           AppBarAction(
             title: lang.action_global_search,
@@ -100,7 +100,7 @@ class _BrowseTabState extends State<BrowseTab>
         content: const Placeholder(),
       ),
       TabContent(
-        titleRes: lang.label_extensions,
+        title: lang.label_extensions,
         badgeNumber: 1,
         searchEnabled: true,
         actions: [
@@ -143,7 +143,7 @@ class _BrowseTabState extends State<BrowseTab>
         content: const Placeholder(),
       ),
       TabContent(
-        titleRes: lang.label_migration,
+        title: lang.label_migration,
         actions: [
           AppBarAction(
             title: lang.migration_help_guide,
@@ -175,12 +175,14 @@ class _BrowseTabState extends State<BrowseTab>
         bottom: TabBar(
           controller: _tabController,
           tabs: tabs
-              .map((tab) => Tab(
-                    icon: TabText(
-                      text: tab.titleRes,
-                      badgeCount: tab.badgeNumber,
-                    ),
-                  ))
+              .map(
+                (tab) => Tab(
+                  icon: TabText(
+                    text: tab.title,
+                    badgeCount: tab.badgeNumber,
+                  ),
+                ),
+              )
               .toList(),
         ),
         searchEnabled: tabs[_tabController.index].searchEnabled,

@@ -4,7 +4,7 @@ import 'package:flutteryomi/domain/manga/model/manga_cover.dart' as manga_cover_
 import 'package:flutteryomi/presentation/components/badges.dart' as badges;
 import 'package:flutteryomi/presentation/manga/components/manga_cover.dart';
 
-class CommonMangaItemDefaults {
+abstract class CommonMangaItemDefaults {
   static const gridHorizontalSpacer = 4.0;
   static const gridVerticalSpacer = 4.0;
   static const browseFavoriteCoverAlpha = 0.34;
@@ -15,29 +15,31 @@ const _continueReadingButtonGridPadding = 6.0;
 const _continueReadingButtonListSpacing = 8.0;
 const _gridSelectedCoverAlpha = 0.76;
 
+/// Layout of grid list item with title overlaying the cover.
+/// Accepts null [title] for a cover-only view.
 class MangaCompactGridItem extends StatelessWidget {
   const MangaCompactGridItem({
     super.key,
-    this.title,
-    this.isSelected = false,
     required this.coverData,
+    required this.onClick,
+    required this.onLongClick,
+    this.isSelected = false,
+    this.title,
+    this.onClickContinueReading,
     this.coverAlpha = 1.0,
     this.coverBadgeStart,
     this.coverBadgeEnd,
-    required this.onLongClick,
-    required this.onClick,
-    this.onClickContinueReading,
   });
 
+  final manga_cover_data.MangaCover coverData;
+  final GestureTapCallback onClick;
+  final GestureLongPressCallback onLongClick;
   final bool isSelected;
   final String? title;
-  final manga_cover_data.MangaCover coverData;
+  final GestureTapCallback? onClickContinueReading;
   final double coverAlpha;
   final Widget? coverBadgeStart;
   final Widget? coverBadgeEnd;
-  final GestureLongPressCallback onLongClick;
-  final GestureTapCallback onClick;
-  final VoidCallback? onClickContinueReading;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class MangaCompactGridItem extends StatelessWidget {
       );
     }
 
-    return GridItemSelectable(
+    return _GridItemSelectable(
       isSelected: false,
       onClick: onClick,
       onLongClick: onLongClick,
@@ -111,7 +113,7 @@ class _CoverTextOverlay extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: _GridItemTitle(
                     title: title,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: Colors.white,
                       shadows: [
                         const Shadow(
@@ -188,13 +190,13 @@ class _GridItemTitle extends StatelessWidget {
   const _GridItemTitle({
     super.key,
     required this.title,
-    required this.style,
+    this.style,
     required this.minLines,
     this.maxLines = 2,
   });
 
   final String title;
-  final TextStyle style;
+  final TextStyle? style;
   final int minLines;
   final int maxLines;
 
@@ -206,13 +208,13 @@ class _GridItemTitle extends StatelessWidget {
       title,
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
-      style: style.copyWith(fontSize: 12.0),
+      style: style?.copyWith(fontSize: 12.0),
     );
   }
 }
 
-class GridItemSelectable extends StatelessWidget {
-  const GridItemSelectable({
+class _GridItemSelectable extends StatelessWidget {
+  const _GridItemSelectable({
     super.key,
     required this.isSelected,
     this.onClick,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutteryomi/domain/manga/model/manga_cover.dart' as manga_cover_data;
 
+//TODO
 class MangaCover extends StatelessWidget {
   static const squareRatio = 1.0;
   static const bookRatio = 2.0 / 3.0;
@@ -29,7 +29,7 @@ class MangaCover extends StatelessWidget {
 
   final String contentDescription;
   //final ImageProvider<Object> image;
-  final manga_cover_data.MangaCover data;
+  final Object data;
   final double ratio;
   final VoidCallback? onClick;
 

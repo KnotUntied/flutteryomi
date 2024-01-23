@@ -37,7 +37,7 @@ class EmptyScreen extends StatelessWidget {
           children: [
             Text(
               _errorFaces[Random().nextInt(_errorFaces.length)],
-              style: Theme.of(context).textTheme.displayMedium!.copyWith(
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
             ),

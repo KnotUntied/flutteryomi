@@ -47,11 +47,13 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const MaterialApp(
-      title: 'Flutteryomi',
+    final lang = AppLocalizations.of(context);
+    return MaterialApp(
+      //title: 'Flutteryomi',
+      onGenerateTitle: (context) => lang.app_name,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

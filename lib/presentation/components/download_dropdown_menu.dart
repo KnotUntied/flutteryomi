@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
+import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 
 class _DownloadDropdownMenuItem {
   const _DownloadDropdownMenuItem({

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutteryomi/presentation/components/settings_items.dart';
 
+import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart';
-import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
-import 'package:flutteryomi/presentation/theme/color_scheme.dart' as color_scheme;
+import 'package:flutteryomi/presentation/components/settings_items.dart';
+import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
+import 'package:flutteryomi/presentation/theme/color_scheme.dart'
+    as color_scheme;
 
 class ChapterSettingsDialog extends StatelessWidget {
   const ChapterSettingsDialog({
     super.key,
     required this.onDismissRequest,
-    //this.manga,
+    this.manga,
     required this.onDownloadFilterChanged,
     required this.onUnreadFilterChanged,
     required this.onBookmarkedFilterChanged,
@@ -23,7 +25,7 @@ class ChapterSettingsDialog extends StatelessWidget {
   });
 
   final VoidCallback onDismissRequest;
-  //final Manga? manga;
+  final Manga? manga;
   final ValueChanged<bool?> onDownloadFilterChanged;
   final ValueChanged<bool?> onUnreadFilterChanged;
   final ValueChanged<bool?> onBookmarkedFilterChanged;
@@ -37,6 +39,15 @@ class ChapterSettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
+    // TODO: state:
+    // bool showSetAsDefaultDialog = false;
+    //if (showSetAsDefaultDialog) {
+    //  return _SetAsDefaultDialog(
+    //    onDismissRequest: () => setState(() { showSetAsDefaultDialog = false; }),
+    //    onConfirmed: onSetAsDefault,
+    //  );
+    //}
+
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -54,26 +65,22 @@ class ChapterSettingsDialog extends StatelessWidget {
                 ),
               ),
               MenuAnchor(
-                builder: (BuildContext context, MenuController controller,
-                    Widget? child) {
+                builder: (context, controller, child) {
                   return IconButton(
-                    onPressed: () {
-                      controller.isOpen
-                          ? controller.close()
-                          : controller.open();
-                    },
+                    onPressed: () => controller.isOpen
+                        ? controller.close()
+                        : controller.open(),
                     icon: Icon(Icons.adaptive.more_outlined),
                   );
                 },
                 menuChildren: [
                   MenuItemButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            SetAsDefaultDialog(onConfirm: onSetAsDefault),
-                      );
-                    },
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) => _SetAsDefaultDialog(
+                        onConfirmed: onSetAsDefault,
+                      ),
+                    ),
                     child: Text(lang.set_chapter_settings_as_default),
                   ),
                   MenuItemButton(
@@ -146,17 +153,17 @@ class _FilterPage extends StatelessWidget {
           label: lang.label_downloaded,
           state: true,
           enabled: true,
-          onClick: (bool? x) {},
+          onClick: onDownloadFilterChanged,
         ),
         TriStateItem(
           label: lang.action_filter_unread,
           state: true,
-          onClick: (bool? x) {},
+          onClick: onUnreadFilterChanged,
         ),
         TriStateItem(
           label: lang.label_started,
           state: true,
-          onClick: (bool? x) {},
+          onClick: onBookmarkedFilterChanged,
         ),
         ListTile(
           leading: Icon(
@@ -186,14 +193,20 @@ class _SortPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    //final Map<String, >items = ;
+    final sortMap = {
+      lang.sort_by_source: MangaUtils.chapterSortingSource,
+      lang.sort_by_number: MangaUtils.chapterSortingNumber,
+      lang.sort_by_upload_date: MangaUtils.chapterSortingUploadDate,
+      lang.action_sort_alpha: MangaUtils.chapterSortingAlphabet,
+    };
     return ListView(
       children: [
-        SortItem(
-          label: lang.sort_by_source,
-          sortDescending: false,
-          onClick: () {},
-        ),
+        for (final entry in sortMap.entries)
+          SortItem(
+            label: entry.key,
+            sortDescending: sortingMode == entry.value ? sortDescending : null,
+            onClick: () => onItemSelected(entry.value),
+          ),
       ],
     );
   }
@@ -212,27 +225,41 @@ class _DisplayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
+    final displayMap = {
+      lang.show_title: MangaUtils.chapterDisplayName,
+      lang.show_chapter_number: MangaUtils.chapterDisplayNumber,
+    };
     return ListView(
       children: [
-        HeadingItem(lang.show_title),
+        for (final entry in displayMap.entries)
+          RadioListTile<int>(
+            title: Text(entry.key),
+            value: entry.value,
+            groupValue: displayMode,
+            onChanged: (v) => onItemSelected(v!),
+          ),
       ],
     );
   }
 }
 
-class SetAsDefaultDialog extends StatefulWidget {
-  const SetAsDefaultDialog({
+class _SetAsDefaultDialog extends StatefulWidget {
+  const _SetAsDefaultDialog({
     super.key,
-    required this.onConfirm,
+    this.onDismissRequest = _defaultOnDismissRequest,
+    required this.onConfirmed,
   });
 
-  final Function(bool optionalChecked) onConfirm;
+  final VoidCallback onDismissRequest;
+  final ValueChanged<bool> onConfirmed;
 
   @override
-  State<SetAsDefaultDialog> createState() => _SetAsDefaultDialogState();
+  State<_SetAsDefaultDialog> createState() => _SetAsDefaultDialogState();
+
+  static void _defaultOnDismissRequest() {}
 }
 
-class _SetAsDefaultDialogState extends State<SetAsDefaultDialog> {
+class _SetAsDefaultDialogState extends State<_SetAsDefaultDialog> {
   bool optionalChecked = false;
 
   @override
@@ -248,11 +275,9 @@ class _SetAsDefaultDialogState extends State<SetAsDefaultDialog> {
           ),
           CheckboxListTile(
             value: optionalChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                optionalChecked = value!;
-              });
-            },
+            onChanged: (bool? value) => setState(() {
+              optionalChecked = value!;
+            }),
             title: Text(lang.also_set_chapter_settings_for_library),
           ),
         ],
@@ -261,13 +286,14 @@ class _SetAsDefaultDialogState extends State<SetAsDefaultDialog> {
         TextButton(
           child: Text(lang.action_cancel),
           onPressed: () {
+            widget.onDismissRequest();
             Navigator.of(context).pop();
-          },
+          }
         ),
         TextButton(
           child: Text(lang.action_ok),
           onPressed: () {
-            widget.onConfirm(optionalChecked);
+            widget.onConfirmed(optionalChecked);
             Navigator.of(context).pop();
           },
         ),

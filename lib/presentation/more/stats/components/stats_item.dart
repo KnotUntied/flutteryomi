@@ -17,9 +17,9 @@ class StatsOverviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BaseStatsItem(
       title: title,
-      titleStyle: Theme.of(context).textTheme.bodyMedium!,
+      titleStyle: Theme.of(context).textTheme.bodyMedium,
       subtitle: subtitle,
-      subtitleStyle: Theme.of(context).textTheme.labelSmall!,
+      subtitleStyle: Theme.of(context).textTheme.labelSmall,
       icon: icon,
     );
   }
@@ -39,9 +39,9 @@ class StatsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BaseStatsItem(
       title: title,
-      titleStyle: Theme.of(context).textTheme.bodyMedium!,
+      titleStyle: Theme.of(context).textTheme.bodyMedium,
       subtitle: subtitle,
-      subtitleStyle: Theme.of(context).textTheme.labelSmall!,
+      subtitleStyle: Theme.of(context).textTheme.labelSmall,
     );
   }
 }
@@ -50,16 +50,16 @@ class _BaseStatsItem extends StatelessWidget {
   const _BaseStatsItem({
     super.key,
     required this.title,
-    required this.titleStyle,
+    this.titleStyle,
     required this.subtitle,
-    required this.subtitleStyle,
+    this.subtitleStyle,
     this.icon,
   });
 
   final String title;
-  final TextStyle titleStyle;
+  final TextStyle? titleStyle;
   final String subtitle;
-  final TextStyle subtitleStyle;
+  final TextStyle? subtitleStyle;
   final IconData? icon;
 
   @override
@@ -74,13 +74,13 @@ class _BaseStatsItem extends StatelessWidget {
         Text(
           title,
           maxLines: 1,
-          style: titleStyle.copyWith(fontWeight: FontWeight.bold),
+          style: titleStyle?.copyWith(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox.square(dimension: MaterialPadding.small),
         Text(
           subtitle,
-          style: subtitleStyle.copyWith(
+          style: subtitleStyle?.copyWith(
             color: Theme.of(context)
                 .colorScheme
                 .onSurface

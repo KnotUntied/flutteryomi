@@ -18,19 +18,19 @@ class PageIndicatorText extends StatelessWidget {
       children: <Text>[
         Text(
           text,
-          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-            fontWeight: FontWeight.bold,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 4.0
-              ..color = Color.fromARGB(255, 45, 45, 45),
-          ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 4.0
+                  ..color = const Color.fromARGB(255, 45, 45, 45),
+              ),
         ),
         Text(
           text,
-          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-            color: Color.fromARGB(255, 235, 235, 235),
-          ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: const Color.fromARGB(255, 235, 235, 235),
+              ),
         ),
       ],
     );

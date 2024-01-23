@@ -6,7 +6,7 @@ import 'package:flutteryomi/presentation/components/tab_text.dart';
 import 'package:flutteryomi/presentation/library/components/library_content.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
-import 'package:flutteryomi/presentation/manga/components/manga_screen_constants.dart';
+import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 
 class LibraryTab extends StatefulWidget {
   const LibraryTab({super.key});

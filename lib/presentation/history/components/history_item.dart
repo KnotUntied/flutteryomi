@@ -25,7 +25,8 @@ class HistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    final readAt = history.readAt != null ? DateFormat.jm().format(history.readAt!) : '';
+    final readAt =
+        history.readAt != null ? DateFormat.jm().format(history.readAt!) : '';
     return InkWell(
       onTap: onClickResume,
       child: Padding(
@@ -55,13 +56,17 @@ class HistoryItem extends StatelessWidget {
                         history.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w600),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Text(
                           history.chapterNumber > -1
-                              ? lang.recent_manga_time(history.chapterNumber, history.readAt!)
+                              ? lang.recent_manga_time(
+                                  history.chapterNumber, history.readAt!)
                               : readAt,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),

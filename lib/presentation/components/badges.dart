@@ -37,7 +37,7 @@ class Badge extends StatelessWidget {
       child: Text(
         text,
         maxLines: 1,
-        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: textColor ?? Theme.of(context).colorScheme.onSecondary,
               fontWeight: FontWeight.w500,
             ),
@@ -69,7 +69,7 @@ class Badge extends StatelessWidget {
 //      child: Text(
 //        text,
 //        maxLines: 1,
-//        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+//        style: Theme.of(context).textTheme.bodySmall?.copyWith(
 //          color: iconColor ?? Theme.of(context).colorScheme.onSecondary,
 //          fontWeight: FontWeight.w500,
 //        ),

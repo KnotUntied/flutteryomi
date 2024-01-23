@@ -323,30 +323,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   }
 }
 
-//@freezed
-//class UpdatesScreenState with _$UpdatesScreenState {
 class UpdatesScreenState extends Equatable {
-  //UpdatesScreenState._();
-  //factory UpdatesScreenState.def({
-  //  required List<UpdatesItem> items,
-  //  required DateTime lastUpdated,
-  //  required List<int> selectedPositions,
-  //  required HashSet<int> selectedChapterIds,
-  //}) = _UpdatesScreenState;
-  //factory UpdatesScreenState({
-  //  required List<UpdatesItem> items,
-  //  required DateTime lastUpdated,
-  //  List<int>? selectedPositions,
-  //  HashSet<int>? selectedChapterIds,
-  //}) {
-  //  return _UpdatesScreenState(
-  //    items: items,
-  //    lastUpdated: lastUpdated,
-  //    selectedPositions: selectedPositions ?? [-1, -1],
-  //    selectedChapterIds: selectedChapterIds ?? HashSet(),
-  //  );
-  //}
-
   UpdatesScreenState({
     required this.items,
     required this.lastUpdated,
@@ -412,9 +389,10 @@ class UpdatesItem with _$UpdatesItem {
 
 extension _UpdatesWithRelationsToUpdateItems on List<UpdatesWithRelations> {
   List<UpdatesItem> toUpdateItems(
-          DownloadManager downloadManager, HashSet<int> selectedChapterIds) =>
+    DownloadManager downloadManager,
+    HashSet<int> selectedChapterIds,
+  ) =>
       map((update) {
-        // TODO: Fetch downloads
         final activeDownload =
             downloadManager.getQueuedDownloadOrNull(update.chapterId);
         final downloaded = downloadManager.isChapterDownloaded(

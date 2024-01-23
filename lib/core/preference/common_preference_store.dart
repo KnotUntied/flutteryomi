@@ -45,7 +45,7 @@ class CommonPreferenceStore extends PreferenceStore {
 
   @override
   Map<String, dynamic> getAll() =>
-      {for (var k in prefs.getKeys()) k: prefs.get(k)};
+      {for (final k in prefs.getKeys()) k: prefs.get(k)};
 }
 
 @riverpod

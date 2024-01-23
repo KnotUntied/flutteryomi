@@ -9,6 +9,7 @@ abstract class MaterialPadding {
   static const double medium = 16.0;
   static const double small = 8.0;
   static const double tiny = 4.0;
+  static const double extraSmall = 4.0;
 }
 
 abstract class MaterialCorner {
@@ -17,6 +18,7 @@ abstract class MaterialCorner {
   static const double medium = 12.0;
   static const double small = 8.0;
   static const double tiny = 4.0;
+  static const double extraSmall = 4.0;
 }
 
 const topSmallPaddingValues = EdgeInsets.only(top: MaterialPadding.small);
