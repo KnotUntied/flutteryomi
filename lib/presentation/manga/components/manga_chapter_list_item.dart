@@ -73,31 +73,32 @@ class MangaChapterListItem extends StatelessWidget {
       // when reaching threshold
       background: Container(
         color: start?.background,
-        child: Row(
-          children: [
-            if (start != null) Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Icon(
-                start.icon,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ],
+        child: Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: start != null
+              ? Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(
+                    start.icon,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                )
+              : null,
         ),
       ),
       secondaryBackground: Container(
         color: end?.background,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (end != null) Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Icon(
-                end.icon,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ],
+        child: Align(
+          alignment: AlignmentDirectional.centerEnd,
+          child: end != null
+              ? Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(
+                    end.icon,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                )
+              : null,
         ),
       ),
       //swipeActionThreshold in Kotlin is not fractional
@@ -105,14 +106,14 @@ class MangaChapterListItem extends StatelessWidget {
       //ignore for now
       //Might be possible with 56.0/MediaQuery.sizeof(context).width
       //dismissThresholds: {},
-      onDismissed: (direction) {
+      confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
           start?.onSwipe();
         } else if (direction == DismissDirection.endToStart) {
           end?.onSwipe();
         }
+        return false;
       },
-      confirmDismiss: (direction) async => false,
       child: InkWell(
         onTap: onClick,
         onLongPress: onLongClick,
@@ -189,11 +190,12 @@ class MangaChapterListItem extends StatelessWidget {
                             if (readProgress != null || scanlator != null)
                               const DotSeparatorText(),
                           ],
-                          if (scanlator != null) Text(
-                            scanlator!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          if (scanlator != null)
+                            Text(
+                              scanlator!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                         ],
                       ),
                     ),

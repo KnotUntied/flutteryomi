@@ -280,12 +280,12 @@
     }
   },
 
-  "pref_library_update_manga_restriction": "Skip updating entries",
-  "pref_update_only_completely_read": "With unread chapter(s)",
-  "pref_update_only_non_completed": "With \"Completed\" status",
-  "pref_update_only_started": "That haven't been started",
+  "pref_library_update_smart_update": "Smart update",
+  "pref_update_only_completely_read": "Skip entries with unread chapter(s)",
+  "pref_update_only_non_completed": "Skip entries with \"Completed\" status",
+  "pref_update_only_started": "Skip unstarted entries",
+  "pref_update_only_in_release_period": "Predict next release time",
   "pref_library_update_show_tab_badge": "Show unread count on Updates icon",
-  "pref_update_only_in_release_period": "Outside expected release period",
 
   "pref_library_update_refresh_metadata": "Automatically refresh metadata",
   "pref_library_update_refresh_metadata_summary": "Check for new cover and details when updating library",
@@ -742,7 +742,20 @@
   },
   "manga_display_interval_title": "Estimate every",
   "manga_display_modified_interval_title": "Set to update every",
-  "manga_modify_calculated_interval_title": "Customize interval",
+  
+  "manga_interval_expected_update": "New chapters predicted to be released in around {expected}, checking around every {interval}.",
+  "@display_mode_chapter": {
+    "placeholders": {
+      "expected": {
+        "type": "String"
+      },
+      "interval": {
+        "type": "String"
+      }
+    }
+  },
+  "manga_interval_expected_update_soon": "Soon",
+  "manga_interval_custom_amount": "Custom update frequency:",
   "chapter_downloading_progress": "Downloading ({current}/{total})",
   "@chapter_downloading_progress": {
     "placeholders": {
