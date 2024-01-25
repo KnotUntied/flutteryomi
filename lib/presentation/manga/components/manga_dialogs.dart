@@ -108,8 +108,9 @@ class _SetIntervalDialogState extends State<SetIntervalDialog> {
         TextButton(
           child: Text(lang.action_ok),
           onPressed: () {
-            if (widget.onValueChanged != null)
+            if (widget.onValueChanged != null) {
               widget.onValueChanged!(selectedInterval);
+            }
             Navigator.of(context).pop();
           },
         ),

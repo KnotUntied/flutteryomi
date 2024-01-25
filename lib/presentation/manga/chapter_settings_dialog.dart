@@ -88,7 +88,7 @@ class ChapterSettingsDialog extends StatelessWidget {
                     child: Text(lang.action_reset),
                   ),
                 ],
-              )
+              ),
             ],
           ),
           Expanded(
