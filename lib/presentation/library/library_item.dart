@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
+import 'package:flutteryomi/domain/source/service/source_manager.dart';
 
 part 'library_item.freezed.dart';
 
@@ -13,8 +14,7 @@ class LibraryItem with _$LibraryItem {
     @Default(-1) int unreadCount,
     @Default(false) bool isLocal,
     @Default('') String sourceLanguage,
-    // TODO
-    //SourceManager sourceManager,
+    required SourceManager sourceManager,
   }) = _LibraryItem;
 
   // TODO
@@ -22,7 +22,7 @@ class LibraryItem with _$LibraryItem {
   ///
   /// Returns true if the manga matches the query, false otherwise.
   bool matches(String constraint) {
-    //final sourceName by lazy { sourceManager.getOrStub(libraryManga.manga.source).getNameForMangaInfo() }
+    //final sourceName = sourceManager.getOrStub(libraryManga.manga.source).getNameForMangaInfo();
     return libraryManga.manga.title.containsIgnoreCase(constraint) ||
         (libraryManga.manga.author?.containsIgnoreCase(constraint) ?? false) ||
         (libraryManga.manga.artist?.containsIgnoreCase(constraint) ?? false) ||

@@ -70,93 +70,91 @@ class UpdatesUiItem extends StatelessWidget {
       child: Container(
         color: selected ? selectedBackground(context) : null,
         padding: const EdgeInsets.symmetric(horizontal: MaterialPadding.medium),
-        child: SizedBox(
-          height: 56.0,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: MangaCover.square(
-                  data: update.coverData,
-                  onClick: onClickCover,
-                ),
+        height: 56.0,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
+              child: MangaCover.square(
+                data: update.coverData,
+                onClick: onClickCover,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: MaterialPadding.medium,
-                  ),
-                  child: Column(
-                    children: [
-                      Opacity(
-                        opacity: textAlpha,
-                        child: Text(
-                          update.mangaTitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: MaterialPadding.medium,
+                ),
+                child: Column(
+                  children: [
+                    Opacity(
+                      opacity: textAlpha,
+                      child: Text(
+                        update.mangaTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      Row(
-                        children: [
-                          if (!update.read)
-                            Icon(
-                              Icons.circle,
-                              semanticLabel: lang.unread,
-                              size: 8.0,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          //TODO: Make bookmark's height equal to subtitle height
-                          if (update.bookmark) ...[
-                            Icon(
-                              Icons.bookmark,
-                              semanticLabel: lang.action_filter_bookmarked,
-                              size: 12.0,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            const SizedBox(width: 2.0),
-                          ],
-                          Flexible(
-                            child: Opacity(
-                              opacity: textAlpha,
-                              child: Text(
-                                update.chapterName,
-                                maxLines: 1,
-                                style: Theme.of(context).textTheme.bodySmall,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                    ),
+                    Row(
+                      children: [
+                        if (!update.read)
+                          Icon(
+                            Icons.circle,
+                            semanticLabel: lang.unread,
+                            size: 8.0,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        //TODO: Make bookmark's height equal to subtitle height
+                        if (update.bookmark) ...[
+                          Icon(
+                            Icons.bookmark,
+                            semanticLabel: lang.action_filter_bookmarked,
+                            size: 12.0,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 2.0),
+                        ],
+                        Flexible(
+                          child: Opacity(
+                            opacity: textAlpha,
+                            child: Text(
+                              update.chapterName,
+                              maxLines: 1,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if (readProgress != null) ...[
-                            const DotSeparatorText(),
-                            Opacity(
-                              opacity: readItemAlpha,
-                              child: Text(
-                                readProgress!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                        ),
+                        if (readProgress != null) ...[
+                          const DotSeparatorText(),
+                          Opacity(
+                            opacity: readItemAlpha,
+                            child: Text(
+                              readProgress!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
+                          ),
                         ],
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 4.0),
-                child: ChapterDownloadIndicator(
-                  enabled: onDownloadChapter != null,
-                  downloadStateProvider: downloadStateProvider,
-                  downloadProgressProvider: downloadProgressProvider,
-                  onClick: onDownloadChapter != null //
-                      ? onDownloadChapter!
-                      : (_) {},
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 4.0),
+              child: ChapterDownloadIndicator(
+                enabled: onDownloadChapter != null,
+                downloadStateProvider: downloadStateProvider,
+                downloadProgressProvider: downloadProgressProvider,
+                onClick: onDownloadChapter != null //
+                    ? onDownloadChapter!
+                    : (_) {},
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
