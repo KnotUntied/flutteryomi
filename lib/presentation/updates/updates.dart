@@ -116,54 +116,58 @@ class UpdatesScreenContent extends ConsumerWidget {
     return RefreshIndicator.adaptive(
       onRefresh: () async => onUpdateLibrary(),
       notificationPredicate: !state.selectionMode ? (_) => true : (_) => false,
-      child: ListView.builder(
-        itemCount: uiModels.length + 1,
-        itemBuilder: (_, index) {
-          if (index == 0) {
-            return UpdatesLastUpdatedItem(
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: UpdatesLastUpdatedItem(
               key: const Key('updates-lastUpdated'),
               lastUpdated: lastUpdated,
-            );
-          }
-          final item = uiModels[index - 1];
-          return switch (item) {
-            Header() => ListGroupHeader(
-                relativeDateText(
-                  context: context,
-                  date: item.date,
-                  relativeTime: relativeTime,
-                  dateFormat: dateFormat,
-                ),
-                key: Key('updates-${item.hashCode}'),
-              ),
-            Item() => UpdatesUiItem(
-                key: Key(
-                  'updates-${item.item.update.mangaId}-${item.item.update.chapterId}',
-                ),
-                update: item.item.update,
-                selected: item.item.selected,
-                readProgress: (!item.item.update.read &&
-                        item.item.update.lastPageRead > 0)
-                    ? lang.chapter_progress(item.item.update.lastPageRead + 1)
-                    : null,
-                onLongClick: () {
-                  onUpdateSelected(item.item, !item.item.selected, true, true);
-                },
-                onClick: () => selectionMode
-                    ? onUpdateSelected(
-                        item.item, !item.item.selected, true, false)
-                    : onClickUpdate(item.item),
-                onClickCover: !selectionMode //
-                    ? () => onClickCover(item.item)
-                    : null,
-                onDownloadChapter: !selectionMode
-                    ? (action) => onDownloadChapter([item.item], action)
-                    : null,
-                downloadStateProvider: item.item.downloadStateProvider,
-                downloadProgressProvider: item.item.downloadProgressProvider,
-              ),
-          };
-        },
+            ),
+          ),
+          SliverList.builder(
+            itemCount: uiModels.length,
+            itemBuilder: (_, index) {
+              final item = uiModels[index];
+              return switch (item) {
+                Header() => ListGroupHeader(
+                    relativeDateText(
+                      context: context,
+                      date: item.date,
+                      relativeTime: relativeTime,
+                      dateFormat: dateFormat,
+                    ),
+                    key: Key('updates-${item.hashCode}'),
+                  ),
+                Item() => UpdatesUiItem(
+                    key: Key(
+                      'updates-${item.item.update.mangaId}-${item.item.update.chapterId}',
+                    ),
+                    update: item.item.update,
+                    selected: item.item.selected,
+                    readProgress: (!item.item.update.read &&
+                            item.item.update.lastPageRead > 0)
+                        ? lang.chapter_progress(item.item.update.lastPageRead + 1)
+                        : null,
+                    onLongClick: () {
+                      onUpdateSelected(item.item, !item.item.selected, true, true);
+                    },
+                    onClick: () => selectionMode
+                        ? onUpdateSelected(
+                            item.item, !item.item.selected, true, false)
+                        : onClickUpdate(item.item),
+                    onClickCover: !selectionMode //
+                        ? () => onClickCover(item.item)
+                        : null,
+                    onDownloadChapter: !selectionMode
+                        ? (action) => onDownloadChapter([item.item], action)
+                        : null,
+                    downloadStateProvider: item.item.downloadStateProvider,
+                    downloadProgressProvider: item.item.downloadProgressProvider,
+                  ),
+              };
+            },
+          ),
+        ],
       ),
     );
   }

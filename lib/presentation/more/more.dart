@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutteryomi/presentation/icons/custom_icons.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/about/about.dart';
-import 'package:flutteryomi/presentation/more/old_backup_and_restore.dart';
 import 'package:flutteryomi/presentation/category/category.dart';
 import 'package:flutteryomi/presentation/download/download_queue.dart';
 import 'package:flutteryomi/presentation/more/stats/stats.dart';
@@ -31,9 +31,7 @@ class MoreTab extends StatelessWidget {
           onChanged: (bool? value) {},
         ),
         SwitchListTile.adaptive(
-          // glasses are somehow missing in Material Icons
-          // Tachiyomi uses custom icon
-          secondary: const Icon(Icons.visibility_off_outlined),
+          secondary: const Icon(CustomIcons.glasses),
           title: Text(lang.pref_incognito_mode),
           subtitle: Text(lang.pref_incognito_mode_summary),
           value: true,
@@ -72,18 +70,6 @@ class MoreTab extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const StatsScreen(),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings_backup_restore_outlined),
-          title: Text(lang.label_backup),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const OldBackupRestoreScreen(),
               ),
             );
           },

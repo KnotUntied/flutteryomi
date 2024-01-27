@@ -1,29 +1,31 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+interface class SChapter {
+  SChapter({
+    required this.url,
+    required this.name,
+    required this.dateUpload,
+    required this.chapterNumber,
+    this.scanlator,
+  });
 
-part 'schapter.freezed.dart';
+  String url;
+  String name;
+  DateTime dateUpload;
+  double chapterNumber;
+  String? scanlator;
 
-@freezed
-class SChapter with _$SChapter {
-  const factory SChapter.def({
-    required String url,
-    required String name,
-    DateTime? dateUpload,
-    @Default(-1.0) required double chapterNumber,
-    String? scanlator,
-  }) = _SChapter;
-  factory SChapter({
-    required String url,
-    required String name,
-    DateTime? dateUpload,
-    required double chapterNumber,
-    String? scanlator,
-  }) {
-    return _SChapter(
-      url: url,
-      name: name,
-      dateUpload: dateUpload ?? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-      chapterNumber: chapterNumber,
-      scanlator: scanlator,
-    );
+  void copyFrom(SChapter other) {
+    name = other.name;
+    url = other.url;
+    dateUpload = other.dateUpload;
+    chapterNumber = other.chapterNumber;
+    scanlator = other.scanlator;
   }
+
+  factory SChapter.create() => SChapter(
+    name: '',
+    url: '',
+    dateUpload: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+    chapterNumber: -1.0,
+    scanlator: null,
+  );
 }

@@ -36,7 +36,7 @@ class HistoryTab extends ConsumerWidget {
             iconData: Icons.delete_sweep_outlined,
             onClick: () => showDialog(
               context: context,
-              builder: (BuildContext context) => HistoryDeleteAllDialog(
+              builder: (context) => HistoryDeleteAllDialog(
                 onDelete: screenModel.removeAllHistory,
               ),
             ),
@@ -83,7 +83,7 @@ class HistoryTab extends ConsumerWidget {
               },
               onClickDelete: (item) => showDialog(
                 context: context,
-                builder: (BuildContext context) => HistoryDeleteDialog(
+                builder: (context) => HistoryDeleteDialog(
                   onDelete: (all) => all
                       ? screenModel.removeAllFromHistory(item.mangaId)
                       : screenModel.removeFromHistory(item),
@@ -118,7 +118,7 @@ class _HistoryScreenContent extends ConsumerWidget {
     final dateFormat = preferences.dateFormat().get();
     return ListView.builder(
       itemCount: history.length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         // TODO: Animate on move
         // Unfortunately no straightforward equivalent
         // for Modifier.animateItemPlacement()

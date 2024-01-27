@@ -178,25 +178,26 @@ class AppBarOverflowActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    return actions.isNotEmpty
-        ? MenuAnchor(
-            builder: (context, controller, child) => IconButton(
-              onPressed: () => controller.isOpen //
-                  ? controller.close()
-                  : controller.open(),
-              icon: Icon(
-                Icons.adaptive.more_outlined,
-                semanticLabel: lang.label_more,
-              ),
-            ),
-            menuChildren: actions
-                .map((action) => MenuItemButton(
-                      onPressed: action.onClick,
-                      child: Text(action.title),
-                    ))
-                .toList(),
-          )
-        : const SizedBox.shrink();
+    if (actions.isNotEmpty) {
+      return MenuAnchor(
+        builder: (context, controller, child) => IconButton(
+          onPressed: () => controller.isOpen //
+              ? controller.close()
+              : controller.open(),
+          icon: Icon(
+            Icons.adaptive.more_outlined,
+            semanticLabel: lang.label_more,
+          ),
+        ),
+        menuChildren: actions
+            .map((action) => MenuItemButton(
+                  onPressed: action.onClick,
+                  child: Text(action.title)
+                ))
+            .toList(),
+      );
+    }
+    return const SizedBox.shrink();
   }
 }
 

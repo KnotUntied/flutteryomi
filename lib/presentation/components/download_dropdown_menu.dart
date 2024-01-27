@@ -17,9 +17,11 @@ class DownloadDropdownMenu extends StatelessWidget {
   const DownloadDropdownMenu({
     super.key,
     required this.onDownloadClicked,
+    this.title,
   });
 
   final ValueChanged<DownloadAction> onDownloadClicked;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +56,9 @@ class DownloadDropdownMenu extends StatelessWidget {
               : controller.open(),
           icon: Icon(
             Icons.download_outlined,
-            semanticLabel: lang.action_download,
+            semanticLabel: title ?? lang.action_download,
           ),
-          tooltip: lang.action_download,
+          tooltip: title ?? lang.action_download,
         );
       },
       menuChildren: dropdownItems
