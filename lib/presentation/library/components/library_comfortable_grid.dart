@@ -11,8 +11,8 @@ import 'package:flutteryomi/presentation/library/library_item.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_cover.dart';
 
 // Better to manually define sliver grid than use LibraryGrid or LazyLibraryGrid
-class LibraryCompactGrid extends StatelessWidget {
-  const LibraryCompactGrid({
+class LibraryComfortableGrid extends StatelessWidget {
+  const LibraryComfortableGrid({
     super.key,
     required this.items,
     required this.showTitle,
@@ -69,11 +69,11 @@ class LibraryCompactGrid extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = items[index];
             final manga = item.libraryManga.manga;
-            return MangaCompactGridItem(
+            return MangaComfortableGridItem(
               isSelected: selection.any(
                 (it) => it.id == item.libraryManga.id,
               ),
-              title: showTitle ? manga.title : null,
+              title: manga.title,
               coverData: manga_cover_data.MangaCover(
                 mangaId: manga.id,
                 sourceId: manga.source,

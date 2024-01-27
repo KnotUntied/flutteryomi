@@ -32,7 +32,7 @@ class _CategoryCreateDialogState extends State<CategoryCreateDialog> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: _nameController,
-      builder: (context, TextEditingValue value, __) {
+      builder: (context, value, __) {
         final lang = AppLocalizations.of(context);
         final name = _nameController.text;
         final nameAlreadyExists = widget.categories.anyWithName(name);
@@ -254,7 +254,7 @@ class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
       title: Text(lang.action_move_category),
       content: ListView.builder(
         itemCount: selection.length,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
           final checkbox = selection[index];
           bool? value;
           if (checkbox is CheckboxTriState) {

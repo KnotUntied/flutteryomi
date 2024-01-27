@@ -4,7 +4,7 @@
 
 *Well, close enough.*
 
-A personal project for learning Flutter. An attempt to port Tachiyomi's UI and functionality to Flutter and its target platforms.
+A personal project for learning Flutter. An attempt to port the now-defunct Tachiyomi's UI and functionality to Flutter and its target platforms.
 
 ## Running Locally
 
@@ -26,7 +26,7 @@ flutter gen-l10n
 
 Required when updating Riverpod providers, database models, etc.
 
-See [Drift's official documentation](https://drift.simonbinder.eu/docs/getting-started/).
+See [Drift's official documentation](https://drift.simonbinder.eu/docs/getting-started/) regarding the SQLite database.
 
 ```sh
 dart run build_runner build
@@ -48,15 +48,9 @@ dart run icon_font_generator:generator
 dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 ```
 
-## Personal Notes
-
-- Tachiyomi seems to be based on [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), albeit with multiple instances of such at the root of its repository and some folders deep, possibly due to Android Studio or Kotlin requirements (not sure, I am not a Kotlin dev).
-- Drift codegen is expected to handle some parts of the data and domain layers.
-
 ## Todo
 
-- License (esp. wrt. existing Tachiyomi license and permissions)
-  - Proper attribution
-- Feature parity with Tachiyomi
-- Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp` rather than simply using `CupertinoIcons`
-- XML to ARB for localization
+- [ ] License (esp. wrt. existing Tachiyomi license and permissions)
+- [ ] Feature parity with Tachiyomi
+- [ ] Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp`
+- [ ] XML to ARB for localization

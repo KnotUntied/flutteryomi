@@ -34,49 +34,52 @@ class LibraryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final offset = !searchQuery.isNullOrEmpty ? 1 : 0;
-    return ListView.builder(
-      itemCount: items.length + offset,
-      itemBuilder: (context, index) {
-        if (offset > 0 && index == 0) {
-          return Padding(
+    return CustomScrollView(
+      slivers: [
+        if (!searchQuery.isNullOrEmpty) SliverToBoxAdapter(
+          child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: GlobalSearchItem(
               searchQuery: searchQuery!,
               onClick: onGlobalSearchClicked,
             ),
-          );
-        } 
-        final item = items[index + offset];
-        final manga = item.libraryManga.manga;
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: MangaListItem(
-            isSelected: selection.any((it) => it.id == item.libraryManga.id),
-            title: manga.title,
-            coverData: MangaCover(
-              mangaId: manga.id,
-              sourceId: manga.source,
-              isMangaFavorite: manga.favorite,
-              url: manga.thumbnailUrl,
-              lastModified: manga.coverLastModified,
-            ),
-            badge: [
-              DownloadsBadge(count: item.downloadCount),
-              UnreadBadge(count: item.unreadCount),
-              LanguageBadge(
-                isLocal: item.isLocal,
-                sourceLanguage: item.sourceLanguage,
-              )
-            ],
-            onLongClick: () => onLongClick(item.libraryManga),
-            onClick: () => onClick(item.libraryManga),
-            onClickContinueReading: onClickContinueReading != null && item.unreadCount > 0
-                ? () => onClickContinueReading!(item.libraryManga)
-                : null,
           ),
-        );
-      }
+        ),
+        SliverList.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            final manga = item.libraryManga.manga;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: MangaListItem(
+                isSelected: selection.any((it) => it.id == item.libraryManga.id),
+                title: manga.title,
+                coverData: MangaCover(
+                  mangaId: manga.id,
+                  sourceId: manga.source,
+                  isMangaFavorite: manga.favorite,
+                  url: manga.thumbnailUrl,
+                  lastModified: manga.coverLastModified,
+                ),
+                badge: [
+                  DownloadsBadge(count: item.downloadCount),
+                  UnreadBadge(count: item.unreadCount),
+                  LanguageBadge(
+                    isLocal: item.isLocal,
+                    sourceLanguage: item.sourceLanguage,
+                  )
+                ],
+                onLongClick: () => onLongClick(item.libraryManga),
+                onClick: () => onClick(item.libraryManga),
+                onClickContinueReading: onClickContinueReading != null && item.unreadCount > 0
+                    ? () => onClickContinueReading!(item.libraryManga)
+                    : null,
+              ),
+            );
+          }
+        ),
+      ],
     );
   }
 }
