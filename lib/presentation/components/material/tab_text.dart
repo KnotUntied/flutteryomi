@@ -14,22 +14,22 @@ class TabText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pillAlpha =
-        MediaQuery.platformBrightnessOf(context) == Brightness.dark ? 31 : 20;
+    final pillOpacity =
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark
+            ? 0.12
+            : 0.08;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        Text(text, maxLines: 1, overflow: TextOverflow.ellipsis),
         if (badgeCount != null)
           Pill(
-            text: badgeCount!.toString(),
-            color:
-                Theme.of(context).colorScheme.onBackground.withAlpha(pillAlpha),
+            text: '$badgeCount',
+            color: Theme.of(context)
+                .colorScheme
+                .onBackground
+                .withOpacity(pillOpacity),
             fontSize: 10.0,
           ),
       ],

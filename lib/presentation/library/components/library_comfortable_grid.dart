@@ -11,6 +11,9 @@ import 'package:flutteryomi/presentation/library/library_item.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_cover.dart';
 
 // Better to manually define sliver grid than use LibraryGrid or LazyLibraryGrid
+// However, childAspectRatio is required and manually computing it is non-trivial
+// TODO: Compute childAspectRatio or use layout implementation with builder and
+// independence from childAspectRatio
 class LibraryComfortableGrid extends StatelessWidget {
   const LibraryComfortableGrid({
     super.key,
@@ -53,17 +56,19 @@ class LibraryComfortableGrid extends StatelessWidget {
           gridDelegate: columns == 0
               ? const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 128.0,
-                  childAspectRatio: MangaCover.bookRatio,
                   crossAxisSpacing:
                       CommonMangaItemDefaults.gridHorizontalSpacer,
                   mainAxisSpacing: CommonMangaItemDefaults.gridVerticalSpacer,
+                  // TODO: Compute this
+                  childAspectRatio: 0.5,
                 )
               : SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: columns,
-                  childAspectRatio: MangaCover.bookRatio,
                   crossAxisSpacing:
                       CommonMangaItemDefaults.gridHorizontalSpacer,
                   mainAxisSpacing: CommonMangaItemDefaults.gridVerticalSpacer,
+                  // TODO: Compute this
+                  childAspectRatio: 0.5,
                 ),
           itemCount: items.length,
           itemBuilder: (context, index) {
