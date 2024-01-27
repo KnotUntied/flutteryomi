@@ -33,7 +33,6 @@ class UnreadBadge extends StatelessWidget {
   }
 }
 
-// Supposedly an IconBadge but I can't see it in Tachiyomi
 class LanguageBadge extends StatelessWidget {
   const LanguageBadge({
     super.key,
@@ -48,10 +47,10 @@ class LanguageBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
     if (isLocal) {
-      return badges.Badge(
-        text: lang.label_local,
+      return badges.IconBadge(
+        iconData: Icons.folder_outlined,
         color: Theme.of(context).colorScheme.tertiary,
-        textColor: Theme.of(context).colorScheme.onTertiary,
+        iconColor: Theme.of(context).colorScheme.onTertiary,
       );
     } else if (sourceLanguage.isNotEmpty) {
       return badges.Badge(

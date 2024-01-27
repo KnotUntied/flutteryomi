@@ -162,8 +162,6 @@ class MangaComfortableGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget? content;
-
     return _GridItemSelectable(
       isSelected: false,
       onClick: onClick,

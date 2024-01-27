@@ -7,8 +7,6 @@ import 'package:flutteryomi/presentation/components/material/constants.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/components/dot_separator_text.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_cover.dart';
-import 'package:flutteryomi/presentation/updates/updates.dart';
-import 'package:flutteryomi/presentation/updates/updates_screen_model.dart';
 import 'package:flutteryomi/presentation/util/modifier.dart';
 import 'package:flutteryomi/presentation/util/time_utils.dart';
 
