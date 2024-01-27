@@ -42,18 +42,18 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final lang = AppLocalizations.of(context);
-    return MaterialApp(
-      //title: 'Flutteryomi',
-      onGenerateTitle: (context) => lang.app_name,
+  Widget build(BuildContext context) {
+    //final lang = AppLocalizations.of(context);
+    return const MaterialApp(
+      title: 'Flutteryomi',
+      //onGenerateTitle: (context) => lang.app_name,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }
