@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutteryomi/presentation/library/components/library_settings_dialog.dart';
 
 import 'package:flutteryomi/presentation/library/components/library_content.dart';
+import 'package:flutteryomi/presentation/library/components/library_settings_dialog.dart';
+import 'package:flutteryomi/presentation/library/components/library_tabs.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
@@ -24,8 +25,7 @@ class _LibraryTabState extends State<LibraryTab>
     super.build(context);
     final lang = AppLocalizations.of(context);
     return DefaultTabController(
-      length: 5,
-      //length: categories.length,
+      length: categories.length,
       child: Scaffold(
         appBar: LibraryToolbar(
           hasActiveFilters: false,
@@ -46,43 +46,13 @@ class _LibraryTabState extends State<LibraryTab>
           onClickGlobalUpdate: () {},
           onClickOpenRandomManga: () {},
           onSearchQueryChange: (String? value) {},
-          bottom: TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: [
-              //hacky way to have text and pill
-              Tab(
-                icon: TabText(
-                  text: lang.label_default,
-                  badgeCount: 7,
-                ),
-              ),
-              Tab(
-                icon: TabText(
-                  text: lang.label_default,
-                  badgeCount: 7,
-                ),
-              ),
-              Tab(
-                icon: TabText(
-                  text: lang.label_default,
-                  badgeCount: 7,
-                ),
-              ),
-              Tab(
-                icon: TabText(
-                  text: lang.label_default,
-                  badgeCount: 7,
-                ),
-              ),
-              Tab(
-                icon: TabText(
-                  text: lang.label_default,
-                  badgeCount: 7,
-                ),
-              ),
-            ],
-          ),
+          bottom: showPageTabs && categories.size > 1
+              ? LibraryTabs(
+                  categories: categories,
+                  getNumberOfMangaForCategory: (_) => 0,
+                  onTabItemClick: (_) {},
+                )
+              : null,
         ),
         body: LibraryContent(
           hasActiveFilters: false,

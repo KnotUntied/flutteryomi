@@ -12,8 +12,6 @@ class LibraryList extends StatelessWidget {
   const LibraryList({
     super.key,
     required this.items,
-    required this.showTitle,
-    required this.columns,
     required this.selection,
     required this.onClick,
     required this.onLongClick,
@@ -23,8 +21,6 @@ class LibraryList extends StatelessWidget {
   });
 
   final List<LibraryItem> items;
-  final bool showTitle;
-  final int columns;
   final List<LibraryManga> selection;
   final ValueChanged<LibraryManga> onClick;
   final ValueChanged<LibraryManga> onLongClick;
@@ -37,7 +33,8 @@ class LibraryList extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         if (!searchQuery.isNullOrEmpty) SliverToBoxAdapter(
-          child: Padding(
+          child: Container(
+            alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: GlobalSearchItem(
               searchQuery: searchQuery!,

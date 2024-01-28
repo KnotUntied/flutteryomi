@@ -41,7 +41,8 @@ class LibraryCompactGrid extends StatelessWidget {
       slivers: [
         if (!searchQuery.isNullOrEmpty)
           SliverToBoxAdapter(
-            child: Padding(
+            child: Container(
+              alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: GlobalSearchItem(
                 searchQuery: searchQuery!,

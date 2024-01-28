@@ -91,8 +91,10 @@ class LibraryRegularToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    final pillAlpha =
-        MediaQuery.platformBrightnessOf(context) == Brightness.dark ? 31 : 20;
+    final pillOpacity =
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark
+            ? 0.12
+            : 0.08;
     final filterTint =
         hasFilters ? Theme.of(context).colorScheme.primary : null;
     return SearchToolbar(
@@ -111,7 +113,7 @@ class LibraryRegularToolbar extends StatelessWidget {
               color: Theme.of(context)
                   .colorScheme
                   .onBackground
-                  .withAlpha(pillAlpha),
+                  .withOpacity(pillOpacity),
               text: title.numberOfManga.toString(),
               fontSize: 14.0,
             ),

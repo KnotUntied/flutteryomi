@@ -11,7 +11,7 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
   int get flag => type + direction;
   @override
   int get mask => type.mask | direction.mask;
-  bool get isAscending => direction == Direction.ascending;
+  bool get isAscending => direction is _Ascending;
 
   const LibrarySort._();
   const factory LibrarySort(Type type, Direction direction) = _LibrarySort;
