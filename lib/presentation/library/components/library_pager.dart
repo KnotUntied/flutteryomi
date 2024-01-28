@@ -2,7 +2,6 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/library/model/library_display_mode.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/presentation//library/components/library_compact_grid.dart';

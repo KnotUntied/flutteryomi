@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/presentation/library/library_settings_dialog.dart';
 import 'package:flutteryomi/presentation/library/components/library_content.dart';
-import 'package:flutteryomi/presentation/library/components/library_settings_dialog.dart';
 import 'package:flutteryomi/presentation/library/components/library_tabs.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
