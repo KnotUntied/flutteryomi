@@ -458,7 +458,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         return MangaUpdate(
           favorite: drift.Value(false),
           id: drift.Value(it.id),
-        )
+        );
       }).toList();
       await updateManga.awaitAll(toDelete);
     }
@@ -708,7 +708,4 @@ class _ItemPreferences with _$ItemPreferences {
     required TriState filterCompleted,
     required TriState filterIntervalCustom,
   }) = __ItemPreferences;
-}
-
-extension LibraryMapExtensions on LibraryMap {
 }

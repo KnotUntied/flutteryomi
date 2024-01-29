@@ -1,9 +1,10 @@
-//import 'package:flutteryomi/core/preference/tri_state.dart';
+import 'package:drift/drift.dart';
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as drift;
 import 'package:flutteryomi/data/source/update_strategy.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
 import 'package:flutteryomi/domain/reader/setting/reading_mode.dart';
+import 'package:flutteryomi/domain/source/model/smanga.dart';
 
 // Drift already generates convenient classes
 // Typedef here so dependents will depend on domain instead of data
@@ -58,7 +59,7 @@ extension MangaUtils on Manga {
   static const int chapterDisplayNumber = 0x00100000;
   static const int chapterDisplayMask = 0x00100000;
 
-  Manga create() => Manga(
+  static Manga create() => Manga(
         id: -1,
         url: "",
         title: "",
@@ -98,11 +99,61 @@ extension MangaUtils on Manga {
       bookmarkedFilter != TriState.disabled;
   // TODO: Figure this one out
   //bool forceDownloaded() => favorite && Injekt.get<BasePreferences>().downloadedOnly().get();
+  //Probably this one
+  //bool forceDownloaded(BasePreferences prefs) => favorite && prefs.downloadedOnly().get();
   bool forceDownloaded() => favorite;
+
+  SManga toSManga() => SManga.create()
+      ..url = url
+      ..title = title
+      ..artist = artist
+      ..author = author
+      ..description = description
+      ..genre = genre?.join() ?? [].join()
+      ..status = status
+      ..thumbnailUrl = thumbnailUrl
+      ..initialized = initialized;
+
+  Manga copyFrom(SManga other) {
+    final _author = other.author ?? author;
+    final _artist = other.artist ?? artist;
+    final _description = other.description ?? description;
+    final _genres = other.genre != null ? other.getGenres() : genre;
+    final _thumbnailUrl = other.thumbnailUrl ?? thumbnailUrl;
+    return copyWith(
+      author: Value(_author),
+      artist: Value(_artist),
+      description: Value(_description),
+      genre: Value(_genres),
+      thumbnailUrl: Value(_thumbnailUrl),
+      status: other.status,
+      updateStrategy: other.updateStrategy.index,
+      initialized: other.initialized && initialized,
+    );
+  }
+
+  //TODO
+  //bool hasCustomCover(CoverCache coverCache) =>
+  //    coverCache.getCustomCoverFile(id).exists();
 }
 
-// TODO: toSmanga
-// TODO: copyFromSManga
-// TODO: toDomainManga
-// TODO: hasCoverCache
+extension SMangaToDomainManga on SManga {
+  Manga toDomainManga(int sourceId) => MangaUtils
+      .create()
+      .copyWith(
+        url: url,
+        title: title,
+        artist: Value(artist),
+        author: Value(author),
+        description: Value(description),
+        genre: Value(getGenres()),
+        status: status,
+        thumbnailUrl: Value(thumbnailUrl),
+        updateStrategy: updateStrategy.index,
+        initialized: initialized,
+        source: sourceId,
+      );
+}
+
+/// Creates a ComicInfo instance based on the manga and chapter metadata.
 // TODO: getComicInfo
