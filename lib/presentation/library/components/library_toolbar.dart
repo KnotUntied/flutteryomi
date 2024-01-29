@@ -189,7 +189,7 @@ class LibrarySelectionToolbar extends StatelessWidget {
 }
 
 class LibraryToolbarTitle {
-  const LibraryToolbarTitle(this.text, this.numberOfManga);
+  const LibraryToolbarTitle(this.text, [this.numberOfManga]);
   final String text;
   final int? numberOfManga;
 }

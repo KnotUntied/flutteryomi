@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
@@ -8,6 +9,7 @@ import 'package:flutteryomi/domain/download/download_store.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/source/model/page.dart' as pageData;
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 
 //TODO
@@ -336,21 +338,22 @@ class Downloader {
   }
 
   /// Gets the [download] image of [page] from the filesystem in [tmpDir] if it exists or downloads it otherwise.
-  //Future<void> _getOrDownloadImage(Page page, Download download, UniFile tmpDir) async {
-  //  // If the image URL is empty, do nothing
-  //  if (page.imageUrl == null) return;
+  Future<void> _getOrDownloadImage(pageData.Page page, Download download, Directory tmpDir) async {
+    // If the image URL is empty, do nothing
+    if (page.imageUrl == null) return;
 
-  //  final digitCount = (download.pages?.size ?: 0).toString().length.coerceAtLeast(3)
-  //  final filename = "%0${digitCount}d".format(Locale.ENGLISH, page.number)
-  //  final tmpFile = tmpDir.findFile("$filename.tmp")
+    final digitCount = max(3, (download.pages?.length ?? 0).toString().length);
+    //final filename = "%0${digitCount}d".format(Locale.ENGLISH, page.number);
+    //final tmpFile = tmpDir.findFile("$filename.tmp")
 
-  //  // Delete temp file if it exists
-  //  tmpFile?.delete()
+    // Delete temp file if it exists
+    //tmpFile?.delete();
 
-  //  // Try to find the image file
-  //  final imageFile = tmpDir.listFiles()?.firstOrNull {
-  //      it.name!!.startsWith("$filename.") || it.name!!.startsWith("${filename}__001")
-  //  }
+    // Try to find the image file
+    //final imageFile = tmpDir.listFiles()?.firstOrNull(
+    //  (it) => it.name!.startsWith("$filename.") ||
+    //  it.name!.startsWith("${filename}__001"),
+    //);
 
   //  try {
   //    // If the image is already downloaded, do nothing. Otherwise download from network
@@ -375,10 +378,10 @@ class Downloader {
   //    page.status = PageState.error;
   //    notifier.onError(e.message, download.chapter.name, download.manga.title);
   //  }
-  //}
+  }
 
   /// Downloads the image in [page] from [source] from network to a file [filename] in [tmpDir].
-  //Future<UniFile> _downloadImage(Page page, HttpSource source, UniFile tmpDir, String filename) async {
+  //Future<File> _downloadImage(Page page, HttpSource source, Directory tmpDir, String filename) async {
   //  page.status = PageState.downloadImage;
   //  page.progress = 0;
   //  return flow {
@@ -408,8 +411,8 @@ class Downloader {
   //}
 
   /// Copies the image [filename] from [cacheFile] to file in [tmpDir].
-  //UniFile _copyImageFromCache(File cacheFile, UniFile tmpDir, String filename) {
-  //  final tmpFile = tmpDir.createFile("$filename.tmp")!!;
+  File _copyImageFromCache(File cacheFile, Directory tmpDir, String filename) {
+    //final tmpFile = tmpDir.createFile("$filename.tmp")!!;
   //  cacheFile.inputStream().use { input ->
   //    tmpFile.openOutputStream().use { output ->
   //      input.copyTo(output);
@@ -419,12 +422,13 @@ class Downloader {
   //  tmpFile.renameTo("$filename.${extension.extension}")
   //  cacheFile.delete();
   //  return tmpFile;
-  //}
+    return File('');
+  }
 
   /// Returns the extension of the downloaded image from the network [response], or if it's null,
   /// analyze the [file]. If everything fails, assume it's a jpg.
-  //String _getImageExtension(Response response, UniFile file) {
-  //  // Read content type if available.
+  String _getImageExtension(HttpResponse response, File file) {
+    // Read content type if available.
   //  final mime = response.body.contentType()?.run { type == "image" ? "image/$subtype" : null }
   //      // Else guess from the uri.
   //      ?? context.contentResolver.getType(file.uri)
@@ -432,81 +436,83 @@ class Downloader {
   //      ?? ImageUtil.findImageType { file.openInputStream() }?.mime;
 
   //  return ImageUtil.getExtensionFromMimeType(mime);
-  //}
+    return '';
+  }
 
-  //void _splitTallImageIfNeeded(Page page, UniFile tmpDir) {
-  //  if (!downloadPreferences.splitTallImages().get()) return;
+  void _splitTallImageIfNeeded(pageData.Page page, File tmpDir) {
+    if (!downloadPreferences.splitTallImages().get()) return;
 
-  //  //try {
-  //  //  final filenamePrefix = "%03d".format(Locale.ENGLISH, page.number);
-  //  //  final imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
-  //  //      ?? error(context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number));
+    //try {
+    //  final filenamePrefix = "%03d".format(Locale.ENGLISH, page.number);
+    //  final imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
+    //      ?? error(context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number));
 
-  //  //  // If the original page was previously split, then skip
-  //  //  if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return;
+    //  // If the original page was previously split, then skip
+    //  if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return;
 
-  //  //  ImageUtil.splitTallImage(tmpDir, imageFile, filenamePrefix);
-  //  //} catch (Exception e) {
-  //  //  logcat(LogPriority.ERROR, e) { "Failed to split downloaded image" };
-  //  //}
-  //}
+    //  ImageUtil.splitTallImage(tmpDir, imageFile, filenamePrefix);
+    //} catch (Exception e) {
+    //  logcat(LogPriority.ERROR, e) { "Failed to split downloaded image" };
+    //}
+  }
 
   /// Checks if the [download] in [tmpDir] was successful.
-  //bool _isDownloadSuccessful(Download download, UniFile tmpDir) {
-  //  //// Page list hasn't been initialized
-  //  //final downloadPageCount = download.pages?.size ?? return false;
+  bool _isDownloadSuccessful(Download download, Directory tmpDir) {
+    // Page list hasn't been initialized
+    final downloadPageCount = download.pages?.length;
+    if (downloadPageCount == null) return false;
 
-  //  //// Ensure that all pages have been downloaded
-  //  //if (download.downloadedImages != downloadPageCount) {
-  //  //  return false;
-  //  //}
+    // Ensure that all pages have been downloaded
+    if (download.downloadedImages != downloadPageCount) {
+      return false;
+    }
 
-  //  //// Ensure that the chapter folder has all the pages
-  //  //final downloadedImagesCount = tmpDir.listFiles().orEmpty().count {
-  //  //  final fileName = it.name.orEmpty();
-  //  //  when {
-  //  //    fileName in listOf(COMIC_INFO_FILE, NOMEDIA_FILE) => false;
-  //  //    fileName.endsWith(".tmp") => false;
-  //  //    // Only count the first split page and not the others
-  //  //    fileName.contains("__") && !fileName.endsWith("__001.jpg") => false;
-  //  //    _ => true;
-  //  //  }
-  //  //}
-  //  //return downloadedImagesCount == downloadPageCount;
-  //  return false;
-  //}
+    //// Ensure that the chapter folder has all the pages
+    //final downloadedImagesCount = tmpDir.listFiles().orEmpty().count {
+    //  final fileName = it.name.orEmpty();
+    //  when {
+    //    fileName in listOf(COMIC_INFO_FILE, NOMEDIA_FILE) => false;
+    //    fileName.endsWith(".tmp") => false;
+    //    // Only count the first split page and not the others
+    //    fileName.contains("__") && !fileName.endsWith("__001.jpg") => false;
+    //    _ => true;
+    //  }
+    //}
+    //return downloadedImagesCount == downloadPageCount;
+    return false;
+  }
 
   /// Archive the chapter pages as a CBZ.
-  //void _archiveChapter(UniFile mangaDir, String dirname, UniFile tmpDir) {
-  //  //final zip = mangaDir.createFile("$dirname.cbz$tmpDirSuffix")!!
-  //  //ZipOutputStream(BufferedOutputStream(zip.openOutputStream())).use { zipOut ->
-  //  //  zipOut.setMethod(ZipEntry.STORED);
+  void _archiveChapter(Directory mangaDir, String dirname, Directory tmpDir) {
+    //final zip = mangaDir.createFile("$dirname.cbz$tmpDirSuffix")!!
+    //ZipOutputStream(BufferedOutputStream(zip.openOutputStream())).use { zipOut ->
+    //  zipOut.setMethod(ZipEntry.STORED);
 
-  //  //  tmpDir.listFiles()?.forEach { img ->
-  //  //    img.openInputStream().use { input ->
-  //  //      final data = input.readBytes();
-  //  //      final size = img.length();
-  //  //      final entry = ZipEntry(img.name).apply {
-  //  //        final crc = CRC32().apply {
-  //  //          update(data);
-  //  //        }
-  //  //        setCrc(crc.value);
+    //  tmpDir.listFiles()?.forEach { img ->
+    //    img.openInputStream().use { input ->
+    //      final data = input.readBytes();
+    //      final size = img.length();
+    //      final entry = ZipEntry(img.name).apply {
+    //        final crc = CRC32().apply {
+    //          update(data);
+    //        }
+    //        setCrc(crc.value);
 
-  //  //        compressedSize = size;
-  //  //        setSize(size);
-  //  //      }
-  //  //      zipOut.putNextEntry(entry)
-  //  //      zipOut.write(data)
-  //  //    }
-  //  //  }
-  //  //}
-  //  //zip.renameTo("$dirname.cbz");
-  //  //tmpDir.delete();
-  //}
+    //        compressedSize = size;
+    //        setSize(size);
+    //      }
+    //      zipOut.putNextEntry(entry)
+    //      zipOut.write(data)
+    //    }
+    //  }
+    //}
+    //zip.renameTo("$dirname.cbz");
+    //tmpDir.delete();
+  }
 
   /// Creates a ComicInfo.xml file inside the given directory.
   //Future<void> _createComicInfoFile(
-  //  UniFile dir,
+  //  Directory dir,
   //  Manga manga,
   //  Chapter chapter,
   //  HttpSource source,

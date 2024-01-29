@@ -22,7 +22,6 @@ enum ReadingMode {
 
   static bool isPagerType(int preference) => fromPreference(preference).type == ViewerType.pager;
 
-  // TODO
   // toViewer belongs to presentation
 }
 

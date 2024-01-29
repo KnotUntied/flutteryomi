@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
@@ -49,6 +50,7 @@ class DownloadManager {
   //);
 
   //bool get isRunning => _downloader.isRunning;
+  bool get isRunning => false;
 
   /// Queue to delay the deletion of a list of chapters until triggered.
   //late final _pendingDeleter = DownloadPendingDeleter(context);
@@ -105,9 +107,9 @@ class DownloadManager {
   }
 
   /// Reorders the download queue to [downloads].
-  //void reorderQueue(downloads: List<Download>) {
+  void reorderQueue(List<Download> downloads) {
   //  _downloader.updateQueue(downloads);
-  //}
+  }
 
   /// Tells the downloader to enqueue the given list of [chapters] in [manga]. Can be set to [autoStart].
   void downloadChapters(Manga manga, List<Chapter> chapters, [bool autoStart = true]) {
@@ -115,16 +117,16 @@ class DownloadManager {
   }
 
   /// Tells the downloader to enqueue the given list of [downloads] at the start of the queue.
-  //void addDownloadsToStartOfQueue(List<Download> downloads) {
-  //  if (downloads.isEmpty) return;
+  void addDownloadsToStartOfQueue(List<Download> downloads) {
+    if (downloads.isEmpty) return;
   //  //final queue = queueState.value;
   //  //queue.addAll(0, downloads);
   //  //reorderQueue(queue);
   //  //if (!DownloadJob.isRunning(context)) startDownloads();
-  //}
+  }
 
   /// Builds and returns the page list of a downloaded [chapter] from its [manga] and [source].
-  //List<Page> buildPageList(Source source, Manga manga, Chapter chapter) {
+  List<Page> buildPageList(Source source, Manga manga, Chapter chapter) {
   //  final chapterDir = provider.findChapterDir(chapter.name, chapter.scanlator, manga.title, source);
   //  final files = chapterDir?.listFiles().orEmpty().filter((it) => "image" in it.type.orEmpty());
 
@@ -137,7 +139,8 @@ class DownloadManager {
   //        final page = Page(i, uri: file.uri);
   //          //.apply { status = Page.State.READY }
   //      });
-  //}
+    return [];
+  }
 
   // TODO
   /// Returns true if the chapter is downloaded.
@@ -164,11 +167,14 @@ class DownloadManager {
 
   /// Returns the amount of downloaded chapters.
   //int getDownloadCount() => cache.getTotalDownloadCount();
+  int getDownloadCount() => 0;
 
   /// Returns the amount of downloaded chapters for a [manga].
-  //int getDownloadCount(Manga manga) => cache.getDownloadCount(manga);
+  //int getDownloadCountForManga(Manga manga) => cache.getDownloadCount(manga);
+  int getDownloadCountForManga(Manga manga) => 0;
 
-  //void cancelQueuedDownloads(List<Download> downloads) =>
+  void cancelQueuedDownloads(List<Download> downloads) =>
+      null;
   //    _removeFromDownloadQueue(downloads.map((it) => it.chapter));
 
   /// Deletes the directories of a list of downloaded [chapters] in their [manga] and [source].
@@ -224,7 +230,7 @@ class DownloadManager {
 
   // TODO
   /// Adds a list of [chapters] from a given [manga] to be deleted later.
-  Future<void> enqueueChaptersToDelete(List<Chapter> chapters, Manga manga) async => 0;
+  Future<void> enqueueChaptersToDelete(List<Chapter> chapters, Manga manga) async => null;
     //await pendingDeleter.addChapters(_getChaptersToDelete(chapters, manga), manga);
 
   /// Triggers the execution of the deletion of pending chapters.
@@ -289,23 +295,23 @@ class DownloadManager {
   //  }
   }
 
-  //Future<List<Chapter>> _getChaptersToDelete(List<Chapter> chapters, Manga manga) async {
-  //  // Retrieve the categories that are set to exclude from being deleted on read
-  //  final categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map(String::toLong);
+  Future<List<Chapter>> _getChaptersToDelete(List<Chapter> chapters, Manga manga) async {
+    // Retrieve the categories that are set to exclude from being deleted on read
+    final categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map((it) => int.parse(it));
 
-  //  final categories = await getCategories.await_(manga.id);
-  //  var categoriesForManga = categories.map((it) => it.id).toList();
-  //  if (categoriesForManga.isEmpty) categoriesForManga = [0];
-  //  final filteredCategoryManga = categoriesForManga.intersect(categoriesToExclude).isNotEmpty
-  //      ? chapters.whereNot((it) => it.read)
-  //      : chapters;
+    final _categoriesForManga = await getCategories.await_(manga.id);
+    var categoriesForManga = _categoriesForManga.map((it) => it.id).toList();
+    if (categoriesForManga.isEmpty) categoriesForManga = const [0];
+    final filteredCategoryManga = categoriesForManga.intersect(categoriesToExclude).isNotEmpty
+        ? chapters.filterNot((it) => it.read)
+        : chapters;
 
-  //  //if (!downloadPreferences.removeBookmarkedChapters().get()) {
-  //  //  return filteredCategoryManga.filterNot((it) => it.bookmark)
-  //  //} else {
-  //  //  return filteredCategoryManga;
-  //  //}
-  //}
+    if (!downloadPreferences.removeBookmarkedChapters().get()) {
+      return filteredCategoryManga.filterNot((it) => it.bookmark).toList();
+    } else {
+      return filteredCategoryManga.toList();
+    }
+  }
 
   //Stream<Download> statusStream() => queueState
   //    .flatMapLatest((downloads) => downloads
@@ -314,6 +320,7 @@ class DownloadManager {
   //    .onStart(() => emitAll(
   //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
   //    ));
+  Stream<Download> statusStream() => Stream.empty();
 
   //Stream<Download> progressStream() => queueState
   //    .flatMapLatest((downloads) => downloads
@@ -322,6 +329,7 @@ class DownloadManager {
   //    .onStart(() => emitAll(
   //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
   //    ));
+  Stream<Download> progressStream() => Stream.empty();
 }
 
 @riverpod

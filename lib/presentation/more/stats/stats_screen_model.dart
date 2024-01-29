@@ -111,7 +111,7 @@ class StatsScreenModel extends _$StatsScreenModel {
   }
 
   //TODO
-  //Future<Map<int, List<Track>>> _getMangaTrackMap(List<LibraryManga> libraryManga) async {
+  Future<Map<int, List<Track>>> _getMangaTrackMap(List<LibraryManga> libraryManga) async {
   //  final loggedInTrackerIds = loggedInTrackers.map((it) => it.id).toHashSet();
   //  final getTracks = ref.watch(getTracksProvider);
   //  return libraryManga.associate((manga) {
@@ -120,10 +120,12 @@ class StatsScreenModel extends _$StatsScreenModel {
 
   //    return MapEntry(manga.id, tracks);
   //  });
-  //}
+    return {};
+  }
 
   //TODO
-  //Map<int, List<Track>> _getScoredMangaTrackMap(Map<int, List<Track>> mangaTrackMap) =>
+  Map<int, List<Track>> _getScoredMangaTrackMap(Map<int, List<Track>> mangaTrackMap) =>
+      {};
   //    mangaTrackMap.mapNotNull((mangaId, tracks) {
   //      final trackList = tracks.mapNotNull((track) => track.score > 0.0 ? track : null);
   //      if (trackList.isEmpty) return@mapNotNull null;
@@ -131,18 +133,20 @@ class StatsScreenModel extends _$StatsScreenModel {
   //    }).toMap();
 
   //TODO
-  //double _getTrackMeanScore(Map<int, List<Track>> scoredMangaTrackMap) =>
+  double _getTrackMeanScore(Map<int, List<Track>> scoredMangaTrackMap) =>
+      0.0;
   //    scoredMangaTrackMap
   //        .map((_, tracks) => tracks.map(::get10PointScore).average())
   //        .where((it) => !it.isNaN)
   //        .average();
 
   //TODO
-  //double _get10PointScore(Track track) {
+  double _get10PointScore(Track track) {
+    return 0;
   //  final trackerManager = ref.watch(trackerManagerProvider);
   //  final service = trackerManager.get(track.trackerId)!;
   //  return service.get10PointScore(track);
-  //}
+  }
 }
 
 @freezed

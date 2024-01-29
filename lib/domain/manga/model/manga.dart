@@ -1,4 +1,5 @@
 //import 'package:flutteryomi/core/preference/tri_state.dart';
+import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as drift;
 import 'package:flutteryomi/data/source/update_strategy.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
@@ -15,16 +16,16 @@ extension MangaUtils on Manga {
   int get downloadedFilterRaw => chapterFlags & chapterDownloadedMask;
   int get bookmarkedFilterRaw => chapterFlags & chapterBookmarkedMask;
 
-  bool? get unreadFilter => switch (unreadFilterRaw) {
-        chapterShowUnread => true,
-        chapterShowRead => false,
-        _ => null,
+  TriState get unreadFilter => switch (unreadFilterRaw) {
+        chapterShowUnread => TriState.enabledIs,
+        chapterShowRead => TriState.enabledNot,
+        _ => TriState.disabled,
       };
 
-  bool? get bookmarkedFilter => switch (unreadFilterRaw) {
-        chapterShowBookmarked => true,
-        chapterShowNotBookmarked => false,
-        _ => null,
+  TriState get bookmarkedFilter => switch (unreadFilterRaw) {
+        chapterShowBookmarked => TriState.enabledIs,
+        chapterShowNotBookmarked => TriState.enabledNot,
+        _ => TriState.disabled,
       };
 
   bool sortDescending() => chapterFlags & chapterSortDirMask == chapterSortDesc;
@@ -84,18 +85,20 @@ extension MangaUtils on Manga {
 
   int get readingMode => viewerFlags & ReadingMode.mask;
   int get readerOrientation => viewerFlags & ReaderOrientation.mask;
-  //TriState get downloadedFilter => forceDownloaded()
-  //    ? TriState.enabledIs
-  //    : switch (downloadedFilterRaw) {
-  //      chapterShowDownloaded => TriState.enabledIs,
-  //      chapterShowNotDownloaded => TriState.enabledNot,
-  //      _ => TriState.disabled,
-  //    };
-  //bool chaptersFiltered() => unreadFilter != TriState.disabled ||
-  //    downloadedFilter != TriState.disabled ||
-  //    bookmarkedFilter != TriState.disabled;
+  TriState get downloadedFilter => forceDownloaded()
+      ? TriState.enabledIs
+      : switch (downloadedFilterRaw) {
+          chapterShowDownloaded => TriState.enabledIs,
+          chapterShowNotDownloaded => TriState.enabledNot,
+          _ => TriState.disabled,
+        };
+  bool chaptersFiltered() =>
+      unreadFilter != TriState.disabled ||
+      downloadedFilter != TriState.disabled ||
+      bookmarkedFilter != TriState.disabled;
   // TODO: Figure this one out
   //bool forceDownloaded() => favorite && Injekt.get<BasePreferences>().downloadedOnly().get();
+  bool forceDownloaded() => favorite;
 }
 
 // TODO: toSmanga

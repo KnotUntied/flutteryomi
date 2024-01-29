@@ -17,8 +17,8 @@ class DeleteDownload {
 
   //TODO
   Future<void> awaitAll(Manga manga, List<Chapter> chapters) async {
-    //final source = await sourceManager.get(manga.source);
-    //await downloadManager.deleteChapters(chapters, manga, source);
+    final source = await sourceManager.get(manga.source);
+    downloadManager.deleteChapters(chapters, manga, source!);
   }
 }
 

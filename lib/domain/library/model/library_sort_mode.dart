@@ -68,16 +68,15 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
 
   String serialize() {
     String serializedType = switch (type) {
-      _Alphabetical() => "ALPHABETICAL",
-      _LastRead() => "LAST_READ",
-      _LastUpdate() => "LAST_MANGA_UPDATE",
-      _UnreadCount() => "UNREAD_COUNT",
-      _TotalChapters() => "TOTAL_CHAPTERS",
-      _LatestChapter() => "LATEST_CHAPTER",
-      _ChapterFetchDate() => "CHAPTER_FETCH_DATE",
-      _DateAdded() => "DATE_ADDED",
-      _TrackerMean() => "TRACKER_MEAN",
-      //_ => "ALPHABETICAL",
+      Alphabetical() => "ALPHABETICAL",
+      LastRead() => "LAST_READ",
+      LastUpdate() => "LAST_MANGA_UPDATE",
+      UnreadCount() => "UNREAD_COUNT",
+      TotalChapters() => "TOTAL_CHAPTERS",
+      LatestChapter() => "LATEST_CHAPTER",
+      ChapterFetchDate() => "CHAPTER_FETCH_DATE",
+      DateAdded() => "DATE_ADDED",
+      TrackerMean() => "TRACKER_MEAN",
     };
     String serializedDirection =
         (direction == Direction.ascending) ? "ASCENDING" : "DESCENDING";
@@ -93,15 +92,15 @@ sealed class Type implements FlagWithMask {
 
   const Type(this.flag) : mask = 0x3C;
 
-  static const Type alphabetical = _Alphabetical();
-  static const Type lastRead = _LastRead();
-  static const Type lastUpdate = _LastUpdate();
-  static const Type unreadCount = _UnreadCount();
-  static const Type totalChapters = _TotalChapters();
-  static const Type latestChapter = _LatestChapter();
-  static const Type chapterFetchDate = _ChapterFetchDate();
-  static const Type dateAdded = _DateAdded();
-  static const Type trackerMean = _TrackerMean();
+  static const Type alphabetical = Alphabetical();
+  static const Type lastRead = LastRead();
+  static const Type lastUpdate = LastUpdate();
+  static const Type unreadCount = UnreadCount();
+  static const Type totalChapters = TotalChapters();
+  static const Type latestChapter = LatestChapter();
+  static const Type chapterFetchDate = ChapterFetchDate();
+  static const Type dateAdded = DateAdded();
+  static const Type trackerMean = TrackerMean();
 
   static Type valueOf(int flag) {
     return LibrarySort.types.firstWhere(
@@ -110,40 +109,40 @@ sealed class Type implements FlagWithMask {
   }
 }
 
-class _Alphabetical extends Type {
-  const _Alphabetical() : super(0x00);
+class Alphabetical extends Type {
+  const Alphabetical() : super(0x00);
 }
 
-class _LastRead extends Type {
-  const _LastRead() : super(0x04);
+class LastRead extends Type {
+  const LastRead() : super(0x04);
 }
 
-class _LastUpdate extends Type {
-  const _LastUpdate() : super(0x08);
+class LastUpdate extends Type {
+  const LastUpdate() : super(0x08);
 }
 
-class _UnreadCount extends Type {
-  const _UnreadCount() : super(0x0C);
+class UnreadCount extends Type {
+  const UnreadCount() : super(0x0C);
 }
 
-class _TotalChapters extends Type {
-  const _TotalChapters() : super(0x10);
+class TotalChapters extends Type {
+  const TotalChapters() : super(0x10);
 }
 
-class _LatestChapter extends Type {
-  const _LatestChapter() : super(0x14);
+class LatestChapter extends Type {
+  const LatestChapter() : super(0x14);
 }
 
-class _ChapterFetchDate extends Type {
-  const _ChapterFetchDate() : super(0x18);
+class ChapterFetchDate extends Type {
+  const ChapterFetchDate() : super(0x18);
 }
 
-class _DateAdded extends Type {
-  const _DateAdded() : super(0x1C);
+class DateAdded extends Type {
+  const DateAdded() : super(0x1C);
 }
 
-class _TrackerMean extends Type {
-  const _TrackerMean() : super(0x20);
+class TrackerMean extends Type {
+  const TrackerMean() : super(0x20);
 }
 
 const defaultType = Type.alphabetical;
@@ -177,5 +176,5 @@ class _Descending extends Direction {
 const defaultDirection = Direction.descending;
 
 extension CategorySort on Category {
-  LibrarySort get sort => LibrarySort.valueOf(flags);
+  LibrarySort get librarySort => LibrarySort.valueOf(flags);
 }

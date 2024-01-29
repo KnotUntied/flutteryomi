@@ -17,13 +17,9 @@ class Page with _$Page {
 
   int get number => index + 1;
 
-  int get status {
-    return 0;
-  }
+  int get status => 0;
 
-  int get progress {
-    return 0;
-  }
+  int get progress => 0;
 }
 
 enum PageState {

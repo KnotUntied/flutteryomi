@@ -1,7 +1,3 @@
-// TODO
-// In master but not in latest release, wait and see how it goes
-// Uses db handler instead of repo, hmm
-
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';

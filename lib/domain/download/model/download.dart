@@ -22,16 +22,13 @@ class Download with _$Download {
   ]) = _Download;
 
   int get totalProgress {
-    //if (pages == null) return 0;
+    if (pages == null) return 0;
     //return pages?.sum(Page::progress).average().toInt();
     return 0;
   }
 
-  int get downloadedImages {
-    //if (pages == null) return 0;
-    //return pages?.where((it) => it.status == PageState.ready).length;
-    return 0;
-  }
+  int get downloadedImages =>
+      pages?.where((it) => it.status == PageState.ready).length ?? 0;
 
   DownloadState get status {
     return DownloadState.notDownloaded;
@@ -55,6 +52,7 @@ class Download with _$Download {
     //final source = (sourceManager.get(manga.source) as HttpSource?) ?? return null;
 
     //return Download(source, manga, chapter);
+    return null;
   }
 }
 

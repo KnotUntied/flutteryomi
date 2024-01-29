@@ -1,78 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/library/model/library_display_mode.dart';
 import 'package:flutteryomi/presentation/components/settings_items.dart';
+import 'package:flutteryomi/presentation/components/tabbed_dialog.dart';
 
+//TODO
 class LibrarySettingsDialog extends StatelessWidget {
   const LibrarySettingsDialog({
     super.key,
-    //required this.category,
+    //required this.screenModel
+    this.category,
   });
 
-  //final Category? category;
+  final Category? category;
 
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    return DefaultTabController(
-      length: 3,
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.5,
-        maxChildSize: 1,
-        minChildSize: 0.5,
-        builder: (BuildContext context, ScrollController scrollController) =>
-            Expanded(
-          child: Column(
-            children: [
-              TabBar(
-                tabAlignment: TabAlignment.fill,
-                tabs: <Tab>[
-                  Tab(text: lang.action_filter),
-                  Tab(text: lang.action_sort),
-                  Tab(text: lang.pref_category_display),
-                ],
-              ),
-              const TabBarView(
-                children: [
-                  _FilterPage(),
-                  //_SortPage(category),
-                  _SortPage(),
-                  _DisplayPage(),
-                ],
-              ),
-            ],
-          ),
+    return TabbedDialog(
+      tabTitles: [
+        lang.action_filter,
+        lang.action_sort,
+        lang.pref_category_display,
+      ],
+      content: [
+        const _FilterPage(
+          //screenModel: screenModel,
         ),
-      ),
-      //child: Column(
-      //  children: [
-      //    TabBar(
-      //      tabAlignment: TabAlignment.fill,
-      //      tabs: <Tab>[
-      //        Tab(text: lang.action_filter),
-      //        Tab(text: lang.action_sort),
-      //        Tab(text: lang.pref_category_display),
-      //      ],
-      //    ),
-      //    const Expanded(
-      //      child: TabBarView(
-      //        children: [
-      //          _FilterPage(),
-      //          //_SortPage(category),
-      //          _SortPage(),
-      //          _DisplayPage(),
-      //        ],
-      //      ),
-      //    ),
-      //  ],
-      //),
+        _SortPage(
+          category: category,
+          //screenModel: screenModel,
+        ),
+        const _DisplayPage(
+          //screenModel: screenModel,
+        ),
+      ],
     );
   }
 }
 
 class _FilterPage extends StatelessWidget {
-  const _FilterPage({super.key});
+  const _FilterPage({
+    super.key,
+    //required this.screenModel
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +89,13 @@ class _FilterPage extends StatelessWidget {
 }
 
 class _SortPage extends StatelessWidget {
-  const _SortPage({super.key});
+  const _SortPage({
+    super.key,
+    this.category,
+    //required this.screenModel
+  });
+
+  final Category? category;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +113,10 @@ class _SortPage extends StatelessWidget {
 }
 
 class _DisplayPage extends StatelessWidget {
-  const _DisplayPage({super.key});
+  const _DisplayPage({
+    super.key,
+    //required this.screenModel
+  });
 
   @override
   Widget build(BuildContext context) {

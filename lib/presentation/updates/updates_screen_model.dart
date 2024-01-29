@@ -50,6 +50,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
 
   // TODO: Forward messages to toast/snackbar
 
+  //TODO
   bool updateLibrary() {
     return true;
     //final started = LibraryUpdateJob.startNow(Injekt.get<Application>())
@@ -89,7 +90,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     } else if (action == ChapterDownloadAction.startNow) {
       final chapterId = items.singleOrNull?.update.chapterId;
       if (chapterId == null) return;
-      await _startDownloadingNow(chapterId);
+      _startDownloadingNow(chapterId);
     } else if (action == ChapterDownloadAction.cancel) {
       final chapterId = items.singleOrNull?.update.chapterId;
       if (chapterId == null) return;
@@ -100,21 +101,25 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     await toggleAllSelection(false);
   }
 
-  Future<void> _startDownloadingNow(int chapterId) async {
-    //await downloadManager.startDownloadNow(chapterId);
+  //TODO
+  void _startDownloadingNow(int chapterId) {
+    final downloadManager = ref.watch(downloadManagerProvider);
+    downloadManager.startDownloadNow(chapterId);
   }
 
+  //TODO
   Future<void> _cancelDownload(int chapterId) async {
-    //final activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId);
-    //if (activeDownload == null) return;
-    //downloadManager.cancelQueuedDownloads(listOf(activeDownload));
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId);
+    if (activeDownload == null) return;
+    //downloadManager.cancelQueuedDownloads([activeDownload]);
     //updateDownloadState(activeDownload.apply { status = DownloadState.notDownloaded });
   }
 
   //TODO
   /// Mark the selected [updates] list as [read]/unread.
   Future<void> markUpdatesRead(List<UpdatesItem> updates, bool read) async {
-    //final setReadStatus = ref.watch(setReadStatusProvider);
+    final setReadStatus = ref.watch(setReadStatusProvider);
     //await setReadStatus.await_(
     //  read: read,
     //  chapters: updates
@@ -152,9 +157,8 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
       final manga = await getManga.await_(mangaId);
       if (manga == null) continue;
       // Don't download if source isn't available
-      //TODO
-      //final source = await sourceManager.get(manga.source);
-      //if (source == null) continue;
+      final source = await sourceManager.get(manga.source);
+      if (source == null) continue;
       //final chapters = updates
       //    .mapNotNull((it) async => await getChapter.await_(it.update.chapterId)).toList();
       //TODO
@@ -167,7 +171,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     final getManga = ref.watch(getMangaProvider);
     final sourceManager = ref.watch(sourceManagerProvider);
     final getChapter = ref.watch(getChapterProvider);
-    //final downloadManager = ref.watch(downloadManagerProvider);
+    final downloadManager = ref.watch(downloadManagerProvider);
     final updateEntries = updatesItem //
         .groupBy((it) => it.update.mangaId)
         .entries;
@@ -176,7 +180,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
       final updates = entry.value;
       final manga = await getManga.await_(mangaId);
       if (manga != null) {
-        //final source = await sourceManager.get(manga.source);
+        final source = await sourceManager.get(manga.source);
         //if (source != null) {
         //  final chapters = updates.mapNotNull((it) async => await getChapter.await_(it.update.chapterId));
         //  //TODO
