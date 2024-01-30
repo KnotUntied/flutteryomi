@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'library_screen_model.dart';
+part of 'get_tracks_per_manga.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$libraryScreenModelHash() =>
-    r'bfce4a0fdc03f1b863a885bf431b9e76d86d0904';
+String _$getTracksPerMangaHash() => r'e0ebd6c450f389d163016663a06a6ba55444da97';
 
-/// See also [LibraryScreenModel].
-@ProviderFor(LibraryScreenModel)
-final libraryScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    LibraryScreenModel, LibraryScreenState>.internal(
-  LibraryScreenModel.new,
-  name: r'libraryScreenModelProvider',
+/// See also [getTracksPerManga].
+@ProviderFor(getTracksPerManga)
+final getTracksPerMangaProvider =
+    AutoDisposeProvider<GetTracksPerManga>.internal(
+  getTracksPerManga,
+  name: r'getTracksPerMangaProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$libraryScreenModelHash,
+      : _$getTracksPerMangaHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$LibraryScreenModel = AutoDisposeStreamNotifier<LibraryScreenState>;
+typedef GetTracksPerMangaRef = AutoDisposeProviderRef<GetTracksPerManga>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

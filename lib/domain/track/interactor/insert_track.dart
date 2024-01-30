@@ -1,7 +1,11 @@
 import 'package:logger/logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
+
+part 'insert_track.g.dart';
 
 class InsertTrack {
   InsertTrack({
@@ -27,3 +31,9 @@ class InsertTrack {
     }
   }
 }
+
+@riverpod
+InsertTrack insertTrack(InsertTrackRef ref) => InsertTrack(
+      logger: ref.watch(loggerProvider),
+      repository: ref.watch(trackRepositoryProvider),
+    );

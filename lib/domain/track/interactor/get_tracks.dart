@@ -1,7 +1,11 @@
 import 'package:logger/logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
+
+part 'get_tracks.g.dart';
 
 class GetTracks {
   GetTracks({
@@ -31,3 +35,9 @@ class GetTracks {
 
   Stream<List<Track>> subscribe(int mangaId) => repository.getTracksByMangaIdAsStream(mangaId);
 }
+
+@riverpod
+GetTracks getTracks(GetTracksRef ref) => GetTracks(
+      logger: ref.watch(loggerProvider),
+      repository: ref.watch(trackRepositoryProvider),
+    );

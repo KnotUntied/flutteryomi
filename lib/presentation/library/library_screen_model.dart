@@ -1,49 +1,42 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
-import 'package:equatable/equatable.dart';
-import 'package:flutteryomi/presentation/util/chapter/chapter_get_next_unread.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
-import 'package:flutteryomi/core/util/collection_utils.dart';
+import 'package:flutteryomi/domain/base/base_preferences.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/interactor/set_manga_categories.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
-import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_read_status.dart';
-import 'package:flutteryomi/domain/chapter/interactor/update_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
-import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
-import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/history/interactor/get_next_chapters.dart';
 import 'package:flutteryomi/domain/library/model/library_display_mode.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/domain/library/model/library_sort_mode.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_library_manga.dart';
-import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga_update.dart';
 import 'package:flutteryomi/domain/manga/model/tri_state.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
-import 'package:flutteryomi/domain/updates/interactor/get_updates.dart';
-import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
+import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/library/library_item.dart';
-import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
-import 'package:flutteryomi/presentation/updates/updates.dart';
-import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
+import 'package:flutteryomi/presentation/util/chapter/chapter_get_next_unread.dart';
 
 part 'library_screen_model.freezed.dart';
 part 'library_screen_model.g.dart';
@@ -57,75 +50,81 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   @override
   Stream<LibraryScreenState> build() {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
-    //return StreamZip([
-    //]).map();
-    //combine(
-    //  state.map((it) => it.searchQuery).distinctUntilChanged().debounce(searchDebounceMillis),
-    //  getLibraryStream(),
-    //  getTracksPerManga.subscribe(),
-    //  getTrackingFilterStream(),
-    //  downloadCache.changes,
-    //) { searchQuery, library, tracks, loggedInTrackers, _ =>
-    //  library
-    //      .applyFilters(tracks, loggedInTrackers)
-    //      .applySort(tracks)
-    //      .mapValues((_, value) =>
-    //          searchQuery != null
-    //              // Filter query
-    //              ? value.filter((it) => it.matches(searchQuery))
-    //              // Don't do anything
-    //              : value
-    //      )
-    //}
-    //    .collectLatest {
-    //        mutableState.update { state ->
-    //            state.copy(
-    //                isLoading = false,
-    //                library = it,
-    //            )
-    //        }
-    //    }
+    final getTracksPerManga = ref.watch(getTracksPerMangaProvider);
+    final stream1 = StreamZip([
+      future
+          .asStream()
+          .map((it) => it.searchQuery)
+          .distinct()
+          .debounce(const Duration(milliseconds: searchDebounceMillis)),
+      _getLibraryStream(),
+      getTracksPerManga.subscribe(),
+      const Stream<Map<int, List<Track>>>.empty(),
+      _getTrackingFilterStream(),
+      //downloadCache.changes,
+    ]).asyncMap((e) async {
+      final searchQuery = e[0] as String?;
+      final library = e[1] as LibraryMap;
+      final tracks = e[2] as Map<int, List<Track>>;
+      final loggedInTrackers = e[3] as Map<int, TriState>;
+      final newLibrary = library;
+      final filteredLibrary =
+          await applyFilters(newLibrary, tracks, loggedInTrackers);
+      final sortedLibrary = _applySort(filteredLibrary, tracks);
+      final queriedLibrary =
+          sortedLibrary.mapValues((entry) => searchQuery != null
+              // Filter query
+              ? entry.value.where((it) => it.matches(searchQuery)).toList()
+              // Don't do anything
+              : entry.value.toList());
+      return LibraryScreenState(
+        library: queriedLibrary,
+        searchQuery: searchQuery,
+      );
+    });
 
-    //combine(
-    //  libraryPreferences.categoryTabs().changes(),
-    //  libraryPreferences.categoryNumberOfItems().changes(),
-    //  libraryPreferences.showContinueReadingButton().changes(),
-    //) { a, b, c -> arrayOf(a, b, c) }
-    //    .onEach { (showCategoryTabs, showMangaCount, showMangaContinueButton) ->
-    //        mutableState.update { state ->
-    //            state.copy(
-    //                showCategoryTabs = showCategoryTabs,
-    //                showMangaCount = showMangaCount,
-    //                showMangaContinueButton = showMangaContinueButton,
-    //            )
-    //        }
-    //    }
-    //    .launchIn(screenModelScope)
+    final stream2 = StreamZip([
+      libraryPreferences.categoryTabs().changes(),
+      libraryPreferences.categoryNumberOfItems().changes(),
+      libraryPreferences.showContinueReadingButton().changes(),
+    ]).map((e) => LibraryScreenState(
+          showCategoryTabs: e[0],
+          showMangaCount: e[1],
+          showMangaContinueButton: e[2],
+        ));
 
-    //combine(
-    //    getLibraryItemPreferencesFlow(),
-    //    getTrackingFilterStream(),
-    //) { prefs, trackFilter =>
-    //    (
-    //        [
-    //          prefs.filterDownloaded,
-    //          prefs.filterUnread,
-    //          prefs.filterStarted,
-    //          prefs.filterBookmarked,
-    //          prefs.filterCompleted,
-    //          prefs.filterIntervalCustom,
-    //        ] + trackFilter.values
-    //    ).any((it) => it != TriState.disabled)
-    //}
-    //    .distinctUntilChanged()
-    //    .onEach {
-    //        mutableState.update { state ->
-    //            state.copy(hasActiveFilters: it)
-    //        }
-    //    }
-    return Stream.empty();
+    final stream3 = StreamZip([
+      _getLibraryItemPreferencesStream(),
+      //getTrackingFilterStream(),
+    ])
+        .map((e) {
+          final prefs = e[0];
+          //final trackFilter = e[1];
+          return ([
+            prefs.filterDownloaded,
+            prefs.filterUnread,
+            prefs.filterStarted,
+            prefs.filterBookmarked,
+            prefs.filterCompleted,
+            prefs.filterIntervalCustom,
+            //] + trackFilter.values
+          ]).any((it) => it != TriState.disabled);
+        })
+        .distinct()
+        .map((it) => LibraryScreenState(hasActiveFilters: it));
+
+    return StreamZip([
+      stream1, stream2, stream3
+    ]).map((e) => LibraryScreenState(
+      library: e[0].library,
+      searchQuery: e[0].searchQuery,
+      //selection?
+      showCategoryTabs: e[1].showCategoryTabs,
+      showMangaCount: e[1].showMangaCount,
+      showMangaContinueButton: e[1].showMangaContinueButton,
+      hasActiveFilters: e[2].hasActiveFilters,
+    ));
   }
-
 
   /// Applies library filters to the given map of manga.
   Future<LibraryMap> applyFilters(
@@ -134,10 +133,11 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     Map<int, TriState> loggedInTrackers,
   ) async {
     final downloadManager = ref.watch(downloadManagerProvider);
-    final prefs = await getLibraryItemPreferencesStream().first;
+    final prefs = await _getLibraryItemPreferencesStream().first;
     final downloadedOnly = prefs.globalFilterDownloaded;
     final skipOutsideReleasePeriod = prefs.skipOutsideReleasePeriod;
-    final filterDownloaded = downloadedOnly ? TriState.enabledIs : prefs.filterDownloaded;
+    final filterDownloaded =
+        downloadedOnly ? TriState.enabledIs : prefs.filterDownloaded;
     final filterUnread = prefs.filterUnread;
     final filterStarted = prefs.filterStarted;
     final filterBookmarked = prefs.filterBookmarked;
@@ -147,19 +147,18 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     final isNotLoggedInAnyTrack = loggedInTrackers.isEmpty;
 
     final excludedTracks = loggedInTrackers.entries
-        .map((it) => it.value == TriState.enabledNot ? it.key : null)
-        .whereNotNull();
+        .mapNotNull((it) => it.value == TriState.enabledNot ? it.key : null);
     final includedTracks = loggedInTrackers.entries
-        .map((it) => it.value == TriState.enabledIs ? it.key : null)
-        .whereNotNull();
-    final trackFiltersIsIgnored = includedTracks.isEmpty && excludedTracks.isEmpty;
+        .mapNotNull((it) => it.value == TriState.enabledIs ? it.key : null);
+    final trackFiltersIsIgnored =
+        includedTracks.isEmpty && excludedTracks.isEmpty;
 
     bool filterFnDownloaded(LibraryItem it) {
       return applyFilter(
         filterDownloaded,
         //TODO: Support for LocalSource
         //() => it.libraryManga.manga.isLocal() ||
-        () => 
+        () =>
             it.downloadCount > 0 ||
             downloadManager.getDownloadCountForManga(it.libraryManga.manga) > 0,
       );
@@ -179,34 +178,34 @@ class LibraryScreenModel extends _$LibraryScreenModel {
           () => it.libraryManga.manga.status.toInt() == SManga.completed,
         );
 
-    bool filterFnIntervalCustom(LibraryItem it) =>
-        skipOutsideReleasePeriod
-            ? applyFilter(filterIntervalCustom, () => it.libraryManga.manga.fetchInterval < 0)
-            : true;
+    bool filterFnIntervalCustom(LibraryItem it) => skipOutsideReleasePeriod
+        ? applyFilter(
+            filterIntervalCustom, () => it.libraryManga.manga.fetchInterval < 0)
+        : true;
 
     bool filterFnTracking(LibraryItem item) {
       if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return true;
 
-      final mangaTracks = trackMap
-          .mapValues((entry) => entry.value.map((it) => it.trackerId))[item.libraryManga.id]
-          ?? const [];
+      final mangaTracks = trackMap.mapValues((entry) =>
+              entry.value.map((it) => it.trackerId))[item.libraryManga.id] ??
+          const [];
 
-      final isExcluded = excludedTracks.isNotEmpty
-          && mangaTracks.any((it) => excludedTracks.contains(it));
-      final isIncluded = includedTracks.isEmpty
-          || mangaTracks.any((it) => includedTracks.contains(it));
+      final isExcluded = excludedTracks.isNotEmpty &&
+          mangaTracks.any((it) => excludedTracks.contains(it));
+      final isIncluded = includedTracks.isEmpty ||
+          mangaTracks.any((it) => includedTracks.contains(it));
 
       return !isExcluded && isIncluded;
     }
 
     bool filterFn(LibraryItem it) =>
         filterFnDownloaded(it) &&
-            filterFnUnread(it) &&
-            filterFnStarted(it) &&
-            filterFnBookmarked(it) &&
-            filterFnCompleted(it) &&
-            filterFnIntervalCustom(it) &&
-            filterFnTracking(it);
+        filterFnUnread(it) &&
+        filterFnStarted(it) &&
+        filterFnBookmarked(it) &&
+        filterFnCompleted(it) &&
+        filterFnIntervalCustom(it) &&
+        filterFnTracking(it);
 
     return map.mapValues((entry) => entry.value.where(filterFn).toList());
   }
@@ -214,134 +213,156 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   /// Applies library sorting to the given map of manga.
   LibraryMap _applySort(LibraryMap map, Map<int, List<Track>> trackMap) {
     int sortAlphabetically(LibraryItem i1, LibraryItem i2) =>
-        i1.libraryManga.manga.title.toLowerCase().compareTo(i2.libraryManga.manga.title.toLowerCase());
+        i1.libraryManga.manga.title
+            .toLowerCase()
+            .compareTo(i2.libraryManga.manga.title.toLowerCase());
 
-    final defaultTrackerScoreSortValue = -1.0;
-  //  final trackerMap = trackerManager.loggedInTrackers().associateBy((e) => e.id);
-  //  final trackerScores = trackMap.mapValues(
-  //    (entry) => entry.value.isEmpty
-  //        ? null
-  //        : entry.value
-  //            .mapNotNull((it) => trackerMap[it.trackerId]?.get10PointScore(it))
-  //            .average(),
-  //  );
+    const defaultTrackerScoreSortValue = -1.0;
+    //  final trackerMap = trackerManager.loggedInTrackers().associateBy((e) => e.id);
+    //  final trackerScores = trackMap.mapValues(
+    //    (entry) => entry.value.isEmpty
+    //        ? null
+    //        : entry.value
+    //            .mapNotNull((it) => trackerMap[it.trackerId]?.get10PointScore(it))
+    //            .average(),
+    //  );
 
-  //  int sortFn(LibraryItem i1, LibraryItem i2) {
-  //    final sort = map.keys.firstWhere((it) => it.id == i1.libraryManga.category).librarySort;
-  //    switch (sort.type) {
-  //      case Alphabetical():
-  //        return sortAlphabetically(i1, i2);
-  //      case LastRead():
-  //        return i1.libraryManga.lastRead.compareTo(i2.libraryManga.lastRead);
-  //      case LastUpdate():
-  //        return i1.libraryManga.manga.lastUpdate!.compareTo(i2.libraryManga.manga.lastUpdate!);
-  //      case UnreadCount():
-  //        // Ensure unread content comes first
-  //        if (i1.libraryManga.unreadCount == i2.libraryManga.unreadCount) {
-  //          return 0;
-  //        } else if (i1.libraryManga.unreadCount == 0) {
-  //          return sort.isAscending ? 1 : -1;
-  //        } else if (i2.libraryManga.unreadCount == 0 ) {
-  //          return sort.isAscending ? -1 : 1;
-  //        } else {
-  //          return i1.libraryManga.unreadCount.compareTo(i2.libraryManga.unreadCount);
-  //        }
-  //      case TotalChapters():
-  //        return i1.libraryManga.totalChapters.compareTo(i2.libraryManga.totalChapters);
-  //      case LatestChapter():
-  //        return i1.libraryManga.latestUpload.compareTo(i2.libraryManga.latestUpload);
-  //      case ChapterFetchDate():
-  //        return i1.libraryManga.chapterFetchedAt.compareTo(i2.libraryManga.chapterFetchedAt);
-  //      case DateAdded():
-  //        return i1.libraryManga.manga.dateAdded.compareTo(i2.libraryManga.manga.dateAdded);
-  //      case TrackerMean():
-  //        final item1Score = trackerScores[i1.libraryManga.id] ?? defaultTrackerScoreSortValue;
-  //        final item2Score = trackerScores[i2.libraryManga.id] ?? defaultTrackerScoreSortValue;
-  //        return item1Score.compareTo(item2Score);
-  //    }
-  //  }
+    int sortFn(LibraryItem i1, LibraryItem i2) {
+      final sort = map.keys
+          .firstWhere((it) => it.id == i1.libraryManga.category)
+          .librarySort;
+      switch (sort.type) {
+        case Alphabetical():
+          return sortAlphabetically(i1, i2);
+        case LastRead():
+          return i1.libraryManga.lastRead.compareTo(i2.libraryManga.lastRead);
+        case LastUpdate():
+          return i1.libraryManga.manga.lastUpdate!
+              .compareTo(i2.libraryManga.manga.lastUpdate!);
+        case UnreadCount():
+          // Ensure unread content comes first
+          if (i1.libraryManga.unreadCount == i2.libraryManga.unreadCount) {
+            return 0;
+          } else if (i1.libraryManga.unreadCount == 0) {
+            return sort.isAscending ? 1 : -1;
+          } else if (i2.libraryManga.unreadCount == 0) {
+            return sort.isAscending ? -1 : 1;
+          } else {
+            return i1.libraryManga.unreadCount
+                .compareTo(i2.libraryManga.unreadCount);
+          }
+        case TotalChapters():
+          return i1.libraryManga.totalChapters
+              .compareTo(i2.libraryManga.totalChapters);
+        case LatestChapter():
+          return i1.libraryManga.latestUpload
+              .compareTo(i2.libraryManga.latestUpload);
+        case ChapterFetchDate():
+          return i1.libraryManga.chapterFetchedAt
+              .compareTo(i2.libraryManga.chapterFetchedAt);
+        case DateAdded():
+          return i1.libraryManga.manga.dateAdded
+              .compareTo(i2.libraryManga.manga.dateAdded);
+        case TrackerMean():
+          // TODO: Tracker support
+          //final item1Score = trackerScores[i1.libraryManga.id] ?? defaultTrackerScoreSortValue;
+          //final item2Score = trackerScores[i2.libraryManga.id] ?? defaultTrackerScoreSortValue;
+          //return item1Score.compareTo(item2Score);
+          return 0;
+      }
+    }
 
-  //  return map.mapValues((entry) {
-  //    final comparator = map.keys.firstWhere((it) => it.id == entry.key.id).librarySort.isAscending
-  //        ? Comparator(sortFn)
-  //        : Collections.reverseOrder(sortFn);
-
-  //    return entry.value.sortedWith(comparator.thenComparator(sortAlphabetically));
-  //  });
-    return {};
+    return map.mapValues((entry) {
+      final comparator = map.keys
+              .firstWhere((it) => it.id == entry.key.id)
+              .librarySort
+              .isAscending
+          ? sortFn
+          : sortFn.reverse();
+      return entry.value.sortedWith(comparator).sortedWith(sortAlphabetically);
+    });
   }
 
-  //TODO
-  Stream<_ItemPreferences> getLibraryItemPreferencesStream() {
+  Stream<_ItemPreferences> _getLibraryItemPreferencesStream() {
+    final preferences = ref.watch(basePreferencesProvider);
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
-  //  return combine(
-  //    libraryPreferences.downloadBadge().changes(),
-  //    libraryPreferences.localBadge().changes(),
-  //    libraryPreferences.languageBadge().changes(),
-  //    libraryPreferences.autoUpdateMangaRestrictions().changes(),
-
-  //    preferences.downloadedOnly().changes(),
-  //    libraryPreferences.filterDownloaded().changes(),
-  //    libraryPreferences.filterUnread().changes(),
-  //    libraryPreferences.filterStarted().changes(),
-  //    libraryPreferences.filterBookmarked().changes(),
-  //    libraryPreferences.filterCompleted().changes(),
-  //    libraryPreferences.filterIntervalCustom().changes(),
-  //  ) {
-  //    _ItemPreferences(
-  //      downloadBadge: it[0] as bool,
-  //      localBadge: it[1] as bool,
-  //      languageBadge: it[2] as bool,
-  //      skipOutsideReleasePeriod: LibraryPreferences.mangaOutsideReleasePeriod in (it[3] as Set<*>),
-  //      globalFilterDownloaded: it[4] as bool,
-  //      filterDownloaded: it[5] as TriState,
-  //      filterUnread: it[6] as TriState,
-  //      filterStarted: it[7] as TriState,
-  //      filterBookmarked: it[8] as TriState,
-  //      filterCompleted: it[9] as TriState,
-  //      filterIntervalCustom: it[10] as TriState,
-  //    )
-  //  }
-    return Stream.empty();
+    return StreamZip([
+      libraryPreferences.downloadBadge().changes(),
+      libraryPreferences.localBadge().changes(),
+      libraryPreferences.languageBadge().changes(),
+      libraryPreferences.autoUpdateMangaRestrictions().changes(),
+      preferences.downloadedOnly().changes(),
+      libraryPreferences.filterDownloaded().changes(),
+      libraryPreferences.filterUnread().changes(),
+      libraryPreferences.filterStarted().changes(),
+      libraryPreferences.filterBookmarked().changes(),
+      libraryPreferences.filterCompleted().changes(),
+      libraryPreferences.filterIntervalCustom().changes(),
+    ]).map((it) => _ItemPreferences(
+          downloadBadge: it[0] as bool,
+          localBadge: it[1] as bool,
+          languageBadge: it[2] as bool,
+          skipOutsideReleasePeriod: (it[3] as Set<String>)
+              .contains(LibraryPreferences.mangaOutsideReleasePeriod),
+          globalFilterDownloaded: it[4] as bool,
+          filterDownloaded: it[5] as TriState,
+          filterUnread: it[6] as TriState,
+          filterStarted: it[7] as TriState,
+          filterBookmarked: it[8] as TriState,
+          filterCompleted: it[9] as TriState,
+          filterIntervalCustom: it[10] as TriState,
+        ));
   }
 
   /// Get the categories and all its manga from the database.
   Stream<LibraryMap> _getLibraryStream() {
+    //final downloadCache = ref.watch(downloadCacheProvider);
     final downloadManager = ref.watch(downloadManagerProvider);
+    final getCategories = ref.watch(getCategoriesProvider);
     final getLibraryManga = ref.watch(getLibraryMangaProvider);
-  //  final libraryMangasStream = combine(
-  //    getLibraryManga.subscribe(),
-  //    getLibraryItemPreferencesStream(),
-  //    downloadCache.changes,
-  //  ) { libraryMangaList, prefs, _ ->
-  //      libraryMangaList
-  //          .map((libraryManga) => 
-  //              // Display mode based on user preference: take it from global library setting or category
-  //              LibraryItem(
-  //                libraryManga,
-  //                downloadCount: prefs.downloadBadge
-  //                    ? downloadManager.getDownloadCount(libraryManga.manga).toLong()
-  //                    : 0,
-  //                unreadCount: libraryManga.unreadCount,
-  //                isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
-  //                sourceLanguage: prefs.languageBadge
-  //                    ? sourceManager.getOrStub(libraryManga.manga.source).lang
-  //                    : "",
-  //              )
-  //          )
-  //          .groupBy((it) => it.libraryManga.category)
-  //  }
+    final sourceManager = ref.watch(sourceManagerProvider);
+    final libraryMangasStream = StreamZip([
+      getLibraryManga.subscribe(),
+      _getLibraryItemPreferencesStream(),
+      //downloadCache.changes,
+    ]).map((e) {
+      final libraryMangaList = e[0] as List<LibraryManga>;
+      final prefs = e[1] as _ItemPreferences;
+      return libraryMangaList.map((libraryManga) {
+        // Display mode based on user preference: take it from global library setting or category
+        return LibraryItem(
+          libraryManga: libraryManga,
+          downloadCount: prefs.downloadBadge
+              ? downloadManager.getDownloadCountForManga(libraryManga.manga)
+              : 0,
+          unreadCount: libraryManga.unreadCount,
+          isLocal: prefs.localBadge
+              //TODO
+              //? libraryManga.manga.isLocal()
+              ? false
+              : false,
+          sourceLanguage: prefs.languageBadge
+              ? sourceManager.getOrStub(libraryManga.manga.source).lang
+              : "",
+          sourceManager: sourceManager,
+        );
+      }).groupBy((it) => it.libraryManga.category);
+    });
 
-  //  return combine(getCategories.subscribe(), libraryMangasStream) { categories, libraryManga ->
-  //    final displayCategories = libraryManga.isNotEmpty && !libraryManga.containsKey(0)
-  //      ? categories.whereNot((it) => it.isSystemCategory)
-  //      : categories;
+    return StreamZip([getCategories.subscribe(), libraryMangasStream]).map((e) {
+      final categories = e[0] as List<Category>;
+      final libraryManga = e[1] as Map<int, List<LibraryItem>>;
+      final displayCategories =
+          libraryManga.isNotEmpty && !libraryManga.containsKey(0)
+              ? categories.whereNot((it) => it.isSystemCategory)
+              : categories;
 
-  //    displayCategories.associateWith((it) => libraryManga[it.id].orEmpty());
-  //  }
-    return Stream.empty();
+      return displayCategories
+          .associateWith((it) => libraryManga[it.id] ?? const []);
+    });
   }
 
+  // TODO
   /// Stream of tracking filter preferences
   ///
   /// Returns map of track id with the filter value
@@ -374,75 +395,94 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   Future<Chapter?> getNextUnreadChapter(Manga manga) async {
     final downloadManager = ref.watch(downloadManagerProvider);
     final getChaptersByMangaId = ref.watch(getChaptersByMangaIdProvider);
-    final chapters = await getChaptersByMangaId.await_(manga.id, applyScanlatorFilter: true);
+    final chapters =
+        await getChaptersByMangaId.await_(manga.id, applyScanlatorFilter: true);
     return chapters.getNextUnread(manga, downloadManager);
   }
 
   /// Returns the mix (non-common) categories for the given list of manga [mangas].
-  Future<Iterable<Category>> _getMixCategories(List<Manga> mangas) async {
-    //if (mangas.isEmpty) return const [];
-    //final mangaCategories = mangas.map((it) => getCategories.await_(it.id).toSet());
-    //final common = mangaCategories.reduce((set1, set2) => set1.intersect(set2));
-    //return mangaCategories.flatten().distinct().subtract(common);
-    return [];
+  Future<Iterable<Category>> getMixCategories(List<Manga> mangas) async {
+    final getCategories = ref.watch(getCategoriesProvider);
+    if (mangas.isEmpty) return const [];
+    final mangaCategories = await Future.wait(
+      mangas.map((it) async {
+        final categories = await getCategories.await_(it.id);
+        return categories.toSet();
+      }),
+    );
+    final common = mangaCategories.reduce(
+      (set1, set2) => set1.intersection(set2),
+    );
+    return mangaCategories.flatten().toSet().difference(common);
   }
 
   void runDownloadActionSelection(DownloadAction action) {
-    //final selection = state.value.selection;
-    //final mangas = selection.map((it) => it.manga).toList();
-    //switch (action) {
-    //  case DownloadAction.next1Chapter:
-    //    _downloadUnreadChapters(mangas, 1);
-    //  case DownloadAction.next5Chapters:
-    //    _downloadUnreadChapters(mangas, 5);
-    //  case DownloadAction.next10Chapters:
-    //    _downloadUnreadChapters(mangas, 10);
-    //  case DownloadAction.next25Chapters:
-    //    _downloadUnreadChapters(mangas, 25);
-    //  case DownloadAction.unreadChapters:
-    //    _downloadUnreadChapters(mangas, null);
-    //}
-    //clearSelection();
+    final currentState = state.valueOrNull;
+    if (currentState != null) {
+      final selection = currentState.selection;
+      final mangas = selection.map((it) => it.manga).toList();
+      switch (action) {
+        case DownloadAction.next1Chapter:
+          _downloadUnreadChapters(mangas, 1);
+        case DownloadAction.next5Chapters:
+          _downloadUnreadChapters(mangas, 5);
+        case DownloadAction.next10Chapters:
+          _downloadUnreadChapters(mangas, 10);
+        case DownloadAction.next25Chapters:
+          _downloadUnreadChapters(mangas, 25);
+        case DownloadAction.unreadChapters:
+          _downloadUnreadChapters(mangas, null);
+      }
+    }
+    clearSelection();
   }
 
   /// Queues the [amount] specified of unread chapters from the list of mangas [mangas].
   ///
   /// [amount] can be set to null to queue all
-  void _downloadUnreadChapters(List<Manga> mangas, int? amount) {
+  void _downloadUnreadChapters(List<Manga> mangas, int? amount) async {
     final downloadManager = ref.watch(downloadManagerProvider);
     final getNextChapters = ref.watch(getNextChaptersProvider);
-    mangas.forEach((manga) async {
-      final __chapters = await getNextChapters.awaitByMangaId(manga.id);
-      final _chapters = __chapters
-          .whereNot((chapter) =>
-                downloadManager.getQueuedDownloadOrNull(chapter.id) != null ||
-                downloadManager.isChapterDownloaded(
-                  chapter.name,
-                  chapter.scanlator,
-                  manga.title,
-                  manga.source,
-                ),
-          );
-      final chapters = amount != null ? _chapters.take(amount) : _chapters;
+    for (final manga in mangas) {
+      final rawChapters = await getNextChapters.awaitByMangaId(manga.id);
+      final filteredChapters = rawChapters.whereNot(
+        (chapter) =>
+            downloadManager.getQueuedDownloadOrNull(chapter.id) != null ||
+            downloadManager.isChapterDownloaded(
+              chapter.name,
+              chapter.scanlator,
+              manga.title,
+              manga.source,
+            ),
+      );
+      final chapters = amount != null //
+          ? filteredChapters.take(amount)
+          : filteredChapters;
 
       downloadManager.downloadChapters(manga, chapters.toList());
-    });
+    }
   }
 
   /// Marks mangas' chapters read status.
   void markReadSelection(bool read) {
     final setReadStatus = ref.watch(setReadStatusProvider);
-    //final mangas = state.value.selection.toList();
-    //mangas.forEach((manga) => setReadStatus.awaitByManga(manga.manga, read));
-    //clearSelection();
+    if (state.valueOrNull != null) {
+      final mangas = state.valueOrNull!.selection.toList();
+      for (final manga in mangas) {
+        setReadStatus.awaitByManga(manga.manga, read);
+      }
+      clearSelection();
+    }
   }
 
   /// Remove the selected manga in [mangaList].
   ///
   /// [deleteFromLibrary] indicates whether to delete manga from library.
   /// [deleteChapters] indicates whether to delete downloaded chapters.
-  void removeMangas(List<Manga> mangaList, bool deleteFromLibrary, bool deleteChapters) async {
+  void removeMangas(List<Manga> mangaList, bool deleteFromLibrary,
+      bool deleteChapters) async {
     final downloadManager = ref.watch(downloadManagerProvider);
+    final sourceManager = ref.watch(sourceManagerProvider);
     final updateManga = ref.watch(updateMangaProvider);
     final mangaToDelete = mangaList.distinctBy((it) => it.id);
 
@@ -450,7 +490,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       final toDelete = mangaToDelete.map((it) {
         //it.removeCovers(coverCache);
         return MangaUpdate(
-          favorite: drift.Value(false),
+          favorite: const drift.Value(false),
           id: drift.Value(it.id),
         );
       }).toList();
@@ -458,12 +498,13 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     }
 
     if (deleteChapters) {
-      mangaToDelete.forEach((manga) {
+      for (final manga in mangaToDelete) {
         //final source = sourceManager.get(manga.source) as? HttpSource;
-        //if (source != null) {
-        //  downloadManager.deleteManga(manga, source);
-        //}
-      });
+        final source = sourceManager.get(manga.source);
+        if (source != null) {
+          downloadManager.deleteManga(manga, source);
+        }
+      }
     }
   }
 
@@ -476,17 +517,17 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     List<Manga> mangaList,
     List<int> addCategories,
     List<int> removeCategories,
-  ) {
+  ) async {
     final getCategories = ref.watch(getCategoriesProvider);
     final setMangaCategories = ref.watch(setMangaCategoriesProvider);
-    mangaList.forEach((manga) async {
-      final _categoryIds = await getCategories.await_(manga.id);
-      final categoryIds = _categoryIds.map((it) => it.id).toSet();
+    for (final manga in mangaList) {
+      final rawCategoryIds = await getCategories.await_(manga.id);
+      final categoryIds = rawCategoryIds.map((it) => it.id).toSet();
       categoryIds.removeAll(removeCategories);
       categoryIds.addAll(addCategories);
 
       await setMangaCategories.await_(manga.id, categoryIds.toList());
-    });
+    }
   }
 
   LibraryDisplayMode getDisplayMode() {
@@ -502,129 +543,146 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   }
 
   Future<LibraryItem?> getRandomLibraryItemForCurrentCategory() async {
-    //if (state.value.categories.isEmpty) return null;
-
-    //return withIOContext {
-    //    state.value
-    //        .getLibraryItemsByCategoryId(state.value.categories[activeCategoryIndex].id)
-    //        ?.randomOrNull();
-    //};
-    return null;
+    final libraryPreferences = ref.watch(libraryPreferencesProvider);
+    final currentState = state.valueOrNull;
+    if (currentState?.categories.isEmpty ?? false) return null;
+    final libraryItems = currentState!.getLibraryItemsByCategoryId(
+      currentState.categories[libraryPreferences.lastUsedCategory().get()].id,
+    );
+    return (libraryItems?.isNotEmpty ?? false)
+        ? libraryItems![Random().nextInt(libraryItems.length)]
+        : null;
   }
 
-  //TODO
-  void clearSelection() {
-    //mutableState.update { it.copy(selection: const []) }
+  void clearSelection() async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      state = await AsyncValue.guard(
+        () async => previousState.copyWith(selection: const []),
+      );
+    }
   }
 
-  //TODO
-  void toggleSelection(LibraryManga manga) {
-    //mutableState.update { state ->
-    //  final newSelection = state.selection.mutate { list ->
-    //    if (list.any((it) => it.id == manga.id) {
-    //      list.removeAll((it) => it.id == manga.id);
-    //    } else {
-    //      list.add(manga);
-    //    }
-    //  }
-    //  state.copy(selection: newSelection);
-    //}
+  void toggleSelection(LibraryManga manga) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      // Might mutate previousState
+      final newSelection = previousState.selection;
+      if (newSelection.any((it) => it.id == manga.id)) {
+        newSelection.removeWhere((it) => it.id == manga.id);
+      } else {
+        newSelection.add(manga);
+      }
+      final newState = previousState.copyWith(selection: newSelection);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
-  //TODO
   /// Selects all mangas between and including the given manga and the last pressed manga from the
   /// same category as the given manga
-  void toggleRangeSelection(LibraryManga manga) {
-    //mutableState.update { state ->
-    //  final newSelection = state.selection.mutate { list ->
-    //    final lastSelected = list.lastOrNull()
-    //    if (lastSelected?.category != manga.category) {
-    //      list.add(manga)
-    //      return@mutate
-    //    }
+  void toggleRangeSelection(LibraryManga manga) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      // Might mutate previousState
+      final newSelection = previousState.selection;
+      final lastSelected = newSelection.lastOrNull;
+      if (lastSelected?.category != manga.category) {
+        newSelection.add(manga);
+        final newState = previousState.copyWith(selection: newSelection);
+        state = await AsyncValue.guard(() async => newState);
+        return;
+      }
 
-    //    final items = state.getLibraryItemsByCategoryId(manga.category)
-    //        ?.map((it) => it.libraryManga).orEmpty()
-    //    final lastMangaIndex = items.indexOf(lastSelected)
-    //    final curMangaIndex = items.indexOf(manga)
+      final items = previousState
+              .getLibraryItemsByCategoryId(manga.category)
+              ?.map((it) => it.libraryManga)
+              .toList() ??
+          const [];
+      final lastMangaIndex = items.indexOf(lastSelected!);
+      final curMangaIndex = items.indexOf(manga);
 
-    //    final selectedIds = list.fastMap { it.id }
-    //    final selectionRange;
-    //    if (lastMangaIndex < curMangaIndex) {
-    //      selectionRange = IntRange(lastMangaIndex, curMangaIndex);
-    //    } (curMangaIndex < lastMangaIndex) {
-    //      selectionRange = IntRange(curMangaIndex, lastMangaIndex);
-    //    } else {
-    //      // We shouldn't reach this point
-    //      //return;
-    //    }
-    //    final newSelections = selectionRange.mapNotNull { index ->
-    //        items[index].takeUnless { it.id in selectedIds }
-    //    }
-    //    list.addAll(newSelections);
-    //  }
-    //  state.copy(selection: newSelection);
-    //}
+      final selectedIds = newSelection.map((it) => it.id);
+      final IntRange selectionRange;
+      if (lastMangaIndex < curMangaIndex) {
+        selectionRange = IntRange(lastMangaIndex, curMangaIndex);
+      } else if (curMangaIndex < lastMangaIndex) {
+        selectionRange = IntRange(curMangaIndex, lastMangaIndex);
+      } else {
+        // We shouldn't reach this point
+        return;
+      }
+      final newSelections = selectionRange.mapNotNull(
+        (index) => selectedIds.contains(items[index].id) ? null : items[index],
+      );
+      newSelection.addAll(newSelections);
+      final newState = previousState.copyWith(selection: newSelection);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
-  //TODO
-  void selectAll(int index) {
-    //mutableState.update { state ->
-    //  final newSelection = state.selection.mutate { list ->
-    //    final categoryId = state.categories.elementAtOrNull(index)?.id ?? -1;
-    //    final selectedIds = list.map((it) => it.id);
-    //    state.getLibraryItemsByCategoryId(categoryId)
-    //      ?.mapNotNull { item ->
-    //        item.libraryManga.takeUnless { it.id in selectedIds }
-    //      }
-    //      ?.let { list.addAll(it) }
-    //  }
-    //  state.copy(selection: newSelection)
-    //}
+  void selectAll(int index) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      // Might mutate previousState
+      final newSelection = previousState.selection;
+      final categoryId =
+          previousState.categories.elementAtOrNull(index)?.id ?? -1;
+      final selectedIds = newSelection.map((it) => it.id);
+      final items = previousState
+          .getLibraryItemsByCategoryId(categoryId)
+          ?.mapNotNull((item) => selectedIds.contains(item.libraryManga.id)
+              ? null
+              : item.libraryManga);
+      if (items != null) newSelection.addAll(items);
+      final newState = previousState.copyWith(selection: newSelection);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
-  //TODO
-  void invertSelection(int index) {
-    //mutableState.update { state ->
-    //  final newSelection = state.selection.mutate { list ->
-    //    final categoryId = state.categories[index].id
-    //    final items = state.getLibraryItemsByCategoryId(categoryId)?.fastMap { it.libraryManga }.orEmpty()
-    //    final selectedIds = list.fastMap { it.id }
-    //    final (toRemove, toAdd) = items.fastPartition { it.id in selectedIds }
-    //    final toRemoveIds = toRemove.fastMap { it.id }
-    //    list.removeAll { it.id in toRemoveIds }
-    //    list.addAll(toAdd)
-    //  }
-    //  state.copy(selection = newSelection)
-    //}
+  void invertSelection(int index) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      // Might mutate previousState
+      final newSelection = previousState.selection;
+      final categoryId = previousState.categories[index].id;
+      final items = previousState
+              .getLibraryItemsByCategoryId(categoryId)
+              ?.map((it) => it.libraryManga) ??
+          const [];
+      final selectedIds = newSelection.map((it) => it.id);
+      final partitions = items.partition((it) => selectedIds.contains(it.id));
+      final toRemove = partitions[0];
+      final toAdd = partitions[1];
+      final toRemoveIds = toRemove.map((it) => it.id);
+      newSelection.removeWhere((it) => toRemoveIds.contains(it.id));
+      newSelection.addAll(toAdd);
+      final newState = previousState.copyWith(selection: newSelection);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
-  //TODO
-  void search(String? query) {
-    //mutableState.update { it.copy(searchQuery = query) };
+  void search(String? query) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final newState = previousState.copyWith(searchQuery: query);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 }
 
-class LibraryScreenState extends Equatable {
-  LibraryScreenState({
-    this.isLoading = true,
-    this.library = const {},
-    this.searchQuery,
-    this.selection = const [],
-    this.hasActiveFilters = false,
-    this.showCategoryTabs = false,
-    this.showMangaCount = false,
-    this.showMangaContinueButton = false,
-  });
-
-  final bool isLoading;
-  final LibraryMap library;
-  final String? searchQuery;
-  final List<LibraryManga> selection;
-  final bool hasActiveFilters;
-  final bool showCategoryTabs;
-  final bool showMangaCount;
-  final bool showMangaContinueButton;
+@unfreezed
+class LibraryScreenState with _$LibraryScreenState {
+  LibraryScreenState._();
+  factory LibraryScreenState({
+    //@Default(true) bool isLoading,
+    @Default({}) LibraryMap library,
+    String? searchQuery,
+    @Default([]) List<LibraryManga> selection,
+    @Default(false) bool hasActiveFilters,
+    @Default(false) bool showCategoryTabs,
+    @Default(false) bool showMangaCount,
+    @Default(false) bool showMangaContinueButton,
+  }) = _LibraryScreenState;
 
   late final _libraryCount = library.values
       .flatten()
@@ -646,7 +704,9 @@ class LibraryScreenState extends Equatable {
       library.values.toList().elementAtOrNull(page) ?? const [];
 
   int? getMangaCountForCategory(Category category) =>
-    showMangaCount || !searchQuery.isNullOrEmpty ? library[category]?.length : null;
+      showMangaCount || !searchQuery.isNullOrEmpty
+          ? library[category]?.length
+          : null;
 
   LibraryToolbarTitle getToolbarTitle(
     String defaultTitle,
@@ -655,9 +715,10 @@ class LibraryScreenState extends Equatable {
   ) {
     final category = categories.elementAtOrNull(page);
     if (category == null) return LibraryToolbarTitle(defaultTitle);
-    final categoryName = category.isSystemCategory ? defaultCategoryTitle : category.name;
+    final categoryName =
+        category.isSystemCategory ? defaultCategoryTitle : category.name;
     final title = showCategoryTabs ? defaultTitle : categoryName;
-    final count;
+    final int? count;
     if (!showMangaCount) {
       count = null;
     } else if (!showCategoryTabs) {
@@ -669,27 +730,11 @@ class LibraryScreenState extends Equatable {
 
     return LibraryToolbarTitle(title, count);
   }
-
-  @override
-  List<Object?> get props => [
-        isLoading,
-        library,
-        searchQuery,
-        selection,
-        hasActiveFilters,
-        showCategoryTabs,
-        showMangaCount,
-        showMangaContinueButton,
-      ];
 }
 
 @freezed
 class _ItemPreferences with _$ItemPreferences {
   const factory _ItemPreferences({
-    required UpdatesWithRelations update,
-    required DownloadState Function() downloadStateProvider,
-    required int Function() downloadProgressProvider,
-    @Default(false) bool selected,
     required bool downloadBadge,
     required bool localBadge,
     required bool languageBadge,

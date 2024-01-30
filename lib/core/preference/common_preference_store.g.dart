@@ -6,12 +6,11 @@ part of 'common_preference_store.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sharedPreferencesHash() => r'0924fb848ccdeb837f448bcb2b685bf4104dbd40';
+String _$sharedPreferencesHash() => r'3f89612b888a9971c717cf811cfded5a233611ea';
 
 /// See also [sharedPreferences].
 @ProviderFor(sharedPreferences)
-final sharedPreferencesProvider =
-    AutoDisposeProvider<SharedPreferences>.internal(
+final sharedPreferencesProvider = AutoDisposeProvider<Box>.internal(
   sharedPreferences,
   name: r'sharedPreferencesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,7 +20,7 @@ final sharedPreferencesProvider =
   allTransitiveDependencies: null,
 );
 
-typedef SharedPreferencesRef = AutoDisposeProviderRef<SharedPreferences>;
+typedef SharedPreferencesRef = AutoDisposeProviderRef<Box>;
 String _$commonPreferenceStoreHash() =>
     r'5ca0afff0ae0fc37449fe7f09d3ab50668504704';
 

@@ -15,13 +15,258 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$LibraryScreenState {
+//@Default(true) bool isLoading,
+  Map<Category, List<LibraryItem>> get library =>
+      throw _privateConstructorUsedError; //@Default(true) bool isLoading,
+  set library(Map<Category, List<LibraryItem>> value) =>
+      throw _privateConstructorUsedError;
+  String? get searchQuery => throw _privateConstructorUsedError;
+  set searchQuery(String? value) => throw _privateConstructorUsedError;
+  List<LibraryManga> get selection => throw _privateConstructorUsedError;
+  set selection(List<LibraryManga> value) => throw _privateConstructorUsedError;
+  bool get hasActiveFilters => throw _privateConstructorUsedError;
+  set hasActiveFilters(bool value) => throw _privateConstructorUsedError;
+  bool get showCategoryTabs => throw _privateConstructorUsedError;
+  set showCategoryTabs(bool value) => throw _privateConstructorUsedError;
+  bool get showMangaCount => throw _privateConstructorUsedError;
+  set showMangaCount(bool value) => throw _privateConstructorUsedError;
+  bool get showMangaContinueButton => throw _privateConstructorUsedError;
+  set showMangaContinueButton(bool value) => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $LibraryScreenStateCopyWith<LibraryScreenState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LibraryScreenStateCopyWith<$Res> {
+  factory $LibraryScreenStateCopyWith(
+          LibraryScreenState value, $Res Function(LibraryScreenState) then) =
+      _$LibraryScreenStateCopyWithImpl<$Res, LibraryScreenState>;
+  @useResult
+  $Res call(
+      {Map<Category, List<LibraryItem>> library,
+      String? searchQuery,
+      List<LibraryManga> selection,
+      bool hasActiveFilters,
+      bool showCategoryTabs,
+      bool showMangaCount,
+      bool showMangaContinueButton});
+}
+
+/// @nodoc
+class _$LibraryScreenStateCopyWithImpl<$Res, $Val extends LibraryScreenState>
+    implements $LibraryScreenStateCopyWith<$Res> {
+  _$LibraryScreenStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? library = null,
+    Object? searchQuery = freezed,
+    Object? selection = null,
+    Object? hasActiveFilters = null,
+    Object? showCategoryTabs = null,
+    Object? showMangaCount = null,
+    Object? showMangaContinueButton = null,
+  }) {
+    return _then(_value.copyWith(
+      library: null == library
+          ? _value.library
+          : library // ignore: cast_nullable_to_non_nullable
+              as Map<Category, List<LibraryItem>>,
+      searchQuery: freezed == searchQuery
+          ? _value.searchQuery
+          : searchQuery // ignore: cast_nullable_to_non_nullable
+              as String?,
+      selection: null == selection
+          ? _value.selection
+          : selection // ignore: cast_nullable_to_non_nullable
+              as List<LibraryManga>,
+      hasActiveFilters: null == hasActiveFilters
+          ? _value.hasActiveFilters
+          : hasActiveFilters // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showCategoryTabs: null == showCategoryTabs
+          ? _value.showCategoryTabs
+          : showCategoryTabs // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showMangaCount: null == showMangaCount
+          ? _value.showMangaCount
+          : showMangaCount // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showMangaContinueButton: null == showMangaContinueButton
+          ? _value.showMangaContinueButton
+          : showMangaContinueButton // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LibraryScreenStateImplCopyWith<$Res>
+    implements $LibraryScreenStateCopyWith<$Res> {
+  factory _$$LibraryScreenStateImplCopyWith(_$LibraryScreenStateImpl value,
+          $Res Function(_$LibraryScreenStateImpl) then) =
+      __$$LibraryScreenStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Map<Category, List<LibraryItem>> library,
+      String? searchQuery,
+      List<LibraryManga> selection,
+      bool hasActiveFilters,
+      bool showCategoryTabs,
+      bool showMangaCount,
+      bool showMangaContinueButton});
+}
+
+/// @nodoc
+class __$$LibraryScreenStateImplCopyWithImpl<$Res>
+    extends _$LibraryScreenStateCopyWithImpl<$Res, _$LibraryScreenStateImpl>
+    implements _$$LibraryScreenStateImplCopyWith<$Res> {
+  __$$LibraryScreenStateImplCopyWithImpl(_$LibraryScreenStateImpl _value,
+      $Res Function(_$LibraryScreenStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? library = null,
+    Object? searchQuery = freezed,
+    Object? selection = null,
+    Object? hasActiveFilters = null,
+    Object? showCategoryTabs = null,
+    Object? showMangaCount = null,
+    Object? showMangaContinueButton = null,
+  }) {
+    return _then(_$LibraryScreenStateImpl(
+      library: null == library
+          ? _value.library
+          : library // ignore: cast_nullable_to_non_nullable
+              as Map<Category, List<LibraryItem>>,
+      searchQuery: freezed == searchQuery
+          ? _value.searchQuery
+          : searchQuery // ignore: cast_nullable_to_non_nullable
+              as String?,
+      selection: null == selection
+          ? _value.selection
+          : selection // ignore: cast_nullable_to_non_nullable
+              as List<LibraryManga>,
+      hasActiveFilters: null == hasActiveFilters
+          ? _value.hasActiveFilters
+          : hasActiveFilters // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showCategoryTabs: null == showCategoryTabs
+          ? _value.showCategoryTabs
+          : showCategoryTabs // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showMangaCount: null == showMangaCount
+          ? _value.showMangaCount
+          : showMangaCount // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showMangaContinueButton: null == showMangaContinueButton
+          ? _value.showMangaContinueButton
+          : showMangaContinueButton // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LibraryScreenStateImpl extends _LibraryScreenState {
+  _$LibraryScreenStateImpl(
+      {this.library = const {},
+      this.searchQuery,
+      this.selection = const [],
+      this.hasActiveFilters = false,
+      this.showCategoryTabs = false,
+      this.showMangaCount = false,
+      this.showMangaContinueButton = false})
+      : super._();
+
+//@Default(true) bool isLoading,
+  @override
+  @JsonKey()
+  Map<Category, List<LibraryItem>> library;
+  @override
+  String? searchQuery;
+  @override
+  @JsonKey()
+  List<LibraryManga> selection;
+  @override
+  @JsonKey()
+  bool hasActiveFilters;
+  @override
+  @JsonKey()
+  bool showCategoryTabs;
+  @override
+  @JsonKey()
+  bool showMangaCount;
+  @override
+  @JsonKey()
+  bool showMangaContinueButton;
+
+  @override
+  String toString() {
+    return 'LibraryScreenState(library: $library, searchQuery: $searchQuery, selection: $selection, hasActiveFilters: $hasActiveFilters, showCategoryTabs: $showCategoryTabs, showMangaCount: $showMangaCount, showMangaContinueButton: $showMangaContinueButton)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LibraryScreenStateImplCopyWith<_$LibraryScreenStateImpl> get copyWith =>
+      __$$LibraryScreenStateImplCopyWithImpl<_$LibraryScreenStateImpl>(
+          this, _$identity);
+}
+
+abstract class _LibraryScreenState extends LibraryScreenState {
+  factory _LibraryScreenState(
+      {Map<Category, List<LibraryItem>> library,
+      String? searchQuery,
+      List<LibraryManga> selection,
+      bool hasActiveFilters,
+      bool showCategoryTabs,
+      bool showMangaCount,
+      bool showMangaContinueButton}) = _$LibraryScreenStateImpl;
+  _LibraryScreenState._() : super._();
+
+  @override //@Default(true) bool isLoading,
+  Map<Category, List<LibraryItem>> get library; //@Default(true) bool isLoading,
+  set library(Map<Category, List<LibraryItem>> value);
+  @override
+  String? get searchQuery;
+  set searchQuery(String? value);
+  @override
+  List<LibraryManga> get selection;
+  set selection(List<LibraryManga> value);
+  @override
+  bool get hasActiveFilters;
+  set hasActiveFilters(bool value);
+  @override
+  bool get showCategoryTabs;
+  set showCategoryTabs(bool value);
+  @override
+  bool get showMangaCount;
+  set showMangaCount(bool value);
+  @override
+  bool get showMangaContinueButton;
+  set showMangaContinueButton(bool value);
+  @override
+  @JsonKey(ignore: true)
+  _$$LibraryScreenStateImplCopyWith<_$LibraryScreenStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$ItemPreferences {
-  UpdatesWithRelations get update => throw _privateConstructorUsedError;
-  DownloadState Function() get downloadStateProvider =>
-      throw _privateConstructorUsedError;
-  int Function() get downloadProgressProvider =>
-      throw _privateConstructorUsedError;
-  bool get selected => throw _privateConstructorUsedError;
   bool get downloadBadge => throw _privateConstructorUsedError;
   bool get localBadge => throw _privateConstructorUsedError;
   bool get languageBadge => throw _privateConstructorUsedError;
@@ -46,11 +291,7 @@ abstract class _$ItemPreferencesCopyWith<$Res> {
       __$ItemPreferencesCopyWithImpl<$Res, _ItemPreferences>;
   @useResult
   $Res call(
-      {UpdatesWithRelations update,
-      DownloadState Function() downloadStateProvider,
-      int Function() downloadProgressProvider,
-      bool selected,
-      bool downloadBadge,
+      {bool downloadBadge,
       bool localBadge,
       bool languageBadge,
       bool skipOutsideReleasePeriod,
@@ -61,8 +302,6 @@ abstract class _$ItemPreferencesCopyWith<$Res> {
       TriState filterBookmarked,
       TriState filterCompleted,
       TriState filterIntervalCustom});
-
-  $UpdatesWithRelationsCopyWith<$Res> get update;
 }
 
 /// @nodoc
@@ -78,10 +317,6 @@ class __$ItemPreferencesCopyWithImpl<$Res, $Val extends _ItemPreferences>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? update = null,
-    Object? downloadStateProvider = null,
-    Object? downloadProgressProvider = null,
-    Object? selected = null,
     Object? downloadBadge = null,
     Object? localBadge = null,
     Object? languageBadge = null,
@@ -95,22 +330,6 @@ class __$ItemPreferencesCopyWithImpl<$Res, $Val extends _ItemPreferences>
     Object? filterIntervalCustom = null,
   }) {
     return _then(_value.copyWith(
-      update: null == update
-          ? _value.update
-          : update // ignore: cast_nullable_to_non_nullable
-              as UpdatesWithRelations,
-      downloadStateProvider: null == downloadStateProvider
-          ? _value.downloadStateProvider
-          : downloadStateProvider // ignore: cast_nullable_to_non_nullable
-              as DownloadState Function(),
-      downloadProgressProvider: null == downloadProgressProvider
-          ? _value.downloadProgressProvider
-          : downloadProgressProvider // ignore: cast_nullable_to_non_nullable
-              as int Function(),
-      selected: null == selected
-          ? _value.selected
-          : selected // ignore: cast_nullable_to_non_nullable
-              as bool,
       downloadBadge: null == downloadBadge
           ? _value.downloadBadge
           : downloadBadge // ignore: cast_nullable_to_non_nullable
@@ -157,14 +376,6 @@ class __$ItemPreferencesCopyWithImpl<$Res, $Val extends _ItemPreferences>
               as TriState,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $UpdatesWithRelationsCopyWith<$Res> get update {
-    return $UpdatesWithRelationsCopyWith<$Res>(_value.update, (value) {
-      return _then(_value.copyWith(update: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -176,11 +387,7 @@ abstract class _$$_ItemPreferencesImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {UpdatesWithRelations update,
-      DownloadState Function() downloadStateProvider,
-      int Function() downloadProgressProvider,
-      bool selected,
-      bool downloadBadge,
+      {bool downloadBadge,
       bool localBadge,
       bool languageBadge,
       bool skipOutsideReleasePeriod,
@@ -191,9 +398,6 @@ abstract class _$$_ItemPreferencesImplCopyWith<$Res>
       TriState filterBookmarked,
       TriState filterCompleted,
       TriState filterIntervalCustom});
-
-  @override
-  $UpdatesWithRelationsCopyWith<$Res> get update;
 }
 
 /// @nodoc
@@ -207,10 +411,6 @@ class __$$_ItemPreferencesImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? update = null,
-    Object? downloadStateProvider = null,
-    Object? downloadProgressProvider = null,
-    Object? selected = null,
     Object? downloadBadge = null,
     Object? localBadge = null,
     Object? languageBadge = null,
@@ -224,22 +424,6 @@ class __$$_ItemPreferencesImplCopyWithImpl<$Res>
     Object? filterIntervalCustom = null,
   }) {
     return _then(_$_ItemPreferencesImpl(
-      update: null == update
-          ? _value.update
-          : update // ignore: cast_nullable_to_non_nullable
-              as UpdatesWithRelations,
-      downloadStateProvider: null == downloadStateProvider
-          ? _value.downloadStateProvider
-          : downloadStateProvider // ignore: cast_nullable_to_non_nullable
-              as DownloadState Function(),
-      downloadProgressProvider: null == downloadProgressProvider
-          ? _value.downloadProgressProvider
-          : downloadProgressProvider // ignore: cast_nullable_to_non_nullable
-              as int Function(),
-      selected: null == selected
-          ? _value.selected
-          : selected // ignore: cast_nullable_to_non_nullable
-              as bool,
       downloadBadge: null == downloadBadge
           ? _value.downloadBadge
           : downloadBadge // ignore: cast_nullable_to_non_nullable
@@ -292,11 +476,7 @@ class __$$_ItemPreferencesImplCopyWithImpl<$Res>
 
 class _$_ItemPreferencesImpl implements __ItemPreferences {
   const _$_ItemPreferencesImpl(
-      {required this.update,
-      required this.downloadStateProvider,
-      required this.downloadProgressProvider,
-      this.selected = false,
-      required this.downloadBadge,
+      {required this.downloadBadge,
       required this.localBadge,
       required this.languageBadge,
       required this.skipOutsideReleasePeriod,
@@ -308,15 +488,6 @@ class _$_ItemPreferencesImpl implements __ItemPreferences {
       required this.filterCompleted,
       required this.filterIntervalCustom});
 
-  @override
-  final UpdatesWithRelations update;
-  @override
-  final DownloadState Function() downloadStateProvider;
-  @override
-  final int Function() downloadProgressProvider;
-  @override
-  @JsonKey()
-  final bool selected;
   @override
   final bool downloadBadge;
   @override
@@ -342,7 +513,7 @@ class _$_ItemPreferencesImpl implements __ItemPreferences {
 
   @override
   String toString() {
-    return '_ItemPreferences(update: $update, downloadStateProvider: $downloadStateProvider, downloadProgressProvider: $downloadProgressProvider, selected: $selected, downloadBadge: $downloadBadge, localBadge: $localBadge, languageBadge: $languageBadge, skipOutsideReleasePeriod: $skipOutsideReleasePeriod, globalFilterDownloaded: $globalFilterDownloaded, filterDownloaded: $filterDownloaded, filterUnread: $filterUnread, filterStarted: $filterStarted, filterBookmarked: $filterBookmarked, filterCompleted: $filterCompleted, filterIntervalCustom: $filterIntervalCustom)';
+    return '_ItemPreferences(downloadBadge: $downloadBadge, localBadge: $localBadge, languageBadge: $languageBadge, skipOutsideReleasePeriod: $skipOutsideReleasePeriod, globalFilterDownloaded: $globalFilterDownloaded, filterDownloaded: $filterDownloaded, filterUnread: $filterUnread, filterStarted: $filterStarted, filterBookmarked: $filterBookmarked, filterCompleted: $filterCompleted, filterIntervalCustom: $filterIntervalCustom)';
   }
 
   @override
@@ -350,14 +521,6 @@ class _$_ItemPreferencesImpl implements __ItemPreferences {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ItemPreferencesImpl &&
-            (identical(other.update, update) || other.update == update) &&
-            (identical(other.downloadStateProvider, downloadStateProvider) ||
-                other.downloadStateProvider == downloadStateProvider) &&
-            (identical(
-                    other.downloadProgressProvider, downloadProgressProvider) ||
-                other.downloadProgressProvider == downloadProgressProvider) &&
-            (identical(other.selected, selected) ||
-                other.selected == selected) &&
             (identical(other.downloadBadge, downloadBadge) ||
                 other.downloadBadge == downloadBadge) &&
             (identical(other.localBadge, localBadge) ||
@@ -386,10 +549,6 @@ class _$_ItemPreferencesImpl implements __ItemPreferences {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      update,
-      downloadStateProvider,
-      downloadProgressProvider,
-      selected,
       downloadBadge,
       localBadge,
       languageBadge,
@@ -412,11 +571,7 @@ class _$_ItemPreferencesImpl implements __ItemPreferences {
 
 abstract class __ItemPreferences implements _ItemPreferences {
   const factory __ItemPreferences(
-      {required final UpdatesWithRelations update,
-      required final DownloadState Function() downloadStateProvider,
-      required final int Function() downloadProgressProvider,
-      final bool selected,
-      required final bool downloadBadge,
+      {required final bool downloadBadge,
       required final bool localBadge,
       required final bool languageBadge,
       required final bool skipOutsideReleasePeriod,
@@ -428,14 +583,6 @@ abstract class __ItemPreferences implements _ItemPreferences {
       required final TriState filterCompleted,
       required final TriState filterIntervalCustom}) = _$_ItemPreferencesImpl;
 
-  @override
-  UpdatesWithRelations get update;
-  @override
-  DownloadState Function() get downloadStateProvider;
-  @override
-  int Function() get downloadProgressProvider;
-  @override
-  bool get selected;
   @override
   bool get downloadBadge;
   @override
