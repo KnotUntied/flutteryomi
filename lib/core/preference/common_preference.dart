@@ -1,20 +1,15 @@
-import 'package:flutteryomi/core/preference/preference.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
-sealed class CommonPreference<T> extends Preference<T> {
-  CommonPreference(
-    this.preferences,
-    //this.keyStream,
-    this.key_,
-    this.defaultValue_,
-  );
+import 'package:flutteryomi/core/preference/preference.dart' as base;
 
-  final SharedPreferences preferences;
-  //final Stream<String?> keyStream;
+sealed class CommonPreference<T> extends base.Preference<T> {
+  CommonPreference(this.preferences, this.key_, this.defaultValue_);
+
+  final Box preferences;
   final String key_;
   final T defaultValue_;
 
-  T read(SharedPreferences preferences, String key, T defaultValue);
+  T read(Box preferences, String key, T defaultValue);
 
   void write(String key, T value);
 
@@ -38,94 +33,73 @@ sealed class CommonPreference<T> extends Preference<T> {
   bool isSet() => preferences.containsKey(key_);
 
   @override
-  Future<void> delete() async => await preferences.remove(key_);
+  void delete() async => await preferences.delete(key_);
 
   @override
   T defaultValue() => defaultValue_;
+
+  @override
+  Stream<T> changes() => preferences.watch(key: key_).map((e) => e.value);
 }
 
 class StringPrimitive extends CommonPreference<String> {
-  StringPrimitive(
-    super.preferences,
-    super.key_,
-    super.defaultValue_,
-  );
+  StringPrimitive(super.preferences, super.key_, super.defaultValue_);
 
   @override
-  String read(SharedPreferences preferences, String key, String defaultValue) =>
-      preferences.getString(key) ?? defaultValue;
+  String read(Box preferences, String key, String defaultValue) =>
+      preferences.get(key, defaultValue: defaultValue);
 
   @override
   Future<void> write(String key, String value) async =>
-      await preferences.setString(key, value);
+      await preferences.put(key, value);
 }
 
 class IntPrimitive extends CommonPreference<int> {
-  IntPrimitive(
-    super.preferences,
-    super.key_,
-    super.defaultValue_,
-  );
+  IntPrimitive(super.preferences, super.key_, super.defaultValue_);
 
   @override
-  int read(SharedPreferences preferences, String key, int defaultValue) =>
-      preferences.getInt(key) ?? defaultValue;
+  int read(Box preferences, String key, int defaultValue) =>
+      preferences.get(key, defaultValue: defaultValue);
 
   @override
   Future<void> write(String key, int value) async =>
-      await preferences.setInt(key, value);
+      await preferences.put(key, value);
 }
 
 class DoublePrimitive extends CommonPreference<double> {
-  DoublePrimitive(
-    super.preferences,
-    super.key_,
-    super.defaultValue_,
-  );
+  DoublePrimitive(super.preferences, super.key_, super.defaultValue_);
 
   @override
-  double read(SharedPreferences preferences, String key, double defaultValue) =>
-      preferences.getDouble(key) ?? defaultValue;
+  double read(Box preferences, String key, double defaultValue) =>
+      preferences.get(key, defaultValue: defaultValue);
 
   @override
   Future<void> write(String key, double value) async =>
-      await preferences.setDouble(key, value);
+      await preferences.put(key, value);
 }
 
 class BoolPrimitive extends CommonPreference<bool> {
-  BoolPrimitive(
-    super.preferences,
-    super.key_,
-    super.defaultValue_,
-  );
+  BoolPrimitive(super.preferences, super.key_, super.defaultValue_);
 
   @override
-  bool read(SharedPreferences preferences, String key, bool defaultValue) =>
-      preferences.getBool(key) ?? defaultValue;
+  bool read(Box preferences, String key, bool defaultValue) =>
+      preferences.get(key, defaultValue: defaultValue);
 
   @override
   Future<void> write(String key, bool value) async =>
-      await preferences.setBool(key, value);
+      await preferences.put(key, value);
 }
 
 class StringSetPrimitive extends CommonPreference<Set<String>> {
-  StringSetPrimitive(
-    super.preferences,
-    super.key_,
-    super.defaultValue_,
-  );
+  StringSetPrimitive(super.preferences, super.key_, super.defaultValue_);
 
   @override
-  Set<String> read(
-    SharedPreferences preferences,
-    String key,
-    Set<String> defaultValue,
-  ) =>
-      preferences.getStringList(key)?.toSet() ?? defaultValue;
+  Set<String> read(Box preferences, String key, Set<String> defaultValue) =>
+      preferences.get(key, defaultValue: defaultValue).toSet();
 
   @override
   Future<void> write(String key, Set<String> value) async =>
-      await preferences.setStringList(key, value.toList());
+      await preferences.put(key, value.toList());
 }
 
 class ObjectPrimitive<T> extends CommonPreference<T> {
@@ -141,9 +115,9 @@ class ObjectPrimitive<T> extends CommonPreference<T> {
   final T Function(String) deserializer;
 
   @override
-  T read(SharedPreferences preferences, String key, T defaultValue) {
+  T read(Box preferences, String key, T defaultValue) {
     try {
-      String? pref = preferences.getString(key);
+      String? pref = preferences.get(key);
       return pref != null ? deserializer(pref) : defaultValue;
     } catch (e) {
       return defaultValue_;
@@ -152,5 +126,5 @@ class ObjectPrimitive<T> extends CommonPreference<T> {
 
   @override
   Future<void> write(String key, T value) async =>
-      await preferences.setString(key, serializer(value));
+      await preferences.put(key, serializer(value));
 }

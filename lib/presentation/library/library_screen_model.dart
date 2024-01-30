@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
@@ -56,11 +57,13 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   @override
   Stream<LibraryScreenState> build() {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
+    //return StreamZip([
+    //]).map();
     //combine(
     //  state.map((it) => it.searchQuery).distinctUntilChanged().debounce(searchDebounceMillis),
     //  getLibraryStream(),
     //  getTracksPerManga.subscribe(),
-    //  getTrackingFilterFlow(),
+    //  getTrackingFilterStream(),
     //  downloadCache.changes,
     //) { searchQuery, library, tracks, loggedInTrackers, _ =>
     //  library
@@ -101,7 +104,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
 
     //combine(
     //    getLibraryItemPreferencesFlow(),
-    //    getTrackingFilterFlow(),
+    //    getTrackingFilterStream(),
     //) { prefs, trackFilter =>
     //    (
     //        [
@@ -121,15 +124,6 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     //        }
     //    }
     return Stream.empty();
-  //  // TODO: Combine with download streams
-  //  return getUpdates //
-  //      .subscribe(limit)
-  //      .distinct()
-  //      .map((it) => LibraryScreenState(
-  //            items: const [],
-  //            lastUpdated: lastUpdated,
-  //            selectedChapterIds: HashSet(),
-  //          ));
   }
 
 
