@@ -34,7 +34,7 @@ class HistoryTab extends ConsumerWidget {
           AppBarAction(
             title: lang.pref_clear_history,
             iconData: Icons.delete_sweep_outlined,
-            onClick: () => showDialog(
+            onClick: () => showAdaptiveDialog(
               context: context,
               builder: (context) => HistoryDeleteAllDialog(
                 onDelete: screenModel.removeAllHistory,
@@ -81,7 +81,7 @@ class HistoryTab extends ConsumerWidget {
                 //  history.chapterId,
                 //);
               },
-              onClickDelete: (item) => showDialog(
+              onClickDelete: (item) => showAdaptiveDialog(
                 context: context,
                 builder: (context) => HistoryDeleteDialog(
                   onDelete: (all) => all

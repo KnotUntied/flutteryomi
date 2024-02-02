@@ -7,13 +7,13 @@ part of 'smanga.dart';
 // **************************************************************************
 
 _$SMangaImpl _$$SMangaImplFromJson(Map<String, dynamic> json) => _$SMangaImpl(
-      url: json['url'] as String,
-      title: json['title'] as String,
+      url: json['url'] as String? ?? '',
+      title: json['title'] as String? ?? '',
       artist: json['artist'] as String?,
       author: json['author'] as String?,
       description: json['description'] as String?,
       genre: json['genre'] as String?,
-      status: json['status'] as int? ?? 4,
+      status: json['status'] as int? ?? SManga.publishingFinished,
       thumbnailUrl: json['thumbnailUrl'] as String?,
       updateStrategy: $enumDecodeNullable(
               _$UpdateStrategyEnumMap, json['updateStrategy']) ??

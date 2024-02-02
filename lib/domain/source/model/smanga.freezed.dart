@@ -21,26 +21,15 @@ SManga _$SMangaFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SManga {
   String get url => throw _privateConstructorUsedError;
-  set url(String value) => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  set title(String value) => throw _privateConstructorUsedError;
   String? get artist => throw _privateConstructorUsedError;
-  set artist(String? value) => throw _privateConstructorUsedError;
   String? get author => throw _privateConstructorUsedError;
-  set author(String? value) => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  set description(String? value) => throw _privateConstructorUsedError;
   String? get genre => throw _privateConstructorUsedError;
-  set genre(String? value) => throw _privateConstructorUsedError;
   int get status => throw _privateConstructorUsedError;
-  set status(int value) => throw _privateConstructorUsedError;
   String? get thumbnailUrl => throw _privateConstructorUsedError;
-  set thumbnailUrl(String? value) => throw _privateConstructorUsedError;
   UpdateStrategy get updateStrategy => throw _privateConstructorUsedError;
-  set updateStrategy(UpdateStrategy value) =>
-      throw _privateConstructorUsedError;
   bool get initialized => throw _privateConstructorUsedError;
-  set initialized(bool value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -225,13 +214,13 @@ class __$$SMangaImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SMangaImpl extends _SManga {
   const _$SMangaImpl(
-      {required this.url,
-      required this.title,
+      {this.url = '',
+      this.title = '',
       this.artist,
       this.author,
       this.description,
       this.genre,
-      this.status = 4,
+      this.status = SManga.publishingFinished,
       this.thumbnailUrl,
       this.updateStrategy = UpdateStrategy.alwaysUpdate,
       this.initialized = false})
@@ -241,33 +230,61 @@ class _$SMangaImpl extends _SManga {
       _$$SMangaImplFromJson(json);
 
   @override
-  String url;
-  @override
-  String title;
-  @override
-  String? artist;
-  @override
-  String? author;
-  @override
-  String? description;
-  @override
-  String? genre;
+  @JsonKey()
+  final String url;
   @override
   @JsonKey()
-  int status;
+  final String title;
   @override
-  String? thumbnailUrl;
+  final String? artist;
+  @override
+  final String? author;
+  @override
+  final String? description;
+  @override
+  final String? genre;
   @override
   @JsonKey()
-  UpdateStrategy updateStrategy;
+  final int status;
+  @override
+  final String? thumbnailUrl;
   @override
   @JsonKey()
-  bool initialized;
+  final UpdateStrategy updateStrategy;
+  @override
+  @JsonKey()
+  final bool initialized;
 
   @override
   String toString() {
     return 'SManga(url: $url, title: $title, artist: $artist, author: $author, description: $description, genre: $genre, status: $status, thumbnailUrl: $thumbnailUrl, updateStrategy: $updateStrategy, initialized: $initialized)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SMangaImpl &&
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.artist, artist) || other.artist == artist) &&
+            (identical(other.author, author) || other.author == author) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.genre, genre) || other.genre == genre) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl) &&
+            (identical(other.updateStrategy, updateStrategy) ||
+                other.updateStrategy == updateStrategy) &&
+            (identical(other.initialized, initialized) ||
+                other.initialized == initialized));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, url, title, artist, author,
+      description, genre, status, thumbnailUrl, updateStrategy, initialized);
 
   @JsonKey(ignore: true)
   @override
@@ -285,50 +302,40 @@ class _$SMangaImpl extends _SManga {
 
 abstract class _SManga extends SManga {
   const factory _SManga(
-      {required String url,
-      required String title,
-      String? artist,
-      String? author,
-      String? description,
-      String? genre,
-      int status,
-      String? thumbnailUrl,
-      UpdateStrategy updateStrategy,
-      bool initialized}) = _$SMangaImpl;
+      {final String url,
+      final String title,
+      final String? artist,
+      final String? author,
+      final String? description,
+      final String? genre,
+      final int status,
+      final String? thumbnailUrl,
+      final UpdateStrategy updateStrategy,
+      final bool initialized}) = _$SMangaImpl;
   const _SManga._() : super._();
 
   factory _SManga.fromJson(Map<String, dynamic> json) = _$SMangaImpl.fromJson;
 
   @override
   String get url;
-  set url(String value);
   @override
   String get title;
-  set title(String value);
   @override
   String? get artist;
-  set artist(String? value);
   @override
   String? get author;
-  set author(String? value);
   @override
   String? get description;
-  set description(String? value);
   @override
   String? get genre;
-  set genre(String? value);
   @override
   int get status;
-  set status(int value);
   @override
   String? get thumbnailUrl;
-  set thumbnailUrl(String? value);
   @override
   UpdateStrategy get updateStrategy;
-  set updateStrategy(UpdateStrategy value);
   @override
   bool get initialized;
-  set initialized(bool value);
   @override
   @JsonKey(ignore: true)
   _$$SMangaImplCopyWith<_$SMangaImpl> get copyWith =>

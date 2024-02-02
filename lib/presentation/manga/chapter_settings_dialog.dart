@@ -75,7 +75,7 @@ class ChapterSettingsDialog extends StatelessWidget {
                 },
                 menuChildren: [
                   MenuItemButton(
-                    onPressed: () => showDialog(
+                    onPressed: () => showAdaptiveDialog(
                       context: context,
                       builder: (context) => _SetAsDefaultDialog(
                         onConfirmed: onSetAsDefault,
@@ -246,17 +246,13 @@ class _DisplayPage extends StatelessWidget {
 class _SetAsDefaultDialog extends StatefulWidget {
   const _SetAsDefaultDialog({
     super.key,
-    this.onDismissRequest = _defaultOnDismissRequest,
     required this.onConfirmed,
   });
 
-  final VoidCallback onDismissRequest;
   final ValueChanged<bool> onConfirmed;
 
   @override
   State<_SetAsDefaultDialog> createState() => _SetAsDefaultDialogState();
-
-  static void _defaultOnDismissRequest() {}
 }
 
 class _SetAsDefaultDialogState extends State<_SetAsDefaultDialog> {
@@ -275,9 +271,7 @@ class _SetAsDefaultDialogState extends State<_SetAsDefaultDialog> {
           ),
           CheckboxListTile(
             value: optionalChecked,
-            onChanged: (bool? value) => setState(() {
-              optionalChecked = value!;
-            }),
+            onChanged: (value) => setState(() => optionalChecked = value!),
             title: Text(lang.also_set_chapter_settings_for_library),
           ),
         ],
@@ -285,10 +279,7 @@ class _SetAsDefaultDialogState extends State<_SetAsDefaultDialog> {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () {
-            widget.onDismissRequest();
-            Navigator.of(context).pop();
-          }
+          onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
           child: Text(lang.action_ok),

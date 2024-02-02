@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:async/async.dart';
@@ -44,7 +43,6 @@ part 'library_screen_model.g.dart';
 /// Typealias for the library manga, using the category as keys, and list of manga as values.
 typedef LibraryMap = Map<Category, List<LibraryItem>>;
 
-//TODO
 @riverpod
 class LibraryScreenModel extends _$LibraryScreenModel {
   @override
@@ -113,17 +111,15 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         .distinct()
         .map((it) => LibraryScreenState(hasActiveFilters: it));
 
-    return StreamZip([
-      stream1, stream2, stream3
-    ]).map((e) => LibraryScreenState(
-      library: e[0].library,
-      searchQuery: e[0].searchQuery,
-      //selection?
-      showCategoryTabs: e[1].showCategoryTabs,
-      showMangaCount: e[1].showMangaCount,
-      showMangaContinueButton: e[1].showMangaContinueButton,
-      hasActiveFilters: e[2].hasActiveFilters,
-    ));
+    return StreamZip([stream1, stream2, stream3]).map((e) => LibraryScreenState(
+          library: e[0].library,
+          searchQuery: e[0].searchQuery,
+          //selection?
+          showCategoryTabs: e[1].showCategoryTabs,
+          showMangaCount: e[1].showMangaCount,
+          showMangaContinueButton: e[1].showMangaContinueButton,
+          hasActiveFilters: e[2].hasActiveFilters,
+        ));
   }
 
   /// Applies library filters to the given map of manga.
@@ -186,8 +182,9 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     bool filterFnTracking(LibraryItem item) {
       if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return true;
 
-      final mangaTracks = trackMap.mapValues((entry) =>
-              entry.value.map((it) => it.trackerId))[item.libraryManga.id] ??
+      final mangaTracks = trackMap.mapValues(
+            (entry) => entry.value.map((it) => it.trackerId),
+          )[item.libraryManga.id] ??
           const [];
 
       final isExcluded = excludedTracks.isNotEmpty &&
@@ -379,17 +376,17 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     //} else {
     //  return flowOf(emptyMap());
     //}
-    return Stream.empty();
+    return const Stream.empty();
   }
 
   /// Returns the common categories for the given list of manga [mangas].
-  Future<Iterable<Category>> _getCommonCategories(List<Manga> mangas) async {
+  Future<Iterable<Category>> getCommonCategories(List<Manga> mangas) async {
     if (mangas.isEmpty) return const [];
     final getCategories = ref.watch(getCategoriesProvider);
-    final _categories = [
+    final categories = [
       for (final it in mangas) await getCategories.await_(it.id),
     ].map((it) => it.toSet());
-    return _categories.reduce((set1, set2) => set1.intersection(set2));
+    return categories.reduce((set1, set2) => set1.intersection(set2));
   }
 
   Future<Chapter?> getNextUnreadChapter(Manga manga) async {
@@ -542,12 +539,11 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         : libraryPreferences.portraitColumns().get();
   }
 
-  Future<LibraryItem?> getRandomLibraryItemForCurrentCategory() async {
-    final libraryPreferences = ref.watch(libraryPreferencesProvider);
+  LibraryItem? getRandomLibraryItemForCategory(int index) {
     final currentState = state.valueOrNull;
     if (currentState?.categories.isEmpty ?? false) return null;
     final libraryItems = currentState!.getLibraryItemsByCategoryId(
-      currentState.categories[libraryPreferences.lastUsedCategory().get()].id,
+      currentState.categories[index].id,
     );
     return (libraryItems?.isNotEmpty ?? false)
         ? libraryItems![Random().nextInt(libraryItems.length)]
@@ -708,11 +704,11 @@ class LibraryScreenState with _$LibraryScreenState {
           ? library[category]?.length
           : null;
 
-  LibraryToolbarTitle getToolbarTitle(
-    String defaultTitle,
-    String defaultCategoryTitle,
-    int page,
-  ) {
+  LibraryToolbarTitle getToolbarTitle({
+    required String defaultTitle,
+    required String defaultCategoryTitle,
+    required int page,
+  }) {
     final category = categories.elementAtOrNull(page);
     if (category == null) return LibraryToolbarTitle(defaultTitle);
     final categoryName =

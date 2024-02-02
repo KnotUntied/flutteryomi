@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutteryomi/presentation/browse/source/sources.dart';
 import 'package:flutteryomi/presentation/browse/source/sources_filter.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
-import 'package:flutteryomi/presentation/components/tab_text.dart';
+import 'package:flutteryomi/presentation/components/material/tab_text.dart';
 import 'package:flutteryomi/presentation/components/tabbed_content.dart';
 
 final Uri _migrationGuideUrl =

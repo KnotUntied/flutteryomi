@@ -21,9 +21,9 @@ mixin _$LibraryManga {
   int get totalChapters => throw _privateConstructorUsedError;
   int get readCount => throw _privateConstructorUsedError;
   int get bookmarkCount => throw _privateConstructorUsedError;
-  int get latestUpload => throw _privateConstructorUsedError;
-  int get chapterFetchedAt => throw _privateConstructorUsedError;
-  int get lastRead => throw _privateConstructorUsedError;
+  DateTime get latestUpload => throw _privateConstructorUsedError;
+  DateTime get chapterFetchedAt => throw _privateConstructorUsedError;
+  DateTime get lastRead => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LibraryMangaCopyWith<LibraryManga> get copyWith =>
@@ -42,9 +42,9 @@ abstract class $LibraryMangaCopyWith<$Res> {
       int totalChapters,
       int readCount,
       int bookmarkCount,
-      int latestUpload,
-      int chapterFetchedAt,
-      int lastRead});
+      DateTime latestUpload,
+      DateTime chapterFetchedAt,
+      DateTime lastRead});
 }
 
 /// @nodoc
@@ -93,15 +93,15 @@ class _$LibraryMangaCopyWithImpl<$Res, $Val extends LibraryManga>
       latestUpload: null == latestUpload
           ? _value.latestUpload
           : latestUpload // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       chapterFetchedAt: null == chapterFetchedAt
           ? _value.chapterFetchedAt
           : chapterFetchedAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       lastRead: null == lastRead
           ? _value.lastRead
           : lastRead // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ) as $Val);
   }
 }
@@ -120,9 +120,9 @@ abstract class _$$LibraryMangaImplCopyWith<$Res>
       int totalChapters,
       int readCount,
       int bookmarkCount,
-      int latestUpload,
-      int chapterFetchedAt,
-      int lastRead});
+      DateTime latestUpload,
+      DateTime chapterFetchedAt,
+      DateTime lastRead});
 }
 
 /// @nodoc
@@ -169,15 +169,15 @@ class __$$LibraryMangaImplCopyWithImpl<$Res>
       latestUpload: null == latestUpload
           ? _value.latestUpload
           : latestUpload // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       chapterFetchedAt: null == chapterFetchedAt
           ? _value.chapterFetchedAt
           : chapterFetchedAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       lastRead: null == lastRead
           ? _value.lastRead
           : lastRead // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 }
@@ -207,11 +207,11 @@ class _$LibraryMangaImpl extends _LibraryManga {
   @override
   final int bookmarkCount;
   @override
-  final int latestUpload;
+  final DateTime latestUpload;
   @override
-  final int chapterFetchedAt;
+  final DateTime chapterFetchedAt;
   @override
-  final int lastRead;
+  final DateTime lastRead;
 
   @override
   String toString() {
@@ -258,9 +258,9 @@ abstract class _LibraryManga extends LibraryManga {
       required final int totalChapters,
       required final int readCount,
       required final int bookmarkCount,
-      required final int latestUpload,
-      required final int chapterFetchedAt,
-      required final int lastRead}) = _$LibraryMangaImpl;
+      required final DateTime latestUpload,
+      required final DateTime chapterFetchedAt,
+      required final DateTime lastRead}) = _$LibraryMangaImpl;
   const _LibraryManga._() : super._();
 
   @override
@@ -274,11 +274,11 @@ abstract class _LibraryManga extends LibraryManga {
   @override
   int get bookmarkCount;
   @override
-  int get latestUpload;
+  DateTime get latestUpload;
   @override
-  int get chapterFetchedAt;
+  DateTime get chapterFetchedAt;
   @override
-  int get lastRead;
+  DateTime get lastRead;
   @override
   @JsonKey(ignore: true)
   _$$LibraryMangaImplCopyWith<_$LibraryMangaImpl> get copyWith =>

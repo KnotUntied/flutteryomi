@@ -26,11 +26,11 @@ class UpdatesTab extends ConsumerWidget {
     final lang = AppLocalizations.of(context);
     final screenModel = ref.watch(updatesScreenModelProvider.notifier);
     final state = ref.watch(updatesScreenModelProvider);
+    final currentState = state.unwrapPrevious().valueOrNull;
     return Scaffold(
       appBar: _UpdatesAppBar(
         onUpdateLibrary: screenModel.updateLibrary,
-        actionModeCounter:
-            state.unwrapPrevious().valueOrNull?.selected.length ?? 0,
+        actionModeCounter: currentState?.selected.length ?? 0,
         onSelectAll: () => screenModel.toggleAllSelection(true),
         onInvertSelection: screenModel.invertSelection,
         onCancelActionMode: () => screenModel.toggleAllSelection(false),
@@ -67,12 +67,12 @@ class UpdatesTab extends ConsumerWidget {
               ),
       ),
       bottomNavigationBar: _UpdatesBottomBar(
-        selected: state.unwrapPrevious().valueOrNull?.selected.toList() ?? [],
+        selected: currentState?.selected.toList() ?? [],
         onDownloadChapter: (items, action) =>
             screenModel.downloadChapters(items, action),
         onMultiBookmarkClicked: screenModel.bookmarkUpdates,
         onMultiMarkAsReadClicked: screenModel.markUpdatesRead,
-        onMultiDeleteClicked: (updatesItem) => showDialog(
+        onMultiDeleteClicked: (updatesItem) => showAdaptiveDialog(
           context: context,
           builder: (context) => UpdatesDeleteConfirmationDialog(
             onConfirm: () => screenModel.deleteChapters(updatesItem),

@@ -1,27 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'library_screen_model.dart';
+part of 'tracker_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$libraryScreenModelHash() =>
-    r'aa3d205ef241ccfa04053facfa2328ea67b56447';
+String _$trackerManagerHash() => r'8e6572bbc2b0d966511667c12201438cd0f4b83a';
 
-/// See also [LibraryScreenModel].
-@ProviderFor(LibraryScreenModel)
-final libraryScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    LibraryScreenModel, LibraryScreenState>.internal(
-  LibraryScreenModel.new,
-  name: r'libraryScreenModelProvider',
+/// See also [trackerManager].
+@ProviderFor(trackerManager)
+final trackerManagerProvider = AutoDisposeProvider<TrackerManager>.internal(
+  trackerManager,
+  name: r'trackerManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$libraryScreenModelHash,
+      : _$trackerManagerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$LibraryScreenModel = AutoDisposeStreamNotifier<LibraryScreenState>;
+typedef TrackerManagerRef = AutoDisposeProviderRef<TrackerManager>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -22,11 +22,12 @@ import 'package:flutteryomi/presentation/home/home.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  final prefs = await Hive.openBox('flutter');
   return runApp(
     ProviderScope(
       overrides: [
         // Might be better to ditch the abstract repositories in the future
-        sharedPreferencesProvider.overrideWithValue(Hive.box('')),
+        sharedPreferencesProvider.overrideWithValue(prefs),
         preferenceStoreProvider.overrideWith((ref) => ref.watch(commonPreferenceStoreProvider)),
         categoryRepositoryProvider.overrideWith((ref) => ref.watch(categoryRepositoryImplProvider)),
         chapterRepositoryProvider.overrideWith((ref) => ref.watch(chapterRepositoryImplProvider)),

@@ -43,7 +43,9 @@ class LibraryPager extends StatelessWidget {
     final library = getLibraryForPage(page);
     final displayMode = getDisplayMode(page);
     final columns = displayMode is! ListMode
-        ? getColumnsForOrientation(MediaQuery.orientationOf(context) == Orientation.landscape,)
+        ? getColumnsForOrientation(
+            MediaQuery.orientationOf(context) == Orientation.landscape,
+          )
         : 0;
     return TabBarView(
       children: List.generate(
@@ -58,35 +60,35 @@ class LibraryPager extends StatelessWidget {
           }
           return switch (displayMode) {
             ListMode() => LibraryList(
-              items: library,
-              selection: selectedManga,
-              onClick: onClickManga,
-              onLongClick: onLongClickManga,
-              onClickContinueReading: onClickContinueReading,
-              searchQuery: searchQuery,
-              onGlobalSearchClicked: onGlobalSearchClicked,
-            ),
+                items: library,
+                selection: selectedManga,
+                onClick: onClickManga,
+                onLongClick: onLongClickManga,
+                onClickContinueReading: onClickContinueReading,
+                searchQuery: searchQuery,
+                onGlobalSearchClicked: onGlobalSearchClicked,
+              ),
             CompactGrid() || CoverOnlyGrid() => LibraryCompactGrid(
-              items: library,
-              showTitle: displayMode is CompactGrid,
-              columns: columns,
-              selection: selectedManga,
-              onClick: onClickManga,
-              onLongClick: onLongClickManga,
-              onClickContinueReading: onClickContinueReading,
-              searchQuery: searchQuery,
-              onGlobalSearchClicked: onGlobalSearchClicked,
-            ),
+                items: library,
+                showTitle: displayMode is CompactGrid,
+                columns: columns,
+                selection: selectedManga,
+                onClick: onClickManga,
+                onLongClick: onLongClickManga,
+                onClickContinueReading: onClickContinueReading,
+                searchQuery: searchQuery,
+                onGlobalSearchClicked: onGlobalSearchClicked,
+              ),
             ComfortableGrid() => LibraryComfortableGrid(
-              items: library,
-              columns: columns,
-              selection: selectedManga,
-              onClick: onClickManga,
-              onLongClick: onLongClickManga,
-              onClickContinueReading: onClickContinueReading,
-              searchQuery: searchQuery,
-              onGlobalSearchClicked: onGlobalSearchClicked,
-            ),
+                items: library,
+                columns: columns,
+                selection: selectedManga,
+                onClick: onClickManga,
+                onLongClick: onLongClickManga,
+                onClickContinueReading: onClickContinueReading,
+                searchQuery: searchQuery,
+                onGlobalSearchClicked: onGlobalSearchClicked,
+              ),
           };
         },
         growable: false,

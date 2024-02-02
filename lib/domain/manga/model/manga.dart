@@ -103,34 +103,28 @@ extension MangaUtils on Manga {
   //bool forceDownloaded(BasePreferences prefs) => favorite && prefs.downloadedOnly().get();
   bool forceDownloaded() => favorite;
 
-  SManga toSManga() => SManga.create()
-      ..url = url
-      ..title = title
-      ..artist = artist
-      ..author = author
-      ..description = description
-      ..genre = genre?.join() ?? [].join()
-      ..status = status
-      ..thumbnailUrl = thumbnailUrl
-      ..initialized = initialized;
+  SManga toSManga() => SManga(
+        url: url,
+        title: title,
+        artist: artist,
+        author: author,
+        description: description,
+        genre: genre?.join() ?? [].join(),
+        status: status,
+        thumbnailUrl: thumbnailUrl,
+        initialized: initialized,
+      );
 
-  Manga copyFrom(SManga other) {
-    final _author = other.author ?? author;
-    final _artist = other.artist ?? artist;
-    final _description = other.description ?? description;
-    final _genres = other.genre != null ? other.getGenres() : genre;
-    final _thumbnailUrl = other.thumbnailUrl ?? thumbnailUrl;
-    return copyWith(
-      author: Value(_author),
-      artist: Value(_artist),
-      description: Value(_description),
-      genre: Value(_genres),
-      thumbnailUrl: Value(_thumbnailUrl),
-      status: other.status,
-      updateStrategy: other.updateStrategy.index,
-      initialized: other.initialized && initialized,
-    );
-  }
+  Manga copyFrom(SManga other) => copyWith(
+        author: Value(other.author ?? author),
+        artist: Value(other.artist ?? artist),
+        description: Value(other.description ?? description),
+        genre: Value(other.genre != null ? other.getGenres() : genre),
+        thumbnailUrl: Value(other.thumbnailUrl ?? thumbnailUrl),
+        status: other.status,
+        updateStrategy: other.updateStrategy.index,
+        initialized: other.initialized && initialized,
+      );
 
   //TODO
   //bool hasCustomCover(CoverCache coverCache) =>
@@ -138,9 +132,7 @@ extension MangaUtils on Manga {
 }
 
 extension SMangaToDomainManga on SManga {
-  Manga toDomainManga(int sourceId) => MangaUtils
-      .create()
-      .copyWith(
+  Manga toDomainManga(int sourceId) => MangaUtils.create().copyWith(
         url: url,
         title: title,
         artist: Value(artist),

@@ -5,17 +5,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'smanga.freezed.dart';
 part 'smanga.g.dart';
 
-@unfreezed
+@freezed
 class SManga with _$SManga {
   const SManga._();
   const factory SManga({
-    required String url,
-    required String title,
+    @Default('') String url,
+    @Default('') String title,
     String? artist,
     String? author,
     String? description,
     String? genre,
-    @Default(4) int status,
+    @Default(SManga.publishingFinished) int status,
     String? thumbnailUrl,
     @Default(UpdateStrategy.alwaysUpdate) UpdateStrategy updateStrategy,
     @Default(false) bool initialized,
@@ -30,17 +30,17 @@ class SManga with _$SManga {
           .distinct()
           .toList();
 
-  SManga copy() => create()
-      ..url = url
-      ..title = title
-      ..artist = artist
-      ..author = author
-      ..description = description
-      ..genre = genre
-      ..status = status
-      ..thumbnailUrl = thumbnailUrl
-      ..updateStrategy = updateStrategy
-      ..initialized = initialized;
+  //SManga copy() => create()
+  //    ..url = url
+  //    ..title = title
+  //    ..artist = artist
+  //    ..author = author
+  //    ..description = description
+  //    ..genre = genre
+  //    ..status = status
+  //    ..thumbnailUrl = thumbnailUrl
+  //    ..updateStrategy = updateStrategy
+  //    ..initialized = initialized;
 
   factory SManga.fromJson(Map<String, Object?> json) => _$SMangaFromJson(json);
 
@@ -52,16 +52,16 @@ class SManga with _$SManga {
   static const int cancelled = 5;
   static const int onHiatus = 6;
 
-  static SManga create() => SManga(
-    url: '',
-    title: '',
-    artist: null,
-    author: null,
-    description: null,
-    genre: null,
-    status: 0,
-    thumbnailUrl: null,
-    updateStrategy: UpdateStrategy.alwaysUpdate,
-    initialized: false,
-  );
+  //static SManga create() => const SManga(
+  //  url: '',
+  //  title: '',
+  //  artist: null,
+  //  author: null,
+  //  description: null,
+  //  genre: null,
+  //  status: 0,
+  //  thumbnailUrl: null,
+  //  updateStrategy: UpdateStrategy.alwaysUpdate,
+  //  initialized: false,
+  //);
 }

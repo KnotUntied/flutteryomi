@@ -21,7 +21,7 @@ class CategoryScreen extends ConsumerWidget {
     return state.when(
       loading: () => const Scaffold(body: LoadingScreen()),
       // TODO: Error handling
-      error: (Object error, StackTrace stackTrace) {
+      error: (error, stackTrace) {
         debugPrintStack(
           label: error.toString(),
           stackTrace: stackTrace,
@@ -31,31 +31,31 @@ class CategoryScreen extends ConsumerWidget {
       data: (data) {
         return CategoryScreenContent(
           state: data,
-          onClickCreate: () => showDialog(
+          onClickCreate: () => showAdaptiveDialog(
             context: context,
-            builder: (BuildContext context) => CategoryCreateDialog(
+            builder: (context) => CategoryCreateDialog(
               onCreate: screenModel.createCategory,
               categories: data,
             ),
           ),
-          onClickSortAlphabetically: () => showDialog(
+          onClickSortAlphabetically: () => showAdaptiveDialog(
             context: context,
-            builder: (BuildContext context) => CategorySortAlphabeticallyDialog(
+            builder: (context) => CategorySortAlphabeticallyDialog(
               onSort: screenModel.sortAlphabetically,
             ),
           ),
-          onClickRename: (Category category) => showDialog(
+          onClickRename: (category) => showAdaptiveDialog(
             context: context,
-            builder: (BuildContext context) => CategoryRenameDialog(
+            builder: (context) => CategoryRenameDialog(
               onRename: (String name) =>
                   screenModel.renameCategory(category, name),
               categories: data,
               category: category,
             ),
           ),
-          onClickDelete: (Category category) => showDialog(
+          onClickDelete: (category) => showAdaptiveDialog(
             context: context,
-            builder: (BuildContext context) => CategoryDeleteDialog(
+            builder: (context) => CategoryDeleteDialog(
               onDelete: () => screenModel.deleteCategory(category.id),
               category: category,
             ),

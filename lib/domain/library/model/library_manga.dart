@@ -13,9 +13,9 @@ class LibraryManga with _$LibraryManga {
     required int totalChapters,
     required int readCount,
     required int bookmarkCount,
-    required int latestUpload,
-    required int chapterFetchedAt,
-    required int lastRead,
+    required DateTime latestUpload,
+    required DateTime chapterFetchedAt,
+    required DateTime lastRead,
   }) = _LibraryManga;
 
   int get id => manga.id;
