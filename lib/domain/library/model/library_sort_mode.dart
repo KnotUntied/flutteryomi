@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutteryomi/domain/category/model/category.dart';
@@ -84,7 +85,7 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
   }
 }
 
-sealed class Type implements FlagWithMask {
+sealed class Type extends Equatable implements FlagWithMask {
   @override
   final int flag;
   @override
@@ -107,6 +108,9 @@ sealed class Type implements FlagWithMask {
         (type) => type.flag == (flag & type.mask),
         orElse: () => defaultType);
   }
+
+  @override
+  List<Object?> get props => const [];
 }
 
 class Alphabetical extends Type {
@@ -147,7 +151,7 @@ class TrackerMean extends Type {
 
 const defaultType = Type.alphabetical;
 
-sealed class Direction implements FlagWithMask {
+sealed class Direction extends Equatable implements FlagWithMask {
   @override
   final int flag;
   @override
@@ -163,6 +167,9 @@ sealed class Direction implements FlagWithMask {
         (direction) => direction.flag == (flag & direction.mask),
         orElse: () => defaultDirection);
   }
+
+  @override
+  List<Object?> get props => const [];
 }
 
 class _Ascending extends Direction {

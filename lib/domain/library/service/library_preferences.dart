@@ -34,9 +34,8 @@ class LibraryPreferences {
       preferenceStore.getInt("pref_library_columns_landscape_key", 0);
 
   Preference<int> lastUpdatedTimestamp() => preferenceStore.getInt(
-        Preference.appStateKey("library_update_last_timestamp"),
-        0,
-      );
+      Preference.appStateKey("library_update_last_timestamp"), 0);
+
   Preference<int> autoUpdateInterval() =>
       preferenceStore.getInt("pref_library_update_interval_key", 0);
 
@@ -74,46 +73,31 @@ class LibraryPreferences {
       "pref_filter_library_bookmarked", TriState.disabled, TriState.values);
 
   Preference<TriState> filterCompleted() => preferenceStore.getEnum(
-        "pref_filter_library_completed",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_completed", TriState.disabled, TriState.values);
 
   Preference<TriState> filterIntervalCustom() => preferenceStore.getEnum(
-        "pref_filter_library_interval_custom",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_interval_custom",
+      TriState.disabled,
+      TriState.values);
 
   Preference<TriState> filterIntervalLong() => preferenceStore.getEnum(
-        "pref_filter_library_interval_long",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_interval_long", TriState.disabled, TriState.values);
 
   Preference<TriState> filterIntervalLate() => preferenceStore.getEnum(
-        "pref_filter_library_interval_late",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_interval_late", TriState.disabled, TriState.values);
 
   Preference<TriState> filterIntervalDropped() => preferenceStore.getEnum(
-        "pref_filter_library_interval_dropped",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_interval_dropped",
+      TriState.disabled,
+      TriState.values);
 
   Preference<TriState> filterIntervalPassed() => preferenceStore.getEnum(
-        "pref_filter_library_interval_passed",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_interval_passed",
+      TriState.disabled,
+      TriState.values);
 
   Preference<TriState> filterTracking(int id) => preferenceStore.getEnum(
-        "pref_filter_library_tracked_$id",
-        TriState.disabled,
-        TriState.values,
-      );
+      "pref_filter_library_tracked_$id", TriState.disabled, TriState.values);
 
   // endregion
 
@@ -131,9 +115,7 @@ class LibraryPreferences {
   Preference<bool> newShowUpdatesCount() =>
       preferenceStore.getBool("library_show_updates_count", true);
   Preference<int> newUpdatesCount() => preferenceStore.getInt(
-        Preference.appStateKey("library_unseen_updates_count"),
-        0,
-      );
+      Preference.appStateKey("library_unseen_updates_count"), 0);
 
   // endregion
 
@@ -142,10 +124,8 @@ class LibraryPreferences {
   Preference<int> defaultCategory() =>
       preferenceStore.getInt("default_category", -1);
 
-  Preference<int> lastUsedCategory() => preferenceStore.getInt(
-        Preference.appStateKey("last_used_category"),
-        0,
-      );
+  Preference<int> lastUsedCategory() =>
+      preferenceStore.getInt(Preference.appStateKey("last_used_category"), 0);
 
   Preference<bool> categoryTabs() =>
       preferenceStore.getBool("display_category_tabs", true);
@@ -243,12 +223,7 @@ class LibraryPreferences {
   static const mangaOutsideReleasePeriod = "manga_outside_release_period";
 }
 
-enum ChapterSwipeAction {
-  toggleRead,
-  toggleBookmark,
-  download,
-  disabled,
-}
+enum ChapterSwipeAction { toggleRead, toggleBookmark, download, disabled }
 
 @riverpod
 LibraryPreferences libraryPreferences(LibraryPreferencesRef ref) =>

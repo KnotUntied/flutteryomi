@@ -80,9 +80,9 @@ extension HistoryWithRelationsToHistoryUiModel on List<HistoryWithRelations> {
     HistoryUiModel? after,
   ) {
     final beforeDate = (before as Item?)?.item.readAt?.dateOnly ??
-        DateTime.fromMillisecondsSinceEpoch(0);
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
     final afterDate = (after as Item?)?.item.readAt?.dateOnly ??
-        DateTime.fromMillisecondsSinceEpoch(0);
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
     if (beforeDate.millisecondsSinceEpoch != afterDate.millisecondsSinceEpoch &&
         afterDate.millisecondsSinceEpoch != 0) {
       return HistoryUiModel.header(afterDate);

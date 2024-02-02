@@ -3,18 +3,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:flutteryomi/core/preference/preference_store.dart';
 import 'package:flutteryomi/core/preference/common_preference_store.dart';
+import 'package:flutteryomi/core/preference/preference_store.dart';
 import 'package:flutteryomi/data/category/category_repository_impl.dart';
 import 'package:flutteryomi/data/chapter/chapter_repository_impl.dart';
 import 'package:flutteryomi/data/history/history_repository_impl.dart';
 import 'package:flutteryomi/data/manga/manga_repository_impl.dart';
+import 'package:flutteryomi/data/source/common_source_manager.dart';
 import 'package:flutteryomi/data/track/track_repository_impl.dart';
 import 'package:flutteryomi/data/updates/updates_repository_impl.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 import 'package:flutteryomi/domain/history/repository/history_repository.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
@@ -22,13 +24,14 @@ import 'package:flutteryomi/presentation/home/home.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  final prefs = await Hive.openBox('flutter');
+  final prefs = await Hive.openBox('');
   return runApp(
     ProviderScope(
       overrides: [
         // Might be better to ditch the abstract repositories in the future
         sharedPreferencesProvider.overrideWithValue(prefs),
         preferenceStoreProvider.overrideWith((ref) => ref.watch(commonPreferenceStoreProvider)),
+        sourceManagerProvider.overrideWith((ref) => ref.watch(commonSourceManagerProvider)),
         categoryRepositoryProvider.overrideWith((ref) => ref.watch(categoryRepositoryImplProvider)),
         chapterRepositoryProvider.overrideWith((ref) => ref.watch(chapterRepositoryImplProvider)),
         historyRepositoryProvider.overrideWith((ref) => ref.watch(historyRepositoryImplProvider)),

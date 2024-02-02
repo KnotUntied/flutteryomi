@@ -15,6 +15,7 @@ import 'package:flutteryomi/presentation/library/components/library_content.dart
 import 'package:flutteryomi/presentation/library/components/library_tabs.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/library/delete_library_manga_dialog.dart';
+import 'package:flutteryomi/presentation/library/library_settings_screen_model.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
 import 'package:flutteryomi/presentation/more/onboarding/guides_step.dart';
 import 'package:flutteryomi/presentation/screens/empty_screen.dart';
@@ -34,6 +35,7 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
 
   bool onClickRefresh([Category? category]) {
     final lang = AppLocalizations.of(context);
+    //TODO
     //final started = LibraryUpdateJob.startNow(context, category);
     const started = true;
     final String msg;
@@ -57,6 +59,8 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
     final lang = AppLocalizations.of(context);
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final screenModel = ref.watch(libraryScreenModelProvider.notifier);
+    final settingsScreenModel =
+        ref.watch(librarySettingsScreenModelProvider.notifier);
     final state = ref.watch(libraryScreenModelProvider);
     final currentState = state.unwrapPrevious().valueOrNull;
 
@@ -82,12 +86,17 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
           onClickInvertSelection: () => screenModel
               .invertSelection(DefaultTabController.of(context).index),
           onClickFilter: () {
-            // TODO: https://github.com/mihonapp/mihon/blob/main/app/src/main/java/eu/kanade/tachiyomi/ui/library/LibraryTab.kt#L214
+            final category = currentState?.categories
+                .elementAtOrNull(DefaultTabController.of(context).index);
+            if (category == null) return;
             showModalBottomSheet<void>(
               context: context,
               isScrollControlled: true,
               useSafeArea: true,
-              builder: (context) => const LibrarySettingsDialog(),
+              builder: (context) => LibrarySettingsDialog(
+                screenModel: settingsScreenModel,
+                category: category,
+              ),
             );
           },
           onClickRefresh: () => onClickRefresh(
@@ -189,9 +198,8 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
                     : null,
                 onToggleSelection: screenModel.toggleSelection,
                 onToggleRangeSelection: (it) {
+                  Feedback.forLongPress(context);
                   screenModel.toggleRangeSelection(it);
-                  //TODO: Haptic feedback
-                  //haptic.performHapticFeedback(HapticFeedbackType.LongPress)l
                 },
                 onRefresh: onClickRefresh,
                 onGlobalSearchClicked: () {

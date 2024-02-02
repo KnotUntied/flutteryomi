@@ -30,18 +30,6 @@ class SManga with _$SManga {
           .distinct()
           .toList();
 
-  //SManga copy() => create()
-  //    ..url = url
-  //    ..title = title
-  //    ..artist = artist
-  //    ..author = author
-  //    ..description = description
-  //    ..genre = genre
-  //    ..status = status
-  //    ..thumbnailUrl = thumbnailUrl
-  //    ..updateStrategy = updateStrategy
-  //    ..initialized = initialized;
-
   factory SManga.fromJson(Map<String, Object?> json) => _$SMangaFromJson(json);
 
   static const int unknown = 0;
@@ -51,17 +39,4 @@ class SManga with _$SManga {
   static const int publishingFinished = 4;
   static const int cancelled = 5;
   static const int onHiatus = 6;
-
-  //static SManga create() => const SManga(
-  //  url: '',
-  //  title: '',
-  //  artist: null,
-  //  author: null,
-  //  description: null,
-  //  genre: null,
-  //  status: 0,
-  //  thumbnailUrl: null,
-  //  updateStrategy: UpdateStrategy.alwaysUpdate,
-  //  initialized: false,
-  //);
 }

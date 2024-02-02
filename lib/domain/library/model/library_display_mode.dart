@@ -1,4 +1,6 @@
-sealed class LibraryDisplayMode {
+import 'package:equatable/equatable.dart';
+
+sealed class LibraryDisplayMode extends Equatable {
   static String serializer(LibraryDisplayMode value) => value.serialize();
 
   static final values = {CompactGrid(), ComfortableGrid(), ListMode(), CoverOnlyGrid()};
@@ -19,6 +21,9 @@ sealed class LibraryDisplayMode {
     ListMode() => "LIST",
     CoverOnlyGrid() => "COVER_ONLY_GRID",
   };
+
+  @override
+  List<Object?> get props => const [];
 }
 
 class CompactGrid extends LibraryDisplayMode {}

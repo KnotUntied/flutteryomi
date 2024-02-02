@@ -29,10 +29,13 @@ class TrackRepositoryImpl implements TrackRepository {
       db.mangaSyncDrift.getTracksByMangaId(mangaId: mangaId).watch();
 
   @override
-  Future<void> delete(int mangaId, int trackerId) async => await (db
-          .delete(db.mangaSync)
-        ..where((it) => it.mangaId.equals(mangaId) & it.trackerId.equals(trackerId)))
-      .go();
+  Future<void> delete(int mangaId, int trackerId) async =>
+      await (db.delete(db.mangaSync)
+            ..where(
+              (it) =>
+                  it.mangaId.equals(mangaId) & it.trackerId.equals(trackerId),
+            ))
+          .go();
 
   @override
   Future<void> insert(Track track) async => await db //
