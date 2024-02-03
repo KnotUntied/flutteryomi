@@ -56,3 +56,4 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 - [ ] Feature parity with Tachiyomi/Mihon
 - [ ] Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp`
 - [ ] XML to ARB for localization
+- [ ] Dart-specific optimizations and naming conventions

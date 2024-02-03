@@ -67,6 +67,7 @@ dependencies:
   stream_transform: ^2.1.0
   timeago_flutter: ^3.6.0
   url_launcher: ^6.2.1
+  sprintf: ^7.0.0
 
 
 dev_dependencies:

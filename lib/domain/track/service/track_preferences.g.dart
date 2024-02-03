@@ -1,26 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'more.dart';
+part of 'track_preferences.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$moreScreenModelHash() => r'41c7d606c8d3acee2b1eeb50800efbcabfd90518';
+String _$trackPreferencesHash() => r'41dc91e2168460d8633667e168789cac39a4e0b7';
 
-/// See also [MoreScreenModel].
-@ProviderFor(MoreScreenModel)
-final moreScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    MoreScreenModel, MoreScreenState>.internal(
-  MoreScreenModel.new,
-  name: r'moreScreenModelProvider',
+/// See also [trackPreferences].
+@ProviderFor(trackPreferences)
+final trackPreferencesProvider = AutoDisposeProvider<TrackPreferences>.internal(
+  trackPreferences,
+  name: r'trackPreferencesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$moreScreenModelHash,
+      : _$trackPreferencesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MoreScreenModel = AutoDisposeStreamNotifier<MoreScreenState>;
+typedef TrackPreferencesRef = AutoDisposeProviderRef<TrackPreferences>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

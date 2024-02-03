@@ -154,8 +154,6 @@ class MoreTab extends ConsumerWidget {
   }
 }
 
-
-
 @riverpod
 class MoreScreenModel extends _$MoreScreenModel {
   @override

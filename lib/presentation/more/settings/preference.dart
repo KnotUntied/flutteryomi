@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'package:flutteryomi/core/preference/preference.dart' as pref_data;
+import 'package:flutteryomi/data/track/tracker.dart';
 
 sealed class Preference {
   Preference({
@@ -40,7 +42,7 @@ class TextPreference extends PreferenceItem<String> {
 
   final VoidCallback? onClick;
 
-  static Future<bool> _defaultOnValueChanged(String _) async => true;
+  static Future<bool> _defaultOnValueChanged(_) async => true;
 }
 
 /// A [PreferenceItem] that provides a two-state toggleable option.
@@ -56,7 +58,7 @@ class SwitchPreference extends PreferenceItem<bool> {
 
   final pref_data.Preference<bool> pref;
 
-  static Future<bool> _defaultOnValueChanged(bool _) async => true;
+  static Future<bool> _defaultOnValueChanged(_) async => true;
 }
 
 /// A [PreferenceItem] that provides a slider to select an integer number.
@@ -76,7 +78,7 @@ class SliderPreference extends PreferenceItem<int> {
   final int min;
   final int max;
 
-  static Future<bool> _defaultOnValueChanged(int _) async => true;
+  static Future<bool> _defaultOnValueChanged(_) async => true;
 }
 
 /// A [PreferenceItem] that displays a list of entries as a dialog.
@@ -84,8 +86,7 @@ class ListPreference<T> extends PreferenceItem<T> {
   ListPreference({
     required super.title,
     super.enabled = true,
-    // Supposed to be '%s' but I don't know how this will be used yet
-    super.subtitle,
+    super.subtitle = '%s',
     super.icon,
     super.onValueChanged = _defaultOnValueChanged,
     this.subtitleProvider = _defaultSubtitleProvider,
@@ -99,18 +100,11 @@ class ListPreference<T> extends PreferenceItem<T> {
   final Map<T, String> entries;
 
   static Future<bool> _defaultOnValueChanged(_) async => true;
-  static String? _defaultSubtitleProvider<T>(
-    ListPreference c,
-    T v,
-    Map<T, String> e,
-  ) =>
-      //TODO
-      //String? _defaultSubtitleProvider(T v, Map<T, String> e) => subtitle?.format(e[v]);
-      // consider using https://github.com/vi-k/format
-      c.subtitle;
+  static String? _defaultSubtitleProvider<T>(c, v, e) =>
+      c.subtitle != null ? sprintf(c.subtitle!, e[v]) : null;
 
   void internalSet(Object newValue) => pref.set(newValue as T);
-  Future<void> internalOnValueChanged(Object newValue) =>
+  Future<bool> internalOnValueChanged(Object newValue) =>
       onValueChanged(newValue as T);
 
   void internalSubtitleProvider(Object? value, Map<Object?, String> entries) =>
@@ -122,8 +116,7 @@ class BasicListPreference extends PreferenceItem<String> {
   BasicListPreference({
     required super.title,
     super.enabled = true,
-    // Supposed to be '%s' but I don't know how this will be used yet
-    super.subtitle,
+    super.subtitle = '%s',
     super.icon,
     super.onValueChanged = _defaultOnValueChanged,
     this.subtitleProvider = _defaultSubtitleProvider,
@@ -140,15 +133,8 @@ class BasicListPreference extends PreferenceItem<String> {
   final String value;
 
   static Future<bool> _defaultOnValueChanged(_) async => true;
-  static String? _defaultSubtitleProvider(
-    BasicListPreference c,
-    String v,
-    Map<String, String> e,
-  ) =>
-      //TODO
-      //String? _defaultSubtitleProvider(T v, Map<T, String> e) => subtitle?.format(e[v]);
-      // consider using https://github.com/vi-k/format
-      c.subtitle;
+  static String? _defaultSubtitleProvider(c, v, e) =>
+      c.subtitle != null ? sprintf(c.subtitle!, e[v]) : null;
 }
 
 /// A [PreferenceItem] that displays a list of entries as a dialog.
@@ -157,8 +143,7 @@ class MultiSelectListPreference extends PreferenceItem<Set<String>> {
   MultiSelectListPreference({
     required super.title,
     super.enabled = true,
-    // Supposed to be '%s' but I don't know how this will be used yet
-    super.subtitle,
+    super.subtitle = '%s',
     super.icon,
     super.onValueChanged = _defaultOnValueChanged,
     this.subtitleProvider = _defaultSubtitleProvider,
@@ -176,19 +161,11 @@ class MultiSelectListPreference extends PreferenceItem<Set<String>> {
   final Map<String, String> entries;
 
   static Future<bool> _defaultOnValueChanged(Set<String> _) async => true;
-  static String? _defaultSubtitleProvider(
-    MultiSelectListPreference c,
-    BuildContext context,
-    Set<String> v,
-    Map<String, String> e,
-  ) {
+  static String? _defaultSubtitleProvider(c, context, v, e) {
     final lang = AppLocalizations.of(context);
     final elements = v.map((it) => e[it]);
     final combined = elements.isNotEmpty ? elements.join() : lang.none;
-    //TODO
-    // consider using https://github.com/vi-k/format
-    // return c.subtitle?.format(combined);
-    return c.subtitle;
+    return c.subtitle != null ? sprintf(c.subtitle!, combined) : null;
   }
 }
 
@@ -197,8 +174,7 @@ class EditTextPreference extends PreferenceItem<String> {
   EditTextPreference({
     required super.title,
     super.enabled = true,
-    // Supposed to be '%s' but I don't know how this will be used yet
-    super.subtitle,
+    super.subtitle = '%s',
     super.icon,
     super.onValueChanged = _defaultOnValueChanged,
     required this.pref,
@@ -206,29 +182,28 @@ class EditTextPreference extends PreferenceItem<String> {
 
   final pref_data.Preference<String> pref;
 
-  static Future<bool> _defaultOnValueChanged(String _) async => true;
+  static Future<bool> _defaultOnValueChanged(_) async => true;
 }
 
-//TODO: Tracker interface
 /// A [PreferenceItem] for an individual tracker.
-//class TrackerPreference extends PreferenceItem<String> {
-//  TrackerPreference({
-//    required super.title,
-//    super.enabled = true,
-//    super.subtitle,
-//    super.icon,
-//    super.onValueChanged = _defaultOnValueChanged,
-//    required this.tracker,
-//    required this.login,
-//    required this.logout,
-//  });
+class TrackerPreference extends PreferenceItem<String> {
+  TrackerPreference({
+    required super.title,
+    super.enabled = true,
+    super.subtitle,
+    super.icon,
+    super.onValueChanged = _defaultOnValueChanged,
+    required this.tracker,
+    required this.login,
+    required this.logout,
+  });
 
-//  final Tracker tracker;
-//  final VoidCallback login;
-//  final VoidCallback logout;
+  final Tracker tracker;
+  final VoidCallback login;
+  final VoidCallback logout;
 
-//  static Future<bool> _defaultOnValueChanged(String _) async => true;
-//}
+  static Future<bool> _defaultOnValueChanged(_) async => true;
+}
 
 class InfoPreference extends PreferenceItem<String> {
   InfoPreference({
@@ -239,7 +214,7 @@ class InfoPreference extends PreferenceItem<String> {
     super.onValueChanged = _defaultOnValueChanged,
   });
 
-  static Future<bool> _defaultOnValueChanged(String _) async => true;
+  static Future<bool> _defaultOnValueChanged(_) async => true;
 }
 
 class CustomPreference extends PreferenceItem<String> {
@@ -254,7 +229,7 @@ class CustomPreference extends PreferenceItem<String> {
 
   final Widget? content;
 
-  static Future<bool> _defaultOnValueChanged(String _) async => true;
+  static Future<bool> _defaultOnValueChanged(_) async => true;
 }
 
 class PreferenceGroup extends Preference {
