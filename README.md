@@ -51,6 +51,8 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 ## Todo
 
 - [ ] License (esp. wrt. existing Tachiyomi license and permissions)
-- [ ] Feature parity with Tachiyomi
+- [ ] Better downloader
+  - Consider https://pub.dev/packages/flutter_downloader
+- [ ] Feature parity with Tachiyomi/Mihon
 - [ ] Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp`
 - [ ] XML to ARB for localization

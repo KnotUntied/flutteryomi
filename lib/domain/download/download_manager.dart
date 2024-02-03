@@ -43,25 +43,25 @@ class DownloadManager {
 
   /// Downloader whose only task is to download chapters.
   //late final _downloader = Downloader(context, provider, cache);
-  //late final _downloader = Downloader(
-  //  sourceManager: null,
-  //  downloadPreferences: null,
-  //  getCategories: null,
-  //);
+  late final _downloader = Downloader(
+    sourceManager: sourceManager,
+    downloadPreferences: downloadPreferences,
+    getCategories: getCategories,
+  );
 
-  //bool get isRunning => _downloader.isRunning;
-  bool get isRunning => false;
+  bool get isRunning => _downloader.isRunning;
 
   /// Queue to delay the deletion of a list of chapters until triggered.
   //late final _pendingDeleter = DownloadPendingDeleter(context);
 
-  //get queueState => _downloader.queueState;
+  late final queueState = _downloader.queueState;
 
   // For use by DownloadService only
-  //void downloaderStart() => _downloader.start();
-  //void downloaderStop(String? reason) => _downloader.stop(reason);
+  void downloaderStart() => _downloader.start();
+  void downloaderStop(String? reason) => _downloader.stop(reason);
 
   //get isDownloaderRunning => DownloadJob.isRunningStream(context);
+  late final isDownloaderRunning = const Stream<bool>.empty();
 
   /// Tells the downloader to begin downloads.
   void startDownloads() {
@@ -76,14 +76,14 @@ class DownloadManager {
 
   /// Tells the downloader to pause downloads.
   void pauseDownloads() {
-    //_downloader.pause();
-    //_downloader.stop();
+    _downloader.pause();
+    _downloader.stop();
   }
 
   /// Empties the download queue.
   void clearQueue() {
-    //_downloader.clearQueue();
-    //_downloader.stop();
+    _downloader.clearQueue();
+    _downloader.stop();
   }
 
   /// Returns the download from queue if the chapter with [chapterId] is queued for download
@@ -108,21 +108,21 @@ class DownloadManager {
 
   /// Reorders the download queue to [downloads].
   void reorderQueue(List<Download> downloads) {
-  //  _downloader.updateQueue(downloads);
+    _downloader.updateQueue(downloads);
   }
 
   /// Tells the downloader to enqueue the given list of [chapters] in [manga]. Can be set to [autoStart].
   void downloadChapters(Manga manga, List<Chapter> chapters, [bool autoStart = true]) {
-  //  _downloader.queueChapters(manga, chapters, autoStart);
+    _downloader.queueChapters(manga, chapters, autoStart);
   }
 
   /// Tells the downloader to enqueue the given list of [downloads] at the start of the queue.
   void addDownloadsToStartOfQueue(List<Download> downloads) {
     if (downloads.isEmpty) return;
-  //  //final queue = queueState.value;
-  //  //queue.addAll(0, downloads);
-  //  //reorderQueue(queue);
-  //  //if (!DownloadJob.isRunning(context)) startDownloads();
+    final queue = queueState.value;
+    queue.addAll(0, downloads);
+    //reorderQueue(queue);
+    //if (!DownloadJob.isRunning(context)) startDownloads();
   }
 
   /// Builds and returns the page list of a downloaded [chapter] from its [manga] and [source].

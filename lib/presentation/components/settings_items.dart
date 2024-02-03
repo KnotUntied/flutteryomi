@@ -125,7 +125,7 @@ class SliderItem extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 24.0);
+          const SizedBox(width: 24.0),
           Expanded(
             flex: 3,
             child: Slider.adaptive(

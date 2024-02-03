@@ -44,6 +44,8 @@ class Downloader {
   /// Queue where active downloads are kept.
   //final _queueState = MutableStateFlow<List<Download>>(emptyList());
   //final queueState = _queueState.asStateFlow();
+  final Stream<List<Download>> _queueState = const Stream.empty();
+  Stream<List<Download>> get queueState => _queueState;
 
   /// Notifier for the downloader state and progress.
   //final _notifier by lazy { DownloadNotifier(context) }
@@ -72,34 +74,33 @@ class Downloader {
   ///
   /// Returns true if the downloader is started, false otherwise.
   bool start() {
-    return false;
-    //if (isRunning || queueState.value.isEmpty) return false;
+    if (isRunning || queueState.value.isEmpty) return false;
 
-    //final pending = queueState.value.where((it) => it.status != DownloadState.downloaded);
-    //pending.forEach((it) {
-    //  if (it.status != DownloadState.queue) it.status = DownloadState.queue;
-    //});
+    final pending = queueState.value.where((it) => it.status != DownloadState.downloaded);
+    pending.forEach((it) {
+      if (it.status != DownloadState.queue) it.status = DownloadState.queue;
+    });
 
-    //isPaused = false;
+    isPaused = false;
 
-    //_launchDownloaderJob();
+    _launchDownloaderJob();
 
-    //return pending.isNotEmpty();
+    return pending.isNotEmpty;
   }
 
   /// Stops the downloader.
   void stop([String? reason]) {
     _cancelDownloaderJob();
-    //queueState.value
-    //    .where((it) => it.status == DownloadState.downloading)
-    //    .forEach((it) => it.status = DownloadState.error);
+    queueState.value
+        .where((it) => it.status == DownloadState.downloading)
+        .forEach((it) => it.status = DownloadState.error);
 
     //if (reason != null) {
     //  notifier.onWarning(reason);
     //  return;
     //}
 
-    //if (isPaused && queueState.value.isNotEmpty()) {
+    //if (isPaused && queueState.value.isNotEmpty) {
     //  notifier.onPaused();
     //} else {
     //  notifier.onComplete();
@@ -113,9 +114,9 @@ class Downloader {
   /// Pauses the downloader
   void pause() {
     _cancelDownloaderJob();
-    //queueState.value
-    //    .filter((it) => it.status == DownloadState.downloading)
-    //    .forEach((it) => it.status = DownloadState.queue);
+    queueState.value
+        .where((it) => it.status == DownloadState.downloading)
+        .forEach((it) => it.status = DownloadState.queue);
     isPaused = true;
   }
 
@@ -135,13 +136,13 @@ class Downloader {
     //  final activeDownloadsFlow = queueState.transformLatest { queue ->
     //    while (true) {
     //      final activeDownloads = queue.asSequence()
-    //          .filter { it.status.value <= DownloadState.downloading.value } // Ignore completed downloads, leave them in the queue
-    //          .groupBy { it.source }
+    //          .where((it) => it.status.value <= DownloadState.downloading.value) // Ignore completed downloads, leave them in the queue
+    //          .groupBy((it) => it.source)
     //          .toList().take(5) // Concurrently download from 5 different sources
-    //          .map { (_, downloads) -> downloads.first() }
+    //          .map((_, downloads) => downloads.first())
     //      emit(activeDownloads)
 
-    //      if (activeDownloads.isEmpty()) break
+    //      if (activeDownloads.isEmpty) break
     //      // Suspend until a download enters the ERROR state
     //      final activeDownloadsErroredFlow =
     //        combine(activeDownloads.map(Download::statusFlow)) { states ->
@@ -153,19 +154,17 @@ class Downloader {
 
     //  // Use supervisorScope to cancel child jobs when the downloader job is cancelled
     //  supervisorScope {
-    //    final downloadJobs = mutableMapOf<Download, Job>()
+    //    final downloadJobs = Map<Download, Job>();
 
     //    activeDownloadsFlow.collectLatest { activeDownloads ->
-    //      final downloadJobsToStop = downloadJobs.filter { it.key !in activeDownloads }
+    //      final downloadJobsToStop = downloadJobs.where((it) => !activeDownloads.contains(it.key));
     //      downloadJobsToStop.forEach { (download, job) ->
     //        job.cancel()
     //        downloadJobs.remove(download)
     //      }
 
-    //      final downloadsToStart = activeDownloads.filter { it !in downloadJobs }
-    //      downloadsToStart.forEach { download ->
-    //        downloadJobs[download] = launchDownloadJob(download)
-    //      }
+    //      final downloadsToStart = activeDownloads.where((it) => !downloadJobs.contains(it));
+    //      downloadsToStart.forEach((download) => downloadJobs[download] = launchDownloadJob(download));
     //    }
     //  }
     //}
@@ -206,13 +205,13 @@ class Downloader {
     //final wasEmpty = queueState.value.isEmpty;
     //final chaptersToQueue = chapters.asSequence()
     //    // Filter out those already downloaded.
-    //    .filter { provider.findChapterDir(it.name, it.scanlator, manga.title, source) == null }
+    //    .where((it) => provider.findChapterDir(it.name, it.scanlator, manga.title, source) == null)
     //    // Add chapters to queue from the start.
-    //    .sortedByDescending { it.sourceOrder }
+    //    .sortedByDescending((it) => it.sourceOrder)
     //    // Filter out those already enqueued.
-    //    .filter { chapter -> queueState.value.none { it.chapter.id == chapter.id } }
+    //    .where((chapter) => queueState.value.none((it) => it.chapter.id == chapter.id))
     //    // Create a download for each one.
-    //    .map { Download(source, manga, it) }
+    //    .map((it) => Download(source, manga, it))
     //    .toList();
 
     //if (chaptersToQueue.isNotEmpty) {
