@@ -6,6 +6,7 @@ enum AppTheme {
   greenApple,
   lavender,
   midnightDusk,
+  nord,
   strawberryDaiquiri,
   tako,
   tealturquoise,

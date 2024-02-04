@@ -3,7 +3,8 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:flutteryomi/presentation/more/settings/preference.dart';
-import 'package:flutteryomi/presentation/more/settings/preference_item.dart' as p;
+import 'package:flutteryomi/presentation/more/settings/preference_item.dart'
+    as p;
 
 /// Preference Screen composable which contains a list of [Preference] items
 /// to be displayed on the preference screen.
@@ -19,26 +20,40 @@ class PreferenceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: items.mapIndexed((i, preference) {
-        switch (preference) {
-          case PreferenceGroup():
-            if (preference.enabled) {
-              return <Widget>[
-                PreferenceGroupHeader(title: preference.title),
-                p.PreferenceItem(
+      children: items
+          .mapIndexed((i, preference) {
+            switch (preference) {
+              case PreferenceGroup():
+                if (preference.enabled) {
+                  return <Widget>[
+                    PreferenceGroupHeader(title: preference.title),
+                    p.PreferenceItem(
+                      item: preference,
+                      highlightKey: highlightKey,
+                    ),
+                    if (i < items.length - 1) const SizedBox(height: 12.0),
+                  ];
+                }
+              case PreferenceItem():
+                return p.PreferenceItem(
                   item: preference,
                   highlightKey: highlightKey,
-                ),
-                if (i < items.length - 1) const SizedBox(height: 12.0),
-              ];
+                );
             }
-          case PreferenceItem():
-            return p.PreferenceItem(
-              item: preference,
-              highlightKey: highlightKey,
-            );
-        }
-      }).flattened.toList(),
+          })
+          .flattened
+          .toList(),
     );
   }
+}
+
+extension _PreferenceListFindHighlightedIndex on List<Preference> {
+  int findHighlightedIndex(String highlightKey) =>
+      flatMap((it) => it is PreferenceGroup
+          ? [
+              null, // Header
+              ...it.preferenceItems.map((groupItem) => groupItem.title),
+              null, // Spacer
+            ]
+          : [it.title]).toList().indexWhere((it) => it == highlightKey);
 }
