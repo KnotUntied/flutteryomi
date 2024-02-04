@@ -75,11 +75,13 @@ class _TriStateListDialogState<T> extends State<TriStateListDialog<T>> {
                   },
                 ),
                 title: Text(widget.itemLabel(item)),
-                onTap: () => switch (state) {
-                  _State.unchecked => _State.inversed,
-                  _State.checked => _State.unchecked,
-                  _State.inversed => _State.checked,
-                },
+                onTap: () => setState(
+                  () => selected[index] = switch (state) {
+                    _State.unchecked => _State.inversed,
+                    _State.checked => _State.unchecked,
+                    _State.inversed => _State.checked,
+                  },
+                ),
               );
             },
           ),
