@@ -17,16 +17,16 @@ class GetMangaWithChapters {
     required this.chapterRepository,
   });
 
-  Future<Stream<Pair<Manga, List<Chapter>>>> subscribe(
+  Stream<Pair<Manga, List<Chapter>>> subscribe(
     int id, {
-    bool applyScanlationFilter = false,
-  }) async =>
+    bool applyScanlatorFilter = false,
+  }) =>
       StreamZip(
         [
           mangaRepository.getMangaByIdAsStream(id),
           chapterRepository.getChapterByMangaIdAsStream(
             id,
-            applyScanlatorFilter: applyScanlationFilter,
+            applyScanlatorFilter: applyScanlatorFilter,
           ),
         ],
       ).map(
@@ -41,11 +41,11 @@ class GetMangaWithChapters {
 
   Future<List<Chapter>> awaitChapters(
     int id, {
-    bool applyScanlationFilter = false,
+    bool applyScanlatorFilter = false,
   }) async =>
       await chapterRepository.getChapterByMangaId(
         id,
-        applyScanlatorFilter: applyScanlationFilter,
+        applyScanlatorFilter: applyScanlatorFilter,
       );
 }
 

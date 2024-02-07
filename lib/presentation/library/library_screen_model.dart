@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
+import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -61,10 +62,10 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       _getTrackingFilterStream(),
       //downloadCache.changes,
     ]).asyncMap((e) async {
-      final searchQuery = e[0] as String?;
-      final library = e[1] as LibraryMap;
-      final tracks = e[2] as Map<int, List<Track>>;
-      final loggedInTrackers = e[3] as Map<int, TriState>;
+      final searchQuery = e.first as String?;
+      final library = e.second as LibraryMap;
+      final tracks = e.third as Map<int, List<Track>>;
+      final loggedInTrackers = e.fourth as Map<int, TriState>;
       final newLibrary = library;
       final filteredLibrary =
           await applyFilters(newLibrary, tracks, loggedInTrackers);
@@ -86,9 +87,9 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       libraryPreferences.categoryNumberOfItems().changes(),
       libraryPreferences.showContinueReadingButton().changes(),
     ]).map((e) => LibraryScreenState(
-          showCategoryTabs: e[0],
-          showMangaCount: e[1],
-          showMangaContinueButton: e[2],
+          showCategoryTabs: e.first,
+          showMangaCount: e.second,
+          showMangaContinueButton: e.third,
         ));
 
     final stream3 = StreamZip([
@@ -96,8 +97,8 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       //getTrackingFilterStream(),
     ])
         .map((e) {
-          final prefs = e[0];
-          //final trackFilter = e[1];
+          final prefs = e.first;
+          //final trackFilter = e.second;
           return ([
             prefs.filterDownloaded,
             prefs.filterUnread,
@@ -112,13 +113,13 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         .map((it) => LibraryScreenState(hasActiveFilters: it));
 
     return StreamZip([stream1, stream2, stream3]).map((e) => LibraryScreenState(
-          library: e[0].library,
-          searchQuery: e[0].searchQuery,
+          library: e.first.library,
+          searchQuery: e.first.searchQuery,
           //selection?
-          showCategoryTabs: e[1].showCategoryTabs,
-          showMangaCount: e[1].showMangaCount,
-          showMangaContinueButton: e[1].showMangaContinueButton,
-          hasActiveFilters: e[2].hasActiveFilters,
+          showCategoryTabs: e.second.showCategoryTabs,
+          showMangaCount: e.second.showMangaCount,
+          showMangaContinueButton: e.second.showMangaContinueButton,
+          hasActiveFilters: e.third.hasActiveFilters,
         ));
   }
 
@@ -209,20 +210,21 @@ class LibraryScreenModel extends _$LibraryScreenModel {
 
   /// Applies library sorting to the given map of manga.
   LibraryMap _applySort(LibraryMap map, Map<int, List<Track>> trackMap) {
+    final trackerManager = ref.watch(trackerManagerProvider);
     int sortAlphabetically(LibraryItem i1, LibraryItem i2) =>
         i1.libraryManga.manga.title
             .toLowerCase()
             .compareTo(i2.libraryManga.manga.title.toLowerCase());
 
     const defaultTrackerScoreSortValue = -1.0;
-    //  final trackerMap = trackerManager.loggedInTrackers().associateBy((e) => e.id);
-    //  final trackerScores = trackMap.mapValues(
-    //    (entry) => entry.value.isEmpty
-    //        ? null
-    //        : entry.value
-    //            .mapNotNull((it) => trackerMap[it.trackerId]?.get10PointScore(it))
-    //            .average(),
-    //  );
+    final trackerMap = trackerManager.loggedInTrackers().associateBy((e) => e.id);
+    final trackerScores = trackMap.mapValues(
+      (entry) => entry.value.isEmpty
+          ? null
+          : entry.value
+              .mapNotNull((it) => trackerMap[it.trackerId]?.get10PointScore(it))
+              .average(),
+    );
 
     int sortFn(LibraryItem i1, LibraryItem i2) {
       final sort = map.keys
@@ -261,11 +263,9 @@ class LibraryScreenModel extends _$LibraryScreenModel {
           return i1.libraryManga.manga.dateAdded
               .compareTo(i2.libraryManga.manga.dateAdded);
         case TrackerMean():
-          // TODO: Tracker support
-          //final item1Score = trackerScores[i1.libraryManga.id] ?? defaultTrackerScoreSortValue;
-          //final item2Score = trackerScores[i2.libraryManga.id] ?? defaultTrackerScoreSortValue;
-          //return item1Score.compareTo(item2Score);
-          return 0;
+          final item1Score = trackerScores[i1.libraryManga.id] ?? defaultTrackerScoreSortValue;
+          final item2Score = trackerScores[i2.libraryManga.id] ?? defaultTrackerScoreSortValue;
+          return item1Score.compareTo(item2Score);
       }
     }
 
@@ -364,15 +364,17 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   ///
   /// Returns map of track id with the filter value
   Stream<Map<int, TriState>> _getTrackingFilterStream() {
-    //final loggedInTrackers = trackerManager.loggedInTrackers();
+    final libraryPreferences = ref.watch(libraryPreferencesProvider);
+    final trackerManager = ref.watch(trackerManagerProvider);
+    final loggedInTrackers = trackerManager.loggedInTrackers();
     //if (loggedInTrackers.isNotEmpty) {
     //  final prefStreams = loggedInTrackers
-    //      .map((it) => libraryPreferences.filterTracking(it.id.toInt()).changes());
-    //  return combine(*prefStreams) {
-    //      loggedInTrackers
-    //          .mapIndexed { index, tracker -> tracker.id to it[index] }
-    //          .toMap()
-    //  }
+    //      .map((it) => libraryPreferences.filterTracking(it.id).changes());
+      //return combine(*prefStreams) {
+      //    loggedInTrackers
+      //        .mapIndexed { index, tracker -> tracker.id to it[index] }
+      //        .toMap()
+      //}
     //} else {
     //  return flowOf(emptyMap());
     //}
@@ -670,7 +672,6 @@ class LibraryScreenModel extends _$LibraryScreenModel {
 class LibraryScreenState with _$LibraryScreenState {
   LibraryScreenState._();
   factory LibraryScreenState({
-    //@Default(true) bool isLoading,
     @Default({}) LibraryMap library,
     String? searchQuery,
     @Default([]) List<LibraryManga> selection,

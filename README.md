@@ -51,6 +51,7 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 ## Todo
 
 - [ ] License (esp. wrt. existing Tachiyomi license and permissions)
+- [ ] Replace `toList()` with [`cached`](https://pub.dev/documentation/dartx_nullsafety/latest/dartx/IterableX/cached.html), hmm?
 - [ ] Better downloader
   - Consider https://pub.dev/packages/flutter_downloader
 - [ ] Feature parity with Tachiyomi/Mihon

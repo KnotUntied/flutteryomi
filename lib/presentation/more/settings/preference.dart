@@ -25,7 +25,7 @@ sealed class PreferenceItem<T> extends Preference {
   });
 
   final String? subtitle;
-  final Icon? icon;
+  final IconData? icon;
   final Future<bool> Function(T newValue) onValueChanged;
 }
 
@@ -107,7 +107,7 @@ class ListPreference<T> extends PreferenceItem<T> {
   Future<bool> internalOnValueChanged(Object newValue) =>
       onValueChanged(newValue as T);
 
-  void internalSubtitleProvider(Object? value, Map<Object?, String> entries) =>
+  String? internalSubtitleProvider(Object? value, Map<Object?, String> entries) =>
       subtitleProvider(this, value as T, entries as Map<T, String>);
 }
 

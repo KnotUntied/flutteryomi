@@ -1,9 +1,11 @@
 import 'dart:collection';
 
+import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
 import 'package:equatable/equatable.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -32,20 +34,27 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   @override
   Stream<UpdatesScreenState> build() {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final getUpdates = ref.watch(getUpdatesProvider);
     final lastUpdated = DateTime.fromMillisecondsSinceEpoch(
       libraryPreferences.lastUpdatedTimestamp().get(),
     );
     final limit = DateTime.now().subtract(const Duration(days: 90));
-    final getUpdates = ref.watch(getUpdatesProvider);
-    // TODO: Combine with download streams
-    return getUpdates //
-        .subscribe(limit)
-        .distinct()
-        .map((it) => UpdatesScreenState(
-              items: const [],
-              lastUpdated: lastUpdated,
-              selectedChapterIds: HashSet(),
-            ));
+    return StreamZip([
+      getUpdates.subscribe(limit).distinct(),
+      //downloadCache.changes,
+      downloadManager.queueState,
+    ]).map((e) {
+      final updates = e[0] as List<UpdatesWithRelations>;
+      return UpdatesScreenState(
+        items: updates.toUpdateItems(
+          downloadManager,
+          state.valueOrNull?.selectedChapterIds ?? HashSet(),
+        ),
+        lastUpdated: lastUpdated,
+        selectedChapterIds: state.valueOrNull?.selectedChapterIds ?? HashSet(),
+      );
+    });
   }
 
   // TODO: Forward messages to toast/snackbar
@@ -62,19 +71,21 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
 
   /// Update [download] status of chapters.
   Future<void> _updateDownloadState(Download download) async {
-    //  mutableState.update { state ->
-    //    final newItems = state.items.mutate { list ->
-    //      val modifiedIndex = list.indexOfFirst { it.update.chapterId == download.chapter.id }
-    //      if (modifiedIndex < 0) return@mutate
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final list = previousState.items;
+      final modifiedIndex = list.indexWhere((it) => it.update.chapterId == download.chapter.id);
+      if (modifiedIndex < 0) return;
 
-    //      val item = list[modifiedIndex]
-    //      list[modifiedIndex] = item.copy(
-    //        downloadStateProvider = { download.status },
-    //        downloadProgressProvider = { download.progress },
-    //      )
-    //    }
-    //    state.copyWith(items: newItems);
-    //  }
+      final item = list[modifiedIndex];
+      list[modifiedIndex] = item.copyWith(
+        downloadStateProvider: () => download.status,
+        downloadProgressProvider: () => download.progress,
+      );
+      final newItems = list;
+      final newState = previousState.copyWith(items: newItems);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
   Future<void> downloadChapters(
@@ -101,30 +112,30 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     await toggleAllSelection(false);
   }
 
-  //TODO
   void _startDownloadingNow(int chapterId) {
     final downloadManager = ref.watch(downloadManagerProvider);
     downloadManager.startDownloadNow(chapterId);
   }
 
-  //TODO
   Future<void> _cancelDownload(int chapterId) async {
     final downloadManager = ref.watch(downloadManagerProvider);
     final activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId);
     if (activeDownload == null) return;
-    //downloadManager.cancelQueuedDownloads([activeDownload]);
-    //updateDownloadState(activeDownload.apply { status = DownloadState.notDownloaded });
+    downloadManager.cancelQueuedDownloads([activeDownload]);
+    //TODO: Find intuitive way to define status (supposed to be a stream?)
+    //_updateDownloadState(activeDownload.apply { status = DownloadState.notDownloaded });
   }
 
-  //TODO
   /// Mark the selected [updates] list as [read]/unread.
   Future<void> markUpdatesRead(List<UpdatesItem> updates, bool read) async {
+    final getChapter = ref.watch(getChapterProvider);
     final setReadStatus = ref.watch(setReadStatusProvider);
-    //await setReadStatus.await_(
-    //  read: read,
-    //  chapters: updates
-    //      .mapNotNull((it) async => await getChapter.await_(it.update.chapterId))
-    //);
+    final chapters = <Chapter>[];
+    for (final it in updates) {
+      final chapter = await getChapter.await_(it.update.chapterId);
+      if (chapter != null) chapters.add(chapter);
+    }
+    await setReadStatus.await_(read: read, chapters: chapters);
     await toggleAllSelection(false);
   }
 
@@ -132,7 +143,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   Future<void> bookmarkUpdates(List<UpdatesItem> updates, bool bookmark) async {
     final updateChapter = ref.watch(updateChapterProvider);
     final chapterUpdates = updates
-        .filterNot((it) => it.update.bookmark == bookmark)
+        .whereNot((it) => it.update.bookmark == bookmark)
         .map(
           (it) => ChapterUpdate(
             id: drift.Value(it.update.chapterId),
@@ -157,12 +168,14 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
       final manga = await getManga.await_(mangaId);
       if (manga == null) continue;
       // Don't download if source isn't available
-      final source = await sourceManager.get(manga.source);
+      final source = sourceManager.get(manga.source);
       if (source == null) continue;
-      //final chapters = updates
-      //    .mapNotNull((it) async => await getChapter.await_(it.update.chapterId)).toList();
-      //TODO
-      //downloadManager.downloadChapters(manga, chapters);
+      final chapters = <Chapter>[];
+      for (final it in updates) {
+        final chapter = await getChapter.await_(it.update.chapterId);
+        if (chapter != null) chapters.add(chapter);
+      }
+      downloadManager.downloadChapters(manga, chapters);
     }
   }
 
@@ -180,12 +193,15 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
       final updates = entry.value;
       final manga = await getManga.await_(mangaId);
       if (manga != null) {
-        final source = await sourceManager.get(manga.source);
-        //if (source != null) {
-        //  final chapters = updates.mapNotNull((it) async => await getChapter.await_(it.update.chapterId));
-        //  //TODO
-        //  await downloadManager.deleteChapters(chapters, manga, source);
-        //}
+        final source = sourceManager.get(manga.source);
+        if (source != null) {
+          final chapters = <Chapter>[];
+          for (final it in updates) {
+            final chapter = await getChapter.await_(it.update.chapterId);
+            if (chapter != null) chapters.add(chapter);
+          }
+          downloadManager.deleteChapters(chapters, manga, source);
+        }
       }
     }
     await toggleAllSelection(false);

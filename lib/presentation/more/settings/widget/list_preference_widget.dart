@@ -61,10 +61,10 @@ class _ListPreferenceDialog<T> extends StatelessWidget {
     return AlertDialog.adaptive(
       title: Text(title),
       content: ListView.builder(
-        itemCount: entries.length,
+        itemCount: entriesList.length,
         itemBuilder: (context, index) {
           final current = entriesList[index];
-          return RadioListTile(
+          return RadioListTile.adaptive(
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(current.value),
             value: current.key,

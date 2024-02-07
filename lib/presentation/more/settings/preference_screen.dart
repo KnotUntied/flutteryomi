@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutteryomi/presentation/more/settings/preference.dart';
 import 'package:flutteryomi/presentation/more/settings/preference_item.dart'
     as p;
+import 'package:flutteryomi/presentation/more/settings/widget/preference_group_header.dart';
 
 /// Preference Screen composable which contains a list of [Preference] items
 /// to be displayed on the preference screen.
@@ -25,20 +26,26 @@ class PreferenceScreen extends StatelessWidget {
             switch (preference) {
               case PreferenceGroup():
                 if (preference.enabled) {
-                  return <Widget>[
+                  return [
                     PreferenceGroupHeader(title: preference.title),
-                    p.PreferenceItem(
-                      item: preference,
-                      highlightKey: highlightKey,
-                    ),
+                    ...preference.preferenceItems.map((item) {
+                      return p.PreferenceItem(
+                        item: item,
+                        //highlightKey: highlightKey,
+                      );
+                    }),
                     if (i < items.length - 1) const SizedBox(height: 12.0),
                   ];
+                } else {
+                  return const <Widget>[];
                 }
               case PreferenceItem():
-                return p.PreferenceItem(
-                  item: preference,
-                  highlightKey: highlightKey,
-                );
+                return <Widget>[
+                  p.PreferenceItem(
+                    item: preference,
+                    //highlightKey: highlightKey,
+                  ),
+                ];
             }
           })
           .flattened

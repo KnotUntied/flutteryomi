@@ -1,13 +1,17 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sprintf/sprintf.dart';
 
-import 'package:flutteryomi/data/track/tracker.dart';
 import 'package:flutteryomi/domain/track/service/track_preferences.dart';
+import 'package:flutteryomi/presentation/components/settings_items.dart';
 import 'package:flutteryomi/presentation/more/settings/preference.dart' as d;
+import 'package:flutteryomi/presentation/more/settings/widget/edit_text_preference_widget.dart';
 import 'package:flutteryomi/presentation/more/settings/widget/info_widget.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/list_preference_widget.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/multi_select_list_preference_widget.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/switch_preference_widget.dart';
 import 'package:flutteryomi/presentation/more/settings/widget/text_preference_widget.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/tracking_preference_widget.dart';
 
 const localPreferenceHighlighted = false;
 const localPreferenceMinHeight = 56.0;
@@ -60,14 +64,15 @@ class PreferenceItem extends ConsumerWidget {
         );
       case d.SliderPreference():
         final dItem = item as d.SliderPreference;
-        return SliderPreferenceWidget(
+        // Mihon TODO: use different widget?
+        return SliderItem(
           label: dItem.title,
           min: dItem.min,
           max: dItem.max,
           value: dItem.value,
           valueText: dItem.subtitle.isNullOrEmpty
               ? dItem.value.toString()
-              : dItem.subtitle,
+              : dItem.subtitle!,
           onChange: (it) => item.onValueChanged(it),
         );
       case d.ListPreference():
@@ -139,11 +144,8 @@ class PreferenceItem extends ConsumerWidget {
           onClick: dItem.tracker.isLoggedIn ? dItem.logout : dItem.login,
         );
       case d.InfoPreference():
-        // TODO: Handle this case.
-        final dItem = item as d.InfoPreference;
         return InfoWidget(text: item.title);
       case d.CustomPreference():
-        // TODO: Handle this case.
         final dItem = item as d.CustomPreference;
         return dItem.content ?? const SizedBox.shrink();
     }
