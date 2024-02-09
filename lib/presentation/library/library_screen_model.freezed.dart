@@ -16,9 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LibraryScreenState {
-//@Default(true) bool isLoading,
   Map<Category, List<LibraryItem>> get library =>
-      throw _privateConstructorUsedError; //@Default(true) bool isLoading,
+      throw _privateConstructorUsedError;
   set library(Map<Category, List<LibraryItem>> value) =>
       throw _privateConstructorUsedError;
   String? get searchQuery => throw _privateConstructorUsedError;
@@ -192,7 +191,6 @@ class _$LibraryScreenStateImpl extends _LibraryScreenState {
       this.showMangaContinueButton = false})
       : super._();
 
-//@Default(true) bool isLoading,
   @override
   @JsonKey()
   Map<Category, List<LibraryItem>> library;
@@ -238,8 +236,8 @@ abstract class _LibraryScreenState extends LibraryScreenState {
       bool showMangaContinueButton}) = _$LibraryScreenStateImpl;
   _LibraryScreenState._() : super._();
 
-  @override //@Default(true) bool isLoading,
-  Map<Category, List<LibraryItem>> get library; //@Default(true) bool isLoading,
+  @override
+  Map<Category, List<LibraryItem>> get library;
   set library(Map<Category, List<LibraryItem>> value);
   @override
   String? get searchQuery;

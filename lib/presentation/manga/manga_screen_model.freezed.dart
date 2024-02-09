@@ -293,3 +293,332 @@ abstract class _MangaScreenState extends MangaScreenState {
   _$$MangaScreenStateImplCopyWith<_$MangaScreenStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$ChapterListMissingCount {
+  String get id => throw _privateConstructorUsedError;
+  int get count => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ChapterListMissingCountCopyWith<ChapterListMissingCount> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChapterListMissingCountCopyWith<$Res> {
+  factory $ChapterListMissingCountCopyWith(ChapterListMissingCount value,
+          $Res Function(ChapterListMissingCount) then) =
+      _$ChapterListMissingCountCopyWithImpl<$Res, ChapterListMissingCount>;
+  @useResult
+  $Res call({String id, int count});
+}
+
+/// @nodoc
+class _$ChapterListMissingCountCopyWithImpl<$Res,
+        $Val extends ChapterListMissingCount>
+    implements $ChapterListMissingCountCopyWith<$Res> {
+  _$ChapterListMissingCountCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? count = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      count: null == count
+          ? _value.count
+          : count // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ChapterListMissingCountImplCopyWith<$Res>
+    implements $ChapterListMissingCountCopyWith<$Res> {
+  factory _$$ChapterListMissingCountImplCopyWith(
+          _$ChapterListMissingCountImpl value,
+          $Res Function(_$ChapterListMissingCountImpl) then) =
+      __$$ChapterListMissingCountImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, int count});
+}
+
+/// @nodoc
+class __$$ChapterListMissingCountImplCopyWithImpl<$Res>
+    extends _$ChapterListMissingCountCopyWithImpl<$Res,
+        _$ChapterListMissingCountImpl>
+    implements _$$ChapterListMissingCountImplCopyWith<$Res> {
+  __$$ChapterListMissingCountImplCopyWithImpl(
+      _$ChapterListMissingCountImpl _value,
+      $Res Function(_$ChapterListMissingCountImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? count = null,
+  }) {
+    return _then(_$ChapterListMissingCountImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      count: null == count
+          ? _value.count
+          : count // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChapterListMissingCountImpl implements _ChapterListMissingCount {
+  const _$ChapterListMissingCountImpl({required this.id, required this.count});
+
+  @override
+  final String id;
+  @override
+  final int count;
+
+  @override
+  String toString() {
+    return 'ChapterListMissingCount(id: $id, count: $count)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChapterListMissingCountImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.count, count) || other.count == count));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, count);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChapterListMissingCountImplCopyWith<_$ChapterListMissingCountImpl>
+      get copyWith => __$$ChapterListMissingCountImplCopyWithImpl<
+          _$ChapterListMissingCountImpl>(this, _$identity);
+}
+
+abstract class _ChapterListMissingCount implements ChapterListMissingCount {
+  const factory _ChapterListMissingCount(
+      {required final String id,
+      required final int count}) = _$ChapterListMissingCountImpl;
+
+  @override
+  String get id;
+  @override
+  int get count;
+  @override
+  @JsonKey(ignore: true)
+  _$$ChapterListMissingCountImplCopyWith<_$ChapterListMissingCountImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$ChapterListItem {
+  Chapter get chapter => throw _privateConstructorUsedError;
+  DownloadState get downloadState => throw _privateConstructorUsedError;
+  int get downloadProgress => throw _privateConstructorUsedError;
+  bool get selected => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ChapterListItemCopyWith<ChapterListItem> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChapterListItemCopyWith<$Res> {
+  factory $ChapterListItemCopyWith(
+          ChapterListItem value, $Res Function(ChapterListItem) then) =
+      _$ChapterListItemCopyWithImpl<$Res, ChapterListItem>;
+  @useResult
+  $Res call(
+      {Chapter chapter,
+      DownloadState downloadState,
+      int downloadProgress,
+      bool selected});
+}
+
+/// @nodoc
+class _$ChapterListItemCopyWithImpl<$Res, $Val extends ChapterListItem>
+    implements $ChapterListItemCopyWith<$Res> {
+  _$ChapterListItemCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? chapter = null,
+    Object? downloadState = null,
+    Object? downloadProgress = null,
+    Object? selected = null,
+  }) {
+    return _then(_value.copyWith(
+      chapter: null == chapter
+          ? _value.chapter
+          : chapter // ignore: cast_nullable_to_non_nullable
+              as Chapter,
+      downloadState: null == downloadState
+          ? _value.downloadState
+          : downloadState // ignore: cast_nullable_to_non_nullable
+              as DownloadState,
+      downloadProgress: null == downloadProgress
+          ? _value.downloadProgress
+          : downloadProgress // ignore: cast_nullable_to_non_nullable
+              as int,
+      selected: null == selected
+          ? _value.selected
+          : selected // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ChapterListItemImplCopyWith<$Res>
+    implements $ChapterListItemCopyWith<$Res> {
+  factory _$$ChapterListItemImplCopyWith(_$ChapterListItemImpl value,
+          $Res Function(_$ChapterListItemImpl) then) =
+      __$$ChapterListItemImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Chapter chapter,
+      DownloadState downloadState,
+      int downloadProgress,
+      bool selected});
+}
+
+/// @nodoc
+class __$$ChapterListItemImplCopyWithImpl<$Res>
+    extends _$ChapterListItemCopyWithImpl<$Res, _$ChapterListItemImpl>
+    implements _$$ChapterListItemImplCopyWith<$Res> {
+  __$$ChapterListItemImplCopyWithImpl(
+      _$ChapterListItemImpl _value, $Res Function(_$ChapterListItemImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? chapter = null,
+    Object? downloadState = null,
+    Object? downloadProgress = null,
+    Object? selected = null,
+  }) {
+    return _then(_$ChapterListItemImpl(
+      chapter: null == chapter
+          ? _value.chapter
+          : chapter // ignore: cast_nullable_to_non_nullable
+              as Chapter,
+      downloadState: null == downloadState
+          ? _value.downloadState
+          : downloadState // ignore: cast_nullable_to_non_nullable
+              as DownloadState,
+      downloadProgress: null == downloadProgress
+          ? _value.downloadProgress
+          : downloadProgress // ignore: cast_nullable_to_non_nullable
+              as int,
+      selected: null == selected
+          ? _value.selected
+          : selected // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChapterListItemImpl extends _ChapterListItem {
+  _$ChapterListItemImpl(
+      {required this.chapter,
+      required this.downloadState,
+      required this.downloadProgress,
+      this.selected = false})
+      : super._();
+
+  @override
+  final Chapter chapter;
+  @override
+  final DownloadState downloadState;
+  @override
+  final int downloadProgress;
+  @override
+  @JsonKey()
+  final bool selected;
+
+  @override
+  String toString() {
+    return 'ChapterListItem(chapter: $chapter, downloadState: $downloadState, downloadProgress: $downloadProgress, selected: $selected)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChapterListItemImpl &&
+            (identical(other.chapter, chapter) || other.chapter == chapter) &&
+            (identical(other.downloadState, downloadState) ||
+                other.downloadState == downloadState) &&
+            (identical(other.downloadProgress, downloadProgress) ||
+                other.downloadProgress == downloadProgress) &&
+            (identical(other.selected, selected) ||
+                other.selected == selected));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, chapter, downloadState, downloadProgress, selected);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChapterListItemImplCopyWith<_$ChapterListItemImpl> get copyWith =>
+      __$$ChapterListItemImplCopyWithImpl<_$ChapterListItemImpl>(
+          this, _$identity);
+}
+
+abstract class _ChapterListItem extends ChapterListItem {
+  factory _ChapterListItem(
+      {required final Chapter chapter,
+      required final DownloadState downloadState,
+      required final int downloadProgress,
+      final bool selected}) = _$ChapterListItemImpl;
+  _ChapterListItem._() : super._();
+
+  @override
+  Chapter get chapter;
+  @override
+  DownloadState get downloadState;
+  @override
+  int get downloadProgress;
+  @override
+  bool get selected;
+  @override
+  @JsonKey(ignore: true)
+  _$$ChapterListItemImplCopyWith<_$ChapterListItemImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

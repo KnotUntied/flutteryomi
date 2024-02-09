@@ -7,7 +7,7 @@ part of 'library_screen_model.dart';
 // **************************************************************************
 
 String _$libraryScreenModelHash() =>
-    r'aa3d205ef241ccfa04053facfa2328ea67b56447';
+    r'bbf792cd0ac5649b74f193a21f0fd8d7dd63b920';
 
 /// See also [LibraryScreenModel].
 @ProviderFor(LibraryScreenModel)

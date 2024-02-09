@@ -1,10 +1,10 @@
 # Flutteryomi
 
-*I can't believe it's not [Tachiyomi](https://tachiyomi.org/)!*
+*I can't believe it's not [Tachiyomi/Mihon](https://mihon.app/)!*
 
 *Well, close enough.*
 
-A personal project for learning Flutter. An attempt to port the now-defunct Tachiyomi's UI and functionality to Flutter and its target platforms.
+A personal project for learning Flutter. An attempt to port the now-defunct Tachiyomi's UI and (some) functionality to Flutter and its target platforms.
 
 ## Running Locally
 
@@ -14,7 +14,7 @@ flutter run --verbose --fast-start
 
 ## Localization
 
-See [Tachiyomi's English localization file](https://github.com/tachiyomiorg/tachiyomi/blob/master/i18n/src/main/res/values/strings.xml) for naming and arrangement conventions when adding or editing `.arb` files. The `app_name` key-value pair is not included.
+See [Mihon's English localization file](https://github.com/mihonapp/mihon/blob/main/i18n/src/commonMain/resources/MR/base/strings.xml) for naming and arrangement conventions when adding or editing `.arb` files. The `app_name` key-value pair is not included.
 
 Update localizations by adding or editing the `.arb` files in `lib/l10n`. Then run:
 

@@ -1,7 +1,9 @@
+import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as drift;
 import 'package:flutteryomi/data/source/update_strategy.dart';
+import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
 import 'package:flutteryomi/domain/reader/setting/reading_mode.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
@@ -129,6 +131,75 @@ extension MangaUtils on Manga {
   //TODO
   //bool hasCustomCover(CoverCache coverCache) =>
   //    coverCache.getCustomCoverFile(id).exists();
+
+  /// Call before updating [thumbnailUrl] to ensure old cover can be cleared from cache
+  //Manga prepUpdateCover(CoverCache coverCache, SManga remoteManga, bool refreshSameUrl) {
+  //  final newUrl = remoteManga.thumbnailUrl;
+  //  // Never refresh covers if the new url is null, as the current url has possibly become invalid
+  //  // Never refresh covers if the url is empty to avoid "losing" existing covers
+  //  if (newUrl.isNullOrEmpty) return this;
+
+  //  if (!refreshSameUrl && thumbnailUrl == newUrl) return this;
+
+  //  if (isLocal()) {
+  //    return copyWith(coverLastModified: DateTime.now());
+  //  } else if (hasCustomCover(coverCache)) {
+  //    coverCache.deleteFromCache(this, false);
+  //    return this;
+  //  } else {
+  //    coverCache.deleteFromCache(this, false);
+  //    return copyWith(coverLastModified: DateTime.now());
+  //  }
+  //}
+
+  //Manga removeCovers([CoverCache coverCache]) {
+  Manga removeCovers([int coverCache = 0]) {
+    return this;
+    //if (isLocal()) return this;
+    //return coverCache.deleteFromCache(this, true) > 0
+    //    ? copyWith(coverLastModified: DateTime.now())
+    //    : this;
+  }
+
+  bool shouldDownloadNewChapters(List<int> dbCategories, DownloadPreferences preferences) {
+    if (!favorite) return false;
+
+    final categories = dbCategories.isNotEmpty ? dbCategories : const [0];
+
+    // Boolean to determine if user wants to automatically download new chapters.
+    final downloadNewChapters = preferences.downloadNewChapters().get();
+    if (!downloadNewChapters) return false;
+
+    final includedCategories = preferences.downloadNewChapterCategories().get().map((it) => it.toInt());
+    final excludedCategories = preferences.downloadNewChapterCategoriesExclude().get().map((it) => it.toInt());
+
+    // Default: Download from all categories
+    if (includedCategories.isEmpty && excludedCategories.isEmpty) return true;
+
+    // In excluded category
+    if (categories.any((it) => excludedCategories.contains(it))) return false;
+
+    // Included category not selected
+    if (includedCategories.isEmpty) return true;
+
+    // In included category
+    return categories.any((it) => includedCategories.contains(it));
+  }
+
+  //Future<void> editCover(
+  //  LocalCoverManager coverManager,
+  //  InputStream stream,
+  //  UpdateManga updateManga,
+  //  CoverCache coverCache,
+  //) {
+  //  if (isLocal()) {
+  //    coverManager.update(toSManga(), stream);
+  //    updateManga.awaitUpdateCoverLastModified(id);
+  //  } else if (favorite) {
+  //    coverCache.setCustomCoverToCache(this, stream);
+  //    updateManga.awaitUpdateCoverLastModified(id);
+  //  }
+  //}
 }
 
 extension SMangaToDomainManga on SManga {

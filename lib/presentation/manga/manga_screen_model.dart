@@ -1,19 +1,25 @@
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
-import 'package:dartx/dartx.dart' hide IterableWhereNot, IterableWhereNotNull;
+import 'package:dartx/dartx.dart' hide IterableFirstOrNull, IterableWhereNot, IterableWhereNotNull;
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/interactor/set_manga_categories.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_available_scanlators.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_manga_default_chapter_flags.dart';
+import 'package:flutteryomi/domain/chapter/interactor/sync_chapters_with_source.dart';
+import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
+import 'package:flutteryomi/domain/manga/interactor/get_duplicate_library_manga.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga_with_chapters.dart';
 import 'package:flutteryomi/domain/manga/interactor/set_manga_chapter_flags.dart';
 import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
+import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+import 'package:flutteryomi/domain/track/interactor/add_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -128,127 +134,149 @@ class MangaScreenModel extends _$MangaScreenModel {
   late final List<int> selectedPositions = [-1, -1];
   //private val selectedChapterIds: HashSet<int> = HashSet();
 
-  void fetchAllFromSource([bool manualFetch = true]) {
-  //    screenModelScope.launch {
-  //        updateSuccessState { it.copy(isRefreshingData = true) }
-  //        val fetchFromSourceTasks = listOf(
-  //            async { _fetchMangaFromSource(manualFetch) },
-  //            async { fetchChaptersFromSource(manualFetch) },
-  //        )
-  //        fetchFromSourceTasks.awaitAll()
-  //        updateSuccessState { it.copy(isRefreshingData = false) }
-  //    }
+  void fetchAllFromSource([bool manualFetch = true]) async {
+    //updateSuccessState { it.copy(isRefreshingData = true) }
+    //final fetchFromSourceTasks = [
+    //    async { _fetchMangaFromSource(manualFetch) },
+    //    async { fetchChaptersFromSource(manualFetch) },
+    //]
+    //await fetchFromSourceTasks.awaitAll();
+    //updateSuccessState { it.copy(isRefreshingData = false) }
   }
 
   // Manga info - start
 
   /// Fetch manga information from source.
   Future<void> _fetchMangaFromSource([bool manualFetch = false]) async {
-  //    val state = successState ?: return
-  //    try {
-  //        withIOContext {
-  //            val networkManga = state.source.getMangaDetails(state.manga.toSManga())
-  //            updateManga.awaitUpdateFromSource(state.manga, networkManga, manualFetch)
-  //        }
-  //    } catch (e: Throwable) {
-  //        // Ignore early hints "errors" that aren't handled by OkHttp
-  //        if (e is HttpException && e.code == 103) return
-
-  //        logcat(LogPriority.ERROR, e)
-  //        screenModelScope.launch {
-  //            snackbarHostState.showSnackbar(message = with(context) { e.formattedMessage })
-  //        }
-  //    }
+    final logger = ref.watch(loggerProvider);
+    final updateManga = ref.watch(updateMangaProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      try {
+        //Deprecated?
+        //final networkManga = previousState.source.getMangaDetails(previousState.manga.toSManga());
+        //updateManga.awaitUpdateFromSource(previousState.manga, networkManga, manualFetch);
+      } catch (e) {
+        // Ignore early hints "errors" that aren't handled by OkHttp or any future client
+        //if (e is HttpException && e.code == 103) return
+        logger.e(e);
+        //snackbarHostState.showSnackbar(message = with(context) { e.formattedMessage })
+      }
+    }
   }
 
   void toggleFavorite() {
     toggleFavoriteWithCallback(
       onRemoved: () {
         if (!_hasDownloads()) return;
-  //      final result = snackbarHostState.showSnackbar(
-  //        message: lang.delete_downloads_for_manga,
-  //        actionLabel: lang.action_delete,
-  //        withDismissAction: true,
-  //      )
-  //      if (result == SnackbarResult.ActionPerformed) {
-  //        deleteDownloads();
-  //      }
+        //final result = snackbarHostState.showSnackbar(
+        //  message: lang.delete_downloads_for_manga,
+        //  actionLabel: lang.action_delete,
+        //  withDismissAction: true,
+        //)
+        //if (result == SnackbarResult.ActionPerformed) {
+        //  deleteDownloads();
+        //}
       },
     );
   }
 
   /// Update favorite status of manga, (removes / adds) manga (to / from) library.
   void toggleFavoriteWithCallback({required VoidCallback onRemoved, bool checkDuplicate = true}) async {
-  //  final state = successState ?? return;
-  //  final manga = state.manga;
+    final addTracks = ref.watch(addTracksProvider);
+    final getDuplicateLibraryManga = ref.watch(getDuplicateLibraryMangaProvider);
+    final libraryPreferences = ref.watch(libraryPreferencesProvider);
+    final updateManga = ref.watch(updateMangaProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
 
-  //  if (_isFavorited) {
-  //    // Remove from library
-  //    if (await updateManga.awaitUpdateFavorite(manga.id, false)) {
-  //      // Remove covers and update last modified in db
-  //      if (manga.removeCovers() != manga) {
-  //        await updateManga.awaitUpdateCoverLastModified(manga.id);
-  //      }
-  //      onRemoved();
-  //    }
-  //  } else {
-  //    // Add to library
-  //    // First, check if duplicate exists if callback is provided
-  //    if (checkDuplicate) {
-  //      final duplicate = await getDuplicateLibraryManga.await_(manga).getOrNull(0);
+      if (_isFavorited) {
+        // Remove from library
+        if (await updateManga.awaitUpdateFavorite(manga.id, false)) {
+          // Remove covers and update last modified in db
+          if (manga.removeCovers() != manga) {
+            await updateManga.awaitUpdateCoverLastModified(manga.id);
+          }
+          onRemoved();
+        }
+      } else {
+        // Add to library
+        // First, check if duplicate exists if callback is provided
+        if (checkDuplicate) {
+          final duplicates = await getDuplicateLibraryManga.await_(manga);
+          final duplicate = duplicates.firstOrNull;
+          //TODO:
+          //launch duplicatedialog
+          //updateSuccessState { it.copy(dialog = Dialog.DuplicateManga(manga, duplicate)) }
+          return;
+        }
 
-  //      if (duplicate != null) {
-  //        updateSuccessState { it.copy(dialog = Dialog.DuplicateManga(manga, duplicate)) }
-  //        return;
-  //      }
-  //    }
+        // Now check if user previously set categories, when available
+        final categories = await getCategories();
+        final defaultCategoryId = libraryPreferences.defaultCategory().get().toInt();
+        final defaultCategory = categories.firstWhere((it) => it.id == defaultCategoryId);
+        // Default category set
+        // Always true, I know
+        if (defaultCategory != null) {
+          final result = await updateManga.awaitUpdateFavorite(manga.id, true);
+          if (!result) return;
+          _moveMangaToCategoryWithCategory(defaultCategory);
+        // Automatic 'Default' or no categories
+        } else if (defaultCategoryId == 0 || categories.isEmpty) {
+          final result = await updateManga.awaitUpdateFavorite(manga.id, true);
+          if (!result) return;
+          _moveMangaToCategoryWithCategory(null);
+        }
 
-  //    // Now check if user previously set categories, when available
-  //    final categories = getCategories();
-  //    final defaultCategoryId = libraryPreferences.defaultCategory().get().toInt();
-  //    final defaultCategory = categories.firstWhere((it) => it.id == defaultCategoryId);
-  //    when {
-  //        // Default category set
-  //        defaultCategory != null -> {
-  //            final result = updateManga.awaitUpdateFavorite(manga.id, true)
-  //            if (!result) return@launchIO
-  //            moveMangaToCategory(defaultCategory)
-  //        }
-
-  //        // Automatic 'Default' or no categories
-  //        defaultCategoryId == 0 || categories.isEmpty() -> {
-  //            final result = updateManga.awaitUpdateFavorite(manga.id, true)
-  //            if (!result) return@launchIO
-  //            moveMangaToCategory(null)
-  //        }
-  //    }
-
-  //    // Finally match with enhanced tracking when available
-  //    addTracks.bindEnhancedTrackers(manga, state.source);
-  //  }
+        // Finally match with enhanced tracking when available
+        addTracks.bindEnhancedTrackers(manga, previousState.source);
+      }
+    }
   }
 
-  void setFetchInterval(Manga manga, int interval) {
-  //  if (updateManga.awaitUpdateFetchInterval(
-  //    // Custom intervals are negative
-  //    manga.copyWith(fetchInterval: -interval),
-  //  )) {
-  //      final updatedManga = mangaRepository.getMangaById(manga.id);
-  //      updateSuccessState { it.copyWith(manga: updatedManga) }
-  //  }
+  void setFetchInterval(Manga manga, int interval) async {
+    final fetchInterval = ref.watch(fetchIntervalProvider);
+    final mangaRepository = ref.watch(mangaRepositoryProvider);
+    final updateManga = ref.watch(updateMangaProvider);
+    final now = DateTime.now();
+    if (await updateManga.awaitUpdateFetchInterval(
+      // Custom intervals are negative
+      manga.copyWith(fetchInterval: -interval),
+      now,
+      fetchInterval.getWindow(now),
+    )) {
+      // hmm?
+      final updatedManga = await mangaRepository.getMangaById(manga.id);
+      final previousState = state.valueOrNull;
+      if (previousState != null) {
+        final newState = previousState.copyWith(manga: updatedManga);
+        state = await AsyncValue.guard(() async => newState);
+      }
+    }
   }
 
   /// Returns true if the manga has any downloads.
   bool _hasDownloads() {
-  //    final manga = successState?.manga ?? return false;
-  //    return downloadManager.getDownloadCount(manga) > 0
-    return false;
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final previousState = state.valueOrNull;
+    if (previousState == null) {
+      return false;
+    } else {
+      final manga = previousState.manga;
+      return downloadManager.getDownloadCountForManga(manga) > 0;
+    }
   }
 
   /// Deletes all the downloads for the manga.
   void _deleteDownloads() {
-  //    final state = successState ?? return;
-  //    downloadManager.deleteManga(state.manga, state.source)
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final previousState = state.valueOrNull;
+    if (previousState == null) {
+      return;
+    } else {
+      downloadManager.deleteManga(previousState.manga, previousState.source);
+    }
   }
 
   /// Get user categories, not including the default category.
@@ -293,74 +321,77 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   // Chapters list - start
 
+  //TODO
   void _observeDownloads() {
-  //    screenModelScope.launchIO {
-  //        downloadManager.statusFlow()
-  //            .where((it) => it.manga.id == successState?.manga?.id)
-  //            .catch { error -> logcat(LogPriority.ERROR, error) }
-  //            .collect {
-  //                withUIContext {
-  //                    updateDownloadState(it)
-  //                }
-  //            }
-  //    }
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final logger = ref.watch(loggerProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      downloadManager.statusStream()
+          .where((it) => it.manga.id == previousState.manga.id)
+          .handleError((error) => logger.e(error))
+          .map((it) => _updateDownloadState(it));
 
-  //    screenModelScope.launchIO {
-  //        downloadManager.progressFlow()
-  //            .where((it) => it.manga.id == successState?.manga?.id)
-  //            .catch { error -> logcat(LogPriority.ERROR, error) }
-  //            .collect {
-  //                withUIContext {
-  //                    updateDownloadState(it)
-  //                }
-  //            }
-  //    }
+      downloadManager.progressStream()
+          .where((it) => it.manga.id == previousState.manga.id)
+          .handleError((error) => logger.e(error))
+          .map((it) => _updateDownloadState(it));
+    }
   }
 
-  void _updateDownloadState(Download download) {
-  //    updateSuccessState { successState ->
-  //        val modifiedIndex = successState.chapters.indexOfFirst { it.id == download.chapter.id }
-  //        if (modifiedIndex < 0) return@updateSuccessState successState
+  void _updateDownloadState(Download download) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final modifiedIndex = previousState.chapters.indexWhere((it) => it.id == download.chapter.id);
+      if (modifiedIndex < 0) return;
 
-  //        val newChapters = successState.chapters.toMutableList().apply {
-  //            val item = removeAt(modifiedIndex)
-  //                .copy(downloadState = download.status, downloadProgress = download.progress)
-  //            add(modifiedIndex, item)
-  //        }
-  //        successState.copy(chapters = newChapters)
-  //    }
+      final newChapters = previousState.chapters;
+      final item = newChapters
+          .removeAt(modifiedIndex)
+          .copyWith(downloadState: download.status, downloadProgress: download.progress);
+      newChapters.insert(modifiedIndex, item);
+      final newState = previousState.copyWith(chapters: newChapters);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
   /// Requests an updated list of chapters from the source.
   Future<void> _fetchChaptersFromSource([bool manualFetch = false]) async {
-  //  final state = successState ?? return;
-  //  try {
-  //    final chapters = state.source.getChapterList(state.manga.toSManga());
+    final logger = ref.watch(loggerProvider);
+    final mangaRepository = ref.watch(mangaRepositoryProvider);
+    final syncChaptersWithSource = ref.watch(syncChaptersWithSourceProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      try {
+        //Deprecated?
+        //final chapters = previousState.source.getChapterList(previousState.manga.toSManga());
+        //final newChapters = await syncChaptersWithSource.await_(
+        //  chapters,
+        //  previousState.manga,
+        //  previousState.source,
+        //  manualFetch,
+        //);
 
-  //    final newChapters = await syncChaptersWithSource.await_(
-  //      chapters,
-  //      state.manga,
-  //      state.source,
-  //      manualFetch,
-  //    )
+        //if (manualFetch) downloadNewChapters(newChapters);
+      } catch (e) {
+        //final message = if (e is NoChaptersException) {
+        //  lang.no_chapters_error;
+        //} else {
+        //  logger.e(e);
+        //  //with(context) { e.formattedMessage }
+        //}
 
-  //    if (manualFetch) downloadNewChapters(newChapters);
-  //  } catch (Throwable e) {
-  //    final message = if (e is NoChaptersException) {
-  //      lang.no_chapters_error;
-  //    } else {
-  //      logcat(LogPriority.ERROR, e)
-  //      with(context) { e.formattedMessage }
-  //    }
-
-  //    screenModelScope.launch {
-  //        snackbarHostState.showSnackbar(message = message)
-  //    }
-  //    final newManga = mangaRepository.getMangaById(mangaId);
-  //    updateSuccessState { it.copyWith(manga: newManga) };
-  //  }
+        //screenModelScope.launch {
+        //    snackbarHostState.showSnackbar(message = message)
+        //}
+        final newManga = await mangaRepository.getMangaById(mangaId);
+        final newState = previousState.copyWith(manga: newManga);
+        state = await AsyncValue.guard(() async => newState);
+      }
+    }
   }
 
+  //TODO
   /// Throws an IllegalStateException if the swipe action is LibraryPreferences.ChapterSwipeAction.disabled
   void chapterSwipe(ChapterListItem chapterItem, ChapterSwipeAction swipeAction) {
     final chapter = chapterItem.chapter;
@@ -386,8 +417,12 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   /// Returns the next unread chapter or null if everything is read.
   Chapter? getNextUnreadChapter() {
-  //  final successState = successState ?? return null;
-  //  return successState.chapters.getNextUnread(successState.manga);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      return previousState.chapters.getNextUnread(previousState.manga);
+    } else {
+      return null;
+    }
   }
 
   List<Chapter> _getUnreadChapters() {
@@ -399,35 +434,44 @@ class MangaScreenModel extends _$MangaScreenModel {
   }
 
   List<Chapter> _getUnreadChaptersSorted() {
-  //  final manga = successState?.manga ?? return const [];
-  //  final chaptersSorted = _getUnreadChapters().sortedWith(getChapterSort(manga))
-  //  return manga.sortDescending() ? chaptersSorted.reversed() : chaptersSorted;
-    return [];
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      final chaptersSorted = _getUnreadChapters()
+          .sortedWith(
+            getChapterSort(manga: manga),
+          );
+      return manga.sortDescending() ? chaptersSorted.reversed.toList() : chaptersSorted.toList();
+    } else {
+      return [];
+    }
   }
 
-  void _startDownload(List<Chapter> chapters, bool startNow) {
-  //  final successState = successState ?? return;
+  void _startDownload(List<Chapter> chapters, bool startNow) async {
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      if (startNow) {
+        final chapterId = chapters.singleOrNull?.id;
+        if (chapterId == null) return;
+        downloadManager.startDownloadNow(chapterId);
+      } else {
+        _downloadChapters(chapters);
+      }
 
-  //  if (startNow) {
-  //    final chapterId = chapters.singleOrNull()?.id ?? return;
-  //    downloadManager.startDownloadNow(chapterId);
-  //  } else {
-  //    _downloadChapters(chapters);
-  //  }
-
-  //  if (!_isFavorited && !successState.hasPromptedToAddBefore) {
-  //    updateSuccessState { state ->
-  //      state.copyWith(hasPromptedToAddBefore: true);
-  //    }
-  //    final result = snackbarHostState.showSnackbar(
-  //      message: lang.snack_add_to_library,
-  //      actionLabel: lang.action_add,
-  //      withDismissAction: true,
-  //    )
-  //    if (result == SnackbarResult.ActionPerformed && !_isFavorited) {
-  //      toggleFavorite();
-  //    }
-  //  }
+      if (!_isFavorited && !previousState.hasPromptedToAddBefore) {
+        final newState = previousState.copyWith(hasPromptedToAddBefore: true);
+        state = await AsyncValue.guard(() async => newState);
+        //final result = snackbarHostState.showSnackbar(
+        //  message: lang.snack_add_to_library,
+        //  actionLabel: lang.action_add,
+        //  withDismissAction: true,
+        //)
+        //if (result == SnackbarResult.ActionPerformed && !_isFavorited) {
+        //  toggleFavorite();
+        //}
+      }
+    }
   }
 
   void runChapterDownloadActions({required List<ChapterListItem> items, required ChapterDownloadAction action}) {
@@ -469,7 +513,7 @@ class MangaScreenModel extends _$MangaScreenModel {
     final activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId);
     if (activeDownload == null) return;
     downloadManager.cancelQueuedDownloads([activeDownload]);
-  //  updateDownloadState(activeDownload.apply { status = Download.State.NOT_DOWNLOADED });
+  //  _updateDownloadState(activeDownload.apply { status = Download.State.NOT_DOWNLOADED });
   }
 
   void markPreviousChapterRead(Chapter pointer) {
@@ -784,34 +828,56 @@ class MangaScreenState with _$MangaScreenState {
 
 sealed class ChapterList {}
 
-class ChapterListMissingCount extends Equatable implements ChapterList {
-  const ChapterListMissingCount({required this.id, required this.count});
+//class ChapterListMissingCount extends Equatable implements ChapterList {
+//  const ChapterListMissingCount({required this.id, required this.count});
 
-  final String id;
-  final int count;
+//  final String id;
+//  final int count;
 
-  @override
-  List<Object?> get props => [id, count];
+//  @override
+//  List<Object?> get props => [id, count];
+//}
+
+//class ChapterListItem extends Equatable implements ChapterList {
+//  ChapterListItem({
+//    required this.chapter,
+//    required this.downloadState,
+//    required this.downloadProgress,
+//    this.selected = false,
+//  });
+
+//  final Chapter chapter;
+//  final DownloadState downloadState;
+//  final int downloadProgress;
+//  final bool selected;
+
+//  late final id = chapter.id;
+//  late final isDownloaded = downloadState == DownloadState.downloaded;
+
+//  @override
+//  List<Object?> get props => [chapter, downloadState, downloadProgress, selected];
+//}
+
+@freezed
+class ChapterListMissingCount with _$ChapterListMissingCount {
+  const factory ChapterListMissingCount({
+    required String id,
+    required int count,
+  }) = _ChapterListMissingCount;
 }
 
-class ChapterListItem extends Equatable implements ChapterList {
-  ChapterListItem({
-    required this.chapter,
-    required this.downloadState,
-    required this.downloadProgress,
-    this.selected = false,
-  });
-
-  final Chapter chapter;
-  final DownloadState downloadState;
-  final int downloadProgress;
-  final bool selected;
+@freezed
+class ChapterListItem with _$ChapterListItem {
+  ChapterListItem._();
+  factory ChapterListItem({
+    required Chapter chapter,
+    required DownloadState downloadState,
+    required int downloadProgress,
+    @Default(false) bool selected,
+  }) = _ChapterListItem;
 
   late final id = chapter.id;
   late final isDownloaded = downloadState == DownloadState.downloaded;
-
-  @override
-  List<Object?> get props => [chapter, downloadState, downloadProgress, selected];
 }
 
 
