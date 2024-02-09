@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
-import 'package:dartx/dartx.dart' hide IterableFirstOrNull, IterableWhereNot, IterableWhereNotNull;
+import 'package:dartx/dartx.dart' hide IterableFirstOrNull, IterableNone, IterableWhereNot, IterableWhereNotNull;
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
 import 'package:equatable/equatable.dart';
@@ -12,6 +12,7 @@ import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_available_scanlators.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_manga_default_chapter_flags.dart';
 import 'package:flutteryomi/domain/chapter/interactor/sync_chapters_with_source.dart';
+import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_duplicate_library_manga.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart';
@@ -129,9 +130,6 @@ class MangaScreenModel extends _$MangaScreenModel {
   //val isUpdateIntervalEnabled =
   //    LibraryPreferences.mangaOutsideReleasePeriod in libraryPreferences.autoUpdateMangaRestrictions().get()
 
-  //private val selectedPositions: List<Int> = [-1, -1]; // first and last selected index in list
-  // first and last selected index in list
-  late final List<int> selectedPositions = [-1, -1];
   //private val selectedChapterIds: HashSet<int> = HashSet();
 
   void fetchAllFromSource([bool manualFetch = true]) async {
@@ -516,12 +514,15 @@ class MangaScreenModel extends _$MangaScreenModel {
   //  _updateDownloadState(activeDownload.apply { status = Download.State.NOT_DOWNLOADED });
   }
 
-  void markPreviousChapterRead(Chapter pointer) {
-  //  final manga = successState?.manga ?? return;
-  //  final chapters = filteredChapters.orEmpty().map((it) => it.chapter);
-  //  final prevChapters = manga.sortDescending() ? chapters.asReversed() : chapters;
-  //  final pointerPos = prevChapters.indexOf(pointer)
-  //  if (pointerPos != -1) markChaptersRead(prevChapters.take(pointerPos), true);
+  void markPreviousChapterRead(Chapter pointer) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      //final chapters = filteredChapters.orEmpty().map((it) => it.chapter);
+      //final prevChapters = manga.sortDescending() ? chapters.asReversed() : chapters;
+      //final pointerPos = prevChapters.indexOf(pointer)
+      //if (pointerPos != -1) markChaptersRead(prevChapters.take(pointerPos), true);
+    }
   }
 
   /// Mark the selected chapter list as read/unread.
@@ -534,9 +535,12 @@ class MangaScreenModel extends _$MangaScreenModel {
   /// Downloads the given list of chapters with the manager.
   void _downloadChapters(List<Chapter> chapters) {
     final downloadManager = ref.watch(downloadManagerProvider);
-  //  final manga = successState?.manga ?? return;
-  //  downloadManager.downloadChapters(manga, chapters);
-    toggleAllSelection(false);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      downloadManager.downloadChapters(manga, chapters);
+      toggleAllSelection(false);
+    }
   }
 
   /// Bookmarks the given list of chapters.
@@ -552,197 +556,225 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   /// Deletes the given list of chapters.
   void deleteChapters(List<Chapter> chapters) {
-  //  try {
-  //      successState?.let { state ->
-  //          downloadManager.deleteChapters(
-  //              chapters,
-  //              state.manga,
-  //              state.source,
-  //          )
-  //      }
-  //  } catch (e: Throwable) {
-  //      logcat(LogPriority.ERROR, e);
-  //  }
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final logger = ref.watch(loggerProvider);
+    try {
+      final previousState = state.valueOrNull;
+      if (previousState != null) {
+        downloadManager.deleteChapters(
+          chapters,
+          previousState.manga,
+          previousState.source,
+        );
+      }
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   void _downloadNewChapters(List<Chapter> chapters) async {
-  //  final manga = successState?.manga ?? return;
-  //  final categories = await getCategories.await_(manga.id).map((it) => it.id);
-  //  if (chapters.isEmpty || !manga.shouldDownloadNewChapters(categories, downloadPreferences)) {
-  //    return;
-  //  }
-
-    _downloadChapters(chapters);
+    final downloadPreferences = ref.watch(downloadPreferencesProvider);
+    final getCategories = ref.watch(getCategoriesProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      final categories = await getCategories.await_(manga.id);
+      final categoryIds = categories.map((it) => it.id).toList();
+      if (chapters.isEmpty || !manga.shouldDownloadNewChapters(categoryIds, downloadPreferences)) {
+        return;
+      }
+      _downloadChapters(chapters);
+    }
   }
 
   /// Sets the read filter and requests an UI update.
   ///
-  /// [state] dictates whether to display only unread chapters or all chapters.
-  void setUnreadFilter(TriState state) async {
+  /// [triState] dictates whether to display only unread chapters or all chapters.
+  void setUnreadFilter(TriState triState) async {
     final setMangaChapterFlags = ref.watch(setMangaChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-
-    final flag = switch (state) {
-      TriState.disabled => MangaUtils.showAll,
-      TriState.enabledIs => MangaUtils.chapterShowUnread,
-      TriState.enabledNot => MangaUtils.chapterShowRead,
-    };
-
-    //await setMangaChapterFlags.awaitSetUnreadFilter(manga, flag);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      final flag = switch (triState) {
+        TriState.disabled => MangaUtils.showAll,
+        TriState.enabledIs => MangaUtils.chapterShowUnread,
+        TriState.enabledNot => MangaUtils.chapterShowRead,
+      };
+      await setMangaChapterFlags.awaitSetUnreadFilter(manga, flag);
+    }
   }
 
   /// Sets the download filter and requests an UI update.
   ///
-  /// [state] dictates whether to display only downloaded chapters or all chapters.
-  void setDownloadedFilter(TriState state) async {
+  /// [triState] dictates whether to display only downloaded chapters or all chapters.
+  void setDownloadedFilter(TriState triState) async {
     final setMangaChapterFlags = ref.watch(setMangaChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-
-    final flag = switch (state) {
-      TriState.disabled => MangaUtils.showAll,
-      TriState.enabledIs => MangaUtils.chapterShowDownloaded,
-      TriState.enabledNot => MangaUtils.chapterShowNotDownloaded,
-    };
-
-  //  await setMangaChapterFlags.awaitSetDownloadedFilter(manga, flag);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      final flag = switch (triState) {
+        TriState.disabled => MangaUtils.showAll,
+        TriState.enabledIs => MangaUtils.chapterShowDownloaded,
+        TriState.enabledNot => MangaUtils.chapterShowNotDownloaded,
+      };
+      await setMangaChapterFlags.awaitSetDownloadedFilter(manga, flag);
+    }
   }
 
   /// Sets the bookmark filter and requests an UI update.
   ///
-  /// [state] dictates whether to display only bookmarked chapters or all chapters.
-  void setBookmarkedFilter(TriState state) async {
+  /// [triState] dictates whether to display only bookmarked chapters or all chapters.
+  void setBookmarkedFilter(TriState triState) async {
     final setMangaChapterFlags = ref.watch(setMangaChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-
-    final flag = switch (state) {
-      TriState.disabled => MangaUtils.showAll,
-      TriState.enabledIs => MangaUtils.chapterShowBookmarked,
-      TriState.enabledNot => MangaUtils.chapterShowNotBookmarked,
-    };
-
-  //  await setMangaChapterFlags.awaitSetBookmarkFilter(manga, flag);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      final flag = switch (triState) {
+        TriState.disabled => MangaUtils.showAll,
+        TriState.enabledIs => MangaUtils.chapterShowBookmarked,
+        TriState.enabledNot => MangaUtils.chapterShowNotBookmarked,
+      };
+      await setMangaChapterFlags.awaitSetBookmarkFilter(manga, flag);
+    }
   }
 
   /// Sets the active display mode.
   void setDisplayMode(int mode) async {
     final setMangaChapterFlags = ref.watch(setMangaChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-
-  //  await setMangaChapterFlags.awaitSetDisplayMode(manga, mode);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      await setMangaChapterFlags.awaitSetDisplayMode(manga, mode);
+    }
   }
 
   /// Sets the sorting method and requests an UI update.
   void setSorting(int sort) async {
     final setMangaChapterFlags = ref.watch(setMangaChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-
-  //  await setMangaChapterFlags.awaitSetSortingModeOrFlipOrder(manga, sort);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      await setMangaChapterFlags.awaitSetSortingModeOrFlipOrder(manga, sort);
+    }
   }
 
   void setCurrentSettingsAsDefault(bool applyToExisting) async {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final setMangaDefaultChapterFlags = ref.watch(setMangaDefaultChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-  //  libraryPreferences.setChapterSettingsDefault(manga);
-    if (applyToExisting) {
-      await setMangaDefaultChapterFlags.awaitAll();
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      libraryPreferences.setChapterSettingsDefault(manga);
+      if (applyToExisting) {
+        await setMangaDefaultChapterFlags.awaitAll();
+      }
+      //https://stackoverflow.com/questions/66317145/how-do-i-show-a-snackbar-from-a-statenotifier-in-riverpod
+      //snackbarHostState.showSnackbar(message: lang.chapter_settings_updated);
     }
-  //  //https://stackoverflow.com/questions/66317145/how-do-i-show-a-snackbar-from-a-statenotifier-in-riverpod
-  //  //snackbarHostState.showSnackbar(message: lang.chapter_settings_updated);
   }
 
   void resetToDefaultSettings() async {
     final setMangaDefaultChapterFlags = ref.watch(setMangaDefaultChapterFlagsProvider);
-  //  final manga = successState?.manga ?? return;
-  //  await setMangaDefaultChapterFlags.await_(manga);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+      await setMangaDefaultChapterFlags.await_(manga);
+    }
   }
 
+  //TODO
   void toggleSelection(
     ChapterListItem item,
     bool selected, [
     bool userSelected = false,
     bool fromLongPress = false,
-  ]) {
-  //    updateSuccessState { successState ->
-  //        val newChapters = successState.processedChapters.toList().apply {
-  //            val selectedIndex = successState.processedChapters.indexOfFirst { it.id == item.chapter.id }
-  //            if (selectedIndex < 0) return@apply
+  ]) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final newChapters = previousState.processedChapters.toList();
+      final selectedIndex = previousState.processedChapters.indexWhere((it) => it.id == item.chapter.id);
+      if (selectedIndex < 0) return;
 
-  //            val selectedItem = get(selectedIndex)
-  //            if ((selectedItem.selected && selected) || (!selectedItem.selected && !selected)) return@apply
+      final selectedItem = newChapters[selectedIndex];
+      if ((selectedItem.selected && selected) || (!selectedItem.selected && !selected)) return;
 
-  //            val firstSelection = none { it.selected }
-  //            set(selectedIndex, selectedItem.copy(selected = selected))
-  //            selectedChapterIds.addOrRemove(item.id, selected)
+      final firstSelection = newChapters.none((it) => it.selected);
+      newChapters[selectedIndex] = selectedItem.copyWith(selected: selected);
+      //selectedChapterIds.addOrRemove(item.id, selected);
 
-  //            if (selected && userSelected && fromLongPress) {
-  //                if (firstSelection) {
-  //                    selectedPositions[0] = selectedIndex
-  //                    selectedPositions[1] = selectedIndex
-  //                } else {
-  //                    // Try to select the items in-between when possible
-  //                    val range: IntRange
-  //                    if (selectedIndex < selectedPositions[0]) {
-  //                        range = selectedIndex + 1..<selectedPositions[0]
-  //                        selectedPositions[0] = selectedIndex
-  //                    } else if (selectedIndex > selectedPositions[1]) {
-  //                        range = (selectedPositions[1] + 1)..<selectedIndex
-  //                        selectedPositions[1] = selectedIndex
-  //                    } else {
-  //                        // Just select itself
-  //                        range = IntRange.EMPTY
-  //                    }
+      if (selected && userSelected && fromLongPress) {
+        if (firstSelection) {
+          previousState.selectedPositions[0] = selectedIndex;
+          previousState.selectedPositions[1] = selectedIndex;
+        } else {
+          // Try to select the items in-between when possible
+          final IntRange range;
+          if (selectedIndex < previousState.selectedPositions[0]) {
+            range = IntRange(selectedIndex + 1, previousState.selectedPositions[0]);
+            previousState.selectedPositions[0] = selectedIndex;
+          } else if (selectedIndex > previousState.selectedPositions[1]) {
+            range = IntRange((previousState.selectedPositions[1] + 1), selectedIndex);
+            previousState.selectedPositions[1] = selectedIndex;
+          } else {
+            // Just select itself
+            range = IntRange(0, -1);
+          }
 
-  //                    range.forEach {
-  //                        val inbetweenItem = get(it)
-  //                        if (!inbetweenItem.selected) {
-  //                            selectedChapterIds.add(inbetweenItem.id)
-  //                            set(it, inbetweenItem.copy(selected = true))
-  //                        }
-  //                    }
-  //                }
-  //            } else if (userSelected && !fromLongPress) {
-  //                if (!selected) {
-  //                    if (selectedIndex == selectedPositions[0]) {
-  //                        selectedPositions[0] = indexOfFirst { it.selected }
-  //                    } else if (selectedIndex == selectedPositions[1]) {
-  //                        selectedPositions[1] = indexOfLast { it.selected }
-  //                    }
-  //                } else {
-  //                    if (selectedIndex < selectedPositions[0]) {
-  //                        selectedPositions[0] = selectedIndex
-  //                    } else if (selectedIndex > selectedPositions[1]) {
-  //                        selectedPositions[1] = selectedIndex
-  //                    }
-  //                }
-  //            }
-  //        }
-  //        successState.copyWith(chapters: newChapters);
-  //    }
+          for (final it in range) {
+            final inbetweenItem = newChapters[it];
+            if (!inbetweenItem.selected) {
+              //selectedChapterIds.add(inbetweenItem.id);
+              newChapters[it] = inbetweenItem.copyWith(selected: true);
+            }
+          }
+        }
+      } else if (userSelected && !fromLongPress) {
+        if (!selected) {
+          if (selectedIndex == previousState.selectedPositions[0]) {
+            previousState.selectedPositions[0] = newChapters.indexWhere((it) => it.selected);
+          } else if (selectedIndex == previousState.selectedPositions[1]) {
+            previousState.selectedPositions[1] = newChapters.lastIndexWhere((it) => it.selected);
+          }
+        } else {
+          if (selectedIndex < previousState.selectedPositions[0]) {
+            previousState.selectedPositions[0] = selectedIndex;
+          } else if (selectedIndex > previousState.selectedPositions[1]) {
+            previousState.selectedPositions[1] = selectedIndex;
+          }
+        }
+      }
+      final newState = previousState.copyWith(chapters: newChapters);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
-  void toggleAllSelection(bool selected) {
-  //  updateSuccessState { successState =>
-  //    final newChapters = successState.chapters.map((it) {
-  //      selectedChapterIds.addOrRemove(it.id, selected)
-  //      return it.copyWith(selected: selected);
-  //    });
-  //    selectedPositions[0] = -1;
-  //    selectedPositions[1] = -1;
-  //    successState.copyWith(chapters: newChapters);
-  //  }
+  //TODO
+  void toggleAllSelection(bool selected) async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final newChapters = previousState.chapters.map((it) {
+        //selectedChapterIds.addOrRemove(it.id, selected);
+        return it.copyWith(selected: selected);
+      }).toList();
+      previousState.selectedPositions[0] = -1;
+      previousState.selectedPositions[1] = -1;
+      final newState = previousState.copyWith(chapters: newChapters);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
-  void invertSelection() {
-  //    updateSuccessState { successState =>
-  //      final newChapters = successState.chapters.map((it) {
-  //        selectedChapterIds.addOrRemove(it.id, !it.selected);
-  //        return it.copyWith(selected: !it.selected);
-  //      });
-  //      selectedPositions[0] = -1;
-  //      selectedPositions[1] = -1;
-  //      successState.copyWith(chapters: newChapters);
-  //    }
+  void invertSelection() async {
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final newChapters = previousState.chapters.map((it) {
+        //selectedChapterIds.addOrRemove(it.id, !it.selected);
+        return it.copyWith(selected: !it.selected);
+      }).toList();
+      previousState.selectedPositions[0] = -1;
+      previousState.selectedPositions[1] = -1;
+      final newState = previousState.copyWith(chapters: newChapters);
+      state = await AsyncValue.guard(() async => newState);
+    }
   }
 
   // Chapters list - end
@@ -751,21 +783,23 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   void _observeTrackers() {
     final getTracks = ref.watch(getTracksProvider);
-  //  final manga = successState?.manga ?? return;
-
-  //  getTracks.subscribe(manga.id)
-  //      .catch { logcat(LogPriority.ERROR, it) }
-  //      .map { tracks ->
-  //          loggedInTrackers
-  //              // Map to TrackItem
-  //              .map { service -> TrackItem(tracks.find { it.trackerId == service.id }, service) }
-  //              // Show only if the service supports this manga's source
-  //              .filter { (it.tracker as? EnhancedTracker)?.accept(source!!) ?: true }
-  //      }
-  //      .distinct()
-  //      .collectLatest { trackItems ->
-  //          updateSuccessState { it.copy(trackItems = trackItems) }
-  //      };
+    final logger = ref.watch(loggerProvider);
+    final previousState = state.valueOrNull;
+    if (previousState != null) {
+      final manga = previousState.manga;
+    //getTracks.subscribe(manga.id)
+    //    .handleError((it) => logger.e(it))
+    //    .map((tracks) => loggedInTrackers
+    //        // Map to TrackItem
+    //        .map((service) => TrackItem(tracks.find((it) => it.trackerId == service.id), service))
+    //        // Show only if the service supports this manga's source
+    //        .where((it) => (it.tracker as? EnhancedTracker)?.accept(source!!) ?? true),
+    //    )
+        //.distinct()
+        //.collectLatest { trackItems ->
+        //    updateSuccessState { it.copy(trackItems = trackItems) }
+        //};
+    }
   }
 
   // Track sheet - end
@@ -789,6 +823,8 @@ class MangaScreenState with _$MangaScreenState {
     @Default([]) List<TrackItem> trackItems,
     @Default(false) bool hasPromptedToAddBefore,
   }) = _MangaScreenState;
+
+  late final List<int> selectedPositions = [-1, -1]; // first and last selected index in list
 
   late final processedChapters = chapters.applyFilters(manga).toList();
 
@@ -827,36 +863,6 @@ class MangaScreenState with _$MangaScreenState {
 
 
 sealed class ChapterList {}
-
-//class ChapterListMissingCount extends Equatable implements ChapterList {
-//  const ChapterListMissingCount({required this.id, required this.count});
-
-//  final String id;
-//  final int count;
-
-//  @override
-//  List<Object?> get props => [id, count];
-//}
-
-//class ChapterListItem extends Equatable implements ChapterList {
-//  ChapterListItem({
-//    required this.chapter,
-//    required this.downloadState,
-//    required this.downloadProgress,
-//    this.selected = false,
-//  });
-
-//  final Chapter chapter;
-//  final DownloadState downloadState;
-//  final int downloadProgress;
-//  final bool selected;
-
-//  late final id = chapter.id;
-//  late final isDownloaded = downloadState == DownloadState.downloaded;
-
-//  @override
-//  List<Object?> get props => [chapter, downloadState, downloadProgress, selected];
-//}
 
 @freezed
 class ChapterListMissingCount with _$ChapterListMissingCount {
