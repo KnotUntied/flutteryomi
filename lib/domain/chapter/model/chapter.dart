@@ -2,6 +2,7 @@ import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
 
 import 'package:flutteryomi/data/drift/data/chapters.drift.dart' as drift;
+import 'package:flutteryomi/domain/source/model/schapter.dart';
 
 // Drift already generates convenient classes
 // Typedef here so dependents will depend on domain instead of data
@@ -20,6 +21,20 @@ extension ChapterUtils on Chapter {
             ? Value(other.scanlator)
             : const Value(null),
       );
+
+  Chapter copyFromSChapter(SChapter sChapter) {
+    final scanlator =
+        sChapter.scanlator.isNullOrBlank ? null : sChapter.scanlator;
+    return copyWith(
+      name: sChapter.name,
+      url: sChapter.url,
+      dateUpload: sChapter.dateUpload,
+      chapterNumber: sChapter.chapterNumber,
+      scanlator: scanlator != null //
+          ? Value(scanlator.trim())
+          : const Value(null),
+    );
+  }
 
   static Chapter create() => Chapter(
         id: -1,

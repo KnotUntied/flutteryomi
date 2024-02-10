@@ -74,7 +74,11 @@ class MangaScreenModel extends _$MangaScreenModel {
       final manga = mangaAndChapters.first;
       return (
         manga: manga,
-        chapters: mangaAndChapters.second.toChapterListItems(downloadManager, manga),
+        chapters: mangaAndChapters.second.toChapterListItems(
+          downloadManager,
+          manga,
+          state.valueOrNull?.selectedChapterIds ?? {},
+        ),
       );
     });
 
@@ -83,8 +87,9 @@ class MangaScreenModel extends _$MangaScreenModel {
 
     _observeDownloads();
 
-    if (manga != null && !manga!.favorite) {
-      _setMangaDefaultChapterFlags(manga!);
+    final manga = state.valueOrNull?.manga;
+    if (manga != null && !manga.favorite) {
+      _setMangaDefaultChapterFlags(manga);
     }
 
     // Start observe tracking since it only needs mangaId
@@ -112,25 +117,17 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   //final loggedInTrackers = trackerManager.trackers.where((it) => it.isLoggedIn);
 
-  Manga? get manga => state.valueOrNull?.manga;
-
-  Source? get source => state.valueOrNull?.source;
-
-  bool get _isFavorited => manga?.favorite ?? false;
+  bool get _isFavorited => state.valueOrNull?.manga.favorite ?? false;
 
   List<ChapterListItem>? get _allChapters => state.valueOrNull?.chapters;
 
   List<ChapterListItem>? get _filteredChapters => state.valueOrNull?.processedChapters;
 
-  //val chapterSwipeStartAction = libraryPreferences.swipeToEndAction().get()
-  //val chapterSwipeEndAction = libraryPreferences.swipeToStartAction().get()
+  //final chapterSwipeStartAction = libraryPreferences.swipeToEndAction().get()
+  //final chapterSwipeEndAction = libraryPreferences.swipeToStartAction().get()
 
-  //private val skipFiltered by readerPreferences.skipFiltered().asState(screenModelScope)
-
-  //val isUpdateIntervalEnabled =
+  //final isUpdateIntervalEnabled =
   //    LibraryPreferences.mangaOutsideReleasePeriod in libraryPreferences.autoUpdateMangaRestrictions().get()
-
-  //private val selectedChapterIds: HashSet<int> = HashSet();
 
   void fetchAllFromSource([bool manualFetch = true]) async {
     //updateSuccessState { it.copy(isRefreshingData = true) }
@@ -424,6 +421,8 @@ class MangaScreenModel extends _$MangaScreenModel {
   }
 
   List<Chapter> _getUnreadChapters() {
+    //final readerPreferences = ref.watch(readerPreferencesProvider);
+    //final skipFiltered = readerPreferences.skipFiltered().get();
   //  final chapterItems = skipFiltered ? filteredChapters.orEmpty() : allChapters.orEmpty();
   //  return chapterItems
   //      .where((chapter, dlStatus) => !chapter.read && dlStatus == DownloadState.notDownloaded)
@@ -682,7 +681,6 @@ class MangaScreenModel extends _$MangaScreenModel {
     }
   }
 
-  //TODO
   void toggleSelection(
     ChapterListItem item,
     bool selected, [
@@ -700,21 +698,23 @@ class MangaScreenModel extends _$MangaScreenModel {
 
       final firstSelection = newChapters.none((it) => it.selected);
       newChapters[selectedIndex] = selectedItem.copyWith(selected: selected);
-      //selectedChapterIds.addOrRemove(item.id, selected);
+      final selectedChapterIds = Set.of(previousState.selectedChapterIds);
+      selectedChapterIds.addOrRemove(item.id, selected);
 
+      final selectedPositions = [...previousState.selectedPositions];
       if (selected && userSelected && fromLongPress) {
         if (firstSelection) {
-          previousState.selectedPositions[0] = selectedIndex;
-          previousState.selectedPositions[1] = selectedIndex;
+          selectedPositions[0] = selectedIndex;
+          selectedPositions[1] = selectedIndex;
         } else {
           // Try to select the items in-between when possible
           final IntRange range;
-          if (selectedIndex < previousState.selectedPositions[0]) {
-            range = IntRange(selectedIndex + 1, previousState.selectedPositions[0]);
-            previousState.selectedPositions[0] = selectedIndex;
-          } else if (selectedIndex > previousState.selectedPositions[1]) {
-            range = IntRange((previousState.selectedPositions[1] + 1), selectedIndex);
-            previousState.selectedPositions[1] = selectedIndex;
+          if (selectedIndex < selectedPositions[0]) {
+            range = IntRange(selectedIndex + 1, selectedPositions[0]);
+            selectedPositions[0] = selectedIndex;
+          } else if (selectedIndex > selectedPositions[1]) {
+            range = IntRange((selectedPositions[1] + 1), selectedIndex);
+            selectedPositions[1] = selectedIndex;
           } else {
             // Just select itself
             range = IntRange(0, -1);
@@ -723,42 +723,51 @@ class MangaScreenModel extends _$MangaScreenModel {
           for (final it in range) {
             final inbetweenItem = newChapters[it];
             if (!inbetweenItem.selected) {
-              //selectedChapterIds.add(inbetweenItem.id);
+              selectedChapterIds.add(inbetweenItem.id);
               newChapters[it] = inbetweenItem.copyWith(selected: true);
             }
           }
         }
       } else if (userSelected && !fromLongPress) {
         if (!selected) {
-          if (selectedIndex == previousState.selectedPositions[0]) {
-            previousState.selectedPositions[0] = newChapters.indexWhere((it) => it.selected);
-          } else if (selectedIndex == previousState.selectedPositions[1]) {
-            previousState.selectedPositions[1] = newChapters.lastIndexWhere((it) => it.selected);
+          if (selectedIndex == selectedPositions[0]) {
+            selectedPositions[0] = newChapters.indexWhere((it) => it.selected);
+          } else if (selectedIndex == selectedPositions[1]) {
+            selectedPositions[1] = newChapters.lastIndexWhere((it) => it.selected);
           }
         } else {
-          if (selectedIndex < previousState.selectedPositions[0]) {
-            previousState.selectedPositions[0] = selectedIndex;
-          } else if (selectedIndex > previousState.selectedPositions[1]) {
-            previousState.selectedPositions[1] = selectedIndex;
+          if (selectedIndex < selectedPositions[0]) {
+            selectedPositions[0] = selectedIndex;
+          } else if (selectedIndex > selectedPositions[1]) {
+            selectedPositions[1] = selectedIndex;
           }
         }
       }
-      final newState = previousState.copyWith(chapters: newChapters);
+      final newState = previousState.copyWith(
+        chapters: newChapters,
+        selectedChapterIds: selectedChapterIds,
+        selectedPositions: selectedPositions,
+      );
       state = await AsyncValue.guard(() async => newState);
     }
   }
 
-  //TODO
   void toggleAllSelection(bool selected) async {
     final previousState = state.valueOrNull;
     if (previousState != null) {
+      final selectedChapterIds = Set.of(previousState.selectedChapterIds);
       final newChapters = previousState.chapters.map((it) {
-        //selectedChapterIds.addOrRemove(it.id, selected);
+        selectedChapterIds.addOrRemove(it.id, selected);
         return it.copyWith(selected: selected);
       }).toList();
-      previousState.selectedPositions[0] = -1;
-      previousState.selectedPositions[1] = -1;
-      final newState = previousState.copyWith(chapters: newChapters);
+      final selectedPositions = [...previousState.selectedPositions];
+      selectedPositions[0] = -1;
+      selectedPositions[1] = -1;
+      final newState = previousState.copyWith(
+        chapters: newChapters,
+        selectedChapterIds: selectedChapterIds,
+        selectedPositions: selectedPositions,
+      );
       state = await AsyncValue.guard(() async => newState);
     }
   }
@@ -766,13 +775,19 @@ class MangaScreenModel extends _$MangaScreenModel {
   void invertSelection() async {
     final previousState = state.valueOrNull;
     if (previousState != null) {
+      final selectedChapterIds = Set.of(previousState.selectedChapterIds);
       final newChapters = previousState.chapters.map((it) {
-        //selectedChapterIds.addOrRemove(it.id, !it.selected);
+        selectedChapterIds.addOrRemove(it.id, !it.selected);
         return it.copyWith(selected: !it.selected);
       }).toList();
-      previousState.selectedPositions[0] = -1;
-      previousState.selectedPositions[1] = -1;
-      final newState = previousState.copyWith(chapters: newChapters);
+      final selectedPositions = [...previousState.selectedPositions];
+      selectedPositions[0] = -1;
+      selectedPositions[1] = -1;
+      final newState = previousState.copyWith(
+        chapters: newChapters,
+        selectedChapterIds: selectedChapterIds,
+        selectedPositions: selectedPositions,
+      );
       state = await AsyncValue.guard(() async => newState);
     }
   }
@@ -822,9 +837,9 @@ class MangaScreenState with _$MangaScreenState {
     required Set<String> excludedScanlators,
     @Default([]) List<TrackItem> trackItems,
     @Default(false) bool hasPromptedToAddBefore,
+    @Default([-1, -1]) List<int> selectedPositions, // first and last selected index in list
+    @Default({}) Set<int> selectedChapterIds,
   }) = _MangaScreenState;
-
-  late final List<int> selectedPositions = [-1, -1]; // first and last selected index in list
 
   late final processedChapters = chapters.applyFilters(manga).toList();
 
@@ -914,7 +929,11 @@ extension _ChapterListItemsUtils on List<ChapterListItem> {
 
 extension _ChapterListUtils on List<Chapter> {
   //TODO: Support for isLocal
-  List<ChapterListItem> toChapterListItems(DownloadManager downloadManager, Manga manga) {
+  List<ChapterListItem> toChapterListItems(
+    DownloadManager downloadManager,
+    Manga manga,
+    Set<int> selectedChapterIds,
+  ) {
 //    final isLocal = manga.isLocal();
     return map((chapter) {
       const activeDownload = null;
@@ -938,8 +957,7 @@ extension _ChapterListUtils on List<Chapter> {
         chapter: chapter,
         downloadState: downloadState,
         downloadProgress: activeDownload?.progress ?? 0,
-        //selected: selectedChapterIds.contains(chapter.id),
-        selected: false,
+        selected: selectedChapterIds.contains(chapter.id),
       );
     }).toList();
   }

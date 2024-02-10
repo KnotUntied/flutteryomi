@@ -15,6 +15,16 @@ extension InsertSeparators<T> on List<T> {
   }
 }
 
+extension SetAddOrRemove<T> on Set<T> {
+  void addOrRemove(T value, bool shouldAdd) {
+    if (shouldAdd) {
+      add(value);
+    } else {
+      remove(value);
+    }
+  }
+}
+
 extension HashSetAddOrRemove<T> on HashSet<T> {
   void addOrRemove(T value, bool shouldAdd) {
     if (shouldAdd) {

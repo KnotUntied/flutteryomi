@@ -1,18 +1,17 @@
 import 'dart:async';
 
 import 'package:dartx/dartx.dart';
-import 'package:flutteryomi/data/track/tracker_manager.dart';
-import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
+import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/history/interactor/get_total_read_duration.dart';
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_library_manga.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
+import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
 import 'package:flutteryomi/presentation/more/stats/data/stats_data.dart';
 
@@ -21,9 +20,6 @@ part 'stats_screen_model.g.dart';
 
 @riverpod
 class StatsScreenModel extends _$StatsScreenModel {
-  //TODO
-  //var loggedInTrackers;
-
   @override
   Future<StatsScreenState> build() async {
     final downloadManager = ref.watch(downloadManagerProvider);

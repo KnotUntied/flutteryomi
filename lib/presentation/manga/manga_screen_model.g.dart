@@ -6,7 +6,7 @@ part of 'manga_screen_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mangaScreenModelHash() => r'56b294f28d50909df008c4f382c2865fb9b7b18a';
+String _$mangaScreenModelHash() => r'25dc5cadea718edf1a1e46ecab75791a16e1a5f9';
 
 /// Copied from Dart SDK
 class _SystemHash {

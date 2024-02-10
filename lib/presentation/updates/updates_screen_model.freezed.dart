@@ -15,6 +15,186 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
+mixin _$UpdatesScreenState {
+  List<UpdatesItem> get items => throw _privateConstructorUsedError;
+  set items(List<UpdatesItem> value) => throw _privateConstructorUsedError;
+  DateTime get lastUpdated => throw _privateConstructorUsedError;
+  set lastUpdated(DateTime value) => throw _privateConstructorUsedError;
+  List<int> get selectedPositions => throw _privateConstructorUsedError;
+  set selectedPositions(List<int> value) => throw _privateConstructorUsedError;
+  Set<int> get selectedChapterIds => throw _privateConstructorUsedError;
+  set selectedChapterIds(Set<int> value) => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $UpdatesScreenStateCopyWith<UpdatesScreenState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UpdatesScreenStateCopyWith<$Res> {
+  factory $UpdatesScreenStateCopyWith(
+          UpdatesScreenState value, $Res Function(UpdatesScreenState) then) =
+      _$UpdatesScreenStateCopyWithImpl<$Res, UpdatesScreenState>;
+  @useResult
+  $Res call(
+      {List<UpdatesItem> items,
+      DateTime lastUpdated,
+      List<int> selectedPositions,
+      Set<int> selectedChapterIds});
+}
+
+/// @nodoc
+class _$UpdatesScreenStateCopyWithImpl<$Res, $Val extends UpdatesScreenState>
+    implements $UpdatesScreenStateCopyWith<$Res> {
+  _$UpdatesScreenStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? items = null,
+    Object? lastUpdated = null,
+    Object? selectedPositions = null,
+    Object? selectedChapterIds = null,
+  }) {
+    return _then(_value.copyWith(
+      items: null == items
+          ? _value.items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<UpdatesItem>,
+      lastUpdated: null == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      selectedPositions: null == selectedPositions
+          ? _value.selectedPositions
+          : selectedPositions // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      selectedChapterIds: null == selectedChapterIds
+          ? _value.selectedChapterIds
+          : selectedChapterIds // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UpdatesScreenStateImplCopyWith<$Res>
+    implements $UpdatesScreenStateCopyWith<$Res> {
+  factory _$$UpdatesScreenStateImplCopyWith(_$UpdatesScreenStateImpl value,
+          $Res Function(_$UpdatesScreenStateImpl) then) =
+      __$$UpdatesScreenStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {List<UpdatesItem> items,
+      DateTime lastUpdated,
+      List<int> selectedPositions,
+      Set<int> selectedChapterIds});
+}
+
+/// @nodoc
+class __$$UpdatesScreenStateImplCopyWithImpl<$Res>
+    extends _$UpdatesScreenStateCopyWithImpl<$Res, _$UpdatesScreenStateImpl>
+    implements _$$UpdatesScreenStateImplCopyWith<$Res> {
+  __$$UpdatesScreenStateImplCopyWithImpl(_$UpdatesScreenStateImpl _value,
+      $Res Function(_$UpdatesScreenStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? items = null,
+    Object? lastUpdated = null,
+    Object? selectedPositions = null,
+    Object? selectedChapterIds = null,
+  }) {
+    return _then(_$UpdatesScreenStateImpl(
+      items: null == items
+          ? _value.items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<UpdatesItem>,
+      lastUpdated: null == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      selectedPositions: null == selectedPositions
+          ? _value.selectedPositions
+          : selectedPositions // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      selectedChapterIds: null == selectedChapterIds
+          ? _value.selectedChapterIds
+          : selectedChapterIds // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdatesScreenStateImpl extends _UpdatesScreenState {
+  _$UpdatesScreenStateImpl(
+      {required this.items,
+      required this.lastUpdated,
+      this.selectedPositions = const [-1, -1],
+      this.selectedChapterIds = const {}})
+      : super._();
+
+  @override
+  List<UpdatesItem> items;
+  @override
+  DateTime lastUpdated;
+  @override
+  @JsonKey()
+  List<int> selectedPositions;
+  @override
+  @JsonKey()
+  Set<int> selectedChapterIds;
+
+  @override
+  String toString() {
+    return 'UpdatesScreenState(items: $items, lastUpdated: $lastUpdated, selectedPositions: $selectedPositions, selectedChapterIds: $selectedChapterIds)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdatesScreenStateImplCopyWith<_$UpdatesScreenStateImpl> get copyWith =>
+      __$$UpdatesScreenStateImplCopyWithImpl<_$UpdatesScreenStateImpl>(
+          this, _$identity);
+}
+
+abstract class _UpdatesScreenState extends UpdatesScreenState {
+  factory _UpdatesScreenState(
+      {required List<UpdatesItem> items,
+      required DateTime lastUpdated,
+      List<int> selectedPositions,
+      Set<int> selectedChapterIds}) = _$UpdatesScreenStateImpl;
+  _UpdatesScreenState._() : super._();
+
+  @override
+  List<UpdatesItem> get items;
+  set items(List<UpdatesItem> value);
+  @override
+  DateTime get lastUpdated;
+  set lastUpdated(DateTime value);
+  @override
+  List<int> get selectedPositions;
+  set selectedPositions(List<int> value);
+  @override
+  Set<int> get selectedChapterIds;
+  set selectedChapterIds(Set<int> value);
+  @override
+  @JsonKey(ignore: true)
+  _$$UpdatesScreenStateImplCopyWith<_$UpdatesScreenStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$UpdatesItem {
   UpdatesWithRelations get update => throw _privateConstructorUsedError;
   DownloadState Function() get downloadStateProvider =>

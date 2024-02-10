@@ -35,6 +35,12 @@ mixin _$MangaScreenState {
   set trackItems(List<TrackItem> value) => throw _privateConstructorUsedError;
   bool get hasPromptedToAddBefore => throw _privateConstructorUsedError;
   set hasPromptedToAddBefore(bool value) => throw _privateConstructorUsedError;
+  List<int> get selectedPositions => throw _privateConstructorUsedError;
+  set selectedPositions(List<int> value) =>
+      throw _privateConstructorUsedError; // first and last selected index in list
+  Set<int> get selectedChapterIds =>
+      throw _privateConstructorUsedError; // first and last selected index in list
+  set selectedChapterIds(Set<int> value) => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MangaScreenStateCopyWith<MangaScreenState> get copyWith =>
@@ -55,7 +61,9 @@ abstract class $MangaScreenStateCopyWith<$Res> {
       Set<String> availableScanlators,
       Set<String> excludedScanlators,
       List<TrackItem> trackItems,
-      bool hasPromptedToAddBefore});
+      bool hasPromptedToAddBefore,
+      List<int> selectedPositions,
+      Set<int> selectedChapterIds});
 
   $SourceCopyWith<$Res> get source;
 }
@@ -81,6 +89,8 @@ class _$MangaScreenStateCopyWithImpl<$Res, $Val extends MangaScreenState>
     Object? excludedScanlators = null,
     Object? trackItems = null,
     Object? hasPromptedToAddBefore = null,
+    Object? selectedPositions = null,
+    Object? selectedChapterIds = null,
   }) {
     return _then(_value.copyWith(
       manga: null == manga
@@ -115,6 +125,14 @@ class _$MangaScreenStateCopyWithImpl<$Res, $Val extends MangaScreenState>
           ? _value.hasPromptedToAddBefore
           : hasPromptedToAddBefore // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedPositions: null == selectedPositions
+          ? _value.selectedPositions
+          : selectedPositions // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      selectedChapterIds: null == selectedChapterIds
+          ? _value.selectedChapterIds
+          : selectedChapterIds // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
     ) as $Val);
   }
 
@@ -143,7 +161,9 @@ abstract class _$$MangaScreenStateImplCopyWith<$Res>
       Set<String> availableScanlators,
       Set<String> excludedScanlators,
       List<TrackItem> trackItems,
-      bool hasPromptedToAddBefore});
+      bool hasPromptedToAddBefore,
+      List<int> selectedPositions,
+      Set<int> selectedChapterIds});
 
   @override
   $SourceCopyWith<$Res> get source;
@@ -168,6 +188,8 @@ class __$$MangaScreenStateImplCopyWithImpl<$Res>
     Object? excludedScanlators = null,
     Object? trackItems = null,
     Object? hasPromptedToAddBefore = null,
+    Object? selectedPositions = null,
+    Object? selectedChapterIds = null,
   }) {
     return _then(_$MangaScreenStateImpl(
       manga: null == manga
@@ -202,6 +224,14 @@ class __$$MangaScreenStateImplCopyWithImpl<$Res>
           ? _value.hasPromptedToAddBefore
           : hasPromptedToAddBefore // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedPositions: null == selectedPositions
+          ? _value.selectedPositions
+          : selectedPositions // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      selectedChapterIds: null == selectedChapterIds
+          ? _value.selectedChapterIds
+          : selectedChapterIds // ignore: cast_nullable_to_non_nullable
+              as Set<int>,
     ));
   }
 }
@@ -217,7 +247,9 @@ class _$MangaScreenStateImpl extends _MangaScreenState {
       required this.availableScanlators,
       required this.excludedScanlators,
       this.trackItems = const [],
-      this.hasPromptedToAddBefore = false})
+      this.hasPromptedToAddBefore = false,
+      this.selectedPositions = const [-1, -1],
+      this.selectedChapterIds = const {}})
       : super._();
 
   @override
@@ -238,10 +270,17 @@ class _$MangaScreenStateImpl extends _MangaScreenState {
   @override
   @JsonKey()
   bool hasPromptedToAddBefore;
+  @override
+  @JsonKey()
+  List<int> selectedPositions;
+// first and last selected index in list
+  @override
+  @JsonKey()
+  Set<int> selectedChapterIds;
 
   @override
   String toString() {
-    return 'MangaScreenState(manga: $manga, source: $source, isFromSource: $isFromSource, chapters: $chapters, availableScanlators: $availableScanlators, excludedScanlators: $excludedScanlators, trackItems: $trackItems, hasPromptedToAddBefore: $hasPromptedToAddBefore)';
+    return 'MangaScreenState(manga: $manga, source: $source, isFromSource: $isFromSource, chapters: $chapters, availableScanlators: $availableScanlators, excludedScanlators: $excludedScanlators, trackItems: $trackItems, hasPromptedToAddBefore: $hasPromptedToAddBefore, selectedPositions: $selectedPositions, selectedChapterIds: $selectedChapterIds)';
   }
 
   @JsonKey(ignore: true)
@@ -261,7 +300,9 @@ abstract class _MangaScreenState extends MangaScreenState {
       required Set<String> availableScanlators,
       required Set<String> excludedScanlators,
       List<TrackItem> trackItems,
-      bool hasPromptedToAddBefore}) = _$MangaScreenStateImpl;
+      bool hasPromptedToAddBefore,
+      List<int> selectedPositions,
+      Set<int> selectedChapterIds}) = _$MangaScreenStateImpl;
   _MangaScreenState._() : super._();
 
   @override
@@ -288,6 +329,12 @@ abstract class _MangaScreenState extends MangaScreenState {
   @override
   bool get hasPromptedToAddBefore;
   set hasPromptedToAddBefore(bool value);
+  @override
+  List<int> get selectedPositions;
+  set selectedPositions(List<int> value);
+  @override // first and last selected index in list
+  Set<int> get selectedChapterIds; // first and last selected index in list
+  set selectedChapterIds(Set<int> value);
   @override
   @JsonKey(ignore: true)
   _$$MangaScreenStateImplCopyWith<_$MangaScreenStateImpl> get copyWith =>

@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
-import 'package:equatable/equatable.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -49,10 +48,10 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
       return UpdatesScreenState(
         items: updates.toUpdateItems(
           downloadManager,
-          state.valueOrNull?.selectedChapterIds ?? HashSet(),
+          state.valueOrNull?.selectedChapterIds ?? <int>{},
         ),
         lastUpdated: lastUpdated,
-        selectedChapterIds: state.valueOrNull?.selectedChapterIds ?? HashSet(),
+        selectedChapterIds: state.valueOrNull?.selectedChapterIds ?? <int>{},
       );
     });
   }
@@ -245,7 +244,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     // Mutables
     final items = state.items.toList();
     final selectedPositions = state.selectedPositions.toList(growable: false);
-    final selectedChapterIds = HashSet.of(state.selectedChapterIds);
+    final selectedChapterIds = Set.of(state.selectedChapterIds);
 
     final firstSelection = items.none((it) => it.selected);
     items[selectedIndex] = selectedItem.copyWith(selected: selected);
@@ -302,8 +301,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   Future<void> toggleAllSelection(bool selected) async {
     final previousState = state.valueOrNull;
     if (previousState != null) {
-      final newSelectedChapterIds =
-          HashSet.of(previousState.selectedChapterIds);
+      final newSelectedChapterIds = Set.of(previousState.selectedChapterIds);
       final newItems = previousState.items.map((it) {
         newSelectedChapterIds.addOrRemove(it.update.chapterId, selected);
         return it.copyWith(selected: selected);
@@ -322,7 +320,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     final previousState = state.valueOrNull;
     if (previousState != null) {
       final newSelectedChapterIds =
-          HashSet.of(previousState.selectedChapterIds);
+          Set.of(previousState.selectedChapterIds);
       final newItems = previousState.items.map((it) {
         newSelectedChapterIds.addOrRemove(it.update.chapterId, !it.selected);
         return it.copyWith(selected: !it.selected);
@@ -343,19 +341,15 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
   }
 }
 
-class UpdatesScreenState extends Equatable {
-  UpdatesScreenState({
-    required this.items,
-    required this.lastUpdated,
-    this.selectedPositions = const [-1, -1],
-    // Can't use HashSet as a default param :(
-    required this.selectedChapterIds,
-  });
-
-  final List<UpdatesItem> items;
-  final DateTime lastUpdated;
-  final List<int> selectedPositions;
-  final HashSet<int> selectedChapterIds;
+@unfreezed
+class UpdatesScreenState with _$UpdatesScreenState {
+  UpdatesScreenState._();
+  factory UpdatesScreenState({
+    required List<UpdatesItem> items,
+    required DateTime lastUpdated,
+    @Default([-1, -1]) List<int> selectedPositions,
+    @Default({}) Set<int> selectedChapterIds,
+  }) = _UpdatesScreenState;
 
   late final selected = items.where((it) => it.selected);
   late final selectionMode = selected.isNotEmpty;
@@ -378,23 +372,6 @@ class UpdatesScreenState extends Equatable {
       })
       .whereNotNull()
       .toList();
-
-  @override
-  List<Object?> get props =>
-      [items, lastUpdated, selectedPositions, selectedChapterIds];
-
-  UpdatesScreenState copyWith({
-    List<UpdatesItem>? items,
-    DateTime? lastUpdated,
-    List<int>? selectedPositions,
-    HashSet<int>? selectedChapterIds,
-  }) =>
-      UpdatesScreenState(
-        items: items ?? this.items,
-        lastUpdated: lastUpdated ?? this.lastUpdated,
-        selectedPositions: selectedPositions ?? this.selectedPositions,
-        selectedChapterIds: selectedChapterIds ?? this.selectedChapterIds,
-      );
 }
 
 @freezed
@@ -410,7 +387,7 @@ class UpdatesItem with _$UpdatesItem {
 extension _UpdatesWithRelationsToUpdateItems on List<UpdatesWithRelations> {
   List<UpdatesItem> toUpdateItems(
     DownloadManager downloadManager,
-    HashSet<int> selectedChapterIds,
+    Set<int> selectedChapterIds,
   ) =>
       map((update) {
         final activeDownload =
