@@ -1,11 +1,17 @@
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
-import 'package:dartx/dartx.dart' hide IterableFirstOrNull, IterableNone, IterableWhereNot, IterableWhereNotNull;
+import 'package:dartx/dartx.dart'
+    hide
+        IterableFirstOrNull,
+        IterableNone,
+        IterableWhereNot,
+        IterableWhereNotNull;
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutteryomi/core/util/system/logger.dart';
+import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/interactor/set_manga_categories.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
@@ -58,14 +64,17 @@ part 'manga_screen_model.g.dart';
 @riverpod
 class MangaScreenModel extends _$MangaScreenModel {
   @override
-  Stream<MangaScreenState> build({required int mangaId, required bool isFromSource}) {
+  Stream<MangaScreenState> build(
+      {required int mangaId, required bool isFromSource}) {
     final downloadManager = ref.watch(downloadManagerProvider);
     final getMangaWithChapters = ref.watch(getMangaWithChaptersProvider);
     final getExcludedScanlators = ref.watch(getExcludedScanlatorsProvider);
     final getAvailableScanlators = ref.watch(getAvailableScanlatorsProvider);
     final sourceManager = ref.watch(sourceManagerProvider);
     final stream1 = StreamZip([
-      getMangaWithChapters.subscribe(mangaId, applyScanlatorFilter: true).distinct(),
+      getMangaWithChapters
+          .subscribe(mangaId, applyScanlatorFilter: true)
+          .distinct(),
       //TODO
       //downloadCache.changes,
       downloadManager.queueState,
@@ -111,17 +120,17 @@ class MangaScreenModel extends _$MangaScreenModel {
   }
 
   void _setMangaDefaultChapterFlags(Manga manga) async {
-    final setMangaDefaultChapterFlags = ref.watch(setMangaDefaultChapterFlagsProvider);
+    final setMangaDefaultChapterFlags =
+        ref.watch(setMangaDefaultChapterFlagsProvider);
     await setMangaDefaultChapterFlags.await_(manga);
   }
-
-  //final loggedInTrackers = trackerManager.trackers.where((it) => it.isLoggedIn);
 
   bool get _isFavorited => state.valueOrNull?.manga.favorite ?? false;
 
   List<ChapterListItem>? get _allChapters => state.valueOrNull?.chapters;
 
-  List<ChapterListItem>? get _filteredChapters => state.valueOrNull?.processedChapters;
+  List<ChapterListItem>? get _filteredChapters =>
+      state.valueOrNull?.processedChapters;
 
   //final chapterSwipeStartAction = libraryPreferences.swipeToEndAction().get()
   //final chapterSwipeEndAction = libraryPreferences.swipeToStartAction().get()
@@ -177,9 +186,13 @@ class MangaScreenModel extends _$MangaScreenModel {
   }
 
   /// Update favorite status of manga, (removes / adds) manga (to / from) library.
-  void toggleFavoriteWithCallback({required VoidCallback onRemoved, bool checkDuplicate = true}) async {
+  void toggleFavoriteWithCallback({
+    required VoidCallback onRemoved,
+    bool checkDuplicate = true,
+  }) async {
     final addTracks = ref.watch(addTracksProvider);
-    final getDuplicateLibraryManga = ref.watch(getDuplicateLibraryMangaProvider);
+    final getDuplicateLibraryManga =
+        ref.watch(getDuplicateLibraryMangaProvider);
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final updateManga = ref.watch(updateMangaProvider);
     final previousState = state.valueOrNull;
@@ -209,15 +222,17 @@ class MangaScreenModel extends _$MangaScreenModel {
 
         // Now check if user previously set categories, when available
         final categories = await getCategories();
-        final defaultCategoryId = libraryPreferences.defaultCategory().get().toInt();
-        final defaultCategory = categories.firstWhere((it) => it.id == defaultCategoryId);
+        final defaultCategoryId =
+            libraryPreferences.defaultCategory().get().toInt();
+        final defaultCategory =
+            categories.firstWhere((it) => it.id == defaultCategoryId);
         // Default category set
         // Always true, I know
         if (defaultCategory != null) {
           final result = await updateManga.awaitUpdateFavorite(manga.id, true);
           if (!result) return;
           _moveMangaToCategoryWithCategory(defaultCategory);
-        // Automatic 'Default' or no categories
+          // Automatic 'Default' or no categories
         } else if (defaultCategoryId == 0 || categories.isEmpty) {
           final result = await updateManga.awaitUpdateFavorite(manga.id, true);
           if (!result) return;
@@ -288,7 +303,10 @@ class MangaScreenModel extends _$MangaScreenModel {
     return categories.map((it) => it.id).toList();
   }
 
-  void moveMangaToCategoriesAndAddToLibrary(Manga manga, List<int> categories) async {
+  void moveMangaToCategoriesAndAddToLibrary(
+    Manga manga,
+    List<int> categories,
+  ) async {
     final updateManga = ref.watch(updateMangaProvider);
     _moveMangaToCategory(categories);
     if (manga.favorite) return;
@@ -322,28 +340,30 @@ class MangaScreenModel extends _$MangaScreenModel {
     final logger = ref.watch(loggerProvider);
     final previousState = state.valueOrNull;
     if (previousState != null) {
-      downloadManager.statusStream()
+      downloadManager
+          .statusStream()
           .where((it) => it.manga.id == previousState.manga.id)
           .handleError((error) => logger.e(error))
-          .map((it) => _updateDownloadState(it));
+          .forEach(_updateDownloadState);
 
-      downloadManager.progressStream()
+      downloadManager
+          .progressStream()
           .where((it) => it.manga.id == previousState.manga.id)
           .handleError((error) => logger.e(error))
-          .map((it) => _updateDownloadState(it));
+          .forEach(_updateDownloadState);
     }
   }
 
   void _updateDownloadState(Download download) async {
     final previousState = state.valueOrNull;
     if (previousState != null) {
-      final modifiedIndex = previousState.chapters.indexWhere((it) => it.id == download.chapter.id);
+      final modifiedIndex = previousState.chapters
+          .indexWhere((it) => it.id == download.chapter.id);
       if (modifiedIndex < 0) return;
 
       final newChapters = previousState.chapters;
-      final item = newChapters
-          .removeAt(modifiedIndex)
-          .copyWith(downloadState: download.status, downloadProgress: download.progress);
+      final item = newChapters.removeAt(modifiedIndex).copyWith(
+          downloadState: download.status, downloadProgress: download.progress);
       newChapters.insert(modifiedIndex, item);
       final newState = previousState.copyWith(chapters: newChapters);
       state = await AsyncValue.guard(() async => newState);
@@ -388,7 +408,10 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   //TODO
   /// Throws an IllegalStateException if the swipe action is LibraryPreferences.ChapterSwipeAction.disabled
-  void chapterSwipe(ChapterListItem chapterItem, ChapterSwipeAction swipeAction) {
+  void chapterSwipe(
+    ChapterListItem chapterItem,
+    ChapterSwipeAction swipeAction,
+  ) {
     final chapter = chapterItem.chapter;
     switch (swipeAction) {
       case ChapterSwipeAction.toggleRead:
@@ -397,8 +420,12 @@ class MangaScreenModel extends _$MangaScreenModel {
         bookmarkChapters([chapter], !chapter.bookmark);
       case ChapterSwipeAction.download:
         final downloadAction = switch (chapterItem.downloadState) {
-          DownloadState.error || DownloadState.notDownloaded => ChapterDownloadAction.startNow,
-          DownloadState.queue || DownloadState.downloading => ChapterDownloadAction.cancel,
+          DownloadState.error ||
+          DownloadState.notDownloaded =>
+            ChapterDownloadAction.startNow,
+          DownloadState.queue ||
+          DownloadState.downloading =>
+            ChapterDownloadAction.cancel,
           DownloadState.downloaded => ChapterDownloadAction.delete,
         };
         runChapterDownloadActions(
@@ -406,7 +433,7 @@ class MangaScreenModel extends _$MangaScreenModel {
           action: downloadAction,
         );
       case ChapterSwipeAction.disabled:
-        //throw IllegalStateException();
+      //throw IllegalStateException();
     }
   }
 
@@ -420,13 +447,14 @@ class MangaScreenModel extends _$MangaScreenModel {
     }
   }
 
+  //TODO
   List<Chapter> _getUnreadChapters() {
     //final readerPreferences = ref.watch(readerPreferencesProvider);
     //final skipFiltered = readerPreferences.skipFiltered().get();
-  //  final chapterItems = skipFiltered ? filteredChapters.orEmpty() : allChapters.orEmpty();
-  //  return chapterItems
-  //      .where((chapter, dlStatus) => !chapter.read && dlStatus == DownloadState.notDownloaded)
-  //      .map((it) => it.chapter);
+    //  final chapterItems = skipFiltered ? filteredChapters.orEmpty() : allChapters.orEmpty();
+    //  return chapterItems
+    //      .where((chapter, dlStatus) => !chapter.read && dlStatus == DownloadState.notDownloaded)
+    //      .map((it) => it.chapter);
     return [];
   }
 
@@ -434,11 +462,12 @@ class MangaScreenModel extends _$MangaScreenModel {
     final previousState = state.valueOrNull;
     if (previousState != null) {
       final manga = previousState.manga;
-      final chaptersSorted = _getUnreadChapters()
-          .sortedWith(
-            getChapterSort(manga: manga),
-          );
-      return manga.sortDescending() ? chaptersSorted.reversed.toList() : chaptersSorted.toList();
+      final chaptersSorted = _getUnreadChapters().sortedWith(
+        getChapterSort(manga: manga),
+      );
+      return manga.sortDescending()
+          ? chaptersSorted.reversed.toList()
+          : chaptersSorted.toList();
     } else {
       return [];
     }
@@ -471,7 +500,10 @@ class MangaScreenModel extends _$MangaScreenModel {
     }
   }
 
-  void runChapterDownloadActions({required List<ChapterListItem> items, required ChapterDownloadAction action}) {
+  void runChapterDownloadActions({
+    required List<ChapterListItem> items,
+    required ChapterDownloadAction action,
+  }) {
     final downloadManager = ref.watch(downloadManagerProvider);
     switch (action) {
       case ChapterDownloadAction.start:
@@ -510,9 +542,10 @@ class MangaScreenModel extends _$MangaScreenModel {
     final activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId);
     if (activeDownload == null) return;
     downloadManager.cancelQueuedDownloads([activeDownload]);
-  //  _updateDownloadState(activeDownload.apply { status = Download.State.NOT_DOWNLOADED });
+    //  _updateDownloadState(activeDownload.apply { status = DownloadState.notDownloaded });
   }
 
+  //TODO
   void markPreviousChapterRead(Chapter pointer) async {
     final previousState = state.valueOrNull;
     if (previousState != null) {
@@ -545,9 +578,12 @@ class MangaScreenModel extends _$MangaScreenModel {
   /// Bookmarks the given list of chapters.
   void bookmarkChapters(List<Chapter> chapters, bool bookmarked) async {
     final updateChapter = ref.watch(updateChapterProvider);
-    final notBookmarkedChapters =  chapters
+    final notBookmarkedChapters = chapters
         .whereNot((it) => it.bookmark == bookmarked)
-        .map((it) => ChapterUpdate(id: drift.Value(it.id), bookmark: drift.Value(bookmarked),))
+        .map((it) => ChapterUpdate(
+              id: drift.Value(it.id),
+              bookmark: drift.Value(bookmarked),
+            ))
         .toList();
     await updateChapter.awaitAll(notBookmarkedChapters);
     toggleAllSelection(false);
@@ -579,7 +615,8 @@ class MangaScreenModel extends _$MangaScreenModel {
       final manga = previousState.manga;
       final categories = await getCategories.await_(manga.id);
       final categoryIds = categories.map((it) => it.id).toList();
-      if (chapters.isEmpty || !manga.shouldDownloadNewChapters(categoryIds, downloadPreferences)) {
+      if (chapters.isEmpty ||
+          !manga.shouldDownloadNewChapters(categoryIds, downloadPreferences)) {
         return;
       }
       _downloadChapters(chapters);
@@ -659,7 +696,8 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   void setCurrentSettingsAsDefault(bool applyToExisting) async {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
-    final setMangaDefaultChapterFlags = ref.watch(setMangaDefaultChapterFlagsProvider);
+    final setMangaDefaultChapterFlags =
+        ref.watch(setMangaDefaultChapterFlagsProvider);
     final previousState = state.valueOrNull;
     if (previousState != null) {
       final manga = previousState.manga;
@@ -673,7 +711,8 @@ class MangaScreenModel extends _$MangaScreenModel {
   }
 
   void resetToDefaultSettings() async {
-    final setMangaDefaultChapterFlags = ref.watch(setMangaDefaultChapterFlagsProvider);
+    final setMangaDefaultChapterFlags =
+        ref.watch(setMangaDefaultChapterFlagsProvider);
     final previousState = state.valueOrNull;
     if (previousState != null) {
       final manga = previousState.manga;
@@ -690,11 +729,13 @@ class MangaScreenModel extends _$MangaScreenModel {
     final previousState = state.valueOrNull;
     if (previousState != null) {
       final newChapters = previousState.processedChapters.toList();
-      final selectedIndex = previousState.processedChapters.indexWhere((it) => it.id == item.chapter.id);
+      final selectedIndex = previousState.processedChapters
+          .indexWhere((it) => it.id == item.chapter.id);
       if (selectedIndex < 0) return;
 
       final selectedItem = newChapters[selectedIndex];
-      if ((selectedItem.selected && selected) || (!selectedItem.selected && !selected)) return;
+      if ((selectedItem.selected && selected) ||
+          (!selectedItem.selected && !selected)) return;
 
       final firstSelection = newChapters.none((it) => it.selected);
       newChapters[selectedIndex] = selectedItem.copyWith(selected: selected);
@@ -733,7 +774,8 @@ class MangaScreenModel extends _$MangaScreenModel {
           if (selectedIndex == selectedPositions[0]) {
             selectedPositions[0] = newChapters.indexWhere((it) => it.selected);
           } else if (selectedIndex == selectedPositions[1]) {
-            selectedPositions[1] = newChapters.lastIndexWhere((it) => it.selected);
+            selectedPositions[1] =
+                newChapters.lastIndexWhere((it) => it.selected);
           }
         } else {
           if (selectedIndex < selectedPositions[0]) {
@@ -799,21 +841,31 @@ class MangaScreenModel extends _$MangaScreenModel {
   void _observeTrackers() {
     final getTracks = ref.watch(getTracksProvider);
     final logger = ref.watch(loggerProvider);
+    final trackerManager = ref.watch(trackerManagerProvider);
+    final loggedInTrackers =
+        trackerManager.trackers.where((it) => it.isLoggedIn);
     final previousState = state.valueOrNull;
     if (previousState != null) {
       final manga = previousState.manga;
-    //getTracks.subscribe(manga.id)
-    //    .handleError((it) => logger.e(it))
-    //    .map((tracks) => loggedInTrackers
-    //        // Map to TrackItem
-    //        .map((service) => TrackItem(tracks.find((it) => it.trackerId == service.id), service))
-    //        // Show only if the service supports this manga's source
-    //        .where((it) => (it.tracker as? EnhancedTracker)?.accept(source!!) ?? true),
-    //    )
-        //.distinct()
-        //.collectLatest { trackItems ->
-        //    updateSuccessState { it.copy(trackItems = trackItems) }
-        //};
+      getTracks
+          .subscribe(manga.id)
+          .handleError((it) => logger.e(it))
+          .map((tracks) => loggedInTrackers
+                  // Map to TrackItem
+                  .map((service) => TrackItem(
+                        track: tracks.firstWhereOrNull(
+                            (it) => it.trackerId == service.id),
+                        tracker: service,
+                      ))
+              // Show only if the service supports this manga's source
+              //.where((it) => (it.tracker as? EnhancedTracker)?.accept(source!) ?? true),
+              )
+          .distinct()
+          .forEach((trackItems) async {
+        final newState =
+            previousState.copyWith(trackItems: trackItems.toList());
+        state = await AsyncValue.guard(() async => newState);
+      });
     }
   }
 
@@ -837,7 +889,8 @@ class MangaScreenState with _$MangaScreenState {
     required Set<String> excludedScanlators,
     @Default([]) List<TrackItem> trackItems,
     @Default(false) bool hasPromptedToAddBefore,
-    @Default([-1, -1]) List<int> selectedPositions, // first and last selected index in list
+    @Default([-1, -1])
+    List<int> selectedPositions, // first and last selected index in list
     @Default({}) Set<int> selectedChapterIds,
   }) = _MangaScreenState;
 
@@ -845,37 +898,42 @@ class MangaScreenState with _$MangaScreenState {
 
   late final isAnySelected = chapters.any((it) => it.selected);
 
-  late final chapterListItems = processedChapters.insertSeparators((before, after) {
-    final (lowerChapter, higherChapter) = manga.sortDescending()
-        ? (after, before)
-        : (before, after);
-    if (higherChapter == null) return null;
+  late final chapterListItems = processedChapters.insertSeparators(
+    (before, after) {
+      final (lowerChapter, higherChapter) = manga.sortDescending() //
+          ? (after, before)
+          : (before, after);
+      if (higherChapter == null) return null;
 
-    int? missingCount;
-    if (lowerChapter == null) {
-      missingCount = (higherChapter.chapter.chapterNumber.floor() - 1).coerceAtLeast(0);
-    } else {
-      missingCount = calculateChapterGapUsingChapter(higherChapter.chapter, lowerChapter.chapter);
-    }
-    if (missingCount <= 0) missingCount = null;
-    if (missingCount != null) {
-      return ChapterListMissingCount(
-        id: "${lowerChapter?.id}-${higherChapter.id}",
-        count: missingCount,
-      );
-    } else {
-      return null;
-    }
-  });
+      int? missingCount;
+      if (lowerChapter == null) {
+        missingCount =
+            (higherChapter.chapter.chapterNumber.floor() - 1).coerceAtLeast(0);
+      } else {
+        missingCount = calculateChapterGapUsingChapter(
+          higherChapter.chapter,
+          lowerChapter.chapter,
+        );
+      }
+      if (missingCount <= 0) missingCount = null;
+      if (missingCount != null) {
+        return ChapterListMissingCount(
+          id: "${lowerChapter?.id}-${higherChapter.id}",
+          count: missingCount,
+        );
+      } else {
+        return null;
+      }
+    },
+  );
 
-  bool get scanlatorFilterActive => excludedScanlators.intersect(availableScanlators).isNotEmpty;
+  bool get scanlatorFilterActive =>
+      excludedScanlators.intersect(availableScanlators).isNotEmpty;
 
   bool get filterActive => scanlatorFilterActive || manga.chaptersFiltered();
 
   int get trackingCount => trackItems.count((it) => it.track != null);
 }
-
-
 
 sealed class ChapterList {}
 
@@ -901,7 +959,6 @@ class ChapterListItem with _$ChapterListItem {
   late final isDownloaded = downloadState == DownloadState.downloaded;
 }
 
-
 extension _ChapterListItemsUtils on List<ChapterListItem> {
   /// Applies the view filters to the list of chapters obtained from the database.
   /// Returns an observable of the list of chapters filtered and sorted.
@@ -915,8 +972,10 @@ extension _ChapterListItemsUtils on List<ChapterListItem> {
 
     return where((it) => applyFilter(unreadFilter, () => !it.chapter.read))
         .where((it) => applyFilter(bookmarkedFilter, () => it.chapter.bookmark))
-        .where((it) => applyFilter(downloadedFilter, () => it.isDownloaded || isLocalManga))
-        .sortedWith((i1, i2) => getChapterSort(manga: manga)(i1.chapter, i2.chapter));
+        .where((it) => applyFilter(
+            downloadedFilter, () => it.isDownloaded || isLocalManga))
+        .sortedWith(
+            (i1, i2) => getChapterSort(manga: manga)(i1.chapter, i2.chapter));
   }
 
   Chapter? getNextUnread(Manga manga) {

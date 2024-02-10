@@ -217,7 +217,8 @@ class LibraryScreenModel extends _$LibraryScreenModel {
             .compareTo(i2.libraryManga.manga.title.toLowerCase());
 
     const defaultTrackerScoreSortValue = -1.0;
-    final trackerMap = trackerManager.loggedInTrackers().associateBy((e) => e.id);
+    final trackerMap =
+        trackerManager.loggedInTrackers().associateBy((e) => e.id);
     final trackerScores = trackMap.mapValues(
       (entry) => entry.value.isEmpty
           ? null
@@ -263,8 +264,10 @@ class LibraryScreenModel extends _$LibraryScreenModel {
           return i1.libraryManga.manga.dateAdded
               .compareTo(i2.libraryManga.manga.dateAdded);
         case TrackerMean():
-          final item1Score = trackerScores[i1.libraryManga.id] ?? defaultTrackerScoreSortValue;
-          final item2Score = trackerScores[i2.libraryManga.id] ?? defaultTrackerScoreSortValue;
+          final item1Score =
+              trackerScores[i1.libraryManga.id] ?? defaultTrackerScoreSortValue;
+          final item2Score =
+              trackerScores[i2.libraryManga.id] ?? defaultTrackerScoreSortValue;
           return item1Score.compareTo(item2Score);
       }
     }
@@ -346,7 +349,10 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       }).groupBy((it) => it.libraryManga.category);
     });
 
-    return StreamZip([getCategories.subscribe(), libraryMangasStream]).map((e) {
+    return StreamZip([
+      getCategories.subscribe(),
+      libraryMangasStream,
+    ]).map((e) {
       final categories = e[0] as List<Category>;
       final libraryManga = e[1] as Map<int, List<LibraryItem>>;
       final displayCategories =
@@ -370,11 +376,11 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     //if (loggedInTrackers.isNotEmpty) {
     //  final prefStreams = loggedInTrackers
     //      .map((it) => libraryPreferences.filterTracking(it.id).changes());
-      //return combine(*prefStreams) {
-      //    loggedInTrackers
-      //        .mapIndexed { index, tracker -> tracker.id to it[index] }
-      //        .toMap()
-      //}
+    //return combine(*prefStreams) {
+    //    loggedInTrackers
+    //        .mapIndexed { index, tracker -> tracker.id to it[index] }
+    //        .toMap()
+    //}
     //} else {
     //  return flowOf(emptyMap());
     //}
