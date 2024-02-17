@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart';
 import 'package:flutteryomi/presentation/components/settings_items.dart';
@@ -11,7 +12,6 @@ import 'package:flutteryomi/presentation/theme/color_scheme.dart'
 class ChapterSettingsDialog extends StatelessWidget {
   const ChapterSettingsDialog({
     super.key,
-    required this.onDismissRequest,
     this.manga,
     required this.onDownloadFilterChanged,
     required this.onUnreadFilterChanged,
@@ -24,11 +24,10 @@ class ChapterSettingsDialog extends StatelessWidget {
     required this.onResetToDefault,
   });
 
-  final VoidCallback onDismissRequest;
   final Manga? manga;
-  final ValueChanged<bool?> onDownloadFilterChanged;
-  final ValueChanged<bool?> onUnreadFilterChanged;
-  final ValueChanged<bool?> onBookmarkedFilterChanged;
+  final ValueChanged<TriState> onDownloadFilterChanged;
+  final ValueChanged<TriState> onUnreadFilterChanged;
+  final ValueChanged<TriState> onBookmarkedFilterChanged;
   final bool scanlatorFilterActive;
   final VoidCallback onScanlatorFilterClicked;
   final ValueChanged<int> onSortModeChanged;
@@ -95,22 +94,24 @@ class ChapterSettingsDialog extends StatelessWidget {
             child: TabBarView(
               children: [
                 _FilterPage(
-                  downloadFilter: false,
-                  onDownloadFilterChanged: onDownloadFilterChanged,
-                  unreadFilter: false,
+                  downloadFilter: manga?.downloadedFilter ?? TriState.disabled,
+                  onDownloadFilterChanged: manga?.forceDownloaded() == true
+                      ? null
+                      : onDownloadFilterChanged,
+                  unreadFilter: manga?.unreadFilter ?? TriState.disabled,
                   onUnreadFilterChanged: onUnreadFilterChanged,
-                  bookmarkedFilter: false,
+                  bookmarkedFilter: manga?.bookmarkedFilter ?? TriState.disabled,
                   onBookmarkedFilterChanged: onBookmarkedFilterChanged,
                   scanlatorFilterActive: scanlatorFilterActive,
                   onScanlatorFilterClicked: onScanlatorFilterClicked,
                 ),
                 _SortPage(
-                  sortingMode: 0,
-                  sortDescending: false,
+                  sortingMode: manga?.sorting ?? 0,
+                  sortDescending: manga?.sortDescending() ?? false,
                   onItemSelected: onSortModeChanged,
                 ),
                 _DisplayPage(
-                  displayMode: 0,
+                  displayMode: manga?.displayMode ?? 0,
                   onItemSelected: onDisplayModeChanged,
                 ),
               ],
@@ -125,22 +126,22 @@ class ChapterSettingsDialog extends StatelessWidget {
 class _FilterPage extends StatelessWidget {
   const _FilterPage({
     super.key,
-    this.downloadFilter,
+    required this.downloadFilter,
     this.onDownloadFilterChanged,
-    this.unreadFilter,
+    required this.unreadFilter,
     required this.onUnreadFilterChanged,
-    this.bookmarkedFilter,
+    required this.bookmarkedFilter,
     required this.onBookmarkedFilterChanged,
     required this.scanlatorFilterActive,
     required this.onScanlatorFilterClicked,
   });
 
-  final bool? downloadFilter;
-  final ValueChanged<bool?>? onDownloadFilterChanged;
-  final bool? unreadFilter;
-  final ValueChanged<bool?> onUnreadFilterChanged;
-  final bool? bookmarkedFilter;
-  final ValueChanged<bool?> onBookmarkedFilterChanged;
+  final TriState downloadFilter;
+  final ValueChanged<TriState>? onDownloadFilterChanged;
+  final TriState unreadFilter;
+  final ValueChanged<TriState> onUnreadFilterChanged;
+  final TriState bookmarkedFilter;
+  final ValueChanged<TriState> onBookmarkedFilterChanged;
   final bool scanlatorFilterActive;
   final VoidCallback onScanlatorFilterClicked;
 
@@ -151,18 +152,17 @@ class _FilterPage extends StatelessWidget {
       children: [
         TriStateItem(
           label: lang.label_downloaded,
-          state: true,
-          enabled: true,
+          state: downloadFilter,
           onClick: onDownloadFilterChanged,
         ),
         TriStateItem(
           label: lang.action_filter_unread,
-          state: true,
+          state: unreadFilter,
           onClick: onUnreadFilterChanged,
         ),
         TriStateItem(
           label: lang.label_started,
-          state: true,
+          state: bookmarkedFilter,
           onClick: onBookmarkedFilterChanged,
         ),
         ListTile(
@@ -170,7 +170,10 @@ class _FilterPage extends StatelessWidget {
             Icons.people_alt_outlined,
             color: scanlatorFilterActive ? color_scheme.active(context) : null,
           ),
-          title: Text(lang.scanlator),
+          title: Text(
+            lang.scanlator,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           onTap: onScanlatorFilterClicked,
         ),
       ],
@@ -278,15 +281,15 @@ class _SetAsDefaultDialogState extends State<_SetAsDefaultDialog> {
       ),
       actions: [
         TextButton(
+          onPressed: Navigator.of(context).pop,
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text(lang.action_ok),
           onPressed: () {
             widget.onConfirmed(optionalChecked);
             Navigator.of(context).pop();
           },
+          child: Text(lang.action_ok),
         ),
       ],
     );

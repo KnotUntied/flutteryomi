@@ -6,11 +6,11 @@ import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart'
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/theme/color_scheme.dart';
 
-class MangaToolbar extends StatelessWidget {
+class MangaToolbar extends StatelessWidget implements PreferredSizeWidget {
   const MangaToolbar({
     super.key,
     required this.title,
-    required this.titleAlphaProvider,
+    //required this.titleAlphaProvider,
     required this.hasFilters,
     required this.onBackClicked,
     required this.onClickFilter,
@@ -24,11 +24,13 @@ class MangaToolbar extends StatelessWidget {
     required this.actionModeCounter,
     required this.onSelectAll,
     required this.onInvertSelection,
-    required this.backgroundAlphaProvider,
+    //required this.backgroundAlphaProvider,
+
+    this.bottom,
   });
 
   final String title;
-  final double Function() titleAlphaProvider;
+  //final double Function() titleAlphaProvider;
   final bool hasFilters;
   final VoidCallback onBackClicked;
   final VoidCallback onClickFilter;
@@ -42,7 +44,13 @@ class MangaToolbar extends StatelessWidget {
   final VoidCallback onSelectAll;
   final VoidCallback onInvertSelection;
 
-  final double Function() backgroundAlphaProvider;
+  final PreferredSizeWidget? bottom;
+
+  //final double Function() backgroundAlphaProvider;
+
+  @override
+  Size get preferredSize => Size.fromHeight(
+      bottom != null ? kToolbarHeight + kTextTabBarHeight : kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +58,16 @@ class MangaToolbar extends StatelessWidget {
     final isActionMode = actionModeCounter > 0;
     final filterTint = hasFilters ? active(context) : null;
     return AppBar(
-      title: Opacity(
-        opacity: isActionMode ? 1.0 : titleAlphaProvider(),
+      title: AnimatedOpacity(
+        opacity: isActionMode ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 500),
         child: Text(
           isActionMode ? actionModeCounter.toString() : title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
       ),
+      leading: isActionMode ? CloseButton(onPressed: onBackClicked) : null,
       actions: [
         if (isActionMode) ...[
           AppBarAction(
@@ -102,11 +112,12 @@ class MangaToolbar extends StatelessWidget {
                 title: lang.action_share,
                 onClick: onClickShare!,
               ),
-          ])
+          ]),
         ],
       ],
+      // TODO: Animated background opacity
       backgroundColor: Theme.of(context).colorScheme.surfaceTint.withOpacity(
-            isActionMode ? 1.0 : backgroundAlphaProvider(),
+            isActionMode ? 1.0 : 0.0,
           ),
     );
   }

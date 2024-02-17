@@ -744,7 +744,7 @@
   "manga_display_modified_interval_title": "Set to update every",
   
   "manga_interval_expected_update": "New chapters predicted to be released in around {expected}, checking around every {interval}.",
-  "@display_mode_chapter": {
+  "@manga_interval_expected_update": {
     "placeholders": {
       "expected": {
         "type": "String"

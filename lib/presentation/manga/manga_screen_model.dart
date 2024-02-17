@@ -8,7 +8,6 @@ import 'package:dartx/dartx.dart'
         IterableWhereNotNull;
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
-import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/track/tracker_manager.dart';
@@ -297,7 +296,7 @@ class MangaScreenModel extends _$MangaScreenModel {
   }
 
   /// Gets the category id's the manga is in, if the manga is not in a category, returns the default id.
-  Future<List<int>> _getMangaCategoryIds(Manga manga) async {
+  Future<List<int>> getMangaCategoryIds(Manga manga) async {
     final getCategories = ref.watch(getCategoriesProvider);
     final categories = await getCategories.await_(manga.id);
     return categories.map((it) => it.id).toList();
@@ -938,7 +937,7 @@ class MangaScreenState with _$MangaScreenState {
 sealed class ChapterList {}
 
 @freezed
-class ChapterListMissingCount with _$ChapterListMissingCount {
+class ChapterListMissingCount extends ChapterList with _$ChapterListMissingCount {
   const factory ChapterListMissingCount({
     required String id,
     required int count,
@@ -946,7 +945,7 @@ class ChapterListMissingCount with _$ChapterListMissingCount {
 }
 
 @freezed
-class ChapterListItem with _$ChapterListItem {
+class ChapterListItem extends ChapterList with _$ChapterListItem {
   ChapterListItem._();
   factory ChapterListItem({
     required Chapter chapter,

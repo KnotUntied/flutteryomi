@@ -13,6 +13,8 @@ import 'package:flutteryomi/domain/source/model/smanga.dart';
 typedef Manga = drift.Manga;
 
 extension MangaUtils on Manga {
+  DateTime? get expectedNextUpdate =>
+      status != SManga.completed ? nextUpdate : null;
   int get sorting => chapterFlags & chapterSortingMask;
   int get displayMode => chapterFlags & chapterDisplayMask;
   int get unreadFilterRaw => chapterFlags & chapterUnreadMask;
@@ -161,7 +163,8 @@ extension MangaUtils on Manga {
     //    : this;
   }
 
-  bool shouldDownloadNewChapters(List<int> dbCategories, DownloadPreferences preferences) {
+  bool shouldDownloadNewChapters(
+      List<int> dbCategories, DownloadPreferences preferences) {
     if (!favorite) return false;
 
     final categories = dbCategories.isNotEmpty ? dbCategories : const [0];
@@ -170,8 +173,14 @@ extension MangaUtils on Manga {
     final downloadNewChapters = preferences.downloadNewChapters().get();
     if (!downloadNewChapters) return false;
 
-    final includedCategories = preferences.downloadNewChapterCategories().get().map((it) => it.toInt());
-    final excludedCategories = preferences.downloadNewChapterCategoriesExclude().get().map((it) => it.toInt());
+    final includedCategories = preferences
+        .downloadNewChapterCategories()
+        .get()
+        .map((it) => it.toInt());
+    final excludedCategories = preferences
+        .downloadNewChapterCategoriesExclude()
+        .get()
+        .map((it) => it.toInt());
 
     // Default: Download from all categories
     if (includedCategories.isEmpty && excludedCategories.isEmpty) return true;
