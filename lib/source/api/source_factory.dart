@@ -1,4 +1,4 @@
-import 'package:flutteryomi/domain/source/model/source.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
 /// A factory for creating sources at runtime.
 abstract interface class SourceFactory {

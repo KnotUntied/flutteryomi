@@ -1,32 +1,28 @@
-// TODO
 import 'package:dartx/dartx.dart';
 
 import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/model/schapter.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
-import 'package:flutteryomi/domain/source/model/source.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
-// Currently cannot extend or implement a Freezed class
-//class StubSource implements Source {
-class StubSource {
+class StubSource extends Source {
   StubSource({
-    required this.id,
-    required this.lang,
-    required this.name,
+    required super.id,
+    super.lang,
+    required super.name,
   });
-
-  final int id;
-  final String lang;
-  final String name;
 
   late final bool _isInvalid = name.isBlank || lang.isBlank;
 
+  @override
   Future<SManga> getMangaDetails(SManga manga) =>
       throw SourceNotInstalledException();
 
+  @override
   Future<List<SChapter>> getChapterList(SManga manga) =>
       throw SourceNotInstalledException();
 
+  @override
   Future<List<Page>> getPageList(SChapter chapter) =>
       throw SourceNotInstalledException();
 

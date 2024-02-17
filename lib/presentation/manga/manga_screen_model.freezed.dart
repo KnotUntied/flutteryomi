@@ -64,8 +64,6 @@ abstract class $MangaScreenStateCopyWith<$Res> {
       bool hasPromptedToAddBefore,
       List<int> selectedPositions,
       Set<int> selectedChapterIds});
-
-  $SourceCopyWith<$Res> get source;
 }
 
 /// @nodoc
@@ -135,14 +133,6 @@ class _$MangaScreenStateCopyWithImpl<$Res, $Val extends MangaScreenState>
               as Set<int>,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SourceCopyWith<$Res> get source {
-    return $SourceCopyWith<$Res>(_value.source, (value) {
-      return _then(_value.copyWith(source: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -164,9 +154,6 @@ abstract class _$$MangaScreenStateImplCopyWith<$Res>
       bool hasPromptedToAddBefore,
       List<int> selectedPositions,
       Set<int> selectedChapterIds});
-
-  @override
-  $SourceCopyWith<$Res> get source;
 }
 
 /// @nodoc

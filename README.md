@@ -50,11 +50,12 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 
 ## Todo
 
+- [ ] Better structure for sources (bruh) (probably move from `source/api/` and `source/local/` to `domain/source/api` and `domain/source/local`, respectively)
 - [ ] License (esp. wrt. existing Tachiyomi license and permissions)
-- [ ] Replace `toList()` with [`cached`](https://pub.dev/documentation/dartx_nullsafety/latest/dartx/IterableX/cached.html), hmm?
+- [ ] Replace `toList()` with [`cached`](https://pub.dev/documentation/dartx_nullsafety/latest/dartx/IterableX/cached.html) (beware of memory tradeoffs)
 - [ ] Better downloader
   - Consider https://pub.dev/packages/flutter_downloader
 - [ ] Feature parity with Tachiyomi/Mihon
-- [ ] Platform-adaptive interface, i.e., using `CupertinoApp` alongside `MaterialApp`
-- [ ] XML to ARB for localization
+- [ ] Platform-adaptive UI, i.e., using `CupertinoApp` alongside `MaterialApp`
+- [ ] XML to ARB for localization (tools exist but aren't bespoke)
 - [ ] Dart-specific optimizations and naming conventions

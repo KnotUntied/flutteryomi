@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutteryomi/source/api/source.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,7 +15,6 @@ import 'package:flutteryomi/domain/download/downloader.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
-import 'package:flutteryomi/domain/source/model/source.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 
 part 'download_manager.g.dart';
@@ -117,10 +117,10 @@ class DownloadManager {
   }
 
   /// Tells the downloader to enqueue the given list of [downloads] at the start of the queue.
-  void addDownloadsToStartOfQueue(List<Download> downloads) {
+  void addDownloadsToStartOfQueue(List<Download> downloads) async {
     if (downloads.isEmpty) return;
-    final queue = queueState.value;
-    queue.addAll(0, downloads);
+    final queue = await queueState.last;
+    //await queue.addAll(0, downloads);
     //reorderQueue(queue);
     //if (!DownloadJob.isRunning(context)) startDownloads();
   }
@@ -320,7 +320,7 @@ class DownloadManager {
   //    .onStart(() => emitAll(
   //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
   //    ));
-  Stream<Download> statusStream() => Stream.empty();
+  Stream<Download> statusStream() => const Stream.empty();
 
   //Stream<Download> progressStream() => queueState
   //    .flatMapLatest((downloads) => downloads
@@ -329,7 +329,7 @@ class DownloadManager {
   //    .onStart(() => emitAll(
   //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
   //    ));
-  Stream<Download> progressStream() => Stream.empty();
+  Stream<Download> progressStream() => const Stream.empty();
 }
 
 @riverpod

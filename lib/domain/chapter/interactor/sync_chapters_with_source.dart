@@ -20,7 +20,7 @@ import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart
 import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/schapter.dart';
-import 'package:flutteryomi/domain/source/model/source.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
 part 'sync_chapters_with_source.g.dart';
 

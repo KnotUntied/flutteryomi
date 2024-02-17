@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dartx/dartx.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
@@ -11,6 +12,7 @@ import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/page.dart' as pageData;
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/source/api/unmetered_source.dart';
 
 //TODO
 /// This class is the one in charge of downloading chapters.
@@ -73,13 +75,14 @@ class Downloader {
   /// to download.
   ///
   /// Returns true if the downloader is started, false otherwise.
-  bool start() {
-    if (isRunning || queueState.value.isEmpty) return false;
+  Future<bool> start() async {
+    final value = await queueState.last;
+    if (isRunning || value.isEmpty) return false;
 
-    final pending = queueState.value.where((it) => it.status != DownloadState.downloaded);
-    pending.forEach((it) {
-      if (it.status != DownloadState.queue) it.status = DownloadState.queue;
-    });
+    final pending = value.where((it) => it.status != DownloadState.downloaded);
+    for (final it in pending) {
+      //if (it.status != DownloadState.queue) it.status = DownloadState.queue;
+    }
 
     isPaused = false;
 
@@ -89,11 +92,12 @@ class Downloader {
   }
 
   /// Stops the downloader.
-  void stop([String? reason]) {
+  void stop([String? reason]) async {
+    final value = await queueState.last;
     _cancelDownloaderJob();
-    queueState.value
-        .where((it) => it.status == DownloadState.downloading)
-        .forEach((it) => it.status = DownloadState.error);
+    value
+        .where((it) => it.status == DownloadState.downloading);
+        //.forEach((it) => it.status = DownloadState.error);
 
     //if (reason != null) {
     //  notifier.onWarning(reason);
@@ -112,11 +116,12 @@ class Downloader {
   }
 
   /// Pauses the downloader
-  void pause() {
+  void pause() async {
+    final value = await queueState.last;
     _cancelDownloaderJob();
-    queueState.value
-        .where((it) => it.status == DownloadState.downloading)
-        .forEach((it) => it.status = DownloadState.queue);
+    value
+        .where((it) => it.status == DownloadState.downloading);
+        //.forEach((it) => it.status = DownloadState.queue);
     isPaused = true;
   }
 
@@ -198,28 +203,29 @@ class Downloader {
   /// Creates a download object for every chapter of [chapters] in [manga] and adds them to the downloads queue.
   ///
   /// [autoStart] dictates whether to start the downloader after enqueueing the chapters.
-  void queueChapters(Manga manga, List<Chapter> chapters, bool autoStart) {
+  void queueChapters(Manga manga, List<Chapter> chapters, bool autoStart) async {
     if (chapters.isEmpty) return;
 
     //final source = sourceManager.get(manga.source) as? HttpSource ?? return;
-    //final wasEmpty = queueState.value.isEmpty;
-    //final chaptersToQueue = chapters.asSequence()
-    //    // Filter out those already downloaded.
-    //    .where((it) => provider.findChapterDir(it.name, it.scanlator, manga.title, source) == null)
-    //    // Add chapters to queue from the start.
-    //    .sortedByDescending((it) => it.sourceOrder)
-    //    // Filter out those already enqueued.
-    //    .where((chapter) => queueState.value.none((it) => it.chapter.id == chapter.id))
-    //    // Create a download for each one.
-    //    .map((it) => Download(source, manga, it))
-    //    .toList();
+    final value = await queueState.last;
+    final wasEmpty = value.isEmpty;
+    final chaptersToQueue = chapters
+        // Filter out those already downloaded.
+        //.where((it) => provider.findChapterDir(it.name, it.scanlator, manga.title, source) == null)
+        // Add chapters to queue from the start.
+        .sortedByDescending((it) => it.sourceOrder)
+        // Filter out those already enqueued.
+        .where((chapter) => value.none((it) => it.chapter.id == chapter.id))
+        // Create a download for each one.
+        //.map((it) => Download(source, manga, it))
+        .toList();
 
-    //if (chaptersToQueue.isNotEmpty) {
+    if (chaptersToQueue.isNotEmpty) {
     //  _addAllToQueue(chaptersToQueue);
 
-    //  // Start downloader if needed
-    //  if (autoStart && wasEmpty) {
-    //    final queuedDownloads = queueState.value.where((it) => it.source !is UnmeteredSource).length;
+      // Start downloader if needed
+      if (autoStart && wasEmpty) {
+        //final queuedDownloads = value.where((it) => it.source !is UnmeteredSource).length;
     //    final maxDownloadsFromSource = queueState.value
     //        .groupBy { it.source }
     //        .filterKeys { it !is UnmeteredSource }
@@ -234,8 +240,8 @@ class Downloader {
     //      )
     //    }
     //    DownloadJob.start(context);
-    //  }
-    //}
+      }
+    }
   }
 
   /// Downloads a chapter [download].

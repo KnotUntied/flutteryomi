@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:flutteryomi/domain/source/model/source.dart';
+import 'package:flutteryomi/domain/source/model/domain_source.dart';
 
 part 'source_with_count.freezed.dart';
 

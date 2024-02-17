@@ -3,22 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:flutteryomi/core/preference/checkbox_state.dart';
 import 'package:flutteryomi/data/track/tracker_manager.dart';
-
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/service/missing_chapters.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
-import 'package:flutteryomi/domain/source/model/source.dart';
+import 'package:flutteryomi/domain/source/model/domain_source.dart';
 import 'package:flutteryomi/domain/source/model/stub_source.dart';
-import 'package:flutteryomi/domain/ui/ui_preferences.dart';
 import 'package:flutteryomi/presentation/category/category.dart';
 import 'package:flutteryomi/presentation/category/components/category_dialogs.dart';
-import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/components/date_text.dart';
-import 'package:flutteryomi/presentation/components/list_group_header.dart';
 import 'package:flutteryomi/presentation/components/two_panel_box.dart';
 import 'package:flutteryomi/presentation/manga/chapter_settings_dialog.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
@@ -32,12 +29,9 @@ import 'package:flutteryomi/presentation/manga/components/missing_chapter_count_
 import 'package:flutteryomi/presentation/manga/components/scanlator_filter_dialog.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_model.dart';
-import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
-import 'package:flutteryomi/presentation/updates/updates_dialog.dart';
-import 'package:flutteryomi/presentation/updates/updates_screen_model.dart';
-import 'package:flutteryomi/presentation/updates/updates_ui_item.dart';
 import 'package:flutteryomi/presentation/util/chapter_number_formatter.dart';
+import 'package:flutteryomi/source/api/source_extensions.dart';
 
 class MangaScreen extends ConsumerWidget {
   const MangaScreen({

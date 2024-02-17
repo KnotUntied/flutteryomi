@@ -1,7 +1,7 @@
 import 'package:flutteryomi/domain/source/model/pin.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'source.freezed.dart';
+part 'domain_source.freezed.dart';
 
 @freezed
 class Source with _$Source {

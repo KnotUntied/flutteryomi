@@ -27,6 +27,7 @@ import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 import 'package:flutteryomi/domain/track/interactor/add_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
+import 'package:flutteryomi/source/api/source.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -46,7 +47,6 @@ import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/interactor/set_excluded_scanlators.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/tri_state.dart';
-import 'package:flutteryomi/domain/source/model/source.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
 import 'package:flutteryomi/domain/updates/interactor/get_updates.dart';
@@ -427,10 +427,7 @@ class MangaScreenModel extends _$MangaScreenModel {
             ChapterDownloadAction.cancel,
           DownloadState.downloaded => ChapterDownloadAction.delete,
         };
-        runChapterDownloadActions(
-          items: [chapterItem],
-          action: downloadAction,
-        );
+        runChapterDownloadActions([chapterItem], downloadAction);
       case ChapterSwipeAction.disabled:
       //throw IllegalStateException();
     }
@@ -499,10 +496,10 @@ class MangaScreenModel extends _$MangaScreenModel {
     }
   }
 
-  void runChapterDownloadActions({
-    required List<ChapterListItem> items,
-    required ChapterDownloadAction action,
-  }) {
+  void runChapterDownloadActions(
+    List<ChapterListItem> items,
+    ChapterDownloadAction action,
+  ) {
     final downloadManager = ref.watch(downloadManagerProvider);
     switch (action) {
       case ChapterDownloadAction.start:

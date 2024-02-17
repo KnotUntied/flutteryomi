@@ -7,11 +7,11 @@ import 'package:flutteryomi/data/track/tracker.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart';
 import 'package:flutteryomi/domain/history/interactor/get_history.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
-import 'package:flutteryomi/domain/source/model/source.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/insert_track.dart';
 import 'package:flutteryomi/domain/track/interactor/sync_chapter_progress_with_track.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
 part 'add_tracks.g.dart';
 
@@ -59,7 +59,7 @@ class AddTracks {
         //tracker.setRemoteLastChapterRead(track.toDbTrack(), latestLocalReadChapterNumber.toInt());
       }
 
-      if (track.startDate <= 0) {
+      if (track.startDate.millisecondsSinceEpoch <= 0) {
         final firstReadChapter = await getHistory.await_(mangaId);
         final firstReadChapterDate = firstReadChapter
             .sortedBy((it) => it.readAt?.millisecondsSinceEpoch ?? -1)
