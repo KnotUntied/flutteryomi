@@ -1,5 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
+
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/drift/data/mangas.drift.dart' as drift;
 import 'package:flutteryomi/data/source/update_strategy.dart';
@@ -7,6 +8,7 @@ import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/reader/setting/reader_orientation.dart';
 import 'package:flutteryomi/domain/reader/setting/reading_mode.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 // Drift already generates convenient classes
 // Typedef here so dependents will depend on domain instead of data

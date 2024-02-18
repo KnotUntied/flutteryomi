@@ -11,7 +11,6 @@ import 'package:flutteryomi/domain/chapter/service/missing_chapters.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
-import 'package:flutteryomi/domain/source/model/domain_source.dart';
 import 'package:flutteryomi/domain/source/model/stub_source.dart';
 import 'package:flutteryomi/presentation/category/category.dart';
 import 'package:flutteryomi/presentation/category/components/category_dialogs.dart';
@@ -31,6 +30,8 @@ import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_model.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 import 'package:flutteryomi/presentation/util/chapter_number_formatter.dart';
+import 'package:flutteryomi/presentation/util/system/display_extensions.dart';
+import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/api/source_extensions.dart';
 
 class MangaScreen extends ConsumerWidget {
@@ -72,9 +73,9 @@ class MangaScreen extends ConsumerWidget {
           mangaId: mangaId,
           fromSource: fromSource,
           nextUpdate: data.manga.expectedNextUpdate,
-          isTabletUi: isTabletUi(),
-          chapterSwipeStartAction: screenModel.chapterSwipeStartAction,
-          chapterSwipeEndAction: screenModel.chapterSwipeEndAction,
+          isTabletUi: isTabletUi(context),
+          chapterSwipeStartAction: libraryPreferences.swipeToEndAction().get(),
+          chapterSwipeEndAction: libraryPreferences.swipeToStartAction().get(),
           onBackClicked: Navigator.of(context).pop,
           onChapterClicked: (it) => _openChapter(context, it),
           onDownloadChapter: !data.source.isLocalOrStub()
@@ -85,22 +86,13 @@ class MangaScreen extends ConsumerWidget {
             Feedback.forLongPress(context);
           },
           onWebViewClicked: isHttpSource
-              ? () {
-                  _openMangaInWebView(
-                    data.manga,
-                    data.source,
-                  );
-                }
+              ? () => _openMangaInWebView(context, data.manga, data.source)
               : null,
           onWebViewLongClicked: isHttpSource
-              ? () {
-                  _copyMangaUrl(
-                    data.manga,
-                    data.source,
-                  );
-                }
+              ? () => _copyMangaUrl(data.manga, data.source)
               : null,
           onTrackingClicked: () {
+            //TODO
             if (loggedInTrackers.isEmpty) {
               //Navigator.push(
               //  context,
@@ -218,6 +210,7 @@ class MangaScreen extends ConsumerWidget {
                 }
               : null,
           onMigrateClicked: data.manga.favorite
+              //TODO
               ? () {
                   //Navigator.push(
                   //  context,
@@ -259,44 +252,51 @@ class MangaScreen extends ConsumerWidget {
   String? _getMangaUrl(Manga? manga, Source? source) {
     if (manga == null || source == null) return null;
 
-    //try {
-    //  return source.getMangaUrl(manga.toSManga());
-    //} catch (e) {
-    //  return null;
-    //}
+    try {
+      return null;
+      //return source.getMangaUrl(manga.toSManga());
+    } catch (e) {
+      return null;
+    }
   }
 
-  void _openMangaInWebView(Manga? manga, Source? source) {
-    //_getMangaUrl(manga_, source_)?.let { url ->
-    //Navigator.push(
-    //  context,
-    //  MaterialPageRoute(
-    //    builder: (context) =>
-    //WebViewScreen(
-    //  url: url,
-    //  initialTitle: manga_?.title,
-    //  sourceId: source_?.id,
-    //),
-    //  ),
-    //);
-    //}
+  void _openMangaInWebView(BuildContext context, Manga? manga, Source? source) {
+    final url = _getMangaUrl(manga, source);
+    if (url != null) {
+      //Navigator.push(
+      //  context,
+      //  MaterialPageRoute(
+      //    builder: (context) => WebViewScreen(
+      //      url: url,
+      //      initialTitle: manga?.title,
+      //      sourceId: source?.id,
+      //    ),
+      //  ),
+      //);
+    }
   }
 
   void _shareManga(BuildContext context, Manga? manga, Source? source) {
     final lang = AppLocalizations.of(context);
-    //try {
-    //  getMangaUrl(manga, source)?.let { url ->
-    //    final intent = url.toUri().toShareIntent(context, type = "text/plain")
-    //    context.startActivity(
-    //      Intent.createChooser(
-    //        intent,
-    //        lang.action_share,
-    //      ),
-    //    )
-    //  }
-    //} catch (e) {
-    //  context.toast(e.message);
-    //}
+    try {
+      final url = _getMangaUrl(manga, source);
+      if (url != null) {
+      //final intent = url.toUri().toShareIntent(context, type = "text/plain")
+      //context.startActivity(
+      //  Intent.createChooser(
+      //    intent,
+      //    lang.action_share,
+      //  ),
+      //)
+      }
+    } catch (e) {
+      //not sure on this
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
   }
 
   /// Perform a search using the provided query.
@@ -311,7 +311,7 @@ class MangaScreen extends ConsumerWidget {
       return;
     }
 
-    //if (navigator.size < 2) return;
+    //if (Navigator.of(context).pages.length < 2) return;
 
     //when (val previousController = navigator.items[navigator.size - 2]) {
     //  is HomeScreen -> {
@@ -701,9 +701,7 @@ class _MangaScreenSmallImpl extends ConsumerWidget {
                       title: data.manga.title,
                       author: data.manga.author,
                       artist: data.manga.artist,
-                      //TODO
-                      //sourceName: data.source.getNameForMangaInfo(),
-                      sourceName: 'TODO',
+                      sourceName: data.source.getNameForMangaInfo(),
                       isStubSource: data.source is StubSource,
                       coverDataProvider: () => data.manga,
                       status: data.manga.status,
@@ -940,9 +938,7 @@ class _MangaScreenLargeImpl extends ConsumerWidget {
                       title: data.manga.title,
                       author: data.manga.author,
                       artist: data.manga.artist,
-                      //TODO
-                      //sourceName: data.source.getNameForMangaInfo(),
-                      sourceName: 'TODO',
+                      sourceName: data.source.getNameForMangaInfo(),
                       isStubSource: data.source is StubSource,
                       coverDataProvider: () => data.manga,
                       status: data.manga.status,

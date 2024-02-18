@@ -6,7 +6,7 @@ import 'package:flutteryomi/domain/source/model/filter_list.dart';
 import 'package:flutteryomi/domain/source/model/page.dart' as page;
 import 'package:flutteryomi/domain/source/model/schapter.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
-import 'package:flutteryomi/domain/source/model/source.dart' as domain_source;
+import 'package:flutteryomi/domain/source/model/domain_source.dart' as domain_source;
 import 'package:flutteryomi/source/api/catalogue_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/api/unmetered_source.dart';

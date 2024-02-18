@@ -43,12 +43,12 @@ class UpdateManga {
 
     DateTime? coverLastModified;
     // Never refresh covers if the url is empty to avoid "losing" existing covers
-    //if (remoteManga.thumbnailUrl.isNullOrEmpty) {
-    //  coverLastModified = null;
+    if (remoteManga.thumbnailUrl.isNullOrEmpty) {
+      coverLastModified = null;
     //} else if (!manualFetch &&
     //    localManga.thumbnailUrl == remoteManga.thumbnailUrl) {
     //  coverLastModified = null;
-    //} else if (localManga.isLocal) {
+    //} else if (localManga.isLocal()) {
     //  coverLastModified = DateTime.now();
     //} else if (localManga.hasCustomCover(coverCache)) {
     //  coverCache.deleteFromCache(localManga, false);
@@ -56,7 +56,7 @@ class UpdateManga {
     //} else {
     //  coverCache.deleteFromCache(localManga, false);
     //  coverLastModified = DateTime.now();
-    //}
+    }
 
     final thumbnailUrl = remoteManga.thumbnailUrl.isNotNullOrEmpty
         ? remoteManga.thumbnailUrl

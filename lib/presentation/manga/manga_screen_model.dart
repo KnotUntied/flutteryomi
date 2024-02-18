@@ -9,32 +9,21 @@ import 'package:dartx/dartx.dart'
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/widgets.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'package:flutteryomi/core/preference/tri_state.dart';
+import 'package:flutteryomi/core/util/collection_utils.dart';
 import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/interactor/set_manga_categories.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_available_scanlators.dart';
-import 'package:flutteryomi/domain/chapter/interactor/set_manga_default_chapter_flags.dart';
-import 'package:flutteryomi/domain/chapter/interactor/sync_chapters_with_source.dart';
-import 'package:flutteryomi/domain/download/service/download_preferences.dart';
-import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
-import 'package:flutteryomi/domain/manga/interactor/get_duplicate_library_manga.dart';
-import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart';
-import 'package:flutteryomi/domain/manga/interactor/get_manga_with_chapters.dart';
-import 'package:flutteryomi/domain/manga/interactor/set_manga_chapter_flags.dart';
-import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
-import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
-import 'package:flutteryomi/domain/track/interactor/add_tracks.dart';
-import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
-import 'package:flutteryomi/source/api/source.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'package:flutteryomi/core/preference/tri_state.dart';
-import 'package:flutteryomi/core/util/collection_utils.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
+import 'package:flutteryomi/domain/chapter/interactor/set_manga_default_chapter_flags.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_read_status.dart';
+import 'package:flutteryomi/domain/chapter/interactor/sync_chapters_with_source.dart';
 import 'package:flutteryomi/domain/chapter/interactor/update_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
@@ -42,13 +31,23 @@ import 'package:flutteryomi/domain/chapter/service/chapter_sort.dart';
 import 'package:flutteryomi/domain/chapter/service/missing_chapters.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
+import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
+import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
+import 'package:flutteryomi/domain/manga/interactor/get_duplicate_library_manga.dart';
+import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
+import 'package:flutteryomi/domain/manga/interactor/get_manga_with_chapters.dart';
 import 'package:flutteryomi/domain/manga/interactor/set_excluded_scanlators.dart';
+import 'package:flutteryomi/domain/manga/interactor/set_manga_chapter_flags.dart';
+import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/tri_state.dart';
+import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/domain/track/interactor/add_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
+import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
 import 'package:flutteryomi/domain/updates/interactor/get_updates.dart';
 import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
@@ -56,6 +55,7 @@ import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/manga/track/track_item.dart';
 import 'package:flutteryomi/presentation/updates/updates.dart';
 import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
 part 'manga_screen_model.freezed.dart';
 part 'manga_screen_model.g.dart';
@@ -64,7 +64,7 @@ part 'manga_screen_model.g.dart';
 class MangaScreenModel extends _$MangaScreenModel {
   @override
   Stream<MangaScreenState> build(
-      {required int mangaId, required bool isFromSource}) {
+      {required int mangaId, required bool isFromSource,}) {
     final downloadManager = ref.watch(downloadManagerProvider);
     final getMangaWithChapters = ref.watch(getMangaWithChaptersProvider);
     final getExcludedScanlators = ref.watch(getExcludedScanlatorsProvider);
@@ -959,9 +959,7 @@ extension _ChapterListItemsUtils on List<ChapterListItem> {
   /// Applies the view filters to the list of chapters obtained from the database.
   /// Returns an observable of the list of chapters filtered and sorted.
   List<ChapterListItem> applyFilters(Manga manga) {
-    //TODO: Support for isLocal
-    //final isLocalManga = manga.isLocal();
-    const isLocalManga = true;
+    final isLocalManga = manga.isLocal();
     final unreadFilter = manga.unreadFilter;
     final downloadedFilter = manga.downloadedFilter;
     final bookmarkedFilter = manga.bookmarkedFilter;
@@ -983,22 +981,24 @@ extension _ChapterListItemsUtils on List<ChapterListItem> {
 }
 
 extension _ChapterListUtils on List<Chapter> {
-  //TODO: Support for isLocal
   List<ChapterListItem> toChapterListItems(
     DownloadManager downloadManager,
     Manga manga,
     Set<int> selectedChapterIds,
   ) {
-//    final isLocal = manga.isLocal();
+    final isLocal = manga.isLocal();
     return map((chapter) {
-      const activeDownload = null;
-      const downloaded = true;
-//      final activeDownload = isLocal
-//          ? null
-//          : downloadManager.getQueuedDownloadOrNull(chapter.id);
-//      final downloaded = isLocal
-//          ? true
-//          : downloadManager.isChapterDownloaded(chapter.name, chapter.scanlator, manga.title, manga.source);
+      final activeDownload = isLocal
+          ? null
+          : downloadManager.getQueuedDownloadOrNull(chapter.id);
+      final downloaded = isLocal
+          ? true
+          : downloadManager.isChapterDownloaded(
+              chapter.name,
+              chapter.scanlator,
+              manga.title,
+              manga.source,
+            );
       final DownloadState downloadState;
       if (activeDownload != null) {
         downloadState = activeDownload.status;

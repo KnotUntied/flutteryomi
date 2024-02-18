@@ -4,12 +4,12 @@ import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
-import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
+import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:flutteryomi/domain/base/base_preferences.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/interactor/set_manga_categories.dart';
@@ -37,6 +37,7 @@ import 'package:flutteryomi/presentation/library/components/library_toolbar.dart
 import 'package:flutteryomi/presentation/library/library_item.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/util/chapter/chapter_get_next_unread.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'library_screen_model.freezed.dart';
 part 'library_screen_model.g.dart';
@@ -153,9 +154,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     bool filterFnDownloaded(LibraryItem it) {
       return applyFilter(
         filterDownloaded,
-        //TODO: Support for LocalSource
-        //() => it.libraryManga.manga.isLocal() ||
-        () =>
+        () => it.libraryManga.manga.isLocal() ||
             it.downloadCount > 0 ||
             downloadManager.getDownloadCountForManga(it.libraryManga.manga) > 0,
       );
@@ -337,9 +336,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
               : 0,
           unreadCount: libraryManga.unreadCount,
           isLocal: prefs.localBadge
-              //TODO
-              //? libraryManga.manga.isLocal()
-              ? false
+              ? libraryManga.manga.isLocal()
               : false,
           sourceLanguage: prefs.languageBadge
               ? sourceManager.getOrStub(libraryManga.manga.source).lang

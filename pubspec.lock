@@ -1059,7 +1059,7 @@ packages:
     source: hosted
     version: "2.1.4"
   timeago:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: timeago
       sha256: d3204eb4c788214883380253da7f23485320a58c11d145babc82ad16bf4e7764

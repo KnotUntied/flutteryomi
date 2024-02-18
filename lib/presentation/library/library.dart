@@ -2,6 +2,7 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutteryomi/core/preference/checkbox_state.dart';
@@ -267,12 +268,9 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
               : null,
           onMarkAsReadClicked: () => screenModel.markReadSelection(true),
           onMarkAsUnreadClicked: () => screenModel.markReadSelection(false),
-          //TODO localsource support
-          //onDownloadClicked: currentState?.selection.every((it) => !it.manga.isLocal()) ?? false
-          onDownloadClicked:
-              currentState?.selection.every((it) => false) ?? false
-                  ? screenModel.runDownloadActionSelection
-                  : null,
+          onDownloadClicked: currentState?.selection.every((it) => !it.manga.isLocal()) ?? false
+              ? screenModel.runDownloadActionSelection
+              : null,
           onDeleteClicked: currentState != null
               ? () async {
                   final mangaList =
@@ -281,9 +279,7 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
                     showAdaptiveDialog(
                       context: context,
                       builder: (context) => DeleteLibraryMangaDialog(
-                        //TODO localsource support
-                        //containsLocalManga: mangaList.any((it) => it.isLocal()),
-                        containsLocalManga: mangaList.any((it) => false),
+                        containsLocalManga: mangaList.any((it) => it.isLocal()),
                         onConfirm: (deleteManga, deleteChapter) {
                           screenModel.removeMangas(
                               mangaList, deleteManga, deleteChapter);

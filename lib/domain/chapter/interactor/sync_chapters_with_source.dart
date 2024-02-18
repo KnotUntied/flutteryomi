@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/data/chapter/chapter_sanitizer.dart';
@@ -60,9 +61,9 @@ class SyncChaptersWithSource {
     bool manualFetch = false,
     Pair<int, int> fetchWindow = const Pair(0, 0),
   ]) async {
-    //if (rawSourceChapters.isEmpty && !source.isLocal) {
-    //  throw NoChaptersException;
-    //}
+    if (rawSourceChapters.isEmpty && !source.isLocal()) {
+      throw NoChaptersException;
+    }
 
     final now = DateTime.now();
     final nowMillis = now.millisecondsSinceEpoch;
@@ -157,7 +158,8 @@ class SyncChaptersWithSource {
         updatedChapters.isEmpty) {
       if (manualFetch ||
           manga.fetchInterval == 0 ||
-          (manga.nextUpdate?.millisecondsSinceEpoch ?? -1) < fetchWindow.first) {
+          (manga.nextUpdate?.millisecondsSinceEpoch ?? -1) <
+              fetchWindow.first) {
         await updateManga.awaitUpdateFetchInterval(manga, now, fetchWindow);
       }
       return [];
@@ -171,7 +173,9 @@ class SyncChaptersWithSource {
 
     for (final chapter in removedChapters) {
       if (chapter.read) deletedReadChapterNumbers.add(chapter.chapterNumber);
-      if (chapter.bookmark) deletedBookmarkedChapterNumbers.add(chapter.chapterNumber);
+      if (chapter.bookmark) {
+        deletedBookmarkedChapterNumbers.add(chapter.chapterNumber);
+      }
       deletedChapterNumbers.add(chapter.chapterNumber);
     }
 
@@ -186,16 +190,19 @@ class SyncChaptersWithSource {
       var chapter =
           toAddItem.copyWith(dateFetch: DateTime(nowMillis + itemCount--));
 
-      if (!chapter.isRecognizedNumber || deletedChapterNumbers.contains(chapter.chapterNumber)) return chapter;
+      if (!chapter.isRecognizedNumber ||
+          deletedChapterNumbers.contains(chapter.chapterNumber)) return chapter;
 
       chapter = chapter.copyWith(
         read: deletedReadChapterNumbers.contains(chapter.chapterNumber),
-        bookmark: deletedBookmarkedChapterNumbers.contains(chapter.chapterNumber),
+        bookmark:
+            deletedBookmarkedChapterNumbers.contains(chapter.chapterNumber),
       );
 
       // Try to to use the fetch date of the original entry to not pollute 'Updates' tab
       if (deletedChapterNumberDateFetchMap[chapter.chapterNumber] != null) {
-        chapter = chapter.copyWith(dateFetch: deletedChapterNumberDateFetchMap[chapter.chapterNumber]);
+        chapter = chapter.copyWith(
+            dateFetch: deletedChapterNumberDateFetchMap[chapter.chapterNumber]);
       }
 
       reAdded.add(chapter);

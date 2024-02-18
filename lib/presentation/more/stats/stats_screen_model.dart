@@ -14,6 +14,7 @@ import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
 import 'package:flutteryomi/presentation/more/stats/data/stats_data.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'stats_screen_model.freezed.dart';
 part 'stats_screen_model.g.dart';
@@ -51,9 +52,7 @@ class StatsScreenModel extends _$StatsScreenModel {
     final titlesStatData = Titles(
       globalUpdateItemCount: _getGlobalUpdateItemCount(libraryManga),
       startedMangaCount: distinctLibraryManga.count((it) => it.hasStarted),
-      //TODO
-      //localMangaCount: distinctLibraryManga.count((it) => it.manga.isLocal()),
-      localMangaCount: 0,
+      localMangaCount: distinctLibraryManga.count((it) => it.manga.isLocal()),
     );
 
     final chaptersStatData = Chapters(

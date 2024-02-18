@@ -5,14 +5,13 @@ import 'package:flutteryomi/domain/chapter/service/chapter_sort.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/manga/model/tri_state.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
-
-//TODO: isLocal support
 extension ChaptersApplyFilters on List<Chapter> {
   /// Applies the view filters to the list of chapters obtained from the database.
   /// Returns an observable of the list of chapters filtered and sorted.
   List<Chapter> applyFilters(Manga manga, DownloadManager downloadManager) {
-    //final isLocalManga = manga.isLocal();
+    final isLocalManga = manga.isLocal();
     final unreadFilter = manga.unreadFilter;
     final downloadedFilter = manga.downloadedFilter;
     final bookmarkedFilter = manga.bookmarkedFilter;
@@ -28,8 +27,7 @@ extension ChaptersApplyFilters on List<Chapter> {
               manga.title,
               manga.source,
             );
-            //return downloaded || isLocalManga;
-            return downloaded;
+            return downloaded || isLocalManga;
           },
         ))
         .sortedWith(getChapterSort(manga: manga));
