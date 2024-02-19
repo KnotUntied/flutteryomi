@@ -56,6 +56,7 @@ import 'package:flutteryomi/presentation/manga/track/track_item.dart';
 import 'package:flutteryomi/presentation/updates/updates.dart';
 import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
 import 'package:flutteryomi/source/api/source.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'manga_screen_model.freezed.dart';
 part 'manga_screen_model.g.dart';
@@ -178,7 +179,7 @@ class MangaScreenModel extends _$MangaScreenModel {
         //  withDismissAction: true,
         //)
         //if (result == SnackbarResult.ActionPerformed) {
-        //  deleteDownloads();
+        //  _deleteDownloads();
         //}
       },
     );
@@ -224,9 +225,8 @@ class MangaScreenModel extends _$MangaScreenModel {
         final defaultCategoryId =
             libraryPreferences.defaultCategory().get().toInt();
         final defaultCategory =
-            categories.firstWhere((it) => it.id == defaultCategoryId);
+            categories.firstWhereOrNull((it) => it.id == defaultCategoryId);
         // Default category set
-        // Always true, I know
         if (defaultCategory != null) {
           final result = await updateManga.awaitUpdateFavorite(manga.id, true);
           if (!result) return;
@@ -255,7 +255,6 @@ class MangaScreenModel extends _$MangaScreenModel {
       now,
       fetchInterval.getWindow(now),
     )) {
-      // hmm?
       final updatedManga = await mangaRepository.getMangaById(manga.id);
       final previousState = state.valueOrNull;
       if (previousState != null) {

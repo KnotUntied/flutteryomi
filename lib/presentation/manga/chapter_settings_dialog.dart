@@ -32,21 +32,12 @@ class ChapterSettingsDialog extends StatelessWidget {
   final VoidCallback onScanlatorFilterClicked;
   final ValueChanged<int> onSortModeChanged;
   final ValueChanged<int> onDisplayModeChanged;
-  final Function(bool applyToExistingManga) onSetAsDefault;
+  final void Function(bool applyToExistingManga) onSetAsDefault;
   final VoidCallback onResetToDefault;
 
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    // TODO: state:
-    // bool showSetAsDefaultDialog = false;
-    //if (showSetAsDefaultDialog) {
-    //  return _SetAsDefaultDialog(
-    //    onDismissRequest: () => setState(() { showSetAsDefaultDialog = false; }),
-    //    onConfirmed: onSetAsDefault,
-    //  );
-    //}
-
     return DefaultTabController(
       length: 3,
       child: Column(

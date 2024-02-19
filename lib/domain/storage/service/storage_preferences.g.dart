@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'library_screen_model.dart';
+part of 'storage_preferences.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$libraryScreenModelHash() =>
-    r'63a615d1dd7a15e73f6100845aa6557833251da4';
+String _$storagePreferencesHash() =>
+    r'fca0989f00d5fe39bd228bcb9d211dcbb2436fc6';
 
-/// See also [LibraryScreenModel].
-@ProviderFor(LibraryScreenModel)
-final libraryScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    LibraryScreenModel, LibraryScreenState>.internal(
-  LibraryScreenModel.new,
-  name: r'libraryScreenModelProvider',
+/// See also [storagePreferences].
+@ProviderFor(storagePreferences)
+final storagePreferencesProvider =
+    AutoDisposeProvider<StoragePreferences>.internal(
+  storagePreferences,
+  name: r'storagePreferencesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$libraryScreenModelHash,
+      : _$storagePreferencesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$LibraryScreenModel = AutoDisposeStreamNotifier<LibraryScreenState>;
+typedef StoragePreferencesRef = AutoDisposeProviderRef<StoragePreferences>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

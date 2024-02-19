@@ -6,7 +6,7 @@ part of 'stats_screen_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$statsScreenModelHash() => r'af43f312fd3514e1374fc24a22ae30db56e5a624';
+String _$statsScreenModelHash() => r'ef41c250eb54bc96d0c5c220bcfd99f7b0bfce1b';
 
 /// See also [StatsScreenModel].
 @ProviderFor(StatsScreenModel)

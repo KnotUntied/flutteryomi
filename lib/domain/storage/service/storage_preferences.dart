@@ -1,6 +1,11 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
+import 'package:flutteryomi/core/storage/common_folder_provider.dart';
 import 'package:flutteryomi/core/storage/folder_provider.dart';
+
+part 'storage_preferences.g.dart';
 
 class StoragePreferences {
   StoragePreferences(this.folderProvider, this.preferenceStore);
@@ -13,3 +18,10 @@ class StoragePreferences {
         await folderProvider.path() ?? '',
       );
 }
+
+@riverpod
+StoragePreferences storagePreferences(StoragePreferencesRef ref) =>
+    StoragePreferences(
+      CommonFolderProvider(),
+      ref.watch(preferenceStoreProvider),
+    );
