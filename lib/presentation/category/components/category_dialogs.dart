@@ -50,7 +50,7 @@ class _CategoryCreateDialogState extends State<CategoryCreateDialog> {
               labelText: lang.name,
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: Text(lang.action_cancel),
               onPressed: () => Navigator.of(context).pop(),

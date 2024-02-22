@@ -15,6 +15,8 @@ import 'package:flutteryomi/presentation/download/download_queue.dart';
 import 'package:flutteryomi/presentation/icons/custom_icons.dart';
 import 'package:flutteryomi/presentation/more/logo_header.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/about/about.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/switch_preference_widget.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/text_preference_widget.dart';
 import 'package:flutteryomi/presentation/more/stats/stats.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 
@@ -27,7 +29,6 @@ class MoreTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
-    final screenModel = ref.watch(moreScreenModelProvider.notifier);
     final state = ref.watch(moreScreenModelProvider);
     final preferences = ref.watch(basePreferencesProvider);
     return Scaffold(
@@ -42,29 +43,37 @@ class MoreTab extends ConsumerWidget {
           return const LoadingScreen();
         },
         data: (data) {
+          final downloadQueueState = data.downloadQueueState;
           return ListView(
             children: [
               const LogoHeader(),
-              SwitchListTile.adaptive(
-                title: Text(lang.label_downloaded_only),
-                subtitle: Text(lang.downloaded_only_summary),
-                secondary: const Icon(Icons.cloud_off_outlined),
-                value: data.downloadedOnly,
-                onChanged: (it) => preferences.downloadedOnly().set(it),
+              SwitchPreferenceWidget(
+                title: lang.label_downloaded_only,
+                subtitle: lang.downloaded_only_summary,
+                icon: Icons.cloud_off_outlined,
+                checked: data.downloadedOnly,
+                onCheckedChanged: (it) => preferences.downloadedOnly().set(it),
               ),
-              SwitchListTile.adaptive(
-                secondary: const Icon(CustomIcons.glasses),
-                title: Text(lang.pref_incognito_mode),
-                subtitle: Text(lang.pref_incognito_mode_summary),
-                value: data.incognitoMode,
-                onChanged: (it) => preferences.incognitoMode().set(it),
+              SwitchPreferenceWidget(
+                title: lang.pref_incognito_mode,
+                subtitle: lang.pref_incognito_mode_summary,
+                icon: CustomIcons.glasses,
+                checked: data.incognitoMode,
+                onCheckedChanged: (it) => preferences.incognitoMode().set(it),
               ),
               const Divider(),
-              //TODO
-              ListTile(
-                leading: const Icon(Icons.download_outlined),
-                title: Text(lang.label_download_queue),
-                onTap: () {
+              TextPreferenceWidget(
+                title: lang.label_download_queue,
+                subtitle: switch (downloadQueueState) {
+                  Stopped() => null,
+                  Paused() => downloadQueueState.pending == 0
+                      ? lang.paused
+                      : "${lang.paused} • "
+                        "${lang.download_queue_summary(downloadQueueState.pending)}",
+                  Downloading() => lang.download_queue_summary(downloadQueueState.pending),
+                },
+                icon: Icons.get_app_outlined,
+                onPreferenceClick: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -73,10 +82,10 @@ class MoreTab extends ConsumerWidget {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.label_outlined),
-                title: Text(lang.categories),
-                onTap: () {
+              TextPreferenceWidget(
+                title: lang.categories,
+                icon: Icons.label_outlined,
+                onPreferenceClick: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -85,10 +94,10 @@ class MoreTab extends ConsumerWidget {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.query_stats_outlined),
-                title: Text(lang.label_stats),
-                onTap: () {
+              TextPreferenceWidget(
+                title: lang.label_stats,
+                icon: Icons.query_stats_outlined,
+                onPreferenceClick: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -97,10 +106,10 @@ class MoreTab extends ConsumerWidget {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.storage_outlined),
-                title: Text(lang.label_data_storage),
-                onTap: () {
+              TextPreferenceWidget(
+                title: lang.label_data_storage,
+                icon: Icons.storage_outlined,
+                onPreferenceClick: () {
                   //Navigator.push(
                   //  context,
                   //  MaterialPageRoute(
@@ -110,10 +119,10 @@ class MoreTab extends ConsumerWidget {
                 },
               ),
               const Divider(),
-              ListTile(
-                leading: const Icon(Icons.settings_outlined),
-                title: Text(lang.label_settings),
-                onTap: () {
+              TextPreferenceWidget(
+                title: lang.label_settings,
+                icon: Icons.settings_outlined,
+                onPreferenceClick: () {
                   //Navigator.push(
                   //  context,
                   //  MaterialPageRoute(
@@ -122,10 +131,10 @@ class MoreTab extends ConsumerWidget {
                   //);
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.info_outlined),
-                title: Text(lang.pref_category_about),
-                onTap: () {
+              TextPreferenceWidget(
+                title: lang.pref_category_about,
+                icon: Icons.info_outlined,
+                onPreferenceClick: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -134,10 +143,10 @@ class MoreTab extends ConsumerWidget {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.help_outline),
-                title: Text(lang.label_help),
-                onTap: _launchHelpUrl,
+              TextPreferenceWidget(
+                title: lang.label_help,
+                icon: Icons.help_outline,
+                onPreferenceClick: _launchHelpUrl,
               ),
             ],
           );

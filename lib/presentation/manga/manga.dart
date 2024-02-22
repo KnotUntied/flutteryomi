@@ -33,6 +33,7 @@ import 'package:flutteryomi/presentation/util/chapter_number_formatter.dart';
 import 'package:flutteryomi/presentation/util/system/display_extensions.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/api/source_extensions.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 class MangaScreen extends ConsumerWidget {
   const MangaScreen({
@@ -1118,8 +1119,7 @@ class _SharedChapterItems extends StatelessWidget {
               read: item.chapter.read,
               bookmark: item.chapter.bookmark,
               selected: item.selected,
-              //downloadIndicatorEnabled: !isAnyChapterSelected && !manga.isLocal(),
-              downloadIndicatorEnabled: !isAnyChapterSelected,
+              downloadIndicatorEnabled: !isAnyChapterSelected && !manga.isLocal(),
               downloadStateProvider: () => item.downloadState,
               downloadProgressProvider: () => item.downloadProgress,
               chapterSwipeStartAction: chapterSwipeStartAction,

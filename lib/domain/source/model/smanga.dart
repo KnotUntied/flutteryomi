@@ -5,10 +5,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'smanga.freezed.dart';
 part 'smanga.g.dart';
 
-@freezed
+@unfreezed
 class SManga with _$SManga {
-  const SManga._();
-  const factory SManga({
+  SManga._();
+  factory SManga({
     @Default('') String url,
     @Default('') String title,
     String? artist,

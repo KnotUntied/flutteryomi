@@ -3,9 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
-import 'package:flutteryomi/presentation/components/download_dropdown_menu.dart';
 import 'package:flutteryomi/presentation/components/settings_items.dart';
-import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/theme/color_scheme.dart'
     as color_scheme;
 

@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'storage_preferences.dart';
+part of 'local_source_file_system.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$storagePreferencesHash() =>
-    r'671a1b5e693a9b7cf578d0bdc99880abe5679311';
+String _$localSourceFileSystemHash() =>
+    r'497ee5e89237096ed64bf11d0ca457fa0a7fcdcf';
 
-/// See also [storagePreferences].
-@ProviderFor(storagePreferences)
-final storagePreferencesProvider =
-    AutoDisposeProvider<StoragePreferences>.internal(
-  storagePreferences,
-  name: r'storagePreferencesProvider',
+/// See also [localSourceFileSystem].
+@ProviderFor(localSourceFileSystem)
+final localSourceFileSystemProvider =
+    AutoDisposeProvider<LocalSourceFileSystem>.internal(
+  localSourceFileSystem,
+  name: r'localSourceFileSystemProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$storagePreferencesHash,
+      : _$localSourceFileSystemHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef StoragePreferencesRef = AutoDisposeProviderRef<StoragePreferences>;
+typedef LocalSourceFileSystemRef
+    = AutoDisposeProviderRef<LocalSourceFileSystem>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
