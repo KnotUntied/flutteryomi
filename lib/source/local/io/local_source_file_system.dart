@@ -13,11 +13,12 @@ class LocalSourceFileSystem {
     required this.storageManager,
   });
 
-  Future<Directory?> getBaseDirectory() => storageManager.getLocalSourceDirectory();
+  Future<Directory?> getBaseDirectory() =>
+      storageManager.getLocalSourceDirectory();
 
   Future<List<FileSystemEntity>> getFilesInBaseDirectory() async {
     final dir = await getBaseDirectory();
-    return dir?.listSync() ?? [];
+    return dir?.listSync() ?? const [];
   }
 
   Future<Directory?> getMangaDirectory(String name) async {
@@ -33,11 +34,12 @@ class LocalSourceFileSystem {
 
   Future<List<FileSystemEntity>> getFilesInMangaDirectory(String name) async {
     final dir = await getMangaDirectory(name);
-    return dir?.listSync() ?? [];
+    return dir?.listSync() ?? const [];
   }
 }
 
 @riverpod
-LocalSourceFileSystem localSourceFileSystem(LocalSourceFileSystemRef ref) => LocalSourceFileSystem(
+LocalSourceFileSystem localSourceFileSystem(LocalSourceFileSystemRef ref) =>
+    LocalSourceFileSystem(
       storageManager: ref.watch(storageManagerProvider),
     );

@@ -14,25 +14,25 @@ const comicInfoFile = "ComicInfo.xml";
 
 extension SMangaComicInfo on SManga {
   ComicInfo getComicInfo() => ComicInfo(
-    series: ComicInfoSeries(title),
-    summary: description != null ? ComicInfoSummary(description!) : null,
-    writer: author != null ? ComicInfoWriter(author!) : null,
-    penciller: artist != null ? ComicInfoPenciller(artist!) : null,
-    genre: genre != null ? ComicInfoGenre(genre!) : null,
-    publishingStatus: PublishingStatusTachiyomi(
-      ComicInfoPublishingStatus.toComicInfoValue(status),
-    ),
-    title: null,
-    number: null,
-    web: null,
-    translator: null,
-    inker: null,
-    colorist: null,
-    letterer: null,
-    coverArtist: null,
-    tags: null,
-    categories: null,
-  );
+        series: ComicInfoSeries(title),
+        summary: description != null ? ComicInfoSummary(description!) : null,
+        writer: author != null ? ComicInfoWriter(author!) : null,
+        penciller: artist != null ? ComicInfoPenciller(artist!) : null,
+        genre: genre != null ? ComicInfoGenre(genre!) : null,
+        publishingStatus: PublishingStatusTachiyomi(
+          ComicInfoPublishingStatus.toComicInfoValue(status),
+        ),
+        title: null,
+        number: null,
+        web: null,
+        translator: null,
+        inker: null,
+        colorist: null,
+        letterer: null,
+        coverArtist: null,
+        tags: null,
+        categories: null,
+      );
 
   void copyFromComicInfo(ComicInfo comicInfo) {
     if (comicInfo.series != null) title = comicInfo.series!.value;
@@ -43,7 +43,7 @@ extension SMangaComicInfo on SManga {
       comicInfo.genre?.value,
       comicInfo.tags?.value,
       comicInfo.categories?.value,
-    ]
+    ] //
         .whereNotNull()
         .distinct()
         .map((it) => it.trim())
@@ -64,10 +64,13 @@ extension SMangaComicInfo on SManga {
         .join(", ");
     if (newArtist.isNotNullOrEmpty) artist = newArtist;
 
-    status = ComicInfoPublishingStatus.toSMangaValue(comicInfo.publishingStatus?.value);
+    status = ComicInfoPublishingStatus.toSMangaValue(
+      comicInfo.publishingStatus?.value,
+    );
   }
 }
 
+// https://anansi-project.github.io/docs/comicinfo/schemas/v2.0
 @annotation.XmlRootElement(name: 'ComicInfo')
 @annotation.XmlSerializable()
 @freezed
@@ -82,13 +85,16 @@ class ComicInfo with _$ComicInfo {
     @annotation.XmlElement(name: 'Inker') ComicInfoInker? inker,
     @annotation.XmlElement(name: 'Colorist') ComicInfoColorist? colorist,
     @annotation.XmlElement(name: 'Letterer') ComicInfoLetterer? letterer,
-    @annotation.XmlElement(name: 'CoverArtist') ComicInfoCoverArtist? coverArtist,
+    @annotation.XmlElement(name: 'CoverArtist')
+    ComicInfoCoverArtist? coverArtist,
     @annotation.XmlElement(name: 'Translator') ComicInfoTranslator? translator,
     @annotation.XmlElement(name: 'Genre') ComicInfoGenre? genre,
     @annotation.XmlElement(name: 'Tags') ComicInfoTags? tags,
     @annotation.XmlElement(name: 'Web') ComicInfoWeb? web,
-    @annotation.XmlElement(name: 'PublishingStatusTachiyomi') PublishingStatusTachiyomi? publishingStatus,
-    @annotation.XmlElement(name: 'CategoriesTachiyomi') CategoriesTachiyomi? categories,
+    @annotation.XmlElement(name: 'PublishingStatusTachiyomi')
+    PublishingStatusTachiyomi? publishingStatus,
+    @annotation.XmlElement(name: 'CategoriesTachiyomi')
+    CategoriesTachiyomi? categories,
   }) = _ComicInfo;
 
   factory ComicInfo.fromXmlElement(XmlElement element) =>
@@ -116,15 +122,18 @@ class ComicInfo with _$ComicInfo {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Title')
@@ -160,15 +169,18 @@ class ComicInfoTitle with _$ComicInfoTitle {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTitleToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTitleToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTitleToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTitleToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTitleToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTitleToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Series')
@@ -204,15 +216,18 @@ class ComicInfoSeries with _$ComicInfoSeries {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoSeriesToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoSeriesToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoSeriesToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoSeriesToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoSeriesToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoSeriesToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Number')
@@ -248,15 +263,18 @@ class ComicInfoNumber with _$ComicInfoNumber {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoNumberToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoNumberToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoNumberToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoNumberToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoNumberToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoNumberToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Summary')
@@ -292,15 +310,18 @@ class ComicInfoSummary with _$ComicInfoSummary {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoSummaryToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoSummaryToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoSummaryToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoSummaryToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoSummaryToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoSummaryToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Writer')
@@ -336,15 +357,18 @@ class ComicInfoWriter with _$ComicInfoWriter {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoWriterToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoWriterToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoWriterToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoWriterToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoWriterToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoWriterToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Penciller')
@@ -380,15 +404,18 @@ class ComicInfoPenciller with _$ComicInfoPenciller {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoPencillerToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoPencillerToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoPencillerToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoPencillerToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoPencillerToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoPencillerToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Inker')
@@ -424,15 +451,18 @@ class ComicInfoInker with _$ComicInfoInker {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoInkerToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoInkerToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoInkerToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoInkerToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoInkerToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoInkerToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Colorist')
@@ -468,15 +498,18 @@ class ComicInfoColorist with _$ComicInfoColorist {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoColoristToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoColoristToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoColoristToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoColoristToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoColoristToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoColoristToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Letterer')
@@ -512,15 +545,18 @@ class ComicInfoLetterer with _$ComicInfoLetterer {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoLettererToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoLettererToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoLettererToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoLettererToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoLettererToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoLettererToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'CoverArtist')
@@ -556,15 +592,18 @@ class ComicInfoCoverArtist with _$ComicInfoCoverArtist {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoCoverArtistToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoCoverArtistToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoCoverArtistToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoCoverArtistToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoCoverArtistToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoCoverArtistToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Translator')
@@ -600,15 +639,18 @@ class ComicInfoTranslator with _$ComicInfoTranslator {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTranslatorToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTranslatorToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTranslatorToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTranslatorToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTranslatorToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTranslatorToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Genre')
@@ -644,15 +686,18 @@ class ComicInfoGenre with _$ComicInfoGenre {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoGenreToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoGenreToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoGenreToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoGenreToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoGenreToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoGenreToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Tags')
@@ -688,15 +733,18 @@ class ComicInfoTags with _$ComicInfoTags {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTagsToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTagsToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTagsToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTagsToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoTagsToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoTagsToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'Web')
@@ -732,15 +780,18 @@ class ComicInfoWeb with _$ComicInfoWeb {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoWebToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoWebToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoWebToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoWebToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$ComicInfoWebToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$ComicInfoWebToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'PublishingStatusTachiyomi')
@@ -776,15 +827,18 @@ class PublishingStatusTachiyomi with _$PublishingStatusTachiyomi {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$PublishingStatusTachiyomiToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$PublishingStatusTachiyomiToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$PublishingStatusTachiyomiToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$PublishingStatusTachiyomiToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$PublishingStatusTachiyomiToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$PublishingStatusTachiyomiToXmlElement(this, namespaces: namespaces);
 }
 
 @annotation.XmlRootElement(name: 'CategoriesTachiyomi')
@@ -820,15 +874,18 @@ class CategoriesTachiyomi with _$CategoriesTachiyomi {
 
   List<XmlAttribute> toXmlAttributes({
     Map<String, String?> namespaces = const {},
-  }) => _$CategoriesTachiyomiToXmlAttributes(this, namespaces: namespaces);
+  }) =>
+      _$CategoriesTachiyomiToXmlAttributes(this, namespaces: namespaces);
 
   List<XmlNode> toXmlChildren({
     Map<String, String?> namespaces = const {},
-  }) => _$CategoriesTachiyomiToXmlChildren(this, namespaces: namespaces);
+  }) =>
+      _$CategoriesTachiyomiToXmlChildren(this, namespaces: namespaces);
 
   XmlElement toXmlElement({
     Map<String, String?> namespaces = const {},
-  }) => _$CategoriesTachiyomiToXmlElement(this, namespaces: namespaces);
+  }) =>
+      _$CategoriesTachiyomiToXmlElement(this, namespaces: namespaces);
 }
 
 enum ComicInfoPublishingStatus {
@@ -845,16 +902,14 @@ enum ComicInfoPublishingStatus {
   const ComicInfoPublishingStatus(this.comicInfoValue, this.sMangaModelValue);
 
   static String toComicInfoValue(int value) =>
-      ComicInfoPublishingStatus
-          .values
+      ComicInfoPublishingStatus.values
           .firstWhereOrNull((it) => it.sMangaModelValue == value)
-          ?.comicInfoValue
-          ?? unknown.comicInfoValue;
+          ?.comicInfoValue ??
+      unknown.comicInfoValue;
 
   static int toSMangaValue(String? value) =>
-      ComicInfoPublishingStatus
-          .values
+      ComicInfoPublishingStatus.values
           .firstWhereOrNull((it) => it.comicInfoValue == value)
-          ?.sMangaModelValue
-          ?? unknown.sMangaModelValue;
+          ?.sMangaModelValue ??
+      unknown.sMangaModelValue;
 }

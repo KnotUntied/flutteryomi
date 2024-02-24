@@ -6,25 +6,28 @@ import 'package:collection/collection.dart';
 import 'package:dartx/dartx.dart' hide IterableLastOrNull;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutteryomi/core/metadata/manga_details.dart';
+import 'package:logger/logger.dart';
 import 'package:path/path.dart' as p;
+import 'package:xml/xml.dart';
 
 import 'package:flutteryomi/core/metadata/comic_info.dart';
+import 'package:flutteryomi/core/metadata/manga_details.dart';
 import 'package:flutteryomi/core/util/system/image_util.dart';
+import 'package:flutteryomi/domain/chapter/service/chapter_recognition.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/source/model/domain_source.dart' as domain_source;
+import 'package:flutteryomi/domain/source/model/filter.dart';
 import 'package:flutteryomi/domain/source/model/filter_list.dart';
 import 'package:flutteryomi/domain/source/model/mangas_page.dart';
 import 'package:flutteryomi/domain/source/model/page.dart' as page;
 import 'package:flutteryomi/domain/source/model/schapter.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
-import 'package:flutteryomi/domain/source/model/domain_source.dart' as domain_source;
-import 'package:flutteryomi/domain/source/model/filter.dart';
-import 'package:flutteryomi/domain/chapter/service/chapter_recognition.dart';
 import 'package:flutteryomi/source/api/catalogue_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/api/unmetered_source.dart';
 import 'package:flutteryomi/source/local/filter/order_by.dart';
 import 'package:flutteryomi/source/local/image/local_cover_manager.dart';
+import 'package:flutteryomi/source/local/io/archive.dart' as local_archive;
 import 'package:flutteryomi/source/local/io/format.dart';
 import 'package:flutteryomi/source/local/io/local_source_file_system.dart';
 
@@ -34,12 +37,14 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     required this.context,
     required this.fileSystem,
     required this.coverManager,
+    required this.logger,
   });
 
   // Terrible but necessary for localization
   final BuildContext context;
   final LocalSourceFileSystem fileSystem;
   final LocalCoverManager coverManager;
+  final Logger logger;
 
   late final _popularFilters = [OrderByPopular(context)];
   late final _latestFilters = [OrderByLatest(context)];
@@ -85,7 +90,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
 
     var mangaDirs = await fileSystem.getFilesInBaseDirectory()
         // Filter out files that are hidden and is not a folder
-        ..where((it) => FileSystemEntity.isDirectorySync(it.path) && !p.basename(it.path).startsWith('.'))
+        ..where((it) => it is Directory && !p.basename(it.path).startsWith('.'))
         .distinctBy((it) => p.basename(it.path))
         .where((it) {
           if (lastModifiedLimit.inMilliseconds == 0 && query.isBlank) {
@@ -155,7 +160,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     try {
       final mangaDir = await fileSystem.getMangaDirectory(manga.url);
       if (mangaDir == null) throw Exception("${manga.url} is not a valid directory");
-      final mangaDirFiles = mangaDir.listSync();
+      final mangaDirFiles = mangaDir.listSync().whereType<File>();
 
       final comicInfoFileRef = mangaDirFiles
           .firstWhereOrNull((it) => p.basename(it.path) == comicInfoFile);
@@ -167,41 +172,39 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
       if (comicInfoFileRef != null) {
         // Top level ComicInfo.xml
         await noXmlFile?.delete();
-        //_setMangaDetailsFromComicInfoFile(comicInfoFileRef.openInputStream(), manga);
+        _setMangaDetailsFromComicInfoFile(comicInfoFileRef, manga);
       } else if (legacyJsonDetailsFile != null) {
         // Old custom JSON format
         // Mihon TODO: remove support for this entirely after a while
-        //json.decodeFromStream<MangaDetails>(legacyJsonDetailsFile.openInputStream()).run {
-        //  title?.let { manga.title = it }
-        //  author?.let { manga.author = it }
-        //  artist?.let { manga.artist = it }
-        //  description?.let { manga.description = it }
-        //  genre?.let { manga.genre = it.joinToString() }
-        //  status?.let { manga.status = it }
-        //}
-        //// Replace with ComicInfo.xml file
-        //final comicInfo = manga.getComicInfo();
-        //mangaDir
-        //    .createFile(comicInfoFile)
-        //    ?.openOutputStream()
-        //    ?.use {
-        //      final comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo);
-        //      it.write(comicInfoString.toByteArray());
-        //      legacyJsonDetailsFile.delete();
-        //    };
+        final input = await legacyJsonDetailsFile.readAsString();
+        final Map<String, Object?> map = jsonDecode(input);
+        final details = MangaDetails.fromJson(map);
+        if (details.title != null) manga.title = details.title!;
+        if (details.author != null) manga.author = details.author;
+        if (details.artist != null) manga.artist = details.artist;
+        if (details.description != null) manga.description = details.description;
+        if (details.genre != null) manga.genre = details.genre!.join();
+        if (details.status != null) manga.status = details.status!;
+        // Replace with ComicInfo.xml file
+        final comicInfo = manga.getComicInfo();
+        final comicInfoFileRef = await File(p.join(mangaDir.path, comicInfoFile)).create(recursive: true);
+        final document = XmlDocument();
+        document.children.add(comicInfo.toXmlElement());
+        await comicInfoFileRef.writeAsString(document.toXmlString());
+        await legacyJsonDetailsFile.delete();
       } else if (noXmlFile == null) {
         // Copy ComicInfo.xml from chapter archive to top level if found
         final chapterArchives = mangaDirFiles
-            //.where(Archive::isSupported)
+            .where((it) => local_archive.Archive.isSupported(it))
             .toList();
 
-        //final copiedFile = _copyComicInfoFileFromArchive(chapterArchives, mangaDir);
-        //if (copiedFile != null) {
-          //_setMangaDetailsFromComicInfoFile(copiedFile.openInputStream(), manga);
-        //} else {
+        final copiedFile = _copyComicInfoFileFromArchive(chapterArchives, mangaDir);
+        if (copiedFile != null) {
+          _setMangaDetailsFromComicInfoFile(copiedFile, manga);
+        } else {
           // Avoid re-scanning
-          //mangaDir.createFile(".noxml");
-        //}
+          await File(p.join(mangaDir.path, '.noxml')).create(recursive: true);
+        }
       }
     } catch (e) {
       //logger.e(e, message: "Error setting manga details from local metadata for ${manga.title}");
@@ -235,59 +238,55 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     return null;
   }
 
-  File? _copyComicInfoFile(InputStream comicInfoFileStream, Directory folder) {
-    //return folder.createFile(comicInfoFile)?.apply {
-    //  openOutputStream().use { outputStream ->
-    //      comicInfoFileStream.use { it.copyTo(outputStream) }
-    //  }
-    //}
-    return null;
-  }
+  File? _copyComicInfoFile(File comicInfoFileRef, Directory folder) =>
+      comicInfoFileRef.copySync(p.join(folder.path, comicInfoFile));
 
-  void _setMangaDetailsFromComicInfoFile(InputStream stream, SManga manga) {
-    //final comicInfo = AndroidXmlReader(stream, StandardCharsets.UTF_8.name()).use {
-    //  xml.decodeFromReader<ComicInfo>(it)
-    //}
-
-    //manga.copyFromComicInfo(comicInfo);
+  void _setMangaDetailsFromComicInfoFile(File file, SManga manga) async {
+    final document = XmlDocument.parse(await file.readAsString());
+    final comicInfo = ComicInfo.fromXmlElement(document.rootElement);
+    manga.copyFromComicInfo(comicInfo);
   }
 
   // Chapters
   @override
   Future<List<SChapter>> getChapterList(SManga manga) async {
-    final chapters = await fileSystem.getFilesInMangaDirectory(manga.url);
-    //    // Only keep supported formats
-    //    .where((it) => it.isDirectory || Archive.isSupported(it))
-    //    .map((chapterFile) {
-    //      final chapter = SChapter.create()
-    //          ..url = "${manga.url}/${chapterFile.name}"
-    //          ..name = (chapterFile.isDirectory
-    //              ? chapterFile.name
-    //              : chapterFile.nameWithoutExtension).orEmpty()
-    //          ..dateUpload = chapterFile.lastModified()
-    //          ..chapterNumber = ChapterRecognition
-    //              .parseChapterNumber(manga.title, name, this.chapterNumber.toDouble())
-    //              .toDouble();
-    //      final format = Format.valueOf(chapterFile);
-    //      if (format is Format.Epub) {
-    //          EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
-    //              epub.fillMetadata(manga, this);
-    //          }
-    //      }
-    //      return chapter;
-    //    })
-    //    .sortedWith((c1, c2) {
-    //      final c = c2.chapter_number.compareTo(c1.chapter_number);
-    //      return c == 0
-    //          ? c2.name.compareToCaseInsensitiveNaturalOrder(c1.name)
-    //          : c;
-    //    });
+    final files = await fileSystem.getFilesInMangaDirectory(manga.url);
+    final chapters = files
+        // Only keep supported formats
+        .where((it) => it is Directory || (it is File && local_archive.Archive.isSupported(it)))
+        .map((chapterFile) {
+          final chapter = SChapter.create()
+              ..url = "${manga.url}/${p.basename(chapterFile.path)}"
+              ..name = (chapterFile is Directory
+                  ? p.basename(chapterFile.path)
+                  : p.basenameWithoutExtension(chapterFile.path)).orEmpty()
+              ..dateUpload = FileStat.statSync(chapterFile.path).modified;
+          chapter.chapterNumber = ChapterRecognition.parseChapterNumber(
+            manga.title,
+            chapter.name,
+            chapter.chapterNumber,
+          );
+          final format = Format.valueOf(chapterFile.path);
+          if (format is Epub) {
+            //TODO
+            //EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
+            //  epub.fillMetadata(manga, this);
+            //}
+          }
+          return chapter;
+        })
+        .sortedWith((c1, c2) {
+          final c = c2.chapterNumber.compareTo(c1.chapterNumber);
+          return c == 0
+              ? compareAsciiLowerCaseNatural(c2.name, c1.name)
+              : c;
+        });
 
     // Copy the cover from the first chapter found if not available
     if (manga.thumbnailUrl.isNullOrBlank) {
       final chapter = chapters.lastOrNull;
       if (chapter != null) {
-    //    _updateCover(chapter, manga);
+        await _updateCover(chapter, manga);
       }
     }
 
@@ -307,7 +306,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     final dir = await fileSystem.getBaseDirectory();
     try {
     //  final (mangaDirName, chapterName) = chapter.url.split('/', limit: 2);
-    //  final dir = await fileSystem.getBaseDirectory();
+      final dir = await fileSystem.getBaseDirectory();
     //  final file = dir
     //      ?.findFile(mangaDirName, true)
     //      ?.findFile(chapterName, true);
@@ -324,50 +323,49 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     }
   }
 
-  File? _updateCover(SChapter chapter, SManga manga) {
-    final format = getFormat(chapter);
+  Future<File?> _updateCover(SChapter chapter, SManga manga) async {
+    final format = await getFormat(chapter);
     try {
-      //switch (format) {
-      //  case FormatDirectory():
-      //    //final entry = format.file.listFiles()
-      //    //    ?.sortedWith((f1, f2) =>
-      //    //      f1.name.orEmpty().compareToCaseInsensitiveNaturalOrder(f2.name.orEmpty()),
-      //    //    )
-      //    //    ?.find((it) => !it.isDirectory && ImageUtil.isImage(it.name) { it.openInputStream() });
+      switch (format) {
+        case FormatDirectory():
+          final entry = format.dir.listSync()
+              .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.path, f2.path))
+              .whereType<File>()
+              .firstWhereOrNull((it) => ImageUtil.isImage(p.basename(it.path), it));
 
-      //    //if (entry != null) coverManager.update(manga, it.openInputStream());
-      //    //return entry;
-      //  case Zip():
-      //    //ZipFile(format.file.openReadOnlyChannel(context)).use { zip ->
-      //    //  final entry = zip.entries.toList()
-      //    //      .sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
-      //    //      .find { !it.isDirectory && ImageUtil.isImage(it.name) { zip.getInputStream(it) } }
+          //if (entry != null) coverManager.update(manga, it.openInputStream());
+          return entry;
+        case Zip():
+          final inputStream = InputFileStream('test.zip');
+          final zip = ZipDecoder().decodeBuffer(inputStream);
+          final entry = zip.files
+              .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
+              .firstWhereOrNull((it) => it.isFile && ImageUtil.isImage(it.name, zip.getInputStream(it)));
 
-      //    //  if (entry != null) coverManager.update(manga, zip.getInputStream(it));
-      //    //  return entry;
-      //    //}
-      //  case Rar():
-      //    //JunrarArchive(format.file.openInputStream()).use { archive ->
-      //    //  final entry = archive.fileHeaders
-      //    //      .sortedWith { f1, f2 -> f1.fileName.compareToCaseInsensitiveNaturalOrder(f2.fileName) }
-      //    //      .find { !it.isDirectory && ImageUtil.isImage(it.fileName) { archive.getInputStream(it) } }
+          //if (entry != null) coverManager.update(manga, zip.getInputStream(it));
+          //return entry;
+        case Rar():
+          //JunrarArchive(format.file.openInputStream()).use { archive ->
+          //  final entry = archive.fileHeaders
+          //      .sortedWith { f1, f2 -> f1.fileName.compareToCaseInsensitiveNaturalOrder(f2.fileName) }
+          //      .find { !it.isDirectory && ImageUtil.isImage(it.fileName) { archive.getInputStream(it) } }
 
-      //    //  if (entry != null) coverManager.update(manga, archive.getInputStream(it));
-      //    //  return entry;
-      //    //}
-      //  case Epub():
-      //    //EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
-      //    //  final entry = epub.getImagesFromPages().firstOrNull();
-      //    //  if (entry != null) {
-      //    //    epub.getEntry(entry);
-      //    //    coverManager.update(manga, epub.getInputStream(it));
-      //    //  }
-      //    //  return entry;
-      //    //}
-      //}
+          //  if (entry != null) coverManager.update(manga, archive.getInputStream(it));
+          //  return entry;
+          //}
+        case Epub():
+          //EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
+          //  final entry = epub.getImagesFromPages().firstOrNull();
+          //  if (entry != null) {
+          //    epub.getEntry(entry);
+          //    coverManager.update(manga, epub.getInputStream(it));
+          //  }
+          //  return entry;
+          //}
+      }
       return null;
     } catch (e) {
-      //logger.e(e, message: "Error updating cover for ${manga.title}");
+      logger.e("Error updating cover for ${manga.title}", e);
       return null;
     }
   }

@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mime/mime.dart';
+
+part 'image_util.freezed.dart';
 
 enum ImageType {
   avif(mime: "image/avif", extension: "avif"),
@@ -38,19 +41,18 @@ class SplitData with _$SplitData {
 
 //TODO
 abstract class ImageUtil {
-  static bool isImage(
-    String? name,
-    //[Stdin Function()? openStream],
-  ) {
-    if (name == null) return false;
+  static final MimeTypeResolver resolver = MimeTypeResolver()
+      ..addExtension('jxl', 'image/jxl')
+      ..addMagicNumber([0xFF, 0x0A], 'image/jxl')
+      ..addMagicNumber(
+        [0x00, 0x00, 0x00, 0x0C, 0x4A, 0x58, 0x4C, 0x20, 0x0D, 0x0A, 0x87, 0x0A],
+        'image/jxl',
+      );
 
-    //final contentType = try {
-    //  URLConnection.guessContentTypeFromName(name);
-    //} catch (e) {
-    //  null
-    //} ?? openStream?.let { findImageType(it)?.mime }
-    //return contentType?.startsWith("image/") ?? false;
-    return false;
+  static bool isImage(String? path, {List<int>? headerBytes}) {
+    if (path == null) return false;
+    final contentType = lookupMimeType(path, headerBytes: headerBytes);
+    return contentType?.startsWith("image/") ?? false;
   }
 
   static ImageType? findImageType(
@@ -103,21 +105,6 @@ abstract class ImageUtil {
     }
     return false;
   }
-
-  //static tachiyomi.decoder.ImageType? _getImageType(InputStream stream) {
-  //  final bytes = ByteArray(32);
-
-  //  val length = if (stream.markSupported()) {
-  //      stream.mark(bytes.size)
-  //      stream.read(bytes, 0, bytes.size).also { stream.reset() }
-  //  } else {
-  //      stream.read(bytes, 0, bytes.size)
-  //  }
-
-  //  if (length == -1) return null;
-
-  //  return ImageDecoder.findType(bytes);
-  //}
 
   /// Check whether the image is wide (which we consider a double-page spread).
   ///
@@ -208,7 +195,7 @@ abstract class ImageUtil {
   //}
 
   /// Splits tall images to improve performance of reader
-  //static bool splitTallImage(Directory tmpDir, File imageFile, filenamePrefix: String) {
+  static bool splitTallImage(Directory tmpDir, File imageFile, String filenamePrefix) {
   //  if (isAnimatedAndSupported(imageFile.openInputStream()) || !_isTallImage(imageFile.openInputStream())) {
   //    return true;
   //  }
@@ -257,13 +244,13 @@ abstract class ImageUtil {
   //  } finally {
   //    bitmapRegionDecoder.recycle();
   //  }
-  //}
+    return false;
+  }
 
   //static _splitImageName(String filenamePrefix, int index) => "${filenamePrefix}__${"%03d".format(
   //    Locale.ENGLISH,
   //    index + 1,
   //)}.jpg"
-
   static _splitImageName(String filenamePrefix, int index) => "example.jpg";
 
   //private val BitmapFactory.Options.splitData
@@ -363,19 +350,19 @@ abstract class ImageUtil {
   //    else -> Colors.white
   //  }
 
-  //  var overallWhitePixels = 0
-  //  var overallBlackPixels = 0
-  //  var topBlackStreak = 0
-  //  var topWhiteStreak = 0
-  //  var botBlackStreak = 0
-  //  var botWhiteStreak = 0
-  //  outer@ for (x in intArrayOf(left, right, leftOffsetX, rightOffsetX)) {
-  //      var whitePixelsStreak = 0
-  //      var whitePixels = 0
-  //      var blackPixelsStreak = 0
-  //      var blackPixels = 0
-  //      var blackStreak = false
-  //      var whiteStreak = false
+  //  int overallWhitePixels = 0
+  //  int overallBlackPixels = 0
+  //  int topBlackStreak = 0
+  //  int topWhiteStreak = 0
+  //  int botBlackStreak = 0
+  //  int botWhiteStreak = 0
+  //  outer@ for (x in [left, right, leftOffsetX, rightOffsetX]) {
+  //      int whitePixelsStreak = 0
+  //      int whitePixels = 0
+  //      int blackPixelsStreak = 0
+  //      int blackPixels = 0
+  //      bool blackStreak = false
+  //      bool whiteStreak = false
   //      val notOffset = x == left || x == right
   //      inner@ for ((index, y) in (0..<image.height step image.height / 25).withIndex()) {
   //          val pixel = image[x, y]

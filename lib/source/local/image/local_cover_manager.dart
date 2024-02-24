@@ -5,6 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:quiver/strings.dart';
 
 import 'package:flutteryomi/core/util/system/image_util.dart';
+import 'package:flutteryomi/core/storage/disk_util.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/source/local/io/local_source_file_system.dart';
 
@@ -21,30 +22,24 @@ class LocalCoverManager {
     final files = await fileSystem.getFilesInMangaDirectory(mangaUrl);
     return files
         // Get all file whose names start with "cover"
-        .where((it) => FileSystemEntity.isFileSync(it.path)
+        .where((it) => it is File
             && equalsIgnoreCase(p.basenameWithoutExtension(it.path), 'cover'))
         // Get the first actual image
         .firstWhereOrNull((it) => ImageUtil.isImage(p.basename(it.path)))
         as File?;
   }
 
-  //TODO
-  Future<File?> update(SManga manga) async {
+  Future<File?> update(SManga manga, File file) async {
     final directory = await fileSystem.getMangaDirectory(manga.url);
     if (directory == null) return null;
 
-    //final targetFile = find(manga.url) ?? directory.createFile(_defaultCoverName)!;
+    final targetFileRef = await find(manga.url)
+        ?? await File(p.join(directory.path, _defaultCoverName)).create(recursive: true);
+    final targetFile = await file.copy(targetFileRef.path);
 
-    //inputStream.use { input ->
-    //    targetFile.openOutputStream().use { output ->
-    //        input.copyTo(output)
-    //    }
-    //}
+    DiskUtil.createNoMediaFile(directory);
 
-    //DiskUtil.createNoMediaFile(directory, context);
-
-    //manga.thumbnailUrl = targetFile.uri.toString();
-    //return targetFile;
-    return null;
+    manga.thumbnailUrl = targetFile.uri.toString();
+    return targetFile;
   }
 }
