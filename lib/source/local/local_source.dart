@@ -285,13 +285,10 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     // Copy the cover from the first chapter found if not available
     if (manga.thumbnailUrl.isNullOrBlank) {
       final chapter = chapters.lastOrNull;
-      if (chapter != null) {
-        await _updateCover(chapter, manga);
-      }
+      if (chapter != null) _updateCover(chapter, manga);
     }
 
-    //return chapters;
-    return [];
+    return chapters;
   }
 
   @override
@@ -305,7 +302,8 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     final lang = AppLocalizations.of(context);
     final dir = await fileSystem.getBaseDirectory();
     try {
-    //  final (mangaDirName, chapterName) = chapter.url.split('/', limit: 2);
+      // [mangaDirName, chapterName]
+      final [mangaDirName, chapterName] = chapter.url.partialSplit('/', 2);
       final dir = await fileSystem.getBaseDirectory();
     //  final file = dir
     //      ?.findFile(mangaDirName, true)
@@ -323,7 +321,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     }
   }
 
-  Future<File?> _updateCover(SChapter chapter, SManga manga) async {
+  void _updateCover(SChapter chapter, SManga manga) async {
     final format = await getFormat(chapter);
     try {
       switch (format) {
@@ -331,16 +329,23 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
           final entry = format.dir.listSync()
               .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.path, f2.path))
               .whereType<File>()
-              .firstWhereOrNull((it) => ImageUtil.isImage(p.basename(it.path), it));
+              .firstWhereOrNull((it) => ImageUtil.isImage(
+                p.basename(it.path),
+                headerBytes: it.openSync().readSync(32),
+              ));
 
           //if (entry != null) coverManager.update(manga, it.openInputStream());
-          return entry;
+          //return entry;
         case Zip():
           final inputStream = InputFileStream('test.zip');
           final zip = ZipDecoder().decodeBuffer(inputStream);
           final entry = zip.files
               .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
-              .firstWhereOrNull((it) => it.isFile && ImageUtil.isImage(it.name, zip.getInputStream(it)));
+              .firstWhereOrNull((it) {
+                OutputStream os = OutputStream();
+                it.decompress(os);
+                return it.isFile && ImageUtil.isImage(it.name, headerBytes: os.subset(0, 32));
+              });
 
           //if (entry != null) coverManager.update(manga, zip.getInputStream(it));
           //return entry;
@@ -381,4 +386,41 @@ extension SourceIsLocal on Source {
 
 extension DomainSourceIsLocal on domain_source.Source {
   bool isLocal() => id == LocalSource.localSourceId;
+}
+
+// Taken from https://stackoverflow.com/a/76039017
+// and dartbag by extension
+extension _PartialSplit on String {
+  /// A version of [String.split] that limits splitting to return a [List]
+  /// of at most [count] items.
+  ///
+  /// [count] must be non-negative.  If [count] is 0, returns an empty
+  /// [List].
+  ///
+  /// If splitting this [String] would result in more than [count] items,
+  /// the final element will contain the unsplit remainder of this [String].
+  ///
+  /// If splitting this [String] would result in fewer than [count] items,
+  /// returns a [List] with only the split substrings.
+  List<String> partialSplit(Pattern pattern, int count) {
+    assert(count >= 0);
+
+    const result = <String>[];
+
+    if (count == 0) return result;
+
+    int offset = 0;
+    var matches = pattern.allMatches(this);
+    for (final match in matches) {
+      if (result.length + 1 == count) break;
+
+      if (match.end - match.start == 0 && match.start == offset) continue;
+ 
+      result.add(substring(offset, match.start));
+      offset = match.end;
+    }
+    result.add(substring(offset));
+
+    return result;
+  }
 }

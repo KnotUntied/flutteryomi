@@ -6,24 +6,6 @@ import 'package:mime/mime.dart';
 
 part 'image_util.freezed.dart';
 
-enum ImageType {
-  avif(mime: "image/avif", extension: "avif"),
-  gif(mime: "image/gif", extension: "gif"),
-  heif(mime: "image/heif", extension: "heif"),
-  jpeg(mime: "image/jpeg", extension: "jpg"),
-  jxl(mime: "image/jxl", extension: "jxl"),
-  png(mime: "image/png", extension: "png"),
-  webp(mime: "image/webp", extension: "webp");
-
-  const ImageType({
-    required this.mime,
-    required this.extension,
-  });
-
-  final String mime;
-  final String extension;
-}
-
 enum Side { right, left }
 
 @freezed
@@ -51,44 +33,20 @@ abstract class ImageUtil {
 
   static bool isImage(String? path, {List<int>? headerBytes}) {
     if (path == null) return false;
-    final contentType = lookupMimeType(path, headerBytes: headerBytes);
+    final contentType = resolver.lookup(path, headerBytes: headerBytes);
     return contentType?.startsWith("image/") ?? false;
   }
 
-  static ImageType? findImageType(
-    //Stdin Function() openStream,
-  ) {
-    //return openStream().use { findImageType(it) };
-    return null;
-  }
-
-  static ImageType? findImageTypeUsingStdin(Stdin stream) {
-    //try {
-    //  return switch (_getImageType(stream)?.format) {
-    //    Format.avif => ImageType.avif,
-    //    Format.gif => ImageType.gif,
-    //    Format.heif => ImageType.heif,
-    //    Format.jpeg => ImageType.jpeg,
-    //    Format.jxl => ImageType.jxl,
-    //    Format.png => ImageType.png,
-    //    Format.webp => ImageType.webp,
-    //    _ => null,
-    //  }
-    //} catch (e) {
-    //  return null;
-    //}
-    return null;
-  }
-
   static String getExtensionFromMimeType(String? mime) {
-    //return MimeTypeMap.getSingleton().getExtensionFromMimeType(mime)
-    //    ?? _supplementaryMimetypeMapping[mime]
-    //    ?? "jpg";
-    return 'jpg';
+    String extension = extensionFromMime(mime ?? 'image/jpeg');
+    if (extension == mime) extension = _supplementaryMimetypeMapping[extension] ?? 'jpg';
+    return extension;
   }
 
-  static bool isAnimatedAndSupported(Stdin stream) {
+  static bool isAnimatedAndSupported(Stream<List<int>> stream) {
     try {
+      //See https://github.com/tachiyomiorg/image-decoder/blob/main/library/src/main/java/tachiyomi/decoder/ImageType.kt
+      //Will have to do checks in some other way
       //final type = _getImageType(stream);
       //if (type == null) return false;
       //return switch (type.format) {
@@ -105,6 +63,21 @@ abstract class ImageUtil {
     }
     return false;
   }
+
+  //static String? _getImageType(Stream<List<int>> stream) {
+  //  final bytes = ByteArray(32);
+
+  //  final length = if (stream.markSupported()) {
+  //    stream.mark(bytes.size)
+  //    stream.read(bytes, 0, bytes.size).also { stream.reset() }
+  //  } else {
+  //    stream.read(bytes, 0, bytes.size);
+  //  }
+
+  //  if (length == -1) return null;
+
+  //  return ImageDecoder.findType(bytes);
+  //}
 
   /// Check whether the image is wide (which we consider a double-page spread).
   ///
@@ -520,7 +493,7 @@ abstract class ImageUtil {
 
   static const _optimalImageHeight = getDisplayMaxHeightInPx * 2;
 
-  // Android doesn't include some mappings
+  // jxl is not in defaultExtensionMap
   static const _supplementaryMimetypeMapping = {
     // https://issuetracker.google.com/issues/182703810
     "image/jxl": "jxl",

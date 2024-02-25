@@ -20,7 +20,6 @@ import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/interactor/set_manga_categories.dart';
 import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_available_scanlators.dart';
-import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_manga_default_chapter_flags.dart';
 import 'package:flutteryomi/domain/chapter/interactor/set_read_status.dart';
 import 'package:flutteryomi/domain/chapter/interactor/sync_chapters_with_source.dart';
@@ -36,7 +35,6 @@ import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/fetch_interval.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_duplicate_library_manga.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart';
-import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga_with_chapters.dart';
 import 'package:flutteryomi/domain/manga/interactor/set_excluded_scanlators.dart';
 import 'package:flutteryomi/domain/manga/interactor/set_manga_chapter_flags.dart';
@@ -47,14 +45,9 @@ import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/interactor/add_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
-import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
-import 'package:flutteryomi/domain/updates/interactor/get_updates.dart';
-import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/manga/track/track_item.dart';
-import 'package:flutteryomi/presentation/updates/updates.dart';
-import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/local/local_source.dart';
 
@@ -131,12 +124,6 @@ class MangaScreenModel extends _$MangaScreenModel {
 
   List<ChapterListItem>? get _filteredChapters =>
       state.valueOrNull?.processedChapters;
-
-  //final chapterSwipeStartAction = libraryPreferences.swipeToEndAction().get()
-  //final chapterSwipeEndAction = libraryPreferences.swipeToStartAction().get()
-
-  //final isUpdateIntervalEnabled =
-  //    LibraryPreferences.mangaOutsideReleasePeriod in libraryPreferences.autoUpdateMangaRestrictions().get()
 
   void fetchAllFromSource([bool manualFetch = true]) async {
     //updateSuccessState { it.copy(isRefreshingData = true) }
