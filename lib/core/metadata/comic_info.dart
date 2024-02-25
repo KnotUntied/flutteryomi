@@ -1,13 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:dartx/dartx.dart' hide IterableWhereNotNull;
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:xml/xml.dart';
 // Too verbose >:(
 import 'package:xml_annotation/xml_annotation.dart' as annotation;
 
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 
-part 'comic_info.freezed.dart';
 part 'comic_info.g.dart';
 
 const comicInfoFile = "ComicInfo.xml";
@@ -73,29 +72,93 @@ extension SMangaComicInfo on SManga {
 // https://anansi-project.github.io/docs/comicinfo/schemas/v2.0
 @annotation.XmlRootElement(name: 'ComicInfo')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfo with _$ComicInfo {
-  const factory ComicInfo({
-    @annotation.XmlElement(name: 'Title') ComicInfoTitle? title,
-    @annotation.XmlElement(name: 'Series') ComicInfoSeries? series,
-    @annotation.XmlElement(name: 'Number') ComicInfoNumber? number,
-    @annotation.XmlElement(name: 'Summary') ComicInfoSummary? summary,
-    @annotation.XmlElement(name: 'Writer') ComicInfoWriter? writer,
-    @annotation.XmlElement(name: 'Penciller') ComicInfoPenciller? penciller,
-    @annotation.XmlElement(name: 'Inker') ComicInfoInker? inker,
-    @annotation.XmlElement(name: 'Colorist') ComicInfoColorist? colorist,
-    @annotation.XmlElement(name: 'Letterer') ComicInfoLetterer? letterer,
-    @annotation.XmlElement(name: 'CoverArtist')
-    ComicInfoCoverArtist? coverArtist,
-    @annotation.XmlElement(name: 'Translator') ComicInfoTranslator? translator,
-    @annotation.XmlElement(name: 'Genre') ComicInfoGenre? genre,
-    @annotation.XmlElement(name: 'Tags') ComicInfoTags? tags,
-    @annotation.XmlElement(name: 'Web') ComicInfoWeb? web,
-    @annotation.XmlElement(name: 'PublishingStatusTachiyomi')
-    PublishingStatusTachiyomi? publishingStatus,
-    @annotation.XmlElement(name: 'CategoriesTachiyomi')
-    CategoriesTachiyomi? categories,
-  }) = _ComicInfo;
+class ComicInfo extends Equatable {
+  const ComicInfo({
+    this.title,
+    this.series,
+    this.number,
+    this.summary,
+    this.writer,
+    this.penciller,
+    this.inker,
+    this.colorist,
+    this.letterer,
+    this.coverArtist,
+    this.translator,
+    this.genre,
+    this.tags,
+    this.web,
+    this.publishingStatus,
+    this.categories,
+  });
+
+  @annotation.XmlElement(name: 'Title')
+  final ComicInfoTitle? title;
+
+  @annotation.XmlElement(name: 'Series')
+  final ComicInfoSeries? series;
+  
+  @annotation.XmlElement(name: 'Number')
+  final ComicInfoNumber? number;
+  
+  @annotation.XmlElement(name: 'Summary')
+  final ComicInfoSummary? summary;
+  
+  @annotation.XmlElement(name: 'Writer')
+  final ComicInfoWriter? writer;
+  
+  @annotation.XmlElement(name: 'Penciller')
+  final ComicInfoPenciller? penciller;
+  
+  @annotation.XmlElement(name: 'Inker')
+  final ComicInfoInker? inker;
+  
+  @annotation.XmlElement(name: 'Colorist')
+  final ComicInfoColorist? colorist;
+  
+  @annotation.XmlElement(name: 'Letterer')
+  final ComicInfoLetterer? letterer;
+  
+  @annotation.XmlElement(name: 'CoverArtist')
+  final ComicInfoCoverArtist? coverArtist;
+  
+  @annotation.XmlElement(name: 'Translator')
+  final ComicInfoTranslator? translator;
+  
+  @annotation.XmlElement(name: 'Genre')
+  final ComicInfoGenre? genre;
+  
+  @annotation.XmlElement(name: 'Tags')
+  final ComicInfoTags? tags;
+  
+  @annotation.XmlElement(name: 'Web')
+  final ComicInfoWeb? web;
+  
+  @annotation.XmlElement(name: 'PublishingStatusTachiyomi')
+  final PublishingStatusTachiyomi? publishingStatus;
+  
+  @annotation.XmlElement(name: 'CategoriesTachiyomi')
+  final CategoriesTachiyomi? categories;
+
+  @override
+  List<Object?> get props => [
+    title,
+    series,
+    number,
+    summary,
+    writer,
+    penciller,
+    inker,
+    colorist,
+    letterer,
+    coverArtist,
+    translator,
+    genre,
+    tags,
+    web,
+    publishingStatus,
+    categories,
+  ];
 
   factory ComicInfo.fromXmlElement(XmlElement element) =>
       _$ComicInfoFromXmlElement(element);
@@ -138,11 +201,14 @@ class ComicInfo with _$ComicInfo {
 
 @annotation.XmlRootElement(name: 'Title')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoTitle with _$ComicInfoTitle {
-  const factory ComicInfoTitle(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoTitle;
+class ComicInfoTitle extends Equatable {
+  const ComicInfoTitle(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoTitle.fromXmlElement(XmlElement element) =>
       _$ComicInfoTitleFromXmlElement(element);
@@ -185,11 +251,14 @@ class ComicInfoTitle with _$ComicInfoTitle {
 
 @annotation.XmlRootElement(name: 'Series')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoSeries with _$ComicInfoSeries {
-  const factory ComicInfoSeries(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoSeries;
+class ComicInfoSeries extends Equatable {
+  const ComicInfoSeries(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoSeries.fromXmlElement(XmlElement element) =>
       _$ComicInfoSeriesFromXmlElement(element);
@@ -232,11 +301,14 @@ class ComicInfoSeries with _$ComicInfoSeries {
 
 @annotation.XmlRootElement(name: 'Number')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoNumber with _$ComicInfoNumber {
-  const factory ComicInfoNumber(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoNumber;
+class ComicInfoNumber extends Equatable {
+  const ComicInfoNumber(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoNumber.fromXmlElement(XmlElement element) =>
       _$ComicInfoNumberFromXmlElement(element);
@@ -279,11 +351,14 @@ class ComicInfoNumber with _$ComicInfoNumber {
 
 @annotation.XmlRootElement(name: 'Summary')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoSummary with _$ComicInfoSummary {
-  const factory ComicInfoSummary(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoSummary;
+class ComicInfoSummary extends Equatable {
+  const ComicInfoSummary(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoSummary.fromXmlElement(XmlElement element) =>
       _$ComicInfoSummaryFromXmlElement(element);
@@ -326,11 +401,14 @@ class ComicInfoSummary with _$ComicInfoSummary {
 
 @annotation.XmlRootElement(name: 'Writer')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoWriter with _$ComicInfoWriter {
-  const factory ComicInfoWriter(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoWriter;
+class ComicInfoWriter extends Equatable {
+  const ComicInfoWriter(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoWriter.fromXmlElement(XmlElement element) =>
       _$ComicInfoWriterFromXmlElement(element);
@@ -373,11 +451,14 @@ class ComicInfoWriter with _$ComicInfoWriter {
 
 @annotation.XmlRootElement(name: 'Penciller')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoPenciller with _$ComicInfoPenciller {
-  const factory ComicInfoPenciller(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoPenciller;
+class ComicInfoPenciller extends Equatable {
+  const ComicInfoPenciller(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoPenciller.fromXmlElement(XmlElement element) =>
       _$ComicInfoPencillerFromXmlElement(element);
@@ -420,11 +501,14 @@ class ComicInfoPenciller with _$ComicInfoPenciller {
 
 @annotation.XmlRootElement(name: 'Inker')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoInker with _$ComicInfoInker {
-  const factory ComicInfoInker(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoInker;
+class ComicInfoInker extends Equatable {
+  const ComicInfoInker(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoInker.fromXmlElement(XmlElement element) =>
       _$ComicInfoInkerFromXmlElement(element);
@@ -467,11 +551,14 @@ class ComicInfoInker with _$ComicInfoInker {
 
 @annotation.XmlRootElement(name: 'Colorist')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoColorist with _$ComicInfoColorist {
-  const factory ComicInfoColorist(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoColorist;
+class ComicInfoColorist extends Equatable {
+  const ComicInfoColorist(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoColorist.fromXmlElement(XmlElement element) =>
       _$ComicInfoColoristFromXmlElement(element);
@@ -514,11 +601,14 @@ class ComicInfoColorist with _$ComicInfoColorist {
 
 @annotation.XmlRootElement(name: 'Letterer')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoLetterer with _$ComicInfoLetterer {
-  const factory ComicInfoLetterer(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoLetterer;
+class ComicInfoLetterer extends Equatable {
+  const ComicInfoLetterer(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoLetterer.fromXmlElement(XmlElement element) =>
       _$ComicInfoLettererFromXmlElement(element);
@@ -561,11 +651,14 @@ class ComicInfoLetterer with _$ComicInfoLetterer {
 
 @annotation.XmlRootElement(name: 'CoverArtist')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoCoverArtist with _$ComicInfoCoverArtist {
-  const factory ComicInfoCoverArtist(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoCoverArtist;
+class ComicInfoCoverArtist extends Equatable {
+  const ComicInfoCoverArtist(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoCoverArtist.fromXmlElement(XmlElement element) =>
       _$ComicInfoCoverArtistFromXmlElement(element);
@@ -608,11 +701,14 @@ class ComicInfoCoverArtist with _$ComicInfoCoverArtist {
 
 @annotation.XmlRootElement(name: 'Translator')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoTranslator with _$ComicInfoTranslator {
-  const factory ComicInfoTranslator(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoTranslator;
+class ComicInfoTranslator extends Equatable {
+  const ComicInfoTranslator(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoTranslator.fromXmlElement(XmlElement element) =>
       _$ComicInfoTranslatorFromXmlElement(element);
@@ -655,11 +751,14 @@ class ComicInfoTranslator with _$ComicInfoTranslator {
 
 @annotation.XmlRootElement(name: 'Genre')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoGenre with _$ComicInfoGenre {
-  const factory ComicInfoGenre(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoGenre;
+class ComicInfoGenre extends Equatable {
+  const ComicInfoGenre(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoGenre.fromXmlElement(XmlElement element) =>
       _$ComicInfoGenreFromXmlElement(element);
@@ -702,11 +801,14 @@ class ComicInfoGenre with _$ComicInfoGenre {
 
 @annotation.XmlRootElement(name: 'Tags')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoTags with _$ComicInfoTags {
-  const factory ComicInfoTags(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoTags;
+class ComicInfoTags extends Equatable {
+  const ComicInfoTags(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoTags.fromXmlElement(XmlElement element) =>
       _$ComicInfoTagsFromXmlElement(element);
@@ -749,11 +851,14 @@ class ComicInfoTags with _$ComicInfoTags {
 
 @annotation.XmlRootElement(name: 'Web')
 @annotation.XmlSerializable()
-@freezed
-class ComicInfoWeb with _$ComicInfoWeb {
-  const factory ComicInfoWeb(
-    @annotation.XmlText() String value,
-  ) = _ComicInfoWeb;
+class ComicInfoWeb extends Equatable {
+  const ComicInfoWeb(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory ComicInfoWeb.fromXmlElement(XmlElement element) =>
       _$ComicInfoWebFromXmlElement(element);
@@ -796,11 +901,14 @@ class ComicInfoWeb with _$ComicInfoWeb {
 
 @annotation.XmlRootElement(name: 'PublishingStatusTachiyomi')
 @annotation.XmlSerializable()
-@freezed
-class PublishingStatusTachiyomi with _$PublishingStatusTachiyomi {
-  const factory PublishingStatusTachiyomi(
-    @annotation.XmlText() String value,
-  ) = _PublishingStatusTachiyomi;
+class PublishingStatusTachiyomi extends Equatable {
+  const PublishingStatusTachiyomi(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory PublishingStatusTachiyomi.fromXmlElement(XmlElement element) =>
       _$PublishingStatusTachiyomiFromXmlElement(element);
@@ -843,11 +951,14 @@ class PublishingStatusTachiyomi with _$PublishingStatusTachiyomi {
 
 @annotation.XmlRootElement(name: 'CategoriesTachiyomi')
 @annotation.XmlSerializable()
-@freezed
-class CategoriesTachiyomi with _$CategoriesTachiyomi {
-  const factory CategoriesTachiyomi(
-    @annotation.XmlText() String value,
-  ) = _CategoriesTachiyomi;
+class CategoriesTachiyomi extends Equatable {
+  const CategoriesTachiyomi(this.value);
+
+  @annotation.XmlText()
+  final String value;
+
+  @override
+  List<Object> get props => [value];
 
   factory CategoriesTachiyomi.fromXmlElement(XmlElement element) =>
       _$CategoriesTachiyomiFromXmlElement(element);

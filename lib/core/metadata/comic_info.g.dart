@@ -7,7 +7,121 @@ part of 'comic_info.dart';
 // **************************************************************************
 
 void _$ComicInfoBuildXmlChildren(ComicInfo instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final title = instance.title;
+  final titleSerialized = title;
+  builder.element('Title', nest: () {
+    if (titleSerialized != null) {
+      titleSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final series = instance.series;
+  final seriesSerialized = series;
+  builder.element('Series', nest: () {
+    if (seriesSerialized != null) {
+      seriesSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final number = instance.number;
+  final numberSerialized = number;
+  builder.element('Number', nest: () {
+    if (numberSerialized != null) {
+      numberSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final summary = instance.summary;
+  final summarySerialized = summary;
+  builder.element('Summary', nest: () {
+    if (summarySerialized != null) {
+      summarySerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final writer = instance.writer;
+  final writerSerialized = writer;
+  builder.element('Writer', nest: () {
+    if (writerSerialized != null) {
+      writerSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final penciller = instance.penciller;
+  final pencillerSerialized = penciller;
+  builder.element('Penciller', nest: () {
+    if (pencillerSerialized != null) {
+      pencillerSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final inker = instance.inker;
+  final inkerSerialized = inker;
+  builder.element('Inker', nest: () {
+    if (inkerSerialized != null) {
+      inkerSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final colorist = instance.colorist;
+  final coloristSerialized = colorist;
+  builder.element('Colorist', nest: () {
+    if (coloristSerialized != null) {
+      coloristSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final letterer = instance.letterer;
+  final lettererSerialized = letterer;
+  builder.element('Letterer', nest: () {
+    if (lettererSerialized != null) {
+      lettererSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final coverArtist = instance.coverArtist;
+  final coverArtistSerialized = coverArtist;
+  builder.element('CoverArtist', nest: () {
+    if (coverArtistSerialized != null) {
+      coverArtistSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final translator = instance.translator;
+  final translatorSerialized = translator;
+  builder.element('Translator', nest: () {
+    if (translatorSerialized != null) {
+      translatorSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final genre = instance.genre;
+  final genreSerialized = genre;
+  builder.element('Genre', nest: () {
+    if (genreSerialized != null) {
+      genreSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final tags = instance.tags;
+  final tagsSerialized = tags;
+  builder.element('Tags', nest: () {
+    if (tagsSerialized != null) {
+      tagsSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final web = instance.web;
+  final webSerialized = web;
+  builder.element('Web', nest: () {
+    if (webSerialized != null) {
+      webSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+  final publishingStatus = instance.publishingStatus;
+  final publishingStatusSerialized = publishingStatus;
+  builder.element('PublishingStatusTachiyomi', nest: () {
+    if (publishingStatusSerialized != null) {
+      publishingStatusSerialized.buildXmlChildren(builder,
+          namespaces: namespaces);
+    }
+  });
+  final categories = instance.categories;
+  final categoriesSerialized = categories;
+  builder.element('CategoriesTachiyomi', nest: () {
+    if (categoriesSerialized != null) {
+      categoriesSerialized.buildXmlChildren(builder, namespaces: namespaces);
+    }
+  });
+}
 
 void _$ComicInfoBuildXmlElement(ComicInfo instance, XmlBuilder builder,
     {Map<String, String> namespaces = const {}}) {
@@ -17,7 +131,52 @@ void _$ComicInfoBuildXmlElement(ComicInfo instance, XmlBuilder builder,
 }
 
 ComicInfo _$ComicInfoFromXmlElement(XmlElement element) {
-  return ComicInfo();
+  final title = element.getElement('Title');
+  final series = element.getElement('Series');
+  final number = element.getElement('Number');
+  final summary = element.getElement('Summary');
+  final writer = element.getElement('Writer');
+  final penciller = element.getElement('Penciller');
+  final inker = element.getElement('Inker');
+  final colorist = element.getElement('Colorist');
+  final letterer = element.getElement('Letterer');
+  final coverArtist = element.getElement('CoverArtist');
+  final translator = element.getElement('Translator');
+  final genre = element.getElement('Genre');
+  final tags = element.getElement('Tags');
+  final web = element.getElement('Web');
+  final publishingStatus = element.getElement('PublishingStatusTachiyomi');
+  final categories = element.getElement('CategoriesTachiyomi');
+  return ComicInfo(
+      title: title != null ? ComicInfoTitle.fromXmlElement(title) : null,
+      series: series != null ? ComicInfoSeries.fromXmlElement(series) : null,
+      number: number != null ? ComicInfoNumber.fromXmlElement(number) : null,
+      summary:
+          summary != null ? ComicInfoSummary.fromXmlElement(summary) : null,
+      writer: writer != null ? ComicInfoWriter.fromXmlElement(writer) : null,
+      penciller: penciller != null
+          ? ComicInfoPenciller.fromXmlElement(penciller)
+          : null,
+      inker: inker != null ? ComicInfoInker.fromXmlElement(inker) : null,
+      colorist:
+          colorist != null ? ComicInfoColorist.fromXmlElement(colorist) : null,
+      letterer:
+          letterer != null ? ComicInfoLetterer.fromXmlElement(letterer) : null,
+      coverArtist: coverArtist != null
+          ? ComicInfoCoverArtist.fromXmlElement(coverArtist)
+          : null,
+      translator: translator != null
+          ? ComicInfoTranslator.fromXmlElement(translator)
+          : null,
+      genre: genre != null ? ComicInfoGenre.fromXmlElement(genre) : null,
+      tags: tags != null ? ComicInfoTags.fromXmlElement(tags) : null,
+      web: web != null ? ComicInfoWeb.fromXmlElement(web) : null,
+      publishingStatus: publishingStatus != null
+          ? PublishingStatusTachiyomi.fromXmlElement(publishingStatus)
+          : null,
+      categories: categories != null
+          ? CategoriesTachiyomi.fromXmlElement(categories)
+          : null);
 }
 
 List<XmlAttribute> _$ComicInfoToXmlAttributes(ComicInfo instance,
@@ -29,6 +188,118 @@ List<XmlAttribute> _$ComicInfoToXmlAttributes(ComicInfo instance,
 List<XmlNode> _$ComicInfoToXmlChildren(ComicInfo instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final title = instance.title;
+  final titleSerialized = title;
+  final titleConstructed = XmlElement(
+      XmlName('Title'),
+      titleSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      titleSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(titleConstructed);
+  final series = instance.series;
+  final seriesSerialized = series;
+  final seriesConstructed = XmlElement(
+      XmlName('Series'),
+      seriesSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      seriesSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(seriesConstructed);
+  final number = instance.number;
+  final numberSerialized = number;
+  final numberConstructed = XmlElement(
+      XmlName('Number'),
+      numberSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      numberSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(numberConstructed);
+  final summary = instance.summary;
+  final summarySerialized = summary;
+  final summaryConstructed = XmlElement(
+      XmlName('Summary'),
+      summarySerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      summarySerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(summaryConstructed);
+  final writer = instance.writer;
+  final writerSerialized = writer;
+  final writerConstructed = XmlElement(
+      XmlName('Writer'),
+      writerSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      writerSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(writerConstructed);
+  final penciller = instance.penciller;
+  final pencillerSerialized = penciller;
+  final pencillerConstructed = XmlElement(
+      XmlName('Penciller'),
+      pencillerSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      pencillerSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(pencillerConstructed);
+  final inker = instance.inker;
+  final inkerSerialized = inker;
+  final inkerConstructed = XmlElement(
+      XmlName('Inker'),
+      inkerSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      inkerSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(inkerConstructed);
+  final colorist = instance.colorist;
+  final coloristSerialized = colorist;
+  final coloristConstructed = XmlElement(
+      XmlName('Colorist'),
+      coloristSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      coloristSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(coloristConstructed);
+  final letterer = instance.letterer;
+  final lettererSerialized = letterer;
+  final lettererConstructed = XmlElement(
+      XmlName('Letterer'),
+      lettererSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      lettererSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(lettererConstructed);
+  final coverArtist = instance.coverArtist;
+  final coverArtistSerialized = coverArtist;
+  final coverArtistConstructed = XmlElement(
+      XmlName('CoverArtist'),
+      coverArtistSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      coverArtistSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(coverArtistConstructed);
+  final translator = instance.translator;
+  final translatorSerialized = translator;
+  final translatorConstructed = XmlElement(
+      XmlName('Translator'),
+      translatorSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      translatorSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(translatorConstructed);
+  final genre = instance.genre;
+  final genreSerialized = genre;
+  final genreConstructed = XmlElement(
+      XmlName('Genre'),
+      genreSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      genreSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(genreConstructed);
+  final tags = instance.tags;
+  final tagsSerialized = tags;
+  final tagsConstructed = XmlElement(
+      XmlName('Tags'),
+      tagsSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      tagsSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(tagsConstructed);
+  final web = instance.web;
+  final webSerialized = web;
+  final webConstructed = XmlElement(
+      XmlName('Web'),
+      webSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      webSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(webConstructed);
+  final publishingStatus = instance.publishingStatus;
+  final publishingStatusSerialized = publishingStatus;
+  final publishingStatusConstructed = XmlElement(
+      XmlName('PublishingStatusTachiyomi'),
+      publishingStatusSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      publishingStatusSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(publishingStatusConstructed);
+  final categories = instance.categories;
+  final categoriesSerialized = categories;
+  final categoriesConstructed = XmlElement(
+      XmlName('CategoriesTachiyomi'),
+      categoriesSerialized?.toXmlAttributes(namespaces: namespaces) ?? [],
+      categoriesSerialized?.toXmlChildren(namespaces: namespaces) ?? []);
+  children.add(categoriesConstructed);
   return children;
 }
 
@@ -45,7 +316,11 @@ XmlElement _$ComicInfoToXmlElement(ComicInfo instance,
 
 void _$ComicInfoTitleBuildXmlChildren(
     ComicInfoTitle instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoTitleBuildXmlElement(
     ComicInfoTitle instance, XmlBuilder builder,
@@ -56,7 +331,8 @@ void _$ComicInfoTitleBuildXmlElement(
 }
 
 ComicInfoTitle _$ComicInfoTitleFromXmlElement(XmlElement element) {
-  return ComicInfoTitle();
+  final value = element.getText()!;
+  return ComicInfoTitle(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoTitleToXmlAttributes(ComicInfoTitle instance,
@@ -68,6 +344,10 @@ List<XmlAttribute> _$ComicInfoTitleToXmlAttributes(ComicInfoTitle instance,
 List<XmlNode> _$ComicInfoTitleToXmlChildren(ComicInfoTitle instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -84,7 +364,11 @@ XmlElement _$ComicInfoTitleToXmlElement(ComicInfoTitle instance,
 
 void _$ComicInfoSeriesBuildXmlChildren(
     ComicInfoSeries instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoSeriesBuildXmlElement(
     ComicInfoSeries instance, XmlBuilder builder,
@@ -95,7 +379,8 @@ void _$ComicInfoSeriesBuildXmlElement(
 }
 
 ComicInfoSeries _$ComicInfoSeriesFromXmlElement(XmlElement element) {
-  return ComicInfoSeries();
+  final value = element.getText()!;
+  return ComicInfoSeries(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoSeriesToXmlAttributes(ComicInfoSeries instance,
@@ -107,6 +392,10 @@ List<XmlAttribute> _$ComicInfoSeriesToXmlAttributes(ComicInfoSeries instance,
 List<XmlNode> _$ComicInfoSeriesToXmlChildren(ComicInfoSeries instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -123,7 +412,11 @@ XmlElement _$ComicInfoSeriesToXmlElement(ComicInfoSeries instance,
 
 void _$ComicInfoNumberBuildXmlChildren(
     ComicInfoNumber instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoNumberBuildXmlElement(
     ComicInfoNumber instance, XmlBuilder builder,
@@ -134,7 +427,8 @@ void _$ComicInfoNumberBuildXmlElement(
 }
 
 ComicInfoNumber _$ComicInfoNumberFromXmlElement(XmlElement element) {
-  return ComicInfoNumber();
+  final value = element.getText()!;
+  return ComicInfoNumber(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoNumberToXmlAttributes(ComicInfoNumber instance,
@@ -146,6 +440,10 @@ List<XmlAttribute> _$ComicInfoNumberToXmlAttributes(ComicInfoNumber instance,
 List<XmlNode> _$ComicInfoNumberToXmlChildren(ComicInfoNumber instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -162,7 +460,11 @@ XmlElement _$ComicInfoNumberToXmlElement(ComicInfoNumber instance,
 
 void _$ComicInfoSummaryBuildXmlChildren(
     ComicInfoSummary instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoSummaryBuildXmlElement(
     ComicInfoSummary instance, XmlBuilder builder,
@@ -173,7 +475,8 @@ void _$ComicInfoSummaryBuildXmlElement(
 }
 
 ComicInfoSummary _$ComicInfoSummaryFromXmlElement(XmlElement element) {
-  return ComicInfoSummary();
+  final value = element.getText()!;
+  return ComicInfoSummary(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoSummaryToXmlAttributes(ComicInfoSummary instance,
@@ -185,6 +488,10 @@ List<XmlAttribute> _$ComicInfoSummaryToXmlAttributes(ComicInfoSummary instance,
 List<XmlNode> _$ComicInfoSummaryToXmlChildren(ComicInfoSummary instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -201,7 +508,11 @@ XmlElement _$ComicInfoSummaryToXmlElement(ComicInfoSummary instance,
 
 void _$ComicInfoWriterBuildXmlChildren(
     ComicInfoWriter instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoWriterBuildXmlElement(
     ComicInfoWriter instance, XmlBuilder builder,
@@ -212,7 +523,8 @@ void _$ComicInfoWriterBuildXmlElement(
 }
 
 ComicInfoWriter _$ComicInfoWriterFromXmlElement(XmlElement element) {
-  return ComicInfoWriter();
+  final value = element.getText()!;
+  return ComicInfoWriter(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoWriterToXmlAttributes(ComicInfoWriter instance,
@@ -224,6 +536,10 @@ List<XmlAttribute> _$ComicInfoWriterToXmlAttributes(ComicInfoWriter instance,
 List<XmlNode> _$ComicInfoWriterToXmlChildren(ComicInfoWriter instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -240,7 +556,11 @@ XmlElement _$ComicInfoWriterToXmlElement(ComicInfoWriter instance,
 
 void _$ComicInfoPencillerBuildXmlChildren(
     ComicInfoPenciller instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoPencillerBuildXmlElement(
     ComicInfoPenciller instance, XmlBuilder builder,
@@ -251,7 +571,8 @@ void _$ComicInfoPencillerBuildXmlElement(
 }
 
 ComicInfoPenciller _$ComicInfoPencillerFromXmlElement(XmlElement element) {
-  return ComicInfoPenciller();
+  final value = element.getText()!;
+  return ComicInfoPenciller(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoPencillerToXmlAttributes(
@@ -264,6 +585,10 @@ List<XmlAttribute> _$ComicInfoPencillerToXmlAttributes(
 List<XmlNode> _$ComicInfoPencillerToXmlChildren(ComicInfoPenciller instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -280,7 +605,11 @@ XmlElement _$ComicInfoPencillerToXmlElement(ComicInfoPenciller instance,
 
 void _$ComicInfoInkerBuildXmlChildren(
     ComicInfoInker instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoInkerBuildXmlElement(
     ComicInfoInker instance, XmlBuilder builder,
@@ -291,7 +620,8 @@ void _$ComicInfoInkerBuildXmlElement(
 }
 
 ComicInfoInker _$ComicInfoInkerFromXmlElement(XmlElement element) {
-  return ComicInfoInker();
+  final value = element.getText()!;
+  return ComicInfoInker(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoInkerToXmlAttributes(ComicInfoInker instance,
@@ -303,6 +633,10 @@ List<XmlAttribute> _$ComicInfoInkerToXmlAttributes(ComicInfoInker instance,
 List<XmlNode> _$ComicInfoInkerToXmlChildren(ComicInfoInker instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -319,7 +653,11 @@ XmlElement _$ComicInfoInkerToXmlElement(ComicInfoInker instance,
 
 void _$ComicInfoColoristBuildXmlChildren(
     ComicInfoColorist instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoColoristBuildXmlElement(
     ComicInfoColorist instance, XmlBuilder builder,
@@ -330,7 +668,8 @@ void _$ComicInfoColoristBuildXmlElement(
 }
 
 ComicInfoColorist _$ComicInfoColoristFromXmlElement(XmlElement element) {
-  return ComicInfoColorist();
+  final value = element.getText()!;
+  return ComicInfoColorist(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoColoristToXmlAttributes(
@@ -343,6 +682,10 @@ List<XmlAttribute> _$ComicInfoColoristToXmlAttributes(
 List<XmlNode> _$ComicInfoColoristToXmlChildren(ComicInfoColorist instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -359,7 +702,11 @@ XmlElement _$ComicInfoColoristToXmlElement(ComicInfoColorist instance,
 
 void _$ComicInfoLettererBuildXmlChildren(
     ComicInfoLetterer instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoLettererBuildXmlElement(
     ComicInfoLetterer instance, XmlBuilder builder,
@@ -370,7 +717,8 @@ void _$ComicInfoLettererBuildXmlElement(
 }
 
 ComicInfoLetterer _$ComicInfoLettererFromXmlElement(XmlElement element) {
-  return ComicInfoLetterer();
+  final value = element.getText()!;
+  return ComicInfoLetterer(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoLettererToXmlAttributes(
@@ -383,6 +731,10 @@ List<XmlAttribute> _$ComicInfoLettererToXmlAttributes(
 List<XmlNode> _$ComicInfoLettererToXmlChildren(ComicInfoLetterer instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -399,7 +751,11 @@ XmlElement _$ComicInfoLettererToXmlElement(ComicInfoLetterer instance,
 
 void _$ComicInfoCoverArtistBuildXmlChildren(
     ComicInfoCoverArtist instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoCoverArtistBuildXmlElement(
     ComicInfoCoverArtist instance, XmlBuilder builder,
@@ -410,7 +766,8 @@ void _$ComicInfoCoverArtistBuildXmlElement(
 }
 
 ComicInfoCoverArtist _$ComicInfoCoverArtistFromXmlElement(XmlElement element) {
-  return ComicInfoCoverArtist();
+  final value = element.getText()!;
+  return ComicInfoCoverArtist(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoCoverArtistToXmlAttributes(
@@ -423,6 +780,10 @@ List<XmlAttribute> _$ComicInfoCoverArtistToXmlAttributes(
 List<XmlNode> _$ComicInfoCoverArtistToXmlChildren(ComicInfoCoverArtist instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -439,7 +800,11 @@ XmlElement _$ComicInfoCoverArtistToXmlElement(ComicInfoCoverArtist instance,
 
 void _$ComicInfoTranslatorBuildXmlChildren(
     ComicInfoTranslator instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoTranslatorBuildXmlElement(
     ComicInfoTranslator instance, XmlBuilder builder,
@@ -450,7 +815,8 @@ void _$ComicInfoTranslatorBuildXmlElement(
 }
 
 ComicInfoTranslator _$ComicInfoTranslatorFromXmlElement(XmlElement element) {
-  return ComicInfoTranslator();
+  final value = element.getText()!;
+  return ComicInfoTranslator(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoTranslatorToXmlAttributes(
@@ -463,6 +829,10 @@ List<XmlAttribute> _$ComicInfoTranslatorToXmlAttributes(
 List<XmlNode> _$ComicInfoTranslatorToXmlChildren(ComicInfoTranslator instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -479,7 +849,11 @@ XmlElement _$ComicInfoTranslatorToXmlElement(ComicInfoTranslator instance,
 
 void _$ComicInfoGenreBuildXmlChildren(
     ComicInfoGenre instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoGenreBuildXmlElement(
     ComicInfoGenre instance, XmlBuilder builder,
@@ -490,7 +864,8 @@ void _$ComicInfoGenreBuildXmlElement(
 }
 
 ComicInfoGenre _$ComicInfoGenreFromXmlElement(XmlElement element) {
-  return ComicInfoGenre();
+  final value = element.getText()!;
+  return ComicInfoGenre(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoGenreToXmlAttributes(ComicInfoGenre instance,
@@ -502,6 +877,10 @@ List<XmlAttribute> _$ComicInfoGenreToXmlAttributes(ComicInfoGenre instance,
 List<XmlNode> _$ComicInfoGenreToXmlChildren(ComicInfoGenre instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -517,7 +896,11 @@ XmlElement _$ComicInfoGenreToXmlElement(ComicInfoGenre instance,
 }
 
 void _$ComicInfoTagsBuildXmlChildren(ComicInfoTags instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoTagsBuildXmlElement(ComicInfoTags instance, XmlBuilder builder,
     {Map<String, String> namespaces = const {}}) {
@@ -527,7 +910,8 @@ void _$ComicInfoTagsBuildXmlElement(ComicInfoTags instance, XmlBuilder builder,
 }
 
 ComicInfoTags _$ComicInfoTagsFromXmlElement(XmlElement element) {
-  return ComicInfoTags();
+  final value = element.getText()!;
+  return ComicInfoTags(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoTagsToXmlAttributes(ComicInfoTags instance,
@@ -539,6 +923,10 @@ List<XmlAttribute> _$ComicInfoTagsToXmlAttributes(ComicInfoTags instance,
 List<XmlNode> _$ComicInfoTagsToXmlChildren(ComicInfoTags instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -554,7 +942,11 @@ XmlElement _$ComicInfoTagsToXmlElement(ComicInfoTags instance,
 }
 
 void _$ComicInfoWebBuildXmlChildren(ComicInfoWeb instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$ComicInfoWebBuildXmlElement(ComicInfoWeb instance, XmlBuilder builder,
     {Map<String, String> namespaces = const {}}) {
@@ -564,7 +956,8 @@ void _$ComicInfoWebBuildXmlElement(ComicInfoWeb instance, XmlBuilder builder,
 }
 
 ComicInfoWeb _$ComicInfoWebFromXmlElement(XmlElement element) {
-  return ComicInfoWeb();
+  final value = element.getText()!;
+  return ComicInfoWeb(value: value);
 }
 
 List<XmlAttribute> _$ComicInfoWebToXmlAttributes(ComicInfoWeb instance,
@@ -576,6 +969,10 @@ List<XmlAttribute> _$ComicInfoWebToXmlAttributes(ComicInfoWeb instance,
 List<XmlNode> _$ComicInfoWebToXmlChildren(ComicInfoWeb instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -592,7 +989,11 @@ XmlElement _$ComicInfoWebToXmlElement(ComicInfoWeb instance,
 
 void _$PublishingStatusTachiyomiBuildXmlChildren(
     PublishingStatusTachiyomi instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$PublishingStatusTachiyomiBuildXmlElement(
     PublishingStatusTachiyomi instance, XmlBuilder builder,
@@ -605,7 +1006,8 @@ void _$PublishingStatusTachiyomiBuildXmlElement(
 
 PublishingStatusTachiyomi _$PublishingStatusTachiyomiFromXmlElement(
     XmlElement element) {
-  return PublishingStatusTachiyomi();
+  final value = element.getText()!;
+  return PublishingStatusTachiyomi(value: value);
 }
 
 List<XmlAttribute> _$PublishingStatusTachiyomiToXmlAttributes(
@@ -619,6 +1021,10 @@ List<XmlNode> _$PublishingStatusTachiyomiToXmlChildren(
     PublishingStatusTachiyomi instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
@@ -636,7 +1042,11 @@ XmlElement _$PublishingStatusTachiyomiToXmlElement(
 
 void _$CategoriesTachiyomiBuildXmlChildren(
     CategoriesTachiyomi instance, XmlBuilder builder,
-    {Map<String, String> namespaces = const {}}) {}
+    {Map<String, String> namespaces = const {}}) {
+  final value = instance.value;
+  final valueSerialized = value;
+  builder.text(valueSerialized);
+}
 
 void _$CategoriesTachiyomiBuildXmlElement(
     CategoriesTachiyomi instance, XmlBuilder builder,
@@ -647,7 +1057,8 @@ void _$CategoriesTachiyomiBuildXmlElement(
 }
 
 CategoriesTachiyomi _$CategoriesTachiyomiFromXmlElement(XmlElement element) {
-  return CategoriesTachiyomi();
+  final value = element.getText()!;
+  return CategoriesTachiyomi(value: value);
 }
 
 List<XmlAttribute> _$CategoriesTachiyomiToXmlAttributes(
@@ -660,6 +1071,10 @@ List<XmlAttribute> _$CategoriesTachiyomiToXmlAttributes(
 List<XmlNode> _$CategoriesTachiyomiToXmlChildren(CategoriesTachiyomi instance,
     {Map<String, String?> namespaces = const {}}) {
   final children = <XmlNode>[];
+  final value = instance.value;
+  final valueSerialized = value;
+  final valueConstructed = XmlText(valueSerialized);
+  children.add(valueConstructed);
   return children;
 }
 
