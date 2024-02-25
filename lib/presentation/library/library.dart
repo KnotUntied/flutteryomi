@@ -2,7 +2,6 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutteryomi/source/local/local_source.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutteryomi/core/preference/checkbox_state.dart';
@@ -10,17 +9,19 @@ import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/presentation/category/category.dart';
 import 'package:flutteryomi/presentation/category/components/category_dialogs.dart';
-import 'package:flutteryomi/presentation/library/library_screen_model.dart';
-import 'package:flutteryomi/presentation/library/library_settings_dialog.dart';
 import 'package:flutteryomi/presentation/library/components/library_content.dart';
 import 'package:flutteryomi/presentation/library/components/library_tabs.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/library/delete_library_manga_dialog.dart';
+import 'package:flutteryomi/presentation/library/library_screen_model.dart';
+import 'package:flutteryomi/presentation/library/library_settings_dialog.dart';
 import 'package:flutteryomi/presentation/library/library_settings_screen_model.dart';
 import 'package:flutteryomi/presentation/manga/components/manga_bottom_action_menu.dart';
+import 'package:flutteryomi/presentation/manga/manga.dart';
 import 'package:flutteryomi/presentation/more/onboarding/guides_step.dart';
 import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 class LibraryTab extends ConsumerStatefulWidget {
   const LibraryTab({super.key});
@@ -107,13 +108,13 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
             final randomItem = screenModel.getRandomLibraryItemForCategory(
                 DefaultTabController.of(context).index);
             if (randomItem != null) {
-              //TODO
-              //Navigator.push(
-              //  context,
-              //  MaterialPageRoute(
-              //    builder: (context) => MangaScreen(randomItem.libraryManga.manga.id),
-              //  ),
-              //);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MangaScreen(mangaId: randomItem.libraryManga.manga.id),
+                ),
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(lang.information_no_entries_found)),
@@ -167,15 +168,12 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
                 searchQuery: data.searchQuery,
                 selection: data.selection,
                 hasActiveFilters: data.hasActiveFilters,
-                onMangaClicked: (it) {
-                  //TODO
-                  //Navigator.push(
-                  //  context,
-                  //  MaterialPageRoute(
-                  //    builder: (context) => MangaScreen(it),
-                  //  ),
-                  //);
-                },
+                onMangaClicked: (it) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MangaScreen(mangaId: it),
+                  ),
+                ),
                 onContinueReadingClicked: data.showMangaContinueButton
                     ? (it) async {
                         final chapter =
@@ -242,7 +240,7 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
                       return CheckboxRegularState.none(it);
                     }
                   }).toList();
-                  if (mounted) {
+                  if (context.mounted) {
                     showAdaptiveDialog(
                       context: context,
                       builder: (context) => ChangeCategoryDialog(
@@ -268,9 +266,11 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
               : null,
           onMarkAsReadClicked: () => screenModel.markReadSelection(true),
           onMarkAsUnreadClicked: () => screenModel.markReadSelection(false),
-          onDownloadClicked: currentState?.selection.every((it) => !it.manga.isLocal()) ?? false
-              ? screenModel.runDownloadActionSelection
-              : null,
+          onDownloadClicked:
+              currentState?.selection.every((it) => !it.manga.isLocal()) ??
+                      false
+                  ? screenModel.runDownloadActionSelection
+                  : null,
           onDeleteClicked: currentState != null
               ? () async {
                   final mangaList =

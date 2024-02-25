@@ -95,11 +95,11 @@ class LibraryScreenModel extends _$LibraryScreenModel {
 
     final stream3 = StreamZip([
       _getLibraryItemPreferencesStream(),
-      //getTrackingFilterStream(),
+      _getTrackingFilterStream(),
     ])
         .map((e) {
-          final prefs = e.first;
-          //final trackFilter = e.second;
+          final prefs = e.first as _ItemPreferences;
+          final trackFilter = e.second as Map<int, TriState>;
           return ([
             prefs.filterDownloaded,
             prefs.filterUnread,
@@ -107,7 +107,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
             prefs.filterBookmarked,
             prefs.filterCompleted,
             prefs.filterIntervalCustom,
-            //] + trackFilter.values
+            trackFilter.values,
           ]).any((it) => it != TriState.disabled);
         })
         .distinct()
@@ -154,7 +154,8 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     bool filterFnDownloaded(LibraryItem it) {
       return applyFilter(
         filterDownloaded,
-        () => it.libraryManga.manga.isLocal() ||
+        () =>
+            it.libraryManga.manga.isLocal() ||
             it.downloadCount > 0 ||
             downloadManager.getDownloadCountForManga(it.libraryManga.manga) > 0,
       );
@@ -335,9 +336,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
               ? downloadManager.getDownloadCountForManga(libraryManga.manga)
               : 0,
           unreadCount: libraryManga.unreadCount,
-          isLocal: prefs.localBadge
-              ? libraryManga.manga.isLocal()
-              : false,
+          isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
           sourceLanguage: prefs.languageBadge
               ? sourceManager.getOrStub(libraryManga.manga.source).lang
               : "",
@@ -362,7 +361,6 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     });
   }
 
-  // TODO
   /// Stream of tracking filter preferences
   ///
   /// Returns map of track id with the filter value
@@ -370,18 +368,16 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final trackerManager = ref.watch(trackerManagerProvider);
     final loggedInTrackers = trackerManager.loggedInTrackers();
-    //if (loggedInTrackers.isNotEmpty) {
-    //  final prefStreams = loggedInTrackers
-    //      .map((it) => libraryPreferences.filterTracking(it.id).changes());
-    //return combine(*prefStreams) {
-    //    loggedInTrackers
-    //        .mapIndexed { index, tracker -> tracker.id to it[index] }
-    //        .toMap()
-    //}
-    //} else {
-    //  return flowOf(emptyMap());
-    //}
-    return const Stream.empty();
+    if (loggedInTrackers.isNotEmpty) {
+      final prefStreams = loggedInTrackers
+          .map((it) => libraryPreferences.filterTracking(it.id).changes());
+      return StreamZip(prefStreams).map((it) => Map.fromIterable(
+            loggedInTrackers
+                .mapIndexed((index, tracker) => (tracker.id, it[index])),
+          ));
+    } else {
+      return const Stream.empty();
+    }
   }
 
   /// Returns the common categories for the given list of manga [mangas].
@@ -477,6 +473,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     }
   }
 
+  //TODO
   /// Remove the selected manga in [mangaList].
   ///
   /// [deleteFromLibrary] indicates whether to delete manga from library.
