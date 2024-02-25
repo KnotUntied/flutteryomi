@@ -13,13 +13,13 @@ const comicInfoFile = "ComicInfo.xml";
 
 extension SMangaComicInfo on SManga {
   ComicInfo getComicInfo() => ComicInfo(
-        series: ComicInfoSeries(title),
-        summary: description != null ? ComicInfoSummary(description!) : null,
-        writer: author != null ? ComicInfoWriter(author!) : null,
-        penciller: artist != null ? ComicInfoPenciller(artist!) : null,
-        genre: genre != null ? ComicInfoGenre(genre!) : null,
+        series: ComicInfoSeries(value: title),
+        summary: description != null ? ComicInfoSummary(value: description!) : null,
+        writer: author != null ? ComicInfoWriter(value: author!) : null,
+        penciller: artist != null ? ComicInfoPenciller(value: artist!) : null,
+        genre: genre != null ? ComicInfoGenre(value: genre!) : null,
         publishingStatus: PublishingStatusTachiyomi(
-          ComicInfoPublishingStatus.toComicInfoValue(status),
+          value: ComicInfoPublishingStatus.toComicInfoValue(status),
         ),
         title: null,
         number: null,
@@ -202,7 +202,7 @@ class ComicInfo extends Equatable {
 @annotation.XmlRootElement(name: 'Title')
 @annotation.XmlSerializable()
 class ComicInfoTitle extends Equatable {
-  const ComicInfoTitle(this.value);
+  const ComicInfoTitle({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -252,7 +252,7 @@ class ComicInfoTitle extends Equatable {
 @annotation.XmlRootElement(name: 'Series')
 @annotation.XmlSerializable()
 class ComicInfoSeries extends Equatable {
-  const ComicInfoSeries(this.value);
+  const ComicInfoSeries({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -302,7 +302,7 @@ class ComicInfoSeries extends Equatable {
 @annotation.XmlRootElement(name: 'Number')
 @annotation.XmlSerializable()
 class ComicInfoNumber extends Equatable {
-  const ComicInfoNumber(this.value);
+  const ComicInfoNumber({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -352,7 +352,7 @@ class ComicInfoNumber extends Equatable {
 @annotation.XmlRootElement(name: 'Summary')
 @annotation.XmlSerializable()
 class ComicInfoSummary extends Equatable {
-  const ComicInfoSummary(this.value);
+  const ComicInfoSummary({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -402,7 +402,7 @@ class ComicInfoSummary extends Equatable {
 @annotation.XmlRootElement(name: 'Writer')
 @annotation.XmlSerializable()
 class ComicInfoWriter extends Equatable {
-  const ComicInfoWriter(this.value);
+  const ComicInfoWriter({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -452,7 +452,7 @@ class ComicInfoWriter extends Equatable {
 @annotation.XmlRootElement(name: 'Penciller')
 @annotation.XmlSerializable()
 class ComicInfoPenciller extends Equatable {
-  const ComicInfoPenciller(this.value);
+  const ComicInfoPenciller({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -502,7 +502,7 @@ class ComicInfoPenciller extends Equatable {
 @annotation.XmlRootElement(name: 'Inker')
 @annotation.XmlSerializable()
 class ComicInfoInker extends Equatable {
-  const ComicInfoInker(this.value);
+  const ComicInfoInker({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -552,7 +552,7 @@ class ComicInfoInker extends Equatable {
 @annotation.XmlRootElement(name: 'Colorist')
 @annotation.XmlSerializable()
 class ComicInfoColorist extends Equatable {
-  const ComicInfoColorist(this.value);
+  const ComicInfoColorist({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -602,7 +602,7 @@ class ComicInfoColorist extends Equatable {
 @annotation.XmlRootElement(name: 'Letterer')
 @annotation.XmlSerializable()
 class ComicInfoLetterer extends Equatable {
-  const ComicInfoLetterer(this.value);
+  const ComicInfoLetterer({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -652,7 +652,7 @@ class ComicInfoLetterer extends Equatable {
 @annotation.XmlRootElement(name: 'CoverArtist')
 @annotation.XmlSerializable()
 class ComicInfoCoverArtist extends Equatable {
-  const ComicInfoCoverArtist(this.value);
+  const ComicInfoCoverArtist({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -702,7 +702,7 @@ class ComicInfoCoverArtist extends Equatable {
 @annotation.XmlRootElement(name: 'Translator')
 @annotation.XmlSerializable()
 class ComicInfoTranslator extends Equatable {
-  const ComicInfoTranslator(this.value);
+  const ComicInfoTranslator({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -752,7 +752,7 @@ class ComicInfoTranslator extends Equatable {
 @annotation.XmlRootElement(name: 'Genre')
 @annotation.XmlSerializable()
 class ComicInfoGenre extends Equatable {
-  const ComicInfoGenre(this.value);
+  const ComicInfoGenre({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -802,7 +802,7 @@ class ComicInfoGenre extends Equatable {
 @annotation.XmlRootElement(name: 'Tags')
 @annotation.XmlSerializable()
 class ComicInfoTags extends Equatable {
-  const ComicInfoTags(this.value);
+  const ComicInfoTags({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -852,7 +852,7 @@ class ComicInfoTags extends Equatable {
 @annotation.XmlRootElement(name: 'Web')
 @annotation.XmlSerializable()
 class ComicInfoWeb extends Equatable {
-  const ComicInfoWeb(this.value);
+  const ComicInfoWeb({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -902,7 +902,7 @@ class ComicInfoWeb extends Equatable {
 @annotation.XmlRootElement(name: 'PublishingStatusTachiyomi')
 @annotation.XmlSerializable()
 class PublishingStatusTachiyomi extends Equatable {
-  const PublishingStatusTachiyomi(this.value);
+  const PublishingStatusTachiyomi({required this.value});
 
   @annotation.XmlText()
   final String value;
@@ -952,7 +952,7 @@ class PublishingStatusTachiyomi extends Equatable {
 @annotation.XmlRootElement(name: 'CategoriesTachiyomi')
 @annotation.XmlSerializable()
 class CategoriesTachiyomi extends Equatable {
-  const CategoriesTachiyomi(this.value);
+  const CategoriesTachiyomi({required this.value});
 
   @annotation.XmlText()
   final String value;
