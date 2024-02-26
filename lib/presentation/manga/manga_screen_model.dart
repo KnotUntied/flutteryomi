@@ -45,9 +45,9 @@ import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/interactor/add_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
+import 'package:flutteryomi/domain/track/model/track_item.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
-import 'package:flutteryomi/presentation/manga/track/track_item.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/local/local_source.dart';
 

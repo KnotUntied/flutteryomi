@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
@@ -61,7 +62,7 @@ class DownloadManager {
   void downloaderStop(String? reason) => _downloader.stop(reason);
 
   //get isDownloaderRunning => DownloadJob.isRunningStream(context);
-  late final isDownloaderRunning = const Stream<bool>.empty();
+  late final isDownloaderRunning = Stream<bool>.value(false);
 
   /// Tells the downloader to begin downloads.
   void startDownloads() {
@@ -178,18 +179,18 @@ class DownloadManager {
   //    _removeFromDownloadQueue(downloads.map((it) => it.chapter));
 
   /// Deletes the directories of a list of downloaded [chapters] in their [manga] and [source].
-  void deleteChapters(List<Chapter> chapters, Manga manga, Source source) {
-    //final filteredChapters = _getChaptersToDelete(chapters, manga);
-    //if (filteredChapters.isEmpty()) return;
+  void deleteChapters(List<Chapter> chapters, Manga manga, Source source) async {
+    final filteredChapters = await _getChaptersToDelete(chapters, manga);
+    if (filteredChapters.isEmpty) return;
 
-    //_removeFromDownloadQueue(filteredChapters);
+    _removeFromDownloadQueue(filteredChapters);
 
     //final (mangaDir, chapterDirs) = provider.findChapterDirs(filteredChapters, manga, source);
     //chapterDirs.forEach((it) => it.delete());
     //cache.removeChapters(filteredChapters, manga);
 
     //// Delete manga directory if empty
-    //if (mangaDir?.listFiles()?.isEmpty() == true) {
+    //if (mangaDir?.listFiles()?.isEmpty == true) {
     //  deleteManga(manga, source, removeQueued: false);
     //}
   }
@@ -197,9 +198,7 @@ class DownloadManager {
   /// Deletes the directory of a downloaded [manga] in a given [source].
   /// Can be set to also remove queued downloads with [removeQueued].
   void deleteManga(Manga manga, Source source, [bool removeQueued = true]) {
-    if (removeQueued) {
-  //    downloader.removeFromQueue(manga);
-    }
+    if (removeQueued) _downloader.removeMangaFromQueue(manga);
   //  provider.findMangaDir(manga.title, source)?.delete();
   //  cache.removeManga(manga);
 
@@ -212,25 +211,23 @@ class DownloadManager {
   }
 
   void _removeFromDownloadQueue(List<Chapter> chapters) {
-    //final wasRunning = downloader.isRunning;
-    //if (wasRunning) {
-    //  downloader.pause();
-    //}
+    final wasRunning = _downloader.isRunning;
+    if (wasRunning) _downloader.pause();
 
-    //downloader.removeFromQueue(chapters);
+    _downloader.removeChaptersFromQueue(chapters);
 
-    //if (wasRunning) {
+    if (wasRunning) {
     //  if (queueState.value.isEmpty) {
-    //    downloader.stop();
+    //    _downloader.stop();
     //  } else {
-    //    downloader.start();
+    //    _downloader.start();
     //  }
-    //}
+    }
   }
 
   // TODO
   /// Adds a list of [chapters] from a given [manga] to be deleted later.
-  Future<void> enqueueChaptersToDelete(List<Chapter> chapters, Manga manga) async => null;
+  Future<void> enqueueChaptersToDelete(List<Chapter> chapters, Manga manga) async => await null;
     //await pendingDeleter.addChapters(_getChaptersToDelete(chapters, manga), manga);
 
   /// Triggers the execution of the deletion of pending chapters.
@@ -314,13 +311,14 @@ class DownloadManager {
   }
 
   //Stream<Download> statusStream() => queueState
-  //    .flatMapLatest((downloads) => downloads
+  //    .flatMap((downloads) => downloads
   //        .map((download) => download.statusStream.drop(1).map(() => download))
   //        .merge())
   //    .onStart(() => emitAll(
   //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
-  //    ));
+      //));
   Stream<Download> statusStream() => const Stream.empty();
+  //Stream<Download> statusStream() => Stream.value();
 
   //Stream<Download> progressStream() => queueState
   //    .flatMapLatest((downloads) => downloads
@@ -330,6 +328,7 @@ class DownloadManager {
   //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
   //    ));
   Stream<Download> progressStream() => const Stream.empty();
+  //Stream<Download> progressStream() => Stream.value();
 }
 
 @riverpod

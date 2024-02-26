@@ -45,11 +45,13 @@ class Download with _$Download {
     required GetManga getManga,
     required SourceManager sourceManager,
   }) async {
-    //final chapter = await getChapter.await_(chapterId);
-    //if (chapter == null) return null;
-    //final manga = await getManga.await_(chapter.mangaId);
-    //if (manga == null) return null;
-    //final source = (sourceManager.get(manga.source) as HttpSource?) ?? return null;
+    final chapter = await getChapter.await_(chapterId);
+    if (chapter == null) return null;
+    final manga = await getManga.await_(chapter.mangaId);
+    if (manga == null) return null;
+    //final source = (sourceManager.get(manga.source) as HttpSource?);
+    final source = sourceManager.get(manga.source);
+    if (source == null) return null;
 
     //return Download(source, manga, chapter);
     return null;

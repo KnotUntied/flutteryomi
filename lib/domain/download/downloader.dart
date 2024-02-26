@@ -46,7 +46,7 @@ class Downloader {
   /// Queue where active downloads are kept.
   //final _queueState = MutableStateFlow<List<Download>>(emptyList());
   //final queueState = _queueState.asStateFlow();
-  final Stream<List<Download>> _queueState = const Stream.empty();
+  final Stream<List<Download>> _queueState = Stream.value([]);
   Stream<List<Download>> get queueState => _queueState;
 
   /// Notifier for the downloader state and progress.

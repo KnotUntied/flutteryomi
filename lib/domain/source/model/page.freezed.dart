@@ -14,12 +14,17 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+Page _$PageFromJson(Map<String, dynamic> json) {
+  return _Page.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Page {
   int get index => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $PageCopyWith<Page> get copyWith => throw _privateConstructorUsedError;
 }
@@ -108,9 +113,12 @@ class __$$PageImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PageImpl extends _Page {
   const _$PageImpl(this.index, [this.url = '', this.imageUrl]) : super._();
+
+  factory _$PageImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PageImplFromJson(json);
 
   @override
   final int index;
@@ -136,6 +144,7 @@ class _$PageImpl extends _Page {
                 other.imageUrl == imageUrl));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, index, url, imageUrl);
 
@@ -144,12 +153,21 @@ class _$PageImpl extends _Page {
   @pragma('vm:prefer-inline')
   _$$PageImplCopyWith<_$PageImpl> get copyWith =>
       __$$PageImplCopyWithImpl<_$PageImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PageImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Page extends Page {
   const factory _Page(final int index,
       [final String url, final String? imageUrl]) = _$PageImpl;
   const _Page._() : super._();
+
+  factory _Page.fromJson(Map<String, dynamic> json) = _$PageImpl.fromJson;
 
   @override
   int get index;

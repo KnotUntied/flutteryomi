@@ -53,6 +53,7 @@ dart run drift_dev schema dump lib/data/database.dart lib/data/drift/migrations/
 - [ ] Better structure for sources (bruh) (probably move from `source/api/` and `source/local/` to `domain/source/api` and `domain/source/local`, respectively)
 - [ ] License (esp. wrt. existing Tachiyomi license and permissions)
 - [ ] Replace `toList()` with [`cached`](https://pub.dev/documentation/dartx_nullsafety/latest/dartx/IterableX/cached.html) (beware of memory tradeoffs)
+- [ ] Replace some stream maps with 'mapLatest' implementations (see https://stackoverflow.com/q/73932539)
 - [ ] Better downloader
   - Consider https://pub.dev/packages/flutter_downloader
 - [ ] Feature parity with Tachiyomi/Mihon
