@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
-import 'package:flutteryomi/source/local/local_source.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/data/chapter/chapter_sanitizer.dart';
@@ -21,7 +20,9 @@ import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart
 import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/schapter.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'sync_chapters_with_source.g.dart';
 
@@ -95,11 +96,11 @@ class SyncChaptersWithSource {
       var chapter = sourceChapter;
 
       // Update metadata from source if necessary.
-      //  if (source is HttpSource) {
-      //    final sChapter = chapter.toSChapter();
-      //    source.prepareNewChapter(sChapter, manga.toSManga());
-      //    chapter = chapter.copyFromSChapter(sChapter);
-      //  }
+      if (source is HttpSource) {
+        final sChapter = chapter.toSChapter();
+        source.prepareNewChapter(sChapter, manga.toSManga());
+        chapter = chapter.copyFromSChapter(sChapter);
+      }
 
       // Recognize chapter number for the chapter.
       final chapterNumber = ChapterRecognition.parseChapterNumber(

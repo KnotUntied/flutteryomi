@@ -7,6 +7,7 @@ import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
 
 part 'download.freezed.dart';
 
@@ -15,20 +16,16 @@ part 'download.freezed.dart';
 class Download with _$Download {
   Download._();
   factory Download(
-    //HttpSource source,
+    HttpSource source,
     Manga manga,
     Chapter chapter, [
     List<Page>? pages,
   ]) = _Download;
 
-  int get totalProgress {
-    if (pages == null) return 0;
-    //return pages?.sum(Page::progress).average().toInt();
-    return 0;
-  }
+  int get totalProgress => pages?.sumBy((it) => it.progress) ?? 0;
 
   int get downloadedImages =>
-      pages?.where((it) => it.status == PageState.ready).length ?? 0;
+      pages?.count((it) => it.status == PageState.ready) ?? 0;
 
   DownloadState get status {
     return DownloadState.notDownloaded;
@@ -49,12 +46,10 @@ class Download with _$Download {
     if (chapter == null) return null;
     final manga = await getManga.await_(chapter.mangaId);
     if (manga == null) return null;
-    //final source = (sourceManager.get(manga.source) as HttpSource?);
-    final source = sourceManager.get(manga.source);
+    final source = (sourceManager.get(manga.source) as HttpSource?);
     if (source == null) return null;
 
-    //return Download(source, manga, chapter);
-    return null;
+    return Download(source, manga, chapter);
   }
 }
 

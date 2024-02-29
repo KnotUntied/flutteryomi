@@ -11,6 +11,14 @@ typedef Chapter = drift.Chapter;
 extension ChapterUtils on Chapter {
   bool get isRecognizedNumber => chapterNumber >= 0.0;
 
+  // Mihon TODO: Remove when all deps are migrated
+  SChapter toSChapter() => SChapter.create()
+    ..url = url
+    ..name = name
+    ..dateUpload = dateUpload
+    ..chapterNumber = chapterNumber
+    ..scanlator = scanlator;
+
   // I don't know why this function is needed
   Chapter copyFrom(Chapter other) => other.copyWith(
         name: other.name,

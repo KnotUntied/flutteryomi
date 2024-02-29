@@ -1,9 +1,10 @@
-import 'package:flutteryomi/domain/source/model/stub_source.dart';
-import 'package:flutteryomi/source/api/catalogue_source.dart';
-import 'package:flutteryomi/source/api/source.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutteryomi/domain/source/model/stub_source.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/source/api/catalogue_source.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
 part 'common_source_manager.g.dart';
 
@@ -18,6 +19,12 @@ class CommonSourceManager implements SourceManager {
   @override
   Source getOrStub(int sourceKey) {
     // TODO: implement getOrStub
+    throw UnimplementedError();
+  }
+
+  @override
+  List<HttpSource> getOnlineSources() {
+    // TODO: implement getOnlineSources
     throw UnimplementedError();
   }
 

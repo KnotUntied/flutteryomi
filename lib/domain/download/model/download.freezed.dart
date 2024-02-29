@@ -16,8 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Download {
-//HttpSource source,
-  Manga get manga => throw _privateConstructorUsedError; //HttpSource source,
+  HttpSource get source => throw _privateConstructorUsedError;
+  set source(HttpSource value) => throw _privateConstructorUsedError;
+  Manga get manga => throw _privateConstructorUsedError;
   set manga(Manga value) => throw _privateConstructorUsedError;
   Chapter get chapter => throw _privateConstructorUsedError;
   set chapter(Chapter value) => throw _privateConstructorUsedError;
@@ -34,7 +35,8 @@ abstract class $DownloadCopyWith<$Res> {
   factory $DownloadCopyWith(Download value, $Res Function(Download) then) =
       _$DownloadCopyWithImpl<$Res, Download>;
   @useResult
-  $Res call({Manga manga, Chapter chapter, List<Page>? pages});
+  $Res call(
+      {HttpSource source, Manga manga, Chapter chapter, List<Page>? pages});
 }
 
 /// @nodoc
@@ -50,11 +52,16 @@ class _$DownloadCopyWithImpl<$Res, $Val extends Download>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? source = null,
     Object? manga = null,
     Object? chapter = null,
     Object? pages = freezed,
   }) {
     return _then(_value.copyWith(
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as HttpSource,
       manga: null == manga
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
@@ -79,7 +86,8 @@ abstract class _$$DownloadImplCopyWith<$Res>
       __$$DownloadImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Manga manga, Chapter chapter, List<Page>? pages});
+  $Res call(
+      {HttpSource source, Manga manga, Chapter chapter, List<Page>? pages});
 }
 
 /// @nodoc
@@ -93,11 +101,16 @@ class __$$DownloadImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? source = null,
     Object? manga = null,
     Object? chapter = null,
     Object? pages = freezed,
   }) {
     return _then(_$DownloadImpl(
+      null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as HttpSource,
       null == manga
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
@@ -117,9 +130,11 @@ class __$$DownloadImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DownloadImpl extends _Download {
-  _$DownloadImpl(this.manga, this.chapter, [this.pages]) : super._();
+  _$DownloadImpl(this.source, this.manga, this.chapter, [this.pages])
+      : super._();
 
-//HttpSource source,
+  @override
+  HttpSource source;
   @override
   Manga manga;
   @override
@@ -129,7 +144,7 @@ class _$DownloadImpl extends _Download {
 
   @override
   String toString() {
-    return 'Download(manga: $manga, chapter: $chapter, pages: $pages)';
+    return 'Download(source: $source, manga: $manga, chapter: $chapter, pages: $pages)';
   }
 
   @JsonKey(ignore: true)
@@ -140,12 +155,15 @@ class _$DownloadImpl extends _Download {
 }
 
 abstract class _Download extends Download {
-  factory _Download(Manga manga, Chapter chapter, [List<Page>? pages]) =
-      _$DownloadImpl;
+  factory _Download(HttpSource source, Manga manga, Chapter chapter,
+      [List<Page>? pages]) = _$DownloadImpl;
   _Download._() : super._();
 
-  @override //HttpSource source,
-  Manga get manga; //HttpSource source,
+  @override
+  HttpSource get source;
+  set source(HttpSource value);
+  @override
+  Manga get manga;
   set manga(Manga value);
   @override
   Chapter get chapter;

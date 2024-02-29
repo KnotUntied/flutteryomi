@@ -8,22 +8,22 @@ import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:hive/hive.dart';
 
 part 'download_store.freezed.dart';
 
 /// This class is used to persist active downloads across application restarts.
 class DownloadStore {
-  //DownloadStore({
-    //required this.sourceManager,
-    //required this.getManga,
-    //required this.getChapter,
-  //});
-  DownloadStore();
+  DownloadStore({
+    required this.sourceManager,
+    required this.getManga,
+    required this.getChapter,
+  });
 
-  //final SourceManager sourceManager;
-  //final GetManga getManga;
-  //final GetChapter getChapter;
+  final SourceManager sourceManager;
+  final GetManga getManga;
+  final GetChapter getChapter;
 
   /// Counter used to keep the queue order.
   int _counter = 0;
@@ -64,21 +64,29 @@ class DownloadStore {
   /// Returns the list of downloads to restore. It should be called in a background thread.
   Future<List<Download>> restore() async {
     final preferences = await Hive.openBox('active_downloads');
-    final objs = preferences.values.nonNulls
+    final objs = preferences.keys.nonNulls
         .mapNotNull((it) => _deserialize(it as String))
         .sortedBy((it) => it.order);
 
     final downloads = <Download>[];
     if (objs.isNotEmpty) {
       final cachedManga = <int, Manga?>{};
-      //for ((mangaId, chapterId) in objs) {
-      //  final manga = cachedManga.getOrPut(mangaId) {
-      //    runBlocking { getManga.await(mangaId) };
-      //  } ?? continue;
-      //  final source = sourceManager.get(manga.source) as? HttpSource ?? continue;
-      //  final chapter = runBlocking { getChapter.await(chapterId) } ?? continue;
-      //  downloads.add(Download(source, manga, chapter));
-      //}
+      for (final obj in objs) {
+        final (mangaId, chapterId) = (obj.mangaId, obj.chapterId);
+        var manga = cachedManga[mangaId];
+        if (manga == null) {
+          final fetchedManga = await getManga.await_(mangaId);
+          manga = cachedManga.putIfAbsent(mangaId, () => fetchedManga);
+        }
+        if (manga == null) continue;
+        final source = sourceManager.get(manga.source) as HttpSource?;
+        if (source == null) continue;
+        final chapter = await getChapter.await_(chapterId);
+        if (chapter == null) continue;
+        downloads.add(
+          Download(source, manga, chapter),
+        );
+      }
     }
 
     // Clear the store, downloads will be added again immediately.

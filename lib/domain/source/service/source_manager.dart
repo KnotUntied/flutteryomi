@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/domain/source/model/stub_source.dart';
 import 'package:flutteryomi/source/api/catalogue_source.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
 
 part 'source_manager.g.dart';
@@ -9,10 +10,9 @@ part 'source_manager.g.dart';
 // TODO
 abstract interface class SourceManager {
   late Stream<List<CatalogueSource>> catalogueSources;
-
   Source? get(int sourceKey);
   Source getOrStub(int sourceKey);
-  //List<HttpSource> getOnlineSources();
+  List<HttpSource> getOnlineSources();
   List<CatalogueSource> getCatalogueSources();
   List<StubSource> getStubSources();
 }

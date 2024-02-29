@@ -31,6 +31,7 @@ import 'package:flutteryomi/presentation/manga/manga_screen_model.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 import 'package:flutteryomi/presentation/util/chapter_number_formatter.dart';
 import 'package:flutteryomi/presentation/util/system/display_extensions.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/api/source_extensions.dart';
 import 'package:flutteryomi/source/local/local_source.dart';
@@ -68,8 +69,7 @@ class MangaScreen extends ConsumerWidget {
         return const LoadingScreen();
       },
       data: (data) {
-        //final isHttpSource = data.source is HttpSource;
-        const isHttpSource = false;
+        final isHttpSource = data.source is HttpSource;
         return MangaScreenContent(
           mangaId: mangaId,
           fromSource: fromSource,
@@ -314,13 +314,13 @@ class MangaScreen extends ConsumerWidget {
 
     //if (Navigator.of(context).pages.length < 2) return;
 
-    //when (val previousController = navigator.items[navigator.size - 2]) {
+    //when (val previousController = Navigator.pages[navigator.size - 2]) {
     //  is HomeScreen -> {
-    //    navigator.pop()
+      //  Navigator.of(context).pop();
     //    previousController.search(query);
     //  }
     //  is BrowseSourceScreen -> {
-    //    navigator.pop()
+      //  Navigator.of(context).pop();
     //    previousController.search(query);
     //  }
     //}
@@ -330,7 +330,7 @@ class MangaScreen extends ConsumerWidget {
   Future<void> _performGenreSearch(BuildContext context, genreName, Source source) async {
     //if (navigator.size < 2) return;
 
-    //final previousController = navigator.items[navigator.size - 2];
+    //final previousController = Navigator.pages[navigator.size - 2];
     //if (previousController is BrowseSourceScreen && source is HttpSource) {
     //  Navigator.of(context).pop();
     //  previousController.searchGenre(genreName)
@@ -341,8 +341,7 @@ class MangaScreen extends ConsumerWidget {
 
   /// Copy manga URL to clipboard
   void _copyMangaUrl(Manga? manga, Source? source) {
-    if (manga == null || source == null) return;
-    //(source as HttpSource?)
+    if (manga == null || (source as HttpSource?) == null) return;
     //final url = source.getMangaUrl(manga.toSManga());
     //context.copyToClipboard(url, url);
   }
