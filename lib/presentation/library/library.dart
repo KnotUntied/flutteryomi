@@ -69,6 +69,8 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
     final tabVisible = (currentState?.showCategoryTabs ?? false) &&
         (currentState?.categories.length ?? 0) > 1;
 
+    print(state);
+
     return DefaultTabController(
       initialIndex: libraryPreferences.lastUsedCategory().get(),
       length: state.unwrapPrevious().valueOrNull?.library.length ?? 0,

@@ -37,12 +37,13 @@ import 'package:flutteryomi/presentation/library/components/library_toolbar.dart
 import 'package:flutteryomi/presentation/library/library_item.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
 import 'package:flutteryomi/presentation/util/chapter/chapter_get_next_unread.dart';
+import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'library_screen_model.freezed.dart';
 part 'library_screen_model.g.dart';
 
-/// Typealias for the library manga, using the category as keys, and list of manga as values.
+/// Typedef for the library manga, using the category as keys, and list of manga as values.
 typedef LibraryMap = Map<Category, List<LibraryItem>>;
 
 @riverpod
@@ -51,6 +52,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   Stream<LibraryScreenState> build() {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final getTracksPerManga = ref.watch(getTracksPerMangaProvider);
+    print('start');
     final stream1 = StreamZip([
       future
           .asStream()
@@ -59,7 +61,6 @@ class LibraryScreenModel extends _$LibraryScreenModel {
           .debounce(const Duration(milliseconds: searchDebounceMillis)),
       _getLibraryStream(),
       getTracksPerManga.subscribe(),
-      const Stream<Map<int, List<Track>>>.empty(),
       _getTrackingFilterStream(),
       //downloadCache.changes,
     ]).asyncMap((e) async {
@@ -83,6 +84,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       );
     });
 
+    print('here?');
     final stream2 = StreamZip([
       libraryPreferences.categoryTabs().changes(),
       libraryPreferences.categoryNumberOfItems().changes(),
@@ -113,6 +115,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         .distinct()
         .map((it) => LibraryScreenState(hasActiveFilters: it));
 
+    print('reached here');
     return StreamZip([stream1, stream2, stream3]).map((e) => LibraryScreenState(
           library: e.first.library,
           searchQuery: e.first.searchQuery,
@@ -376,7 +379,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
                 .mapIndexed((index, tracker) => (tracker.id, it[index])),
           ));
     } else {
-      return const Stream.empty();
+      return Stream.value({});
     }
   }
 
@@ -498,11 +501,8 @@ class LibraryScreenModel extends _$LibraryScreenModel {
 
     if (deleteChapters) {
       for (final manga in mangaToDelete) {
-        //final source = sourceManager.get(manga.source) as? HttpSource;
-        final source = sourceManager.get(manga.source);
-        if (source != null) {
-          downloadManager.deleteManga(manga, source);
-        }
+        final source = sourceManager.get(manga.source) as HttpSource?;
+        if (source != null) downloadManager.deleteManga(manga, source);
       }
     }
   }

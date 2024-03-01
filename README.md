@@ -19,7 +19,7 @@ See [Mihon's English localization file](https://github.com/mihonapp/mihon/blob/m
 Update localizations by adding or editing the `.arb` files in `lib/l10n`. Then run:
 
 ```sh
-flutter gen-l10n
+dart run slang
 ```
 
 ## Code Generation

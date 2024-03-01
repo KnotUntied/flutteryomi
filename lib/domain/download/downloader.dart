@@ -3,6 +3,9 @@ import 'dart:math';
 
 import 'package:dartx/dartx.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutteryomi/core/metadata/comic_info.dart';
+import 'package:flutteryomi/core/util/system/image_util.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
@@ -12,7 +15,7 @@ import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
-import 'package:flutteryomi/domain/source/model/page.dart' as pageData;
+import 'package:flutteryomi/domain/source/model/page.dart' as page_data;
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/api/unmetered_source.dart';
@@ -55,10 +58,8 @@ class Downloader {
   );
 
   /// Queue where active downloads are kept.
-  //final _queueState = MutableStateFlow<List<Download>>(emptyList());
-  //final queueState = _queueState.asStateFlow();
-  final Stream<List<Download>> _queueState = Stream.value([]);
-  Stream<List<Download>> get queueState => _queueState;
+  final _queueState = BehaviorSubject.seeded(<Download>[]);
+  ValueStream<List<Download>> get queueState => _queueState.stream;
 
   /// Notifier for the downloader state and progress.
   //final _notifier by lazy { DownloadNotifier(context) }
@@ -72,7 +73,6 @@ class Downloader {
   bool get isRunning => false;
 
   /// Whether the downloader is paused
-  //@Volatile
   bool isPaused = false;
 
   //init {
@@ -87,12 +87,11 @@ class Downloader {
   ///
   /// Returns true if the downloader is started, false otherwise.
   Future<bool> start() async {
-    final value = await queueState.last;
-    if (isRunning || value.isEmpty) return false;
+    if (isRunning || queueState.value.isEmpty) return false;
 
-    final pending = value.where((it) => it.status != DownloadState.downloaded);
+    final pending = queueState.value.where((it) => it.status != DownloadState.downloaded);
     for (final it in pending) {
-      //if (it.status != DownloadState.queue) it.status = DownloadState.queue;
+      if (it.status != DownloadState.queue) it.status = DownloadState.queue;
     }
 
     isPaused = false;
@@ -107,19 +106,19 @@ class Downloader {
     final value = await queueState.last;
     _cancelDownloaderJob();
     value
-        .where((it) => it.status == DownloadState.downloading);
-        //.forEach((it) => it.status = DownloadState.error);
+        .where((it) => it.status == DownloadState.downloading)
+        .forEach((it) => it.status = DownloadState.error);
 
-    //if (reason != null) {
+    if (reason != null) {
     //  notifier.onWarning(reason);
-    //  return;
-    //}
+      return;
+    }
 
-    //if (isPaused && queueState.value.isNotEmpty) {
+    if (isPaused && queueState.value.isNotEmpty) {
     //  notifier.onPaused();
-    //} else {
+    } else {
     //  notifier.onComplete();
-    //}
+    }
 
     isPaused = false;
 
@@ -131,8 +130,8 @@ class Downloader {
     final value = await queueState.last;
     _cancelDownloaderJob();
     value
-        .where((it) => it.status == DownloadState.downloading);
-        //.forEach((it) => it.status = DownloadState.queue);
+        .where((it) => it.status == DownloadState.downloading)
+        .forEach((it) => it.status = DownloadState.queue);
     isPaused = true;
   }
 
@@ -149,30 +148,32 @@ class Downloader {
     if (isRunning) return;
 
     //downloaderJob = scope.launch {
-    //  final activeDownloadsFlow = queueState.transformLatest { queue ->
-    //    while (true) {
-    //      final activeDownloads = queue.asSequence()
-    //          .where((it) => it.status.value <= DownloadState.downloading.value) // Ignore completed downloads, leave them in the queue
-    //          .groupBy((it) => it.source)
-    //          .toList().take(5) // Concurrently download from 5 different sources
-    //          .map((_, downloads) => downloads.first())
-    //      emit(activeDownloads)
+      //final activeDownloadsStream = queueState.transformLatest((queue) {
+      //  while (true) {
+      //    final activeDownloads = queue.asSequence()
+      //        // Ignore completed downloads, leave them in the queue
+      //        .where((it) => it.status.index <= DownloadState.downloading.index)
+      //        .groupBy((it) => it.source)
+      //        .toList()
+      //        .take(5) // Concurrently download from 5 different sources
+      //        .map((_, downloads) => downloads.first());
+      //    emit(activeDownloads);
 
-    //      if (activeDownloads.isEmpty) break
-    //      // Suspend until a download enters the ERROR state
-    //      final activeDownloadsErroredFlow =
-    //        combine(activeDownloads.map(Download::statusFlow)) { states ->
-    //            states.contains(DownloadState.error)
-    //        }.filter { it }
-    //      activeDownloadsErroredFlow.first();
-    //    }
-    //  }.distinctUntilChanged();
+      //    if (activeDownloads.isEmpty) break;
+      //    // Suspend until a download enters the ERROR state
+      //    final activeDownloadsErroredStream =
+      //        StreamZip(activeDownloads.map((it) => itstatusStream))
+      //            .map((states) => states.contains(DownloadState.error))
+      //            .where((it) => it);
+      //    return activeDownloadsErroredStream.first();
+      //  }
+      //}).distinct();
 
     //  // Use supervisorScope to cancel child jobs when the downloader job is cancelled
     //  supervisorScope {
-    //    final downloadJobs = Map<Download, Job>();
+        //final downloadJobs = <Download, Job>{};
 
-    //    activeDownloadsFlow.collectLatest { activeDownloads ->
+    //    activeDownloadsStream.collectLatest { activeDownloads ->
     //      final downloadJobsToStop = downloadJobs.where((it) => !activeDownloads.contains(it.key));
     //      downloadJobsToStop.forEach { (download, job) ->
     //        job.cancel()
@@ -219,15 +220,14 @@ class Downloader {
 
     final source = sourceManager.get(manga.source) as HttpSource?;
     if (source == null) return;
-    final value = await queueState.last;
-    final wasEmpty = value.isEmpty;
+    final wasEmpty = queueState.value.isEmpty;
     final chaptersToQueue = chapters
         // Filter out those already downloaded.
         //.where((it) => provider.findChapterDir(it.name, it.scanlator, manga.title, source) == null)
         // Add chapters to queue from the start.
         .sortedByDescending((it) => it.sourceOrder)
         // Filter out those already enqueued.
-        .where((chapter) => value.none((it) => it.chapter.id == chapter.id))
+        .where((chapter) => queueState.value.none((it) => it.chapter.id == chapter.id))
         // Create a download for each one.
         .map((it) => Download(source, manga, it))
         .toList();
@@ -237,21 +237,23 @@ class Downloader {
 
       // Start downloader if needed
       if (autoStart && wasEmpty) {
-        final queuedDownloads = value.where((it) => it.source !is UnmeteredSource).length;
-    //    final maxDownloadsFromSource = queueState.value
-    //        .groupBy { it.source }
-    //        .filterKeys { it !is UnmeteredSource }
-    //        .maxOfOrNull { it.value.size }
-    //        ?? 0;
-    //    if (queuedDownloads > _downloadsQueuedWarningThreshold ||
-    //      maxDownloadsFromSource > chaptersPerSourceQueueWarningThreshold) {
-    //      notifier.onWarning(
-    //        lang.download_queue_size_warning,
-    //        warningNotifTimeoutMs,
-    //        NotificationHandler.openUrl(context, LibraryUpdateNotifier.helpWarningUrl),
-    //      )
-    //    }
-    //    DownloadJob.start(context);
+        final queuedDownloads = queueState.value.where((it) => it.source is! UnmeteredSource).length;
+        final maxDownloadsFromSource = queueState.value
+            .groupBy((it) => it.source)
+            .filterKeys((it) => it is! UnmeteredSource)
+            .maxBy((it) => it.value.length)
+            ?.value
+            .length
+            ?? 0;
+        if (queuedDownloads > _downloadsQueuedWarningThreshold ||
+          maxDownloadsFromSource > chaptersPerSourceQueueWarningThreshold) {
+          //notifier.onWarning(
+          //  lang.download_queue_size_warning,
+          //  warningNotifTimeoutMs,
+          //  NotificationHandler.openUrl(context, LibraryUpdateNotifier.helpWarningUrl),
+          //)
+        }
+        //DownloadJob.start(context);
       }
     }
   }
@@ -355,7 +357,7 @@ class Downloader {
   }
 
   /// Gets the [download] image of [page] from the filesystem in [tmpDir] if it exists or downloads it otherwise.
-  Future<void> _getOrDownloadImage(pageData.Page page, Download download, Directory tmpDir) async {
+  Future<void> _getOrDownloadImage(page_data.Page page, Download download, Directory tmpDir) async {
     // If the image URL is empty, do nothing
     if (page.imageUrl == null) return;
 
@@ -372,36 +374,39 @@ class Downloader {
     //  it.name!.startsWith("${filename}__001"),
     //);
 
-  //  try {
-  //    // If the image is already downloaded, do nothing. Otherwise download from network
-  //    final file = when {
-  //      imageFile != null => imageFile
-  //      chapterCache.isImageInCache(page.imageUrl!) => _copyImageFromCache(chapterCache.getImageFile(page.imageUrl!!), tmpDir, filename)
-  //      _ => downloadImage(page, download.source, tmpDir, filename)
-  //    }
+    try {
+      // If the image is already downloaded, do nothing. Otherwise download from network
+      //final file;
+      //if (imageFile != null) {
+      //  file = imageFile;
+      //} else if (chapterCache.isImageInCache(page.imageUrl!)) {
+      //  file = _copyImageFromCache(chapterCache.getImageFile(page.imageUrl!), tmpDir, filename);
+      //} else {
+      //  file = downloadImage(page, download.source, tmpDir, filename);
+      //}
 
-  //    // When the page is ready, set page path, progress (just in case) and status
+      // When the page is ready, set page path, progress (just in case) and status
   //    _splitTallImageIfNeeded(page, tmpDir);
 
   //    page.uri = file.uri;
-  //    page.progress = 100;
-  //    page.status = PageState.ready;
-  //  } catch (e: Throwable) {
-  //    if (e is CancellationException) throw e;
-  //    // Mark this page as error and allow to download the remaining
-  //    page.progress = 0;
-  //    page.status = PageState.error;
-  //    notifier.onError(e.message, download.chapter.name, download.manga.title);
-  //  }
+      page.progress = 100;
+      page.status = page_data.PageState.ready;
+    } catch (e) {
+      //if (e is CancellationException) rethrow;
+      // Mark this page as error and allow to download the remaining
+      page.progress = 0;
+      page.status = page_data.PageState.error;
+      //notifier.onError(e.message, download.chapter.name, download.manga.title);
+    }
   }
 
   /// Downloads the image in [page] from [source] from network to a file [filename] in [tmpDir].
-  Future<File> _downloadImage(Page page, HttpSource source, Directory tmpDir, String filename) async {
-  //  page.status = PageState.downloadImage;
-  //  page.progress = 0;
+  Future<File> _downloadImage(page_data.Page page, HttpSource source, Directory tmpDir, String filename) async {
+    page.status = page_data.PageState.downloadImage;
+    page.progress = 0;
   //  return flow {
-  //      final response = source.getImage(page)
-  //      final file = tmpDir.createFile("$filename.tmp")!!
+  //      final response = source.getImage(page);
+  //      final file = tmpDir.createFile("$filename.tmp")!;
   //      try {
   //          response.body.source().saveTo(file.openOutputStream())
   //          val extension = _getImageExtension(response, file)
@@ -416,7 +421,7 @@ class Downloader {
   //      // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
   //      .retryWhen { _, attempt ->
   //          if (attempt < 3) {
-  //              delay((2L shl attempt.toInt()) * 1000)
+  //              delay((2 << attempt.toInt()) * 1000)
   //              true
   //          } else {
   //              false
@@ -434,9 +439,9 @@ class Downloader {
   //      input.copyTo(output);
   //    }
   //  }
-  //  final extension = ImageUtil.findImageType(cacheFile.inputStream()) ?? return tmpFile;
+    //final extension = ImageUtil.findImageType(cacheFile.inputStream()) ?? return tmpFile;
   //  tmpFile.renameTo("$filename.${extension.extension}")
-  //  cacheFile.delete();
+    cacheFile.delete();
   //  return tmpFile;
     return File('');
   }
@@ -455,7 +460,7 @@ class Downloader {
     return '';
   }
 
-  void _splitTallImageIfNeeded(pageData.Page page, File tmpDir) {
+  void _splitTallImageIfNeeded(page_data.Page page, File tmpDir) {
     if (!downloadPreferences.splitTallImages().get()) return;
 
     try {
@@ -483,17 +488,20 @@ class Downloader {
       return false;
     }
 
-    //// Ensure that the chapter folder has all the pages
-    //final downloadedImagesCount = tmpDir.listFiles().orEmpty().count {
+    // Ensure that the chapter folder has all the pages
+    //final downloadedImagesCount = tmpDir.listFiles().orEmpty().count((it) {
     //  final fileName = it.name.orEmpty();
-    //  when {
-    //    fileName in listOf(COMIC_INFO_FILE, NOMEDIA_FILE) => false;
-    //    fileName.endsWith(".tmp") => false;
+    //  if ([comicInfoFile, nomediaFile].contains(fileName)) {
+    //    return false;
+    //  } else if (fileName.endsWith(".tmp")) {
+    //    return false;
+    //  } else if (fileName.contains("__") && !fileName.endsWith("__001.jpg")) {
     //    // Only count the first split page and not the others
-    //    fileName.contains("__") && !fileName.endsWith("__001.jpg") => false;
-    //    _ => true;
+    //    return false;
+    //  } else {
+    //    return true;
     //  }
-    //}
+    //});
     //return downloadedImagesCount == downloadPageCount;
     return false;
   }
@@ -539,17 +547,17 @@ class Downloader {
         ? null
         : fetchedCategories.map((it) => it.name.trim());
     //final comicInfo = getComicInfo(manga, chapter, chapterUrl, categories);
-  //  // Remove the old file
-  //  dir.findFile(COMIC_INFO_FILE, true)?.delete();
-  //  dir.createFile(COMIC_INFO_FILE)!!.openOutputStream().use {
+    // Remove the old file
+    //dir.findFile(comicInfoFile, true)?.delete();
+    //dir.createFile(comicInfoFile)!!.openOutputStream().use {
   //    final comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo);
   //    it.write(comicInfoString.toByteArray());
   //  }
   }
 
   /// Returns true if all the queued downloads are in [downloaded] or [error] state.
-  //bool _areAllDownloadsFinished() => queueState.value.none((it) => it.status.value <= DownloadState.downloading.value);
-  bool _areAllDownloadsFinished() => false;
+  bool _areAllDownloadsFinished() =>
+      queueState.value.none((it) => it.status.index <= DownloadState.downloading.index);
 
   void _addAllToQueue(List<Download> downloads) {
     //_queueState.update((it) {

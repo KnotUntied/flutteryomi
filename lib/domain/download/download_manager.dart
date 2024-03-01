@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutteryomi/source/api/source.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -11,12 +10,15 @@ import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/category/model/category_update.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
+import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/download/downloader.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
+import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/source/api/source.dart';
 
 part 'download_manager.g.dart';
 
@@ -25,22 +27,27 @@ part 'download_manager.g.dart';
 /// and retrieved through dependency injection. You can use this class to queue new chapters or query
 /// downloaded chapters.
 class DownloadManager {
-  //final BuildContext context;
-  //final DownloadProvider provider;
-  //final DownloadCache cache;
-  final GetCategories getCategories;
-  final SourceManager sourceManager;
-  final DownloadPreferences downloadPreferences;
-  final Logger logger;
   DownloadManager({
     //required this.context,
     //required this.provider,
     //required this.cache,
     required this.getCategories,
+    required this.getChapter,
+    required this.getManga,
     required this.sourceManager,
     required this.downloadPreferences,
     required this.logger,
   });
+
+  //final BuildContext context;
+  //final DownloadProvider provider;
+  //final DownloadCache cache;
+  final GetCategories getCategories;
+  final GetChapter getChapter;
+  final GetManga getManga;
+  final SourceManager sourceManager;
+  final DownloadPreferences downloadPreferences;
+  final Logger logger;
 
   /// Downloader whose only task is to download chapters.
   //late final _downloader = Downloader(context, provider, cache);
@@ -48,6 +55,8 @@ class DownloadManager {
     sourceManager: sourceManager,
     downloadPreferences: downloadPreferences,
     getCategories: getCategories,
+    getChapter: getChapter,
+    getManga: getManga,
   );
 
   bool get isRunning => _downloader.isRunning;
@@ -66,7 +75,7 @@ class DownloadManager {
 
   /// Tells the downloader to begin downloads.
   void startDownloads() {
-    //if (_downloader.isRunning) return;
+    if (_downloader.isRunning) return;
 
     //if (DownloadJob.isRunning(context)) {
     //  _downloader.start();
@@ -93,10 +102,15 @@ class DownloadManager {
       //queueState.value.firstWhereOrNull((it) => it.chapter.id == chapterId);
 
   void startDownloadNow(int chapterId) {
-    //final existingDownload = getQueuedDownloadOrNull(chapterId);
+    final existingDownload = getQueuedDownloadOrNull(chapterId);
     // If not in queue try to start a new download
-    //final toAdd = existingDownload ?? runBlocking(() => Download.fromChapterId(chapterId));
-    //if (toAdd == null) return;
+    final toAdd = existingDownload ?? Download.fromChapterId(
+      chapterId: chapterId,
+      getChapter: getChapter,
+      getManga: getManga,
+      sourceManager: sourceManager,
+    );
+    if (toAdd == null) return;
     //final queue = queueState.value;
     //final existingDownload = queue.existingDownload;
     //if (existingDownload != null) {
@@ -122,7 +136,7 @@ class DownloadManager {
     if (downloads.isEmpty) return;
     final queue = await queueState.last;
     //await queue.addAll(0, downloads);
-    //reorderQueue(queue);
+    reorderQueue(queue);
     //if (!DownloadJob.isRunning(context)) startDownloads();
   }
 
@@ -175,8 +189,7 @@ class DownloadManager {
   int getDownloadCountForManga(Manga manga) => 0;
 
   void cancelQueuedDownloads(List<Download> downloads) =>
-      null;
-  //    _removeFromDownloadQueue(downloads.map((it) => it.chapter));
+      _removeFromDownloadQueue(downloads.map((it) => it.chapter).toList());
 
   /// Deletes the directories of a list of downloaded [chapters] in their [manga] and [source].
   void deleteChapters(List<Chapter> chapters, Manga manga, Source source) async {
@@ -310,25 +323,27 @@ class DownloadManager {
     }
   }
 
-  //Stream<Download> statusStream() => queueState
-  //    .flatMap((downloads) => downloads
-  //        .map((download) => download.statusStream.drop(1).map(() => download))
-  //        .merge())
-  //    .onStart(() => emitAll(
-  //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
-      //));
-  Stream<Download> statusStream() => const Stream.empty();
-  //Stream<Download> statusStream() => Stream.value();
+  Stream<Download> statusStream() => queueState
+      .switchMap((downloads) => Rx.merge(
+        downloads.map((download) => download.statusStream.skip(1).map((_) => download))
+      ))
+      .startWithMany(
+        queueState
+            .value
+            .where((download) => download.status == DownloadState.downloading)
+            .toList(),
+      );
 
-  //Stream<Download> progressStream() => queueState
-  //    .flatMapLatest((downloads) => downloads
-  //        .map((download) => download.pregressStream.drop(1).map(() => download))
-  //        .merge())
-  //    .onStart(() => emitAll(
-  //      queueState.value.where((download) => download.status == DownloadState.downloading) .asStream(),
-  //    ));
-  Stream<Download> progressStream() => const Stream.empty();
-  //Stream<Download> progressStream() => Stream.value();
+  Stream<Download> progressStream() => queueState
+      .switchMap((downloads) => Rx.merge(
+        downloads.map((download) => download.progressStream.skip(1).map((_) => download))
+      ))
+      .startWithMany(
+        queueState
+            .value
+            .where((download) => download.status == DownloadState.downloading)
+            .toList(),
+      );
 }
 
 @riverpod
@@ -337,6 +352,8 @@ DownloadManager downloadManager(DownloadManagerRef ref) => DownloadManager(
       //provider: ref.watch(downloadProviderProvider),
       //cache: ref.watch(downloadCacheProvider),
       getCategories: ref.watch(getCategoriesProvider),
+      getChapter: ref.watch(getChapterProvider),
+      getManga: ref.watch(getMangaProvider),
       sourceManager: ref.watch(sourceManagerProvider),
       downloadPreferences: ref.watch(downloadPreferencesProvider),
       logger: ref.watch(loggerProvider),

@@ -1,0 +1,4 @@
+fallback_strategy: base_locale
+input_directory: lib/l10n
+input_file_pattern: .arb
+translate_var: lang

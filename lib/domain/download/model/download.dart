@@ -1,5 +1,10 @@
+import 'dart:async';
+
+import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:rxdart/rxdart.dart' hide DebounceExtensions;
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
@@ -9,26 +14,43 @@ import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/online/http_source.dart';
 
-part 'download.freezed.dart';
-
 //TODO
-@unfreezed
-class Download with _$Download {
-  Download._();
-  factory Download(
-    HttpSource source,
-    Manga manga,
-    Chapter chapter, [
-    List<Page>? pages,
-  ]) = _Download;
+class Download extends Equatable {
+  Download(
+    this.source,
+    this.manga,
+    this.chapter, [
+    this.pages,
+  ]);
+
+  final HttpSource source;
+  final Manga manga;
+  final Chapter chapter;
+  final List<Page>? pages;
 
   int get totalProgress => pages?.sumBy((it) => it.progress) ?? 0;
 
   int get downloadedImages =>
       pages?.count((it) => it.status == PageState.ready) ?? 0;
 
-  DownloadState get status {
-    return DownloadState.notDownloaded;
+  final _statusStream = BehaviorSubject.seeded(DownloadState.notDownloaded);
+
+  ValueStream<DownloadState> get statusStream => _statusStream.stream;
+  DownloadState get status => _statusStream.value;
+  set status(value) => _statusStream.add(value);
+
+  Stream<int> get progressStream async* {
+    if (pages == null) {
+      yield 0;
+      while (pages == null) {
+        await Future.delayed(const Duration(milliseconds: 50));
+      }
+    }
+    final progressStreams = pages!.map((it) => it.progressStream);
+    yield* StreamZip(progressStreams)
+        .map((it) => it.average().toInt())
+        .distinct()
+        .debounce(const Duration(milliseconds: 50));
   }
 
   int get progress {
@@ -51,6 +73,9 @@ class Download with _$Download {
 
     return Download(source, manga, chapter);
   }
+
+  @override
+  List<Object?> get props => [source, manga, chapter, pages];
 }
 
 enum DownloadState {
