@@ -6,7 +6,6 @@ import 'package:drift/drift.dart' as drift;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart' hide DebounceExtensions;
-import 'package:stream_transform/stream_transform.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/track/tracker_manager.dart';
@@ -32,7 +31,6 @@ import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
-import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/library/library_item.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';

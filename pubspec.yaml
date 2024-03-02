@@ -67,6 +67,8 @@ dependencies:
   riverpod: ^2.4.6
   riverpod_annotation: ^2.3.1
   rxdart: ^0.27.7
+  slang: ^3.29.0
+  slang_flutter: ^3.29.0
   sprintf: ^7.0.0
   sqflite: ^2.3.0
   sqlite3_flutter_libs: ^0.5.0
@@ -76,7 +78,7 @@ dependencies:
   url_launcher: ^6.2.1
   xml: ^6.5.0
   xml_annotation: ^2.4.0
-  slang: ^3.29.0
+  streaming_shared_preferences: ^2.0.0
 
 
 dev_dependencies:
