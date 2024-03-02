@@ -6,7 +6,7 @@ part of 'more.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$moreScreenModelHash() => r'41c7d606c8d3acee2b1eeb50800efbcabfd90518';
+String _$moreScreenModelHash() => r'74538e83bfef64689ff504e066e8a25887ebf27f';
 
 /// See also [MoreScreenModel].
 @ProviderFor(MoreScreenModel)

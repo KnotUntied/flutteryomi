@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 // Alias to prevent conflict with Freezed
 import 'package:drift/drift.dart' as drift;
@@ -53,48 +52,62 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   Stream<LibraryScreenState> build() {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final getTracksPerManga = ref.watch(getTracksPerMangaProvider);
-    print('start');
     final stream1 = Rx.combineLatestList([
-      future
-          .asStream()
-          .map((it) => it.searchQuery)
-          .distinct()
-          .debounce(const Duration(milliseconds: searchDebounceMillis)),
-      _getLibraryStream(),
+      //TODO: Fix this
+      //future
+      //    .asStream()
+      //    .map((it) => it.searchQuery)
+      //    .distinct()
+      //    .debounce(const Duration(milliseconds: searchDebounceMillis)),
+      //TODO: Fix this
+      //_getLibraryStream(),
       getTracksPerManga.subscribe(),
       _getTrackingFilterStream(),
       //downloadCache.changes,
     ]).asyncMap((e) async {
-      final searchQuery = e.first as String?;
-      final library = e.second as LibraryMap;
-      final tracks = e.third as Map<int, List<Track>>;
-      final loggedInTrackers = e.fourth as Map<int, TriState>;
-      final newLibrary = library;
-      final filteredLibrary =
-          await applyFilters(newLibrary, tracks, loggedInTrackers);
-      final sortedLibrary = _applySort(filteredLibrary, tracks);
-      final queriedLibrary =
-          sortedLibrary.mapValues((entry) => searchQuery != null
-              // Filter query
-              ? entry.value.where((it) => it.matches(searchQuery)).toList()
-              // Don't do anything
-              : entry.value.toList());
+      //final searchQuery = e.first as String?;
+      //final library = e.second as LibraryMap;
+      //final tracks = e.third as Map<int, List<Track>>;
+      //final loggedInTrackers = e.fourth as Map<int, TriState>;
+      const String? searchQuery = null;
+      //final library = e.first as LibraryMap;
+      final tracks = e.first as Map<int, List<Track>>;
+      final loggedInTrackers = e.second as Map<int, TriState>;
+      //final newLibrary = library;
+      //final filteredLibrary =
+      //    await applyFilters(newLibrary, tracks, loggedInTrackers);
+      //final sortedLibrary = _applySort(filteredLibrary, tracks);
+      //final queriedLibrary =
+      //    sortedLibrary.mapValues((entry) => searchQuery != null
+      //        // Filter query
+      //        ? entry.value.where((it) => it.matches(searchQuery)).toList()
+      //        // Don't do anything
+      //        : entry.value.toList());
       return LibraryScreenState(
-        library: queriedLibrary,
+        //library: queriedLibrary,
         searchQuery: searchQuery,
       );
     });
 
-    print('here?');
     final stream2 = Rx.combineLatest3(
       libraryPreferences.categoryTabs().changes(),
       libraryPreferences.categoryNumberOfItems().changes(),
       libraryPreferences.showContinueReadingButton().changes(),
-      (a, b, c) => LibraryScreenState(
-        showCategoryTabs: a,
-        showMangaCount: b,
-        showMangaContinueButton: c,
-      ),
+      //(a, b, c) => LibraryScreenState(
+      //  showCategoryTabs: a,
+      //  showMangaCount: b,
+      //  showMangaContinueButton: c,
+      //),
+      (a, b, c) {
+        print('a: $a');
+        print('b: $b');
+        print('c: $c');
+        return LibraryScreenState(
+          showCategoryTabs: a,
+          showMangaCount: b,
+          showMangaContinueButton: c,
+        );
+      },
     );
 
     final stream3 = Rx.combineLatest2(
@@ -113,12 +126,11 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         .distinct()
         .map((it) => LibraryScreenState(hasActiveFilters: it));
 
-    print('reached here');
     return Rx.combineLatest3(
       stream1,
       stream2,
       stream3,
-      (a, b, c) => LibraryScreenState(
+      (a, b,c ) => LibraryScreenState(
         library: a.library,
         searchQuery: a.searchQuery,
         //selection?
@@ -667,10 +679,10 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   }
 }
 
-@unfreezed
+@freezed
 class LibraryScreenState with _$LibraryScreenState {
-  LibraryScreenState._();
-  factory LibraryScreenState({
+  const LibraryScreenState._();
+  const factory LibraryScreenState({
     @Default({}) LibraryMap library,
     String? searchQuery,
     @Default([]) List<LibraryManga> selection,
@@ -680,16 +692,17 @@ class LibraryScreenState with _$LibraryScreenState {
     @Default(false) bool showMangaContinueButton,
   }) = _LibraryScreenState;
 
-  late final _libraryCount = library.values
+  // Getters might be slower than precomputed values :(
+  int get _libraryCount => library.values
       .flatten()
       .distinctBy((it) => it.libraryManga.manga.id)
       .length;
 
-  late final isLibraryEmpty = _libraryCount == 0;
+  bool get isLibraryEmpty => _libraryCount == 0;
 
-  late final selectionMode = selection.isNotEmpty;
+  bool get selectionMode => selection.isNotEmpty;
 
-  late final categories = library.keys.toList();
+  List<Category> get categories => library.keys.toList();
 
   List<LibraryItem>? getLibraryItemsByCategoryId(int categoryId) {
     final items = library.filter((e) => e.key.id == categoryId);

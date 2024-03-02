@@ -32,6 +32,8 @@ class LibraryTab extends ConsumerStatefulWidget {
 
 class _LibraryTabState extends ConsumerState<LibraryTab>
     with AutomaticKeepAliveClientMixin<LibraryTab> {
+  late TabController _tabController;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -70,229 +72,235 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
         (currentState?.categories.length ?? 0) > 1;
 
     print(state);
+    print('tab index: ${libraryPreferences.lastUsedCategory().get()}');
+    print('tab count: ${currentState?.library.length}');
 
     return DefaultTabController(
       initialIndex: libraryPreferences.lastUsedCategory().get(),
-      length: state.unwrapPrevious().valueOrNull?.library.length ?? 0,
-      child: Scaffold(
-        appBar: LibraryToolbar(
-          hasActiveFilters: currentState?.hasActiveFilters ?? false,
-          selectedCount: currentState?.selection.length ?? 0,
-          title: currentState?.getToolbarTitle(
-                defaultTitle: lang.label_library,
-                defaultCategoryTitle: lang.label_default,
-                page: DefaultTabController.of(context).index,
-              ) ??
-              const LibraryToolbarTitle(''),
-          onClickUnselectAll: screenModel.clearSelection,
-          onClickSelectAll: () =>
-              screenModel.selectAll(DefaultTabController.of(context).index),
-          onClickInvertSelection: () => screenModel
-              .invertSelection(DefaultTabController.of(context).index),
-          onClickFilter: () {
-            final category = currentState?.categories
-                .elementAtOrNull(DefaultTabController.of(context).index);
-            if (category == null) return;
-            showModalBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              useSafeArea: true,
-              builder: (context) => LibrarySettingsDialog(
-                screenModel: settingsScreenModel,
-                category: category,
-              ),
-            );
-          },
-          onClickRefresh: () => onClickRefresh(
-              currentState?.categories[DefaultTabController.of(context).index]),
-          onClickGlobalUpdate: () => onClickRefresh(null),
-          onClickOpenRandomManga: () {
-            final randomItem = screenModel.getRandomLibraryItemForCategory(
-                DefaultTabController.of(context).index);
-            if (randomItem != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      MangaScreen(mangaId: randomItem.libraryManga.manga.id),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(lang.information_no_entries_found)),
-              );
-            }
-          },
-          searchQuery: currentState?.searchQuery,
-          onSearchQueryChange: screenModel.search,
-          bottom: tabVisible
-              ? LibraryTabs(
-                  categories: currentState?.categories ?? [],
-                  getNumberOfMangaForCategory: (it) =>
-                      currentState?.getMangaCountForCategory(it),
-                  onTabItemClick: (it) =>
-                      currentState?.getLibraryItemsByPage(it),
-                )
-              : null,
-        ),
-        body: state.when(
-          loading: () => const LoadingScreen(),
-          // TODO: Error handling
-          error: (error, stackTrace) {
-            debugPrintStack(
-              label: error.toString(),
-              stackTrace: stackTrace,
-            );
-            return const LoadingScreen();
-          },
-          data: (data) {
-            if (data.searchQuery.isNullOrEmpty &&
-                !data.hasActiveFilters &&
-                data.isLibraryEmpty) {
-              return EmptyScreen(
-                message: lang.information_empty_library,
-                actions: [
-                  EmptyScreenAction(
-                    text: lang.getting_started_guide,
-                    icon: const Icon(Icons.help_outline_outlined),
-                    onClick: () async {
-                      final Uri parsedUrl = Uri.parse(gettingStartedUrl);
-                      if (!await launchUrl(parsedUrl)) {
-                        throw Exception('Could not open $parsedUrl');
-                      }
-                    },
+      length: currentState?.library.length ?? 0,
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: LibraryToolbar(
+              hasActiveFilters: currentState?.hasActiveFilters ?? false,
+              selectedCount: currentState?.selection.length ?? 0,
+              title: currentState?.getToolbarTitle(
+                    defaultTitle: lang.label_library,
+                    defaultCategoryTitle: lang.label_default,
+                    page: DefaultTabController.of(context).index,
+                  ) ??
+                  const LibraryToolbarTitle(''),
+              onClickUnselectAll: screenModel.clearSelection,
+              onClickSelectAll: () =>
+                  screenModel.selectAll(DefaultTabController.of(context).index),
+              onClickInvertSelection: () => screenModel
+                  .invertSelection(DefaultTabController.of(context).index),
+              onClickFilter: () {
+                final category = currentState?.categories
+                    .elementAtOrNull(DefaultTabController.of(context).index);
+                if (category == null) return;
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (context) => LibrarySettingsDialog(
+                    screenModel: settingsScreenModel,
+                    category: category,
                   ),
-                ],
-              );
-            } else {
-              return LibraryContent(
-                categories: data.categories,
-                searchQuery: data.searchQuery,
-                selection: data.selection,
-                hasActiveFilters: data.hasActiveFilters,
-                onMangaClicked: (it) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MangaScreen(mangaId: it),
-                  ),
-                ),
-                onContinueReadingClicked: data.showMangaContinueButton
-                    ? (it) async {
-                        final chapter =
-                            await screenModel.getNextUnreadChapter(it.manga);
-                        if (mounted) {
-                          if (chapter != null) {
-                            //TODO
-                            //Navigator.push(
-                            //  context,
-                            //  MaterialPageRoute(
-                            //    builder: (context) => ReaderScreen(chapter.mangaId, chapter.id),
-                            //  ),
-                            //);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(lang.no_next_chapter)),
-                            );
-                          }
-                        }
-                      }
-                    : null,
-                onToggleSelection: screenModel.toggleSelection,
-                onToggleRangeSelection: (it) {
-                  Feedback.forLongPress(context);
-                  screenModel.toggleRangeSelection(it);
-                },
-                onRefresh: onClickRefresh,
-                onGlobalSearchClicked: () {
-                  //Navigator.push(
-                  //  context,
-                  //  MaterialPageRoute(
-                  //    builder: (context) => GlobalSearchScreen(data.searchQuery ?? ""),
-                  //  ),
-                  //);
-                },
-                getDisplayMode: (_) => screenModel.getDisplayMode(),
-                getColumnsForOrientation: (it) =>
-                    screenModel.getColumnsPreferenceForCurrentOrientation(it),
-                getLibraryForPage: (it) => data.getLibraryItemsByPage(it),
-              );
-            }
-          },
-        ),
-        bottomNavigationBar: LibraryBottomActionMenu(
-          visible: currentState?.selectionMode ?? false,
-          onChangeCategoryClicked: currentState != null
-              ? () async {
-                  final mangaList =
-                      currentState.selection.map((it) => it.manga).toList();
-                  // Hide the default category because it has a different behavior than the ones from db.
-                  final categories =
-                      currentState.categories.where((it) => it.id != 0);
-                  // Get indexes of the common categories to preselect.
-                  final common =
-                      await screenModel.getCommonCategories(mangaList);
-                  // Get indexes of the mix categories to preselect.
-                  final mix = await screenModel.getMixCategories(mangaList);
-                  final preselected = categories.map((it) {
-                    if (common.contains(it)) {
-                      return CheckboxRegularState.checked(it);
-                    } else if (mix.contains(it)) {
-                      return CheckboxTriState.exclude(it);
-                    } else {
-                      return CheckboxRegularState.none(it);
-                    }
-                  }).toList();
-                  if (context.mounted) {
-                    showAdaptiveDialog(
-                      context: context,
-                      builder: (context) => ChangeCategoryDialog(
-                        initialSelection: preselected,
-                        onEditCategories: () {
-                          screenModel.clearSelection();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CategoryScreen(),
-                            ),
-                          );
-                        },
-                        onConfirm: (include, exclude) {
-                          screenModel.clearSelection();
-                          screenModel.setMangaCategories(
-                              mangaList, include, exclude);
-                        },
-                      ),
-                    );
-                  }
+                );
+              },
+              onClickRefresh: () => onClickRefresh(
+                  currentState?.categories[DefaultTabController.of(context).index]),
+              onClickGlobalUpdate: () => onClickRefresh(null),
+              onClickOpenRandomManga: () {
+                final randomItem = screenModel.getRandomLibraryItemForCategory(
+                    DefaultTabController.of(context).index);
+                if (randomItem != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MangaScreen(mangaId: randomItem.libraryManga.manga.id),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(lang.information_no_entries_found)),
+                  );
                 }
-              : null,
-          onMarkAsReadClicked: () => screenModel.markReadSelection(true),
-          onMarkAsUnreadClicked: () => screenModel.markReadSelection(false),
-          onDownloadClicked:
-              currentState?.selection.every((it) => !it.manga.isLocal()) ??
-                      false
-                  ? screenModel.runDownloadActionSelection
+              },
+              searchQuery: currentState?.searchQuery,
+              onSearchQueryChange: screenModel.search,
+              bottom: tabVisible
+                  ? LibraryTabs(
+                      categories: currentState?.categories ?? [],
+                      getNumberOfMangaForCategory: (it) =>
+                          currentState?.getMangaCountForCategory(it),
+                      onTabItemClick: (it) =>
+                          currentState?.getLibraryItemsByPage(it),
+                    )
                   : null,
-          onDeleteClicked: currentState != null
-              ? () async {
-                  final mangaList =
-                      currentState.selection.map((it) => it.manga).toList();
-                  if (mounted) {
-                    showAdaptiveDialog(
-                      context: context,
-                      builder: (context) => DeleteLibraryMangaDialog(
-                        containsLocalManga: mangaList.any((it) => it.isLocal()),
-                        onConfirm: (deleteManga, deleteChapter) {
-                          screenModel.removeMangas(
-                              mangaList, deleteManga, deleteChapter);
-                          screenModel.clearSelection();
+            ),
+            body: state.when(
+              loading: () => const LoadingScreen(),
+              // TODO: Error handling
+              error: (error, stackTrace) {
+                debugPrintStack(
+                  label: error.toString(),
+                  stackTrace: stackTrace,
+                );
+                return const LoadingScreen();
+              },
+              data: (data) {
+                if (data.searchQuery.isNullOrEmpty &&
+                    !data.hasActiveFilters &&
+                    data.isLibraryEmpty) {
+                  return EmptyScreen(
+                    message: lang.information_empty_library,
+                    actions: [
+                      EmptyScreenAction(
+                        text: lang.getting_started_guide,
+                        icon: const Icon(Icons.help_outline_outlined),
+                        onClick: () async {
+                          final Uri parsedUrl = Uri.parse(gettingStartedUrl);
+                          if (!await launchUrl(parsedUrl)) {
+                            throw Exception('Could not open $parsedUrl');
+                          }
                         },
                       ),
-                    );
-                  }
+                    ],
+                  );
+                } else {
+                  return LibraryContent(
+                    categories: data.categories,
+                    searchQuery: data.searchQuery,
+                    selection: data.selection,
+                    hasActiveFilters: data.hasActiveFilters,
+                    onMangaClicked: (it) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MangaScreen(mangaId: it),
+                      ),
+                    ),
+                    onContinueReadingClicked: data.showMangaContinueButton
+                        ? (it) async {
+                            final chapter =
+                                await screenModel.getNextUnreadChapter(it.manga);
+                            if (mounted) {
+                              if (chapter != null) {
+                                //TODO
+                                //Navigator.push(
+                                //  context,
+                                //  MaterialPageRoute(
+                                //    builder: (context) => ReaderScreen(chapter.mangaId, chapter.id),
+                                //  ),
+                                //);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(lang.no_next_chapter)),
+                                );
+                              }
+                            }
+                          }
+                        : null,
+                    onToggleSelection: screenModel.toggleSelection,
+                    onToggleRangeSelection: (it) {
+                      Feedback.forLongPress(context);
+                      screenModel.toggleRangeSelection(it);
+                    },
+                    onRefresh: onClickRefresh,
+                    onGlobalSearchClicked: () {
+                      //Navigator.push(
+                      //  context,
+                      //  MaterialPageRoute(
+                      //    builder: (context) => GlobalSearchScreen(data.searchQuery ?? ""),
+                      //  ),
+                      //);
+                    },
+                    getDisplayMode: (_) => screenModel.getDisplayMode(),
+                    getColumnsForOrientation: (it) =>
+                        screenModel.getColumnsPreferenceForCurrentOrientation(it),
+                    getLibraryForPage: (it) => data.getLibraryItemsByPage(it),
+                  );
                 }
-              : null,
-        ),
+              },
+            ),
+            bottomNavigationBar: LibraryBottomActionMenu(
+              visible: currentState?.selectionMode ?? false,
+              onChangeCategoryClicked: currentState != null
+                  ? () async {
+                      final mangaList =
+                          currentState.selection.map((it) => it.manga).toList();
+                      // Hide the default category because it has a different behavior than the ones from db.
+                      final categories =
+                          currentState.categories.where((it) => it.id != 0);
+                      // Get indexes of the common categories to preselect.
+                      final common =
+                          await screenModel.getCommonCategories(mangaList);
+                      // Get indexes of the mix categories to preselect.
+                      final mix = await screenModel.getMixCategories(mangaList);
+                      final preselected = categories.map((it) {
+                        if (common.contains(it)) {
+                          return CheckboxRegularState.checked(it);
+                        } else if (mix.contains(it)) {
+                          return CheckboxTriState.exclude(it);
+                        } else {
+                          return CheckboxRegularState.none(it);
+                        }
+                      }).toList();
+                      if (context.mounted) {
+                        showAdaptiveDialog(
+                          context: context,
+                          builder: (context) => ChangeCategoryDialog(
+                            initialSelection: preselected,
+                            onEditCategories: () {
+                              screenModel.clearSelection();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CategoryScreen(),
+                                ),
+                              );
+                            },
+                            onConfirm: (include, exclude) {
+                              screenModel.clearSelection();
+                              screenModel.setMangaCategories(
+                                  mangaList, include, exclude);
+                            },
+                          ),
+                        );
+                      }
+                    }
+                  : null,
+              onMarkAsReadClicked: () => screenModel.markReadSelection(true),
+              onMarkAsUnreadClicked: () => screenModel.markReadSelection(false),
+              onDownloadClicked:
+                  currentState?.selection.every((it) => !it.manga.isLocal()) ??
+                          false
+                      ? screenModel.runDownloadActionSelection
+                      : null,
+              onDeleteClicked: currentState != null
+                  ? () async {
+                      final mangaList =
+                          currentState.selection.map((it) => it.manga).toList();
+                      if (mounted) {
+                        showAdaptiveDialog(
+                          context: context,
+                          builder: (context) => DeleteLibraryMangaDialog(
+                            containsLocalManga: mangaList.any((it) => it.isLocal()),
+                            onConfirm: (deleteManga, deleteChapter) {
+                              screenModel.removeMangas(
+                                  mangaList, deleteManga, deleteChapter);
+                              screenModel.clearSelection();
+                            },
+                          ),
+                        );
+                      }
+                    }
+                  : null,
+            ),
+          );
+        }
       ),
     );
   }

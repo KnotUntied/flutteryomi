@@ -39,7 +39,9 @@ sealed class CommonPreference<T> extends base.Preference<T> {
   T defaultValue() => defaultValue_;
 
   @override
-  Stream<T> changes() => preferences.watch(key: key_).map((e) => e.value);
+  Stream<T> changes() => preferences
+      .watch(key: key_)
+      .map((_) => preferences.get(key_));
 }
 
 class StringPrimitive extends CommonPreference<String> {

@@ -18,20 +18,12 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LibraryScreenState {
   Map<Category, List<LibraryItem>> get library =>
       throw _privateConstructorUsedError;
-  set library(Map<Category, List<LibraryItem>> value) =>
-      throw _privateConstructorUsedError;
   String? get searchQuery => throw _privateConstructorUsedError;
-  set searchQuery(String? value) => throw _privateConstructorUsedError;
   List<LibraryManga> get selection => throw _privateConstructorUsedError;
-  set selection(List<LibraryManga> value) => throw _privateConstructorUsedError;
   bool get hasActiveFilters => throw _privateConstructorUsedError;
-  set hasActiveFilters(bool value) => throw _privateConstructorUsedError;
   bool get showCategoryTabs => throw _privateConstructorUsedError;
-  set showCategoryTabs(bool value) => throw _privateConstructorUsedError;
   bool get showMangaCount => throw _privateConstructorUsedError;
-  set showMangaCount(bool value) => throw _privateConstructorUsedError;
   bool get showMangaContinueButton => throw _privateConstructorUsedError;
-  set showMangaContinueButton(bool value) => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LibraryScreenStateCopyWith<LibraryScreenState> get copyWith =>
@@ -147,7 +139,7 @@ class __$$LibraryScreenStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$LibraryScreenStateImpl(
       library: null == library
-          ? _value.library
+          ? _value._library
           : library // ignore: cast_nullable_to_non_nullable
               as Map<Category, List<LibraryItem>>,
       searchQuery: freezed == searchQuery
@@ -155,7 +147,7 @@ class __$$LibraryScreenStateImplCopyWithImpl<$Res>
           : searchQuery // ignore: cast_nullable_to_non_nullable
               as String?,
       selection: null == selection
-          ? _value.selection
+          ? _value._selection
           : selection // ignore: cast_nullable_to_non_nullable
               as List<LibraryManga>,
       hasActiveFilters: null == hasActiveFilters
@@ -181,41 +173,87 @@ class __$$LibraryScreenStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LibraryScreenStateImpl extends _LibraryScreenState {
-  _$LibraryScreenStateImpl(
-      {this.library = const {},
+  const _$LibraryScreenStateImpl(
+      {final Map<Category, List<LibraryItem>> library = const {},
       this.searchQuery,
-      this.selection = const [],
+      final List<LibraryManga> selection = const [],
       this.hasActiveFilters = false,
       this.showCategoryTabs = false,
       this.showMangaCount = false,
       this.showMangaContinueButton = false})
-      : super._();
+      : _library = library,
+        _selection = selection,
+        super._();
+
+  final Map<Category, List<LibraryItem>> _library;
+  @override
+  @JsonKey()
+  Map<Category, List<LibraryItem>> get library {
+    if (_library is EqualUnmodifiableMapView) return _library;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_library);
+  }
+
+  @override
+  final String? searchQuery;
+  final List<LibraryManga> _selection;
+  @override
+  @JsonKey()
+  List<LibraryManga> get selection {
+    if (_selection is EqualUnmodifiableListView) return _selection;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selection);
+  }
 
   @override
   @JsonKey()
-  Map<Category, List<LibraryItem>> library;
-  @override
-  String? searchQuery;
+  final bool hasActiveFilters;
   @override
   @JsonKey()
-  List<LibraryManga> selection;
+  final bool showCategoryTabs;
   @override
   @JsonKey()
-  bool hasActiveFilters;
+  final bool showMangaCount;
   @override
   @JsonKey()
-  bool showCategoryTabs;
-  @override
-  @JsonKey()
-  bool showMangaCount;
-  @override
-  @JsonKey()
-  bool showMangaContinueButton;
+  final bool showMangaContinueButton;
 
   @override
   String toString() {
     return 'LibraryScreenState(library: $library, searchQuery: $searchQuery, selection: $selection, hasActiveFilters: $hasActiveFilters, showCategoryTabs: $showCategoryTabs, showMangaCount: $showMangaCount, showMangaContinueButton: $showMangaContinueButton)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LibraryScreenStateImpl &&
+            const DeepCollectionEquality().equals(other._library, _library) &&
+            (identical(other.searchQuery, searchQuery) ||
+                other.searchQuery == searchQuery) &&
+            const DeepCollectionEquality()
+                .equals(other._selection, _selection) &&
+            (identical(other.hasActiveFilters, hasActiveFilters) ||
+                other.hasActiveFilters == hasActiveFilters) &&
+            (identical(other.showCategoryTabs, showCategoryTabs) ||
+                other.showCategoryTabs == showCategoryTabs) &&
+            (identical(other.showMangaCount, showMangaCount) ||
+                other.showMangaCount == showMangaCount) &&
+            (identical(
+                    other.showMangaContinueButton, showMangaContinueButton) ||
+                other.showMangaContinueButton == showMangaContinueButton));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_library),
+      searchQuery,
+      const DeepCollectionEquality().hash(_selection),
+      hasActiveFilters,
+      showCategoryTabs,
+      showMangaCount,
+      showMangaContinueButton);
 
   @JsonKey(ignore: true)
   @override
@@ -226,37 +264,30 @@ class _$LibraryScreenStateImpl extends _LibraryScreenState {
 }
 
 abstract class _LibraryScreenState extends LibraryScreenState {
-  factory _LibraryScreenState(
-      {Map<Category, List<LibraryItem>> library,
-      String? searchQuery,
-      List<LibraryManga> selection,
-      bool hasActiveFilters,
-      bool showCategoryTabs,
-      bool showMangaCount,
-      bool showMangaContinueButton}) = _$LibraryScreenStateImpl;
-  _LibraryScreenState._() : super._();
+  const factory _LibraryScreenState(
+      {final Map<Category, List<LibraryItem>> library,
+      final String? searchQuery,
+      final List<LibraryManga> selection,
+      final bool hasActiveFilters,
+      final bool showCategoryTabs,
+      final bool showMangaCount,
+      final bool showMangaContinueButton}) = _$LibraryScreenStateImpl;
+  const _LibraryScreenState._() : super._();
 
   @override
   Map<Category, List<LibraryItem>> get library;
-  set library(Map<Category, List<LibraryItem>> value);
   @override
   String? get searchQuery;
-  set searchQuery(String? value);
   @override
   List<LibraryManga> get selection;
-  set selection(List<LibraryManga> value);
   @override
   bool get hasActiveFilters;
-  set hasActiveFilters(bool value);
   @override
   bool get showCategoryTabs;
-  set showCategoryTabs(bool value);
   @override
   bool get showMangaCount;
-  set showMangaCount(bool value);
   @override
   bool get showMangaContinueButton;
-  set showMangaContinueButton(bool value);
   @override
   @JsonKey(ignore: true)
   _$$LibraryScreenStateImplCopyWith<_$LibraryScreenStateImpl> get copyWith =>

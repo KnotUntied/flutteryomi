@@ -53,6 +53,7 @@ class EmptyScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 24.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (final action in actions!)
                       ActionButton(
