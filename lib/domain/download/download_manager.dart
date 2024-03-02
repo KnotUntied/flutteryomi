@@ -101,23 +101,20 @@ class DownloadManager {
   Download? getQueuedDownloadOrNull(int chapterId) => null;
       //queueState.value.firstWhereOrNull((it) => it.chapter.id == chapterId);
 
-  void startDownloadNow(int chapterId) {
+  void startDownloadNow(int chapterId) async {
     final existingDownload = getQueuedDownloadOrNull(chapterId);
     // If not in queue try to start a new download
-    final toAdd = existingDownload ?? Download.fromChapterId(
+    final toAdd = existingDownload ?? await Download.fromChapterId(
       chapterId: chapterId,
       getChapter: getChapter,
       getManga: getManga,
       sourceManager: sourceManager,
     );
     if (toAdd == null) return;
-    //final queue = queueState.value;
-    //final existingDownload = queue.existingDownload;
-    //if (existingDownload != null) {
-    //  queue.remove(existingDownload);
-    //}
-    //queue.add(0, toAdd);
-    //reorderQueue(queue);
+    final queue = queueState.value;
+    if (existingDownload != null) queue.remove(existingDownload);
+    queue.insert(0, toAdd);
+    reorderQueue(queue);
     startDownloads();
   }
 
@@ -135,7 +132,7 @@ class DownloadManager {
   void addDownloadsToStartOfQueue(List<Download> downloads) async {
     if (downloads.isEmpty) return;
     final queue = await queueState.last;
-    //await queue.addAll(0, downloads);
+    queue.insertAll(0, downloads);
     reorderQueue(queue);
     //if (!DownloadJob.isRunning(context)) startDownloads();
   }

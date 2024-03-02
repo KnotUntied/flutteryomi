@@ -6,6 +6,7 @@ import 'package:dartx/dartx.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart' hide DebounceExtensions;
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
@@ -53,7 +54,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final getTracksPerManga = ref.watch(getTracksPerMangaProvider);
     print('start');
-    final stream1 = StreamZip([
+    final stream1 = Rx.combineLatestList([
       future
           .asStream()
           .map((it) => it.searchQuery)
@@ -85,46 +86,48 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     });
 
     print('here?');
-    final stream2 = StreamZip([
+    final stream2 = Rx.combineLatest3(
       libraryPreferences.categoryTabs().changes(),
       libraryPreferences.categoryNumberOfItems().changes(),
       libraryPreferences.showContinueReadingButton().changes(),
-    ]).map((e) => LibraryScreenState(
-          showCategoryTabs: e.first,
-          showMangaCount: e.second,
-          showMangaContinueButton: e.third,
-        ));
+      (a, b, c) => LibraryScreenState(
+        showCategoryTabs: a,
+        showMangaCount: b,
+        showMangaContinueButton: c,
+      ),
+    );
 
-    final stream3 = StreamZip([
+    final stream3 = Rx.combineLatest2(
       _getLibraryItemPreferencesStream(),
       _getTrackingFilterStream(),
-    ])
-        .map((e) {
-          final prefs = e.first as _ItemPreferences;
-          final trackFilter = e.second as Map<int, TriState>;
-          return ([
-            prefs.filterDownloaded,
-            prefs.filterUnread,
-            prefs.filterStarted,
-            prefs.filterBookmarked,
-            prefs.filterCompleted,
-            prefs.filterIntervalCustom,
-            trackFilter.values,
-          ]).any((it) => it != TriState.disabled);
-        })
+      (prefs, trackFilter) => ([
+        prefs.filterDownloaded,
+        prefs.filterUnread,
+        prefs.filterStarted,
+        prefs.filterBookmarked,
+        prefs.filterCompleted,
+        prefs.filterIntervalCustom,
+        trackFilter.values,
+      ]).any((it) => it != TriState.disabled),
+    )
         .distinct()
         .map((it) => LibraryScreenState(hasActiveFilters: it));
 
     print('reached here');
-    return StreamZip([stream1, stream2, stream3]).map((e) => LibraryScreenState(
-          library: e.first.library,
-          searchQuery: e.first.searchQuery,
-          //selection?
-          showCategoryTabs: e.second.showCategoryTabs,
-          showMangaCount: e.second.showMangaCount,
-          showMangaContinueButton: e.second.showMangaContinueButton,
-          hasActiveFilters: e.third.hasActiveFilters,
-        ));
+    return Rx.combineLatest3(
+      stream1,
+      stream2,
+      stream3,
+      (a, b, c) => LibraryScreenState(
+        library: a.library,
+        searchQuery: a.searchQuery,
+        //selection?
+        showCategoryTabs: b.showCategoryTabs,
+        showMangaCount: b.showMangaCount,
+        showMangaContinueButton: b.showMangaContinueButton,
+        hasActiveFilters: c.hasActiveFilters,
+      ),
+    );
   }
 
   /// Applies library filters to the given map of manga.
@@ -289,7 +292,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   Stream<_ItemPreferences> _getLibraryItemPreferencesStream() {
     final preferences = ref.watch(basePreferencesProvider);
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
-    return StreamZip([
+    return Rx.combineLatestList([
       libraryPreferences.downloadBadge().changes(),
       libraryPreferences.localBadge().changes(),
       libraryPreferences.languageBadge().changes(),
@@ -324,16 +327,13 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     final getCategories = ref.watch(getCategoriesProvider);
     final getLibraryManga = ref.watch(getLibraryMangaProvider);
     final sourceManager = ref.watch(sourceManagerProvider);
-    final libraryMangasStream = StreamZip([
+    final libraryMangasStream = Rx.combineLatest2(
       getLibraryManga.subscribe(),
       _getLibraryItemPreferencesStream(),
       //downloadCache.changes,
-    ]).map((e) {
-      final libraryMangaList = e[0] as List<LibraryManga>;
-      final prefs = e[1] as _ItemPreferences;
-      return libraryMangaList.map((libraryManga) {
+      (libraryMangaList, prefs) => libraryMangaList.map(
         // Display mode based on user preference: take it from global library setting or category
-        return LibraryItem(
+        (libraryManga) => LibraryItem(
           libraryManga: libraryManga,
           downloadCount: prefs.downloadBadge
               ? downloadManager.getDownloadCountForManga(libraryManga.manga)
@@ -344,24 +344,23 @@ class LibraryScreenModel extends _$LibraryScreenModel {
               ? sourceManager.getOrStub(libraryManga.manga.source).lang
               : "",
           sourceManager: sourceManager,
-        );
-      }).groupBy((it) => it.libraryManga.category);
-    });
+        ),
+      ).groupBy((it) => it.libraryManga.category),
+    );
 
-    return StreamZip([
+    return Rx.combineLatest2(
       getCategories.subscribe(),
       libraryMangasStream,
-    ]).map((e) {
-      final categories = e[0] as List<Category>;
-      final libraryManga = e[1] as Map<int, List<LibraryItem>>;
-      final displayCategories =
-          libraryManga.isNotEmpty && !libraryManga.containsKey(0)
-              ? categories.whereNot((it) => it.isSystemCategory)
-              : categories;
+      (categories, libraryManga) {
+        final displayCategories =
+            libraryManga.isNotEmpty && !libraryManga.containsKey(0)
+                ? categories.whereNot((it) => it.isSystemCategory)
+                : categories;
 
-      return displayCategories
-          .associateWith((it) => libraryManga[it.id] ?? const []);
-    });
+        return displayCategories
+            .associateWith((it) => libraryManga[it.id] ?? const []);
+      }
+    );
   }
 
   /// Stream of tracking filter preferences
@@ -374,7 +373,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     if (loggedInTrackers.isNotEmpty) {
       final prefStreams = loggedInTrackers
           .map((it) => libraryPreferences.filterTracking(it.id).changes());
-      return StreamZip(prefStreams).map((it) => Map.fromIterable(
+      return Rx.combineLatestList(prefStreams).map((it) => Map.fromIterable(
             loggedInTrackers
                 .mapIndexed((index, tracker) => (tracker.id, it[index])),
           ));

@@ -47,7 +47,7 @@ class Download extends Equatable {
       }
     }
     final progressStreams = pages!.map((it) => it.progressStream);
-    yield* StreamZip(progressStreams)
+    yield* Rx.combineLatestList(progressStreams)
         .map((it) => it.average().toInt())
         .distinct()
         .debounce(const Duration(milliseconds: 50));

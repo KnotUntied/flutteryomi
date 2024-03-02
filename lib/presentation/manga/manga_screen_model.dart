@@ -11,6 +11,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/core/util/collection_utils.dart';
@@ -64,25 +65,25 @@ class MangaScreenModel extends _$MangaScreenModel {
     final getExcludedScanlators = ref.watch(getExcludedScanlatorsProvider);
     final getAvailableScanlators = ref.watch(getAvailableScanlatorsProvider);
     final sourceManager = ref.watch(sourceManagerProvider);
-    final stream1 = StreamZip([
+    final stream1 = Rx.combineLatest2(
       getMangaWithChapters
           .subscribe(mangaId, applyScanlatorFilter: true)
           .distinct(),
       //TODO
       //downloadCache.changes,
-      downloadManager.queueState,
-    ]).asyncMap((e) async {
-      final mangaAndChapters = e.first as Pair<Manga, List<Chapter>>;
-      final manga = mangaAndChapters.first;
-      return (
-        manga: manga,
-        chapters: mangaAndChapters.second.toChapterListItems(
-          downloadManager,
-          manga,
-          state.valueOrNull?.selectedChapterIds ?? {},
-        ),
-      );
-    });
+      downloadManager.queueState as Stream<List<Download>>,
+      (mangaAndChapters, _) {
+        final manga = mangaAndChapters.first;
+        return (
+          manga: manga,
+          chapters: mangaAndChapters.second.toChapterListItems(
+            downloadManager,
+            manga,
+            state.valueOrNull?.selectedChapterIds ?? {},
+          ),
+        );
+      }
+    );
 
     final stream2 = getExcludedScanlators.subscribe(mangaId).distinct();
     final stream3 = getAvailableScanlators.subscribe(mangaId).distinct();
@@ -97,19 +98,22 @@ class MangaScreenModel extends _$MangaScreenModel {
     // Start observe tracking since it only needs mangaId
     _observeTrackers();
 
-    return StreamZip([stream1, stream2, stream3]).map((e) {
-      final (manga, chapters) = e.first as (Manga, List<ChapterListItem>);
-      final excludedScanlators = e.second as Set<String>;
-      final availableScanlators = e.third as Set<String>;
-      return MangaScreenState(
-        manga: manga,
-        source: sourceManager.getOrStub(manga.source),
-        isFromSource: isFromSource,
-        chapters: chapters,
-        excludedScanlators: excludedScanlators,
-        availableScanlators: availableScanlators,
-      );
-    });
+    return Rx.combineLatest3(
+      stream1,
+      stream2,
+      stream3,
+      (mangaAndChapters, excludedScanlators, availableScanlators) {
+        final (manga: manga, chapters: chapters) = mangaAndChapters;
+        return MangaScreenState(
+          manga: manga,
+          source: sourceManager.getOrStub(manga.source),
+          isFromSource: isFromSource,
+          chapters: chapters,
+          excludedScanlators: excludedScanlators,
+          availableScanlators: availableScanlators,
+        );
+      }
+    );
   }
 
   void _setMangaDefaultChapterFlags(Manga manga) async {

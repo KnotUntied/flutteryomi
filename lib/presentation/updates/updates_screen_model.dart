@@ -23,6 +23,7 @@ import 'package:flutteryomi/domain/updates/model/updates_with_relations.dart';
 import 'package:flutteryomi/presentation/manga/components/chapter_download_indicator.dart';
 import 'package:flutteryomi/presentation/updates/updates.dart';
 import 'package:flutteryomi/presentation/util/lang/date_extensions.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'updates_screen_model.freezed.dart';
 part 'updates_screen_model.g.dart';
@@ -39,21 +40,19 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
       libraryPreferences.lastUpdatedTimestamp().get(),
     );
     final limit = DateTime.now().subtract(const Duration(days: 90));
-    return StreamZip([
+    return Rx.combineLatest2(
       getUpdates.subscribe(limit).distinct(),
       //downloadCache.changes,
       downloadManager.queueState,
-    ]).map((e) {
-      final updates = e[0] as List<UpdatesWithRelations>;
-      return UpdatesScreenState(
+      (updates, _) => UpdatesScreenState(
         items: updates.toUpdateItems(
           downloadManager,
           state.valueOrNull?.selectedChapterIds ?? <int>{},
         ),
         lastUpdated: lastUpdated,
         selectedChapterIds: state.valueOrNull?.selectedChapterIds ?? <int>{},
-      );
-    });
+      ),
+    );
   }
 
   // TODO: Forward messages to toast/snackbar
@@ -121,8 +120,7 @@ class UpdatesScreenModel extends _$UpdatesScreenModel {
     final activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId);
     if (activeDownload == null) return;
     downloadManager.cancelQueuedDownloads([activeDownload]);
-    //TODO: Find intuitive way to define status (supposed to be a stream?)
-    //_updateDownloadState(activeDownload.apply { status = DownloadState.notDownloaded });
+    _updateDownloadState(activeDownload..status = DownloadState.notDownloaded);
   }
 
   /// Mark the selected [updates] list as [read]/unread.

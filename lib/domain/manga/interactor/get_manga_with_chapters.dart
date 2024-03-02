@@ -1,6 +1,6 @@
-import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
@@ -21,19 +21,13 @@ class GetMangaWithChapters {
     int id, {
     bool applyScanlatorFilter = false,
   }) =>
-      StreamZip(
-        [
-          mangaRepository.getMangaByIdAsStream(id),
-          chapterRepository.getChapterByMangaIdAsStream(
-            id,
-            applyScanlatorFilter: applyScanlatorFilter,
-          ),
-        ],
-      ).map(
-        (values) => Pair(
-          values.first as Manga,
-          values.second as List<Chapter>,
+      Rx.combineLatest2(
+        mangaRepository.getMangaByIdAsStream(id),
+        chapterRepository.getChapterByMangaIdAsStream(
+          id,
+          applyScanlatorFilter: applyScanlatorFilter,
         ),
+        (manga, chapters) => Pair(manga, chapters),
       );
 
   Future<Manga> awaitManga(int id) async =>

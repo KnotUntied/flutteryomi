@@ -2,11 +2,12 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutteryomi/core/constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutteryomi/core/constants.dart';
 import 'package:flutteryomi/domain/base/base_preferences.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
@@ -171,27 +172,26 @@ class MoreScreenModel extends _$MoreScreenModel {
     final downloadManager = ref.watch(downloadManagerProvider);
     final downloadedOnly = preferences.downloadedOnly().get();
     final incognitoMode = preferences.incognitoMode().get();
-    return StreamZip([
+    return Rx.combineLatest2(
       downloadManager.isDownloaderRunning,
       downloadManager.queueState,
-    ]).map((e) {
-      final isDownloading = e[0] as bool;
-      final downloadQueueSize = (e[1] as List<Download>).length;
-      final pendingDownloadExists = downloadQueueSize != 0;
-      final DownloadQueueState downloadQueueState;
-      if (!pendingDownloadExists) {
-        downloadQueueState = const Stopped();
-      } else if (!isDownloading) {
-        downloadQueueState = Paused(downloadQueueSize);
-      } else {
-        downloadQueueState = Downloading(downloadQueueSize);
+      (isDownloading, downloadQueue) {
+        final pendingDownloadExists = downloadQueue.isNotEmpty;
+        final DownloadQueueState downloadQueueState;
+        if (!pendingDownloadExists) {
+          downloadQueueState = const Stopped();
+        } else if (!isDownloading) {
+          downloadQueueState = Paused(downloadQueue.length);
+        } else {
+          downloadQueueState = Downloading(downloadQueue.length);
+        }
+        return MoreScreenState(
+          downloadQueueState: downloadQueueState,
+          downloadedOnly: downloadedOnly,
+          incognitoMode: incognitoMode,
+        );
       }
-      return MoreScreenState(
-        downloadQueueState: downloadQueueState,
-        downloadedOnly: downloadedOnly,
-        incognitoMode: incognitoMode,
-      );
-    });
+    );
   }
 }
 

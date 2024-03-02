@@ -162,7 +162,7 @@ class Downloader {
       //    if (activeDownloads.isEmpty) break;
       //    // Suspend until a download enters the ERROR state
       //    final activeDownloadsErroredStream =
-      //        StreamZip(activeDownloads.map((it) => itstatusStream))
+      //        Rx.combineLatestList(activeDownloads.map((it) => it.statusStream))
       //            .map((states) => states.contains(DownloadState.error))
       //            .where((it) => it);
       //    return activeDownloadsErroredStream.first();
