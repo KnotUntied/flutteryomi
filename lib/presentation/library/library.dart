@@ -72,8 +72,6 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
         (currentState?.categories.length ?? 0) > 1;
 
     print(state);
-    print('tab index: ${libraryPreferences.lastUsedCategory().get()}');
-    print('tab count: ${currentState?.library.length}');
 
     return DefaultTabController(
       initialIndex: libraryPreferences.lastUsedCategory().get(),

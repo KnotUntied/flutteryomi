@@ -73,12 +73,12 @@ dependencies:
   sqflite: ^2.3.0
   sqlite3_flutter_libs: ^0.5.0
   stream_transform: ^2.1.0
+  streaming_shared_preferences: ^2.0.0
   timeago: ^3.6.1
   timeago_flutter: ^3.6.0
   url_launcher: ^6.2.1
   xml: ^6.5.0
   xml_annotation: ^2.4.0
-  streaming_shared_preferences: ^2.0.0
 
 
 dev_dependencies:

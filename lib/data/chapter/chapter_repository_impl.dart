@@ -58,7 +58,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
   @override
   Future<void> updateAll(List<ChapterUpdate> chapterUpdates) async =>
       await db.transaction(() async {
-        for (var update in chapterUpdates) {
+        for (final update in chapterUpdates) {
           await (db.update(db.chapters)
                 ..where((c) => c.id.equals(update.id.value)))
               .write(update);
@@ -88,13 +88,16 @@ class ChapterRepositoryImpl implements ChapterRepository {
 
   @override
   Future<List<String>> getScanlatorsByMangaId(int mangaId) async =>
-      await db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).get()
-          as Future<List<String>>;
+      (await db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).get())
+          .map((it) => it ?? '')
+          .toList();
 
   @override
   Stream<List<String>> getScanlatorsByMangaIdAsStream(int mangaId) =>
-      db.chaptersDrift.getScanlatorsByMangaId(mangaId: mangaId).watch()
-          as Stream<List<String>>;
+      db.chaptersDrift
+          .getScanlatorsByMangaId(mangaId: mangaId)
+          .watch()
+          .map((it) => it.map((it2) => it2 ?? '').toList());
 
   @override
   Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId) async =>

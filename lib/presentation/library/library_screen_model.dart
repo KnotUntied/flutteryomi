@@ -6,6 +6,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart' hide DebounceExtensions;
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:flutteryomi/core/preference/tri_state.dart';
 import 'package:flutteryomi/data/track/tracker_manager.dart';
@@ -31,6 +32,7 @@ import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks_per_manga.dart';
 import 'package:flutteryomi/domain/track/model/track.dart';
+import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/library/components/library_toolbar.dart';
 import 'package:flutteryomi/presentation/library/library_item.dart';
 import 'package:flutteryomi/presentation/manga/manga_screen_constants.dart';
@@ -46,43 +48,39 @@ typedef LibraryMap = Map<Category, List<LibraryItem>>;
 
 @riverpod
 class LibraryScreenModel extends _$LibraryScreenModel {
+  Stream<String?> searchQueryStream() async* {
+    yield state.valueOrNull?.searchQuery;
+  }
+
   @override
   Stream<LibraryScreenState> build() {
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final getTracksPerManga = ref.watch(getTracksPerMangaProvider);
     final stream1 = Rx.combineLatestList([
-      //TODO: Fix this
-      //future
-      //    .asStream()
-      //    .map((it) => it.searchQuery)
-      //    .distinct()
-      //    .debounce(const Duration(milliseconds: searchDebounceMillis)),
-      //TODO: Fix this
-      //_getLibraryStream(),
+      searchQueryStream()
+          .distinct()
+          .debounce(const Duration(milliseconds: searchDebounceMillis)),
+      _getLibraryStream(),
       getTracksPerManga.subscribe(),
       _getTrackingFilterStream(),
       //downloadCache.changes,
     ]).asyncMap((e) async {
-      //final searchQuery = e.first as String?;
-      //final library = e.second as LibraryMap;
-      //final tracks = e.third as Map<int, List<Track>>;
-      //final loggedInTrackers = e.fourth as Map<int, TriState>;
-      const String? searchQuery = null;
-      //final library = e.first as LibraryMap;
-      final tracks = e.first as Map<int, List<Track>>;
-      final loggedInTrackers = e.second as Map<int, TriState>;
-      //final newLibrary = library;
-      //final filteredLibrary =
-      //    await applyFilters(newLibrary, tracks, loggedInTrackers);
-      //final sortedLibrary = _applySort(filteredLibrary, tracks);
-      //final queriedLibrary =
-      //    sortedLibrary.mapValues((entry) => searchQuery != null
-      //        // Filter query
-      //        ? entry.value.where((it) => it.matches(searchQuery)).toList()
-      //        // Don't do anything
-      //        : entry.value.toList());
+      final searchQuery = e.first as String?;
+      final library = e.second as LibraryMap;
+      final tracks = e.third as Map<int, List<Track>>;
+      final loggedInTrackers = e.fourth as Map<int, TriState>;
+      final newLibrary = library;
+      final filteredLibrary =
+          await applyFilters(newLibrary, tracks, loggedInTrackers);
+      final sortedLibrary = _applySort(filteredLibrary, tracks);
+      final queriedLibrary =
+          sortedLibrary.mapValues((entry) => searchQuery != null
+              // Filter query
+              ? entry.value.where((it) => it.matches(searchQuery)).toList()
+              // Don't do anything
+              : entry.value.toList());
       return LibraryScreenState(
-        //library: queriedLibrary,
+        library: queriedLibrary,
         searchQuery: searchQuery,
       );
     });
@@ -91,21 +89,11 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       libraryPreferences.categoryTabs().changes(),
       libraryPreferences.categoryNumberOfItems().changes(),
       libraryPreferences.showContinueReadingButton().changes(),
-      //(a, b, c) => LibraryScreenState(
-      //  showCategoryTabs: a,
-      //  showMangaCount: b,
-      //  showMangaContinueButton: c,
-      //),
-      (a, b, c) {
-        print('a: $a');
-        print('b: $b');
-        print('c: $c');
-        return LibraryScreenState(
-          showCategoryTabs: a,
-          showMangaCount: b,
-          showMangaContinueButton: c,
-        );
-      },
+      (a, b, c) => LibraryScreenState(
+        showCategoryTabs: a,
+        showMangaCount: b,
+        showMangaContinueButton: c,
+      ),
     );
 
     final stream3 = Rx.combineLatest2(
@@ -128,7 +116,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       stream1,
       stream2,
       stream3,
-      (a, b,c ) => LibraryScreenState(
+      (a, b, c) => LibraryScreenState(
         library: a.library,
         searchQuery: a.searchQuery,
         //selection?

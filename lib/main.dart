@@ -22,11 +22,12 @@ import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
 //import 'package:flutteryomi/l10n/strings.g.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  final prefs = await Hive.openBox('');
+  final prefs = await StreamingSharedPreferences.instance;
   return runApp(
     ProviderScope(
       overrides: [
