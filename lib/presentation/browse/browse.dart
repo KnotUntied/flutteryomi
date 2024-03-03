@@ -36,9 +36,7 @@ class _BrowseTabState extends State<BrowseTab>
     super.initState();
     _tabController = TabController(vsync: this, length: 3);
     _tabController.addListener(() {
-      setState(() {
-        _selectedIndex = _tabController.index;
-      });
+      setState(() => _selectedIndex = _tabController.index);
     });
   }
 
@@ -187,6 +185,7 @@ class _BrowseTabState extends State<BrowseTab>
         ),
         searchEnabled: tabs[_tabController.index].searchEnabled,
         onChangeSearchQuery: (String? value) {},
+        onClickCloseSearch: null,
       ),
       body: TabBarView(
         controller: _tabController,
@@ -196,7 +195,7 @@ class _BrowseTabState extends State<BrowseTab>
   }
 }
 
-Future<void> _launchMigrationGuideUrl() async {
+void _launchMigrationGuideUrl() async {
   if (!await launchUrl(_migrationGuideUrl)) {
     throw Exception('Could not open $_migrationGuideUrl');
   }

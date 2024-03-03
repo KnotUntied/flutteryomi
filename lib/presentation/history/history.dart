@@ -30,6 +30,7 @@ class HistoryTab extends ConsumerWidget {
         titleContent: Text(lang.history),
         searchQuery: state.valueOrNull?.searchQuery,
         onChangeSearchQuery: screenModel.updateSearchQuery,
+        onClickCloseSearch: () => screenModel.updateSearchQuery(null),
         actions: [
           AppBarAction(
             title: lang.pref_clear_history,

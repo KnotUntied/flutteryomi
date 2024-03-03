@@ -121,6 +121,7 @@ class LibraryRegularToolbar extends StatelessWidget {
       ),
       searchQuery: searchQuery,
       onChangeSearchQuery: onSearchQueryChange,
+      onClickCloseSearch: () => onSearchQueryChange(null),
       actions: [
         AppBarAction(
           iconData: Icons.filter_list,

@@ -12,7 +12,7 @@ class ActionAppBarWithCounter extends StatelessWidget
     this.subtitle,
     required this.actions,
     this.actionModeCounter = 0,
-    required this.onCancelActionMode,
+    this.onCancelActionMode = _defaultOnCancelActionMode,
     this.actionModeActions,
     this.bottom,
   });
@@ -25,6 +25,8 @@ class ActionAppBarWithCounter extends StatelessWidget
   final VoidCallback onCancelActionMode;
   final List<Widget>? actionModeActions;
   final PreferredSizeWidget? bottom;
+
+  static void _defaultOnCancelActionMode() {}
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -54,7 +56,7 @@ class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.actions,
     this.isActionMode = false,
     this.leading,
-    required this.onCancelActionMode,
+    this.onCancelActionMode = _defaultOnCancelActionMode,
     this.actionModeActions,
     this.bottom,
   });
@@ -67,6 +69,8 @@ class ActionAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onCancelActionMode;
   final List<Widget>? actionModeActions;
   final PreferredSizeWidget? bottom;
+
+  static void _defaultOnCancelActionMode() {}
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -103,7 +107,7 @@ class AppBarTitle extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-        // Couldn't see marquee in action in Tachiyomi, use Text for now
+        // Couldn't see marquee in action in Tachiyomi/Mihon, use Text for now
         if (subtitle != null)
           Text(
             subtitle!,
@@ -196,29 +200,39 @@ class AppBarOverflowActions extends StatelessWidget {
   }
 }
 
+/// Set [searchEnabled] to false if you don't want to show search action.
+///
+/// Uses the normal toolbar if [searchQuery] is null.
+///
+/// If [placeholderText] is null, action_search_hint is used.
 class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
   const SearchToolbar({
     super.key,
-    required this.titleContent,
-    this.searchEnabled = true,
     this.searchQuery,
     required this.onChangeSearchQuery,
+    required this.titleContent,
+    this.navigateUp,
+    this.searchEnabled = true,
     this.placeholderText,
-    this.onSearch,
-    this.onClickCloseSearch,
+    this.onSearch = _defaultOnSearch,
+    //this.onClickCloseSearch = () => onChangeSearchQuery(null);
+    required this.onClickCloseSearch,
     required this.actions,
     this.bottom,
   });
 
-  final Widget titleContent;
-  final bool searchEnabled;
   final String? searchQuery;
   final ValueChanged<String?> onChangeSearchQuery;
+  final Widget titleContent;
+  final VoidCallback? navigateUp;
+  final bool searchEnabled;
   final String? placeholderText;
   final ValueChanged<String>? onSearch;
   final VoidCallback? onClickCloseSearch;
   final List<Widget> actions;
   final PreferredSizeWidget? bottom;
+
+  static void _defaultOnSearch(String _) {}
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -227,7 +241,7 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    Widget titleContentWidget;
+    final Widget titleContentWidget;
     if (searchQuery == null) {
       titleContentWidget = titleContent;
     } else {
@@ -248,7 +262,7 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
             ),
       );
     }
-    Widget searchWidget;
+    final Widget searchWidget;
     if (!searchEnabled) {
       searchWidget = const SizedBox.shrink();
     } else if (searchQuery == null) {
