@@ -121,20 +121,24 @@ class _LibraryPagerEmptyScreen extends StatelessWidget {
       msg = lang.information_no_manga_category;
     }
 
-    return ListView(
+    return Padding(
       padding: const EdgeInsets.all(8),
-      children: [
-        if (!searchQuery.isNullOrEmpty)
-          Center(
-            child: GlobalSearchItem(
-              searchQuery: searchQuery!,
-              onClick: onGlobalSearchClicked,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (!searchQuery.isNullOrEmpty)
+              GlobalSearchItem(
+                searchQuery: searchQuery!,
+                onClick: onGlobalSearchClicked,
+              ),
+            Expanded(
+              child: EmptyScreen(message: msg),
             ),
-          ),
-        Expanded(
-          child: EmptyScreen(message: msg),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
