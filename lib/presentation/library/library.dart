@@ -281,7 +281,7 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
                   ? () async {
                       final mangaList =
                           currentState.selection.map((it) => it.manga).toList();
-                      if (mounted) {
+                      if (context.mounted) {
                         showAdaptiveDialog(
                           context: context,
                           builder: (context) => DeleteLibraryMangaDialog(

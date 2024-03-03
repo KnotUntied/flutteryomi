@@ -108,9 +108,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         prefs.filterIntervalCustom,
         trackFilter.values,
       ]).any((it) => it != TriState.disabled),
-    )
-        .distinct()
-        .map((it) => LibraryScreenState(hasActiveFilters: it));
+    ).distinct().map((it) => LibraryScreenState(hasActiveFilters: it));
 
     return Rx.combineLatest3(
       stream1,
@@ -329,21 +327,23 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       getLibraryManga.subscribe(),
       _getLibraryItemPreferencesStream(),
       //downloadCache.changes,
-      (libraryMangaList, prefs) => libraryMangaList.map(
-        // Display mode based on user preference: take it from global library setting or category
-        (libraryManga) => LibraryItem(
-          libraryManga: libraryManga,
-          downloadCount: prefs.downloadBadge
-              ? downloadManager.getDownloadCountForManga(libraryManga.manga)
-              : 0,
-          unreadCount: libraryManga.unreadCount,
-          isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
-          sourceLanguage: prefs.languageBadge
-              ? sourceManager.getOrStub(libraryManga.manga.source).lang
-              : "",
-          sourceManager: sourceManager,
-        ),
-      ).groupBy((it) => it.libraryManga.category),
+      (libraryMangaList, prefs) => libraryMangaList
+          .map(
+            // Display mode based on user preference: take it from global library setting or category
+            (libraryManga) => LibraryItem(
+              libraryManga: libraryManga,
+              downloadCount: prefs.downloadBadge
+                  ? downloadManager.getDownloadCountForManga(libraryManga.manga)
+                  : 0,
+              unreadCount: libraryManga.unreadCount,
+              isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
+              sourceLanguage: prefs.languageBadge
+                  ? sourceManager.getOrStub(libraryManga.manga.source).lang
+                  : "",
+              sourceManager: sourceManager,
+            ),
+          )
+          .groupBy((it) => it.libraryManga.category),
     );
 
     return Rx.combineLatest2(
@@ -357,7 +357,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
 
         return displayCategories
             .associateWith((it) => libraryManga[it.id] ?? const []);
-      }
+      },
     );
   }
 
