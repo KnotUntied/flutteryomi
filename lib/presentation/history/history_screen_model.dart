@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/core/util/collection_utils.dart';
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
 import 'package:flutteryomi/domain/history/interactor/get_history.dart';
 import 'package:flutteryomi/domain/history/interactor/get_next_chapters.dart';
 import 'package:flutteryomi/domain/history/interactor/remove_history.dart';
@@ -23,32 +24,35 @@ class HistoryScreenModel extends _$HistoryScreenModel {
     final query = state.valueOrNull?.searchQuery;
     return getHistory //
         .subscribe(query ?? '')
-        .map<HistoryScreenState>(
-          (item) => HistoryScreenState(
-            searchQuery: query,
-            list: item.toHistoryUiModels(),
-          )
-        );
+        .map((item) => HistoryScreenState(
+              searchQuery: query,
+              list: item.toHistoryUiModels(),
+            ));
+  }
+
+  Future<Chapter?> getNextChapter() async {
+    final getNextChapters = ref.watch(getNextChaptersProvider);
+    final chapters = await getNextChapters.await_(onlyUnread: false);
+    return chapters.firstOrNull;
   }
 
   // TODO: Forward messages to toast/snackbar
-  Future<void> removeFromHistory(HistoryWithRelations history) async {
+  void removeFromHistory(HistoryWithRelations history) async {
     final removeHistory = ref.watch(removeHistoryProvider);
     await AsyncValue.guard(() => removeHistory.await_(history));
   }
 
-  Future<void> removeAllFromHistory(int mangaId) async {
+  void removeAllFromHistory(int mangaId) async {
     final removeHistory = ref.watch(removeHistoryProvider);
     await AsyncValue.guard(() => removeHistory.awaitById(mangaId));
   }
 
-  Future<void> removeAllHistory() async {
+  void removeAllHistory() async {
     final removeHistory = ref.watch(removeHistoryProvider);
     await AsyncValue.guard(() => removeHistory.awaitAll());
   }
 
-  Future<void> updateSearchQuery(String? query) async {
-    state = const AsyncValue.loading();
+  void updateSearchQuery(String? query) async {
     state = await AsyncValue.guard(
       () async => HistoryScreenState(
         searchQuery: query,
@@ -69,8 +73,6 @@ class HistoryScreenState with _$HistoryScreenState {
 extension HistoryWithRelationsToHistoryUiModel on List<HistoryWithRelations> {
   List<HistoryUiModel> toHistoryUiModels() =>
       map((it) => HistoryUiModel.item(it))
-          // bruh
-          .toList()
           .insertSeparators(insertHistorySeparators)
           .whereNotNull()
           .toList();

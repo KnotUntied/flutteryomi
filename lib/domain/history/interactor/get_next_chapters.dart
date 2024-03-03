@@ -21,21 +21,21 @@ class GetNextChapters {
     required this.repository,
   });
 
-  Future<List<Chapter>> await_([bool onlyUnread = true]) async {
+  Future<List<Chapter>> await_({bool onlyUnread = true}) async {
     final history = await repository.getLastHistory();
     return history == null
         ? []
         : await awaitFromChapterId(
             history.mangaId,
             history.chapterId,
-            onlyUnread,
+            onlyUnread: onlyUnread,
           );
   }
 
   Future<List<Chapter>> awaitByMangaId(
-    int mangaId, [
+    int mangaId, {
     bool onlyUnread = true,
-  ]) async {
+  }) async {
     final manga = await getManga.await_(mangaId);
     if (manga == null) return [];
     List<Chapter> chapters = await getChaptersByMangaId.await_(
@@ -51,10 +51,10 @@ class GetNextChapters {
 
   Future<List<Chapter>> awaitFromChapterId(
     int mangaId,
-    int fromChapterId, [
+    int fromChapterId, {
     bool onlyUnread = true,
-  ]) async {
-    final chapters = await awaitByMangaId(mangaId, onlyUnread);
+  }) async {
+    final chapters = await awaitByMangaId(mangaId, onlyUnread: onlyUnread);
     final currChapterIndex = chapters.indexWhere(
       (it) => it.id == fromChapterId,
     );

@@ -2,10 +2,12 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutteryomi/domain/ui/ui_preferences.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/history/interactor/get_next_chapters.dart';
 import 'package:flutteryomi/domain/history/model/history_with_relations.dart';
+import 'package:flutteryomi/domain/ui/ui_preferences.dart';
 import 'package:flutteryomi/presentation/components/app_bar.dart';
 import 'package:flutteryomi/presentation/components/date_text.dart';
 import 'package:flutteryomi/presentation/components/list_group_header.dart';
@@ -25,6 +27,7 @@ class HistoryTab extends ConsumerWidget {
     final lang = AppLocalizations.of(context);
     final screenModel = ref.watch(historyScreenModelProvider.notifier);
     final state = ref.watch(historyScreenModelProvider);
+    final getNextChapters = ref.watch(getNextChaptersProvider);
     return Scaffold(
       appBar: SearchToolbar(
         titleContent: Text(lang.history),
@@ -75,12 +78,15 @@ class HistoryTab extends ConsumerWidget {
                 //  ),
                 //);
               },
-              onClickResume: (history) {
-                //TODO
-                //screenModel.getNextChapterForManga(
-                //  history.mangaId,
-                //  history.chapterId,
-                //);
+              onClickResume: (history) async {
+                final chapters = await getNextChapters.awaitFromChapterId(
+                  history.mangaId,
+                  history.chapterId,
+                  onlyUnread: false,
+                );
+                if (context.mounted) {
+                  _openChapter(context, chapters.firstOrNull);
+                }
               },
               onClickDelete: (item) => showAdaptiveDialog(
                 context: context,
@@ -95,6 +101,20 @@ class HistoryTab extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  void _openChapter(BuildContext context, Chapter? chapter) {
+    final lang = AppLocalizations.of(context);
+    if (chapter != null) {
+      //final intent = ReaderActivity.newIntent(context, chapter.mangaId, chapter.id);
+      //context.startActivity(intent);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(lang.no_next_chapter),
+        ),
+      );
+    }
   }
 }
 

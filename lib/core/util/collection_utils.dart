@@ -1,9 +1,24 @@
 import 'dart:collection';
 
-extension InsertSeparators<T> on List<T> {
+extension IterableInsertSeparators<T> on Iterable<T> {
+  Iterable<R> insertSeparators<R>(R? Function(T?, T?) generator) {
+    if (isEmpty) return [];
+    final List<R> newList = [];
+    for (int i = -1; i <= length - 1; i++) {
+      T? before = elementAtOrNull(i);
+      if (before != null) newList.add(before as R);
+      T? after = elementAtOrNull(i + 1);
+      R? separator = generator(before, after);
+      if (separator != null) newList.add(separator);
+    }
+    return newList;
+  }
+}
+
+extension ListInsertSeparators<T> on List<T> {
   List<R> insertSeparators<R>(R? Function(T?, T?) generator) {
     if (isEmpty) return [];
-    List<R> newList = [];
+    final List<R> newList = [];
     for (int i = -1; i <= length - 1; i++) {
       T? before = elementAtOrNull(i);
       if (before != null) newList.add(before as R);
