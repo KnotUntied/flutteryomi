@@ -106,7 +106,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
         prefs.filterBookmarked,
         prefs.filterCompleted,
         prefs.filterIntervalCustom,
-        trackFilter.values,
+        ...trackFilter.values,
       ]).any((it) => it != TriState.disabled),
     ).distinct().map((it) => LibraryScreenState(hasActiveFilters: it));
 
