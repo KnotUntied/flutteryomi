@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:quiver/strings.dart';
@@ -36,6 +37,22 @@ class LocalCoverManager {
     final targetFileRef = await find(manga.url)
         ?? await File(p.join(directory.path, _defaultCoverName)).create(recursive: true);
     final targetFile = await file.copy(targetFileRef.path);
+
+    DiskUtil.createNoMediaFile(directory);
+
+    manga.thumbnailUrl = targetFile.uri.toString();
+    return targetFile;
+  }
+
+  Future<File?> updateFromArchive(SManga manga, ArchiveFile file) async {
+    final directory = await fileSystem.getMangaDirectory(manga.url);
+    if (directory == null) return null;
+
+    final targetFile = await find(manga.url)
+        ?? await File(p.join(directory.path, _defaultCoverName)).create(recursive: true);
+    final outputStream = OutputFileStream(targetFile.path);
+    file.writeContent(outputStream);
+    outputStream.close();
 
     DiskUtil.createNoMediaFile(directory);
 

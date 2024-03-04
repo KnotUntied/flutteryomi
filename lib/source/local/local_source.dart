@@ -227,7 +227,10 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
         }
       }
     } catch (e) {
-      //logger.e(e, message: "Error setting manga details from local metadata for ${manga.title}");
+      logger.e(
+        "Error setting manga details from local metadata for ${manga.title}",
+        e,
+      );
     }
 
     return manga;
@@ -240,18 +243,17 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     for (final chapter in chapterArchives) {
       switch (Format.valueOf(chapter.path)) {
         case Zip():
-        //ZipFile(chapter.openReadOnlyChannel(context)).use { zip: ZipFile ->
-        //    zip.getEntry(comicInfoFile)?.let { comicInfoFile ->
-        //        zip.getInputStream(comicInfoFile).buffered().use { stream ->
-        //            return _copyComicInfoFile(stream, folder)
-        //        }
-        //    }
-        //}
+          final inputStream = InputFileStream(chapter.path);
+          final archive = ZipDecoder().decodeBuffer(inputStream);
+          final file = archive.findFile(comicInfoFile);
+          if (file != null) return _copyComicInfoFileFromZip(file, folder);
+
+        //TODO
         case Rar():
           return null;
         //JunrarArchive(chapter.openInputStream()).use { rar ->
-        //    rar.fileHeaders.firstOrNull { it.fileName == comicInfoFile }?.let { comicInfoFile ->
-        //        rar.getInputStream(comicInfoFile).buffered().use { stream ->
+        //    rar.fileHeaders.firstOrNull { it.fileName == comicInfoFile }?.let { file ->
+        //        rar.getInputStream(file).buffered().use { stream ->
         //            return _copyComicInfoFile(stream, folder)
         //        }
         //    }
@@ -259,6 +261,17 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
       }
     }
     return null;
+  }
+
+  File? _copyComicInfoFileFromZip(
+    ArchiveFile comicInfoFileRef,
+    Directory folder,
+  ) {
+    final path = p.join(folder.path, comicInfoFile);
+    final outputStream = OutputFileStream(path);
+    comicInfoFileRef.writeContent(outputStream);
+    outputStream.close();
+    return File(path);
   }
 
   File? _copyComicInfoFile(File comicInfoFileRef, Directory folder) =>
@@ -343,6 +356,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     }
   }
 
+  //TODO
   void _updateCover(SChapter chapter, SManga manga) async {
     final format = await getFormat(chapter);
     try {
@@ -358,23 +372,21 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
                     headerBytes: it.openSync().readSync(32),
                   ));
 
-        //if (entry != null) coverManager.update(manga, it.openInputStream());
-        //return entry;
+          if (entry != null) coverManager.update(manga, entry);
         case Zip():
-          final inputStream = InputFileStream('test.zip');
+          final inputStream = InputFileStream(format.file.path);
           final zip = ZipDecoder().decodeBuffer(inputStream);
           final entry = zip.files
               .sortedWith(
                   (f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
               .firstWhereOrNull((it) {
-            OutputStream os = OutputStream();
+            final os = OutputStream();
             it.decompress(os);
             return it.isFile &&
                 ImageUtil.isImage(it.name, headerBytes: os.subset(0, 32));
           });
 
-        //if (entry != null) coverManager.update(manga, zip.getInputStream(it));
-        //return entry;
+          if (entry != null) coverManager.updateFromArchive(manga, entry);
         case Rar():
         //JunrarArchive(format.file.openInputStream()).use { archive ->
         //  final entry = archive.fileHeaders
@@ -420,7 +432,7 @@ extension _PartialSplit on String {
   /// A version of [String.split] that limits splitting to return a [List]
   /// of at most [count] items.
   ///
-  /// [count] must be non-negative.  If [count] is 0, returns an empty
+  /// [count] must be non-negative. If [count] is 0, returns an empty
   /// [List].
   ///
   /// If splitting this [String] would result in more than [count] items,

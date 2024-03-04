@@ -32,7 +32,6 @@ class LibraryTab extends ConsumerStatefulWidget {
 
 class _LibraryTabState extends ConsumerState<LibraryTab>
     with AutomaticKeepAliveClientMixin<LibraryTab> {
-  late TabController _tabController;
 
   @override
   bool get wantKeepAlive => true;
@@ -70,8 +69,6 @@ class _LibraryTabState extends ConsumerState<LibraryTab>
 
     final tabVisible = (currentState?.showCategoryTabs ?? false) &&
         (currentState?.categories.length ?? 0) > 1;
-
-    print(state);
 
     return DefaultTabController(
       initialIndex: libraryPreferences.lastUsedCategory().get(),
