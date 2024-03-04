@@ -11,12 +11,14 @@ import 'package:flutteryomi/data/chapter/chapter_repository_impl.dart';
 import 'package:flutteryomi/data/history/history_repository_impl.dart';
 import 'package:flutteryomi/data/manga/manga_repository_impl.dart';
 import 'package:flutteryomi/data/source/common_source_manager.dart';
+import 'package:flutteryomi/data/source/stub_source_repository_impl.dart';
 import 'package:flutteryomi/data/track/track_repository_impl.dart';
 import 'package:flutteryomi/data/updates/updates_repository_impl.dart';
 import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 import 'package:flutteryomi/domain/history/repository/history_repository.dart';
 import 'package:flutteryomi/domain/manga/repository/manga_repository.dart';
+import 'package:flutteryomi/domain/source/repository/stub_source_repository.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
@@ -39,6 +41,7 @@ Future<void> main() async {
         chapterRepositoryProvider.overrideWith((ref) => ref.watch(chapterRepositoryImplProvider)),
         historyRepositoryProvider.overrideWith((ref) => ref.watch(historyRepositoryImplProvider)),
         mangaRepositoryProvider.overrideWith((ref) => ref.watch(mangaRepositoryImplProvider)),
+        stubSourceRepositoryProvider.overrideWith((ref) => ref.watch(stubSourceRepositoryImplProvider)),
         trackRepositoryProvider.overrideWith((ref) => ref.watch(trackRepositoryImplProvider)),
         updatesRepositoryProvider.overrideWith((ref) => ref.watch(updatesRepositoryImplProvider)),
       ],

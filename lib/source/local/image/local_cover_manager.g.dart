@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'library_screen_model.dart';
+part of 'local_cover_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$libraryScreenModelHash() =>
-    r'e52b5b0e4ec24d0f1b562418facc83a17029a088';
+String _$localCoverManagerHash() => r'9ddb92a4f3c5f504f06ff0d78766aadb532e1844';
 
-/// See also [LibraryScreenModel].
-@ProviderFor(LibraryScreenModel)
-final libraryScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    LibraryScreenModel, LibraryScreenState>.internal(
-  LibraryScreenModel.new,
-  name: r'libraryScreenModelProvider',
+/// See also [localCoverManager].
+@ProviderFor(localCoverManager)
+final localCoverManagerProvider =
+    AutoDisposeProvider<LocalCoverManager>.internal(
+  localCoverManager,
+  name: r'localCoverManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$libraryScreenModelHash,
+      : _$localCoverManagerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$LibraryScreenModel = AutoDisposeStreamNotifier<LibraryScreenState>;
+typedef LocalCoverManagerRef = AutoDisposeProviderRef<LocalCoverManager>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

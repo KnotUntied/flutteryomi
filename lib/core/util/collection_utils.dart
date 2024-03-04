@@ -18,7 +18,7 @@ extension IterableInsertSeparators<T> on Iterable<T> {
 extension ListInsertSeparators<T> on List<T> {
   List<R> insertSeparators<R>(R? Function(T?, T?) generator) {
     if (isEmpty) return [];
-    final List<R> newList = [];
+    final newList = <R>[];
     for (int i = -1; i <= length - 1; i++) {
       T? before = elementAtOrNull(i);
       if (before != null) newList.add(before as R);

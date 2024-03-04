@@ -7,7 +7,6 @@ import 'package:flutteryomi/source/api/source.dart';
 
 part 'source_manager.g.dart';
 
-// TODO
 abstract interface class SourceManager {
   late Stream<List<CatalogueSource>> catalogueSources;
   Source? get(int sourceKey);

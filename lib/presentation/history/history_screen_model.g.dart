@@ -7,7 +7,7 @@ part of 'history_screen_model.dart';
 // **************************************************************************
 
 String _$historyScreenModelHash() =>
-    r'270f2f82e13ef2d9a6cf2afce54ccf2e263ac017';
+    r'af4f605d8b6e44fd063e5605c8179f8affbef906';
 
 /// See also [HistoryScreenModel].
 @ProviderFor(HistoryScreenModel)

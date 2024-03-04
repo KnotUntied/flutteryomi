@@ -4,18 +4,19 @@ import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:quiver/strings.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/core/util/system/image_util.dart';
 import 'package:flutteryomi/core/storage/disk_util.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/source/local/io/local_source_file_system.dart';
 
+part 'local_cover_manager.g.dart';
+
 const _defaultCoverName = "cover.jpg";
 
 class LocalCoverManager {
-  LocalCoverManager({
-    required this.fileSystem,
-  });
+  LocalCoverManager({required this.fileSystem});
 
   final LocalSourceFileSystem fileSystem;
 
@@ -60,3 +61,9 @@ class LocalCoverManager {
     return targetFile;
   }
 }
+
+@riverpod
+LocalCoverManager localCoverManager(LocalCoverManagerRef ref) =>
+    LocalCoverManager(
+      fileSystem: ref.watch(localSourceFileSystemProvider),
+    );
