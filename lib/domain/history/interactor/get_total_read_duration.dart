@@ -8,7 +8,7 @@ class GetTotalReadDuration {
   final HistoryRepository repository;
   GetTotalReadDuration(this.repository);
 
-  Future<int> await_() async => await repository.getTotalReadDuration();
+  Future<int> await_() => repository.getTotalReadDuration();
 }
 
 @riverpod

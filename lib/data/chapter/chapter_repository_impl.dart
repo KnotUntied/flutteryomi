@@ -50,14 +50,13 @@ class ChapterRepositoryImpl implements ChapterRepository {
   }
 
   @override
-  Future<void> update(ChapterUpdate chapterUpdate) async =>
-      await (db.update(db.chapters)
-            ..where((c) => c.id.equals(chapterUpdate.id.value)))
-          .write(chapterUpdate);
+  Future<void> update(ChapterUpdate chapterUpdate) => (db.update(db.chapters)
+        ..where((c) => c.id.equals(chapterUpdate.id.value)))
+      .write(chapterUpdate);
 
   @override
-  Future<void> updateAll(List<ChapterUpdate> chapterUpdates) async =>
-      await db.transaction(() async {
+  Future<void> updateAll(List<ChapterUpdate> chapterUpdates) =>
+      db.transaction(() async {
         for (final update in chapterUpdates) {
           await (db.update(db.chapters)
                 ..where((c) => c.id.equals(update.id.value)))
@@ -78,8 +77,8 @@ class ChapterRepositoryImpl implements ChapterRepository {
   Future<List<Chapter>> getChapterByMangaId(
     int mangaId, {
     bool applyScanlatorFilter = false,
-  }) async =>
-      await db.chaptersDrift
+  }) =>
+      db.chaptersDrift
           .getChaptersByMangaId(
             mangaId: mangaId,
             applyScanlatorFilter: applyScanlatorFilter,
@@ -100,14 +99,14 @@ class ChapterRepositoryImpl implements ChapterRepository {
           .map((it) => it.map((it2) => it2 ?? '').toList());
 
   @override
-  Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId) async =>
-      await db.chaptersDrift
+  Future<List<Chapter>> getBookmarkedChaptersByMangaId(int mangaId) =>
+      db.chaptersDrift
           .getBookmarkedChaptersByMangaId(mangaId: mangaId)
           .get();
 
   @override
-  Future<Chapter?> getChapterById(int id) async =>
-      await db.chaptersDrift.getChapterById(id: id).getSingleOrNull();
+  Future<Chapter?> getChapterById(int id) =>
+      db.chaptersDrift.getChapterById(id: id).getSingleOrNull();
 
   @override
   Stream<List<Chapter>> getChapterByMangaIdAsStream(
@@ -122,8 +121,8 @@ class ChapterRepositoryImpl implements ChapterRepository {
           .watch();
 
   @override
-  Future<Chapter?> getChapterByUrlAndMangaId(String url, int mangaId) async =>
-      await db.chaptersDrift
+  Future<Chapter?> getChapterByUrlAndMangaId(String url, int mangaId) =>
+      db.chaptersDrift
           .getChapterByUrlAndMangaId(chapterUrl: url, mangaId: mangaId)
           .getSingleOrNull();
 }

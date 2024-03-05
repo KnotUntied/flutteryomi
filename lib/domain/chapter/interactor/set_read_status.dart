@@ -72,8 +72,8 @@ class SetReadStatus {
         chapters: await chapterRepository.getChapterByMangaId(mangaId),
       );
 
-  Future<void> awaitByManga(Manga manga, bool read) async =>
-      await awaitByMangaId(manga.id, read);
+  Future<void> awaitByManga(Manga manga, bool read) =>
+      awaitByMangaId(manga.id, read);
 }
 
 @riverpod

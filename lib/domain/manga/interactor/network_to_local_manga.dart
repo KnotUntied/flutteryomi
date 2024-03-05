@@ -21,11 +21,10 @@ class NetworkToLocalManga {
     }
   }
 
-  Future<Manga?> _getManga(String url, int sourceId) async =>
-      await repository.getMangaByUrlAndSourceId(url, sourceId);
+  Future<Manga?> _getManga(String url, int sourceId) =>
+      repository.getMangaByUrlAndSourceId(url, sourceId);
 
-  Future<int?> _insertManga(Manga manga) async =>
-      await repository.insert(manga);
+  Future<int?> _insertManga(Manga manga) => repository.insert(manga);
 }
 
 @riverpod

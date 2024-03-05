@@ -9,8 +9,8 @@ class GetLibraryManga {
   final MangaRepository repository;
   GetLibraryManga(this.repository);
 
-  Future<List<LibraryManga>> await_() async =>
-      await repository.getLibraryManga();
+  Future<List<LibraryManga>> await_() =>
+      repository.getLibraryManga();
 
   Stream<List<LibraryManga>> subscribe() =>
       repository.getLibraryMangaAsStream();

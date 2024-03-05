@@ -11,8 +11,8 @@ class SetMangaChapterFlags {
   final MangaRepository repository;
   SetMangaChapterFlags(this.repository);
 
-  Future<bool> awaitSetDownloadedFilter(Manga manga, int flag) async =>
-      await repository.update(
+  Future<bool> awaitSetDownloadedFilter(Manga manga, int flag) =>
+      repository.update(
         MangaUpdate(
           id: Value(manga.id),
           chapterFlags: Value(
@@ -21,8 +21,7 @@ class SetMangaChapterFlags {
         ),
       );
 
-  Future<bool> awaitSetUnreadFilter(Manga manga, int flag) async =>
-      await repository.update(
+  Future<bool> awaitSetUnreadFilter(Manga manga, int flag) => repository.update(
         MangaUpdate(
           id: Value(manga.id),
           chapterFlags: Value(
@@ -31,23 +30,23 @@ class SetMangaChapterFlags {
         ),
       );
 
-  Future<bool> awaitSetBookmarkFilter(Manga manga, int flag) async =>
-      await repository.update(MangaUpdate(
+  Future<bool> awaitSetBookmarkFilter(Manga manga, int flag) =>
+      repository.update(MangaUpdate(
         id: Value(manga.id),
         chapterFlags: Value(
           manga.chapterFlags.setFlag(flag, MangaUtils.chapterBookmarkedMask),
         ),
       ));
 
-  Future<bool> awaitSetDisplayMode(Manga manga, int flag) async =>
-      await repository.update(MangaUpdate(
+  Future<bool> awaitSetDisplayMode(Manga manga, int flag) =>
+      repository.update(MangaUpdate(
         id: Value(manga.id),
         chapterFlags: Value(
           manga.chapterFlags.setFlag(flag, MangaUtils.chapterDisplayMask),
         ),
       ));
 
-  Future<bool> awaitSetSortingModeOrFlipOrder(Manga manga, int flag) async {
+  Future<bool> awaitSetSortingModeOrFlipOrder(Manga manga, int flag) {
     int newFlags = manga.chapterFlags;
     if (manga.sorting == flag) {
       int orderFlag = manga.sortDescending()
@@ -59,7 +58,7 @@ class SetMangaChapterFlags {
           .setFlag(flag, MangaUtils.chapterSortingMask)
           .setFlag(MangaUtils.chapterSortAsc, MangaUtils.chapterSortDirMask);
     }
-    return await repository.update(
+    return repository.update(
       MangaUpdate(id: Value(manga.id), chapterFlags: Value(newFlags)),
     );
   }
@@ -72,8 +71,8 @@ class SetMangaChapterFlags {
     required int sortingMode,
     required int sortingDirection,
     required int displayMode,
-  }) async =>
-      await repository.update(
+  }) =>
+      repository.update(
         MangaUpdate(
           id: Value(mangaId),
           chapterFlags: Value(

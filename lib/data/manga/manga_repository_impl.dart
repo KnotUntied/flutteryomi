@@ -19,16 +19,16 @@ class MangaRepositoryImpl implements MangaRepository {
   final Logger logger;
 
   @override
-  Future<Manga> getMangaById(int id) async =>
-      await db.mangasDrift.getMangaById(id: id).getSingle();
+  Future<Manga> getMangaById(int id) =>
+      db.mangasDrift.getMangaById(id: id).getSingle();
 
   @override
   Stream<Manga> getMangaByIdAsStream(int id) =>
       db.mangasDrift.getMangaById(id: id).watchSingle();
 
   @override
-  Future<Manga?> getMangaByUrlAndSourceId(String url, int sourceId) async =>
-      await db.mangasDrift
+  Future<Manga?> getMangaByUrlAndSourceId(String url, int sourceId) =>
+      db.mangasDrift
           .getMangaByUrlAndSource(url: url, source: sourceId)
           .getSingle();
 
@@ -39,15 +39,13 @@ class MangaRepositoryImpl implements MangaRepository {
           .watchSingle();
 
   @override
-  Future<List<Manga>> getFavorites() async =>
-      await db.mangasDrift.getFavorites().get();
+  Future<List<Manga>> getFavorites() => db.mangasDrift.getFavorites().get();
 
   @override
-  Future<List<LibraryManga>> getLibraryManga() async =>
-      await db.libraryViewDrift
-          .library()
-          .map((row) => MangaMapper.mapLibraryManga(row))
-          .get();
+  Future<List<LibraryManga>> getLibraryManga() => db.libraryViewDrift
+      .library()
+      .map((row) => MangaMapper.mapLibraryManga(row))
+      .get();
 
   @override
   Stream<List<LibraryManga>> getLibraryMangaAsStream() => db.libraryViewDrift
@@ -60,8 +58,8 @@ class MangaRepositoryImpl implements MangaRepository {
       db.mangasDrift.getFavoriteBySourceId(sourceId: sourceId).watch();
 
   @override
-  Future<List<Manga>> getDuplicateLibraryManga(int id, String title) async =>
-      await db.mangasDrift.getDuplicateLibraryManga(id: id, title: title).get();
+  Future<List<Manga>> getDuplicateLibraryManga(int id, String title) =>
+      db.mangasDrift.getDuplicateLibraryManga(id: id, title: title).get();
 
   @override
   Future<bool> resetViewerFlags() async {
@@ -75,23 +73,22 @@ class MangaRepositoryImpl implements MangaRepository {
   }
 
   @override
-  Future<void> setMangaCategories(int mangaId, List<int> categoryIds) async {
-    await db.transaction(() async {
-      await db.mangasCategoriesDrift.deleteMangaCategoryByMangaId(
-        mangaId: mangaId,
-      );
-      for (final categoryId in categoryIds) {
-        await db //
-            .into(db.mangasCategories)
-            .insert(
-              MangasCategoriesCompanion.insert(
-                mangaId: mangaId,
-                categoryId: categoryId,
-              ),
-            );
-      }
-    });
-  }
+  Future<void> setMangaCategories(int mangaId, List<int> categoryIds) =>
+      db.transaction(() async {
+        await db.mangasCategoriesDrift.deleteMangaCategoryByMangaId(
+          mangaId: mangaId,
+        );
+        for (final categoryId in categoryIds) {
+          await db //
+              .into(db.mangasCategories)
+              .insert(
+                MangasCategoriesCompanion.insert(
+                  mangaId: mangaId,
+                  categoryId: categoryId,
+                ),
+              );
+        }
+      });
 
   @override
   Future<int?> insert(Manga manga) async {

@@ -9,7 +9,7 @@ class GetDuplicateLibraryManga {
   final MangaRepository repository;
   GetDuplicateLibraryManga(this.repository);
 
-  Future<List<Manga>> await_(Manga manga) async => await repository
+  Future<List<Manga>> await_(Manga manga) => repository
       .getDuplicateLibraryManga(manga.id, manga.title.toLowerCase());
 }
 

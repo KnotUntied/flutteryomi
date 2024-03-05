@@ -9,7 +9,7 @@ class GetFavorites {
   final MangaRepository repository;
   GetFavorites(this.repository);
 
-  Future<List<Manga>> await_() async => await repository.getFavorites();
+  Future<List<Manga>> await_() => repository.getFavorites();
 
   Stream<List<Manga>> subscribe(int sourceId) =>
       repository.getFavoritesBySourceId(sourceId);

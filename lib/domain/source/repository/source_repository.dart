@@ -21,7 +21,7 @@ abstract interface class SourceRepository {
   //SourcePagingSourceType getLatest(int sourceId);
 }
 
-//// Override this in the main method
+// Override this in the main method
 @riverpod
 SourceRepository sourceRepository(SourceRepositoryRef ref) =>
     throw UnimplementedError();

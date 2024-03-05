@@ -8,7 +8,7 @@ class ResetViewerFlags {
   final MangaRepository repository;
   ResetViewerFlags(this.repository);
 
-  Future<bool> await_() async => await repository.resetViewerFlags();
+  Future<bool> await_() => repository.resetViewerFlags();
 }
 
 @riverpod

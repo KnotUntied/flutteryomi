@@ -51,4 +51,3 @@ abstract class PreferenceStore {
 PreferenceStore preferenceStore(PreferenceStoreRef ref) {
   throw UnimplementedError();
 }
-

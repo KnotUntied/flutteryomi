@@ -40,8 +40,8 @@ class SetSortModeForCategory {
     Category? category,
     Type type,
     Direction direction,
-  ) async =>
-      await await_(category?.id, type, direction);
+  ) =>
+      await_(category?.id, type, direction);
 }
 
 @riverpod

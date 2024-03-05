@@ -18,17 +18,16 @@ class SetMangaDefaultChapterFlags {
     this.setMangaChapterFlags,
   );
 
-  Future<void> await_(Manga manga) async {
-    await setMangaChapterFlags.awaitSetAllFlags(
-      mangaId: manga.id,
-      unreadFilter: preferences.filterChapterByRead().get(),
-      downloadedFilter: preferences.filterChapterByDownloaded().get(),
-      bookmarkedFilter: preferences.filterChapterByBookmarked().get(),
-      sortingMode: preferences.sortChapterBySourceOrNumber().get(),
-      sortingDirection: preferences.sortChapterByAscendingOrDescending().get(),
-      displayMode: preferences.displayChapterByNameOrNumber().get(),
-    );
-  }
+  Future<void> await_(Manga manga) => setMangaChapterFlags.awaitSetAllFlags(
+        mangaId: manga.id,
+        unreadFilter: preferences.filterChapterByRead().get(),
+        downloadedFilter: preferences.filterChapterByDownloaded().get(),
+        bookmarkedFilter: preferences.filterChapterByBookmarked().get(),
+        sortingMode: preferences.sortChapterBySourceOrNumber().get(),
+        sortingDirection:
+            preferences.sortChapterByAscendingOrDescending().get(),
+        displayMode: preferences.displayChapterByNameOrNumber().get(),
+      );
 
   Future<void> awaitAll() async {
     final favorites = await getFavorites.await_();

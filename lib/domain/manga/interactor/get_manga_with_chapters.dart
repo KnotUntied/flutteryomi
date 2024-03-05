@@ -30,14 +30,14 @@ class GetMangaWithChapters {
         (manga, chapters) => Pair(manga, chapters),
       );
 
-  Future<Manga> awaitManga(int id) async =>
-      await mangaRepository.getMangaById(id);
+  Future<Manga> awaitManga(int id) =>
+      mangaRepository.getMangaById(id);
 
   Future<List<Chapter>> awaitChapters(
     int id, {
     bool applyScanlatorFilter = false,
-  }) async =>
-      await chapterRepository.getChapterByMangaId(
+  }) =>
+      chapterRepository.getChapterByMangaId(
         id,
         applyScanlatorFilter: applyScanlatorFilter,
       );

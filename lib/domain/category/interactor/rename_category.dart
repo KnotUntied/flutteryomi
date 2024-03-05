@@ -31,8 +31,8 @@ class RenameCategory {
     }
   }
 
-  Future<void> awaitWithCategory(Category category, String name) async =>
-      await await_(category.id, name);
+  Future<void> awaitWithCategory(Category category, String name) =>
+      await_(category.id, name);
 }
 
 @riverpod

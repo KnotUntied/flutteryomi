@@ -15,9 +15,9 @@ class ResetCategoryFlags {
   });
 
 
-  Future<void> await_(String name) async {
+  Future<void> await_(String name) {
     final sort = preferences.sortingMode().get();
-    return await repository.updateAllFlags(sort.type + sort.direction);
+    return repository.updateAllFlags(sort.type + sort.direction);
   }
 }
 

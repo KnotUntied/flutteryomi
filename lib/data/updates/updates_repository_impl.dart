@@ -13,8 +13,8 @@ class UpdatesRepositoryImpl implements UpdatesRepository {
   final Database db;
 
   @override
-  Future<List<UpdatesWithRelations>> awaitWithRead(bool read, DateTime after, int limit) async =>
-      await db.updatesViewDrift
+  Future<List<UpdatesWithRelations>> awaitWithRead(bool read, DateTime after, int limit) =>
+      db.updatesViewDrift
           .getUpdatesByReadStatus(read: read, after: after, limit: limit)
           .map((row) => _mapUpdatesWithRelations(row))
           .get();

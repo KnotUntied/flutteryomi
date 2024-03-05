@@ -58,8 +58,8 @@ class StringPrimitive extends CommonPreference<String> {
       preferences.getString(key, defaultValue: defaultValue).getValue();
 
   @override
-  Future<void> write(String key, String value) async =>
-      await preferences.setString(key, value);
+  Future<void> write(String key, String value) =>
+      preferences.setString(key, value);
 
   @override
   Stream<String> _watch() =>
@@ -78,8 +78,8 @@ class IntPrimitive extends CommonPreference<int> {
       preferences.getInt(key, defaultValue: defaultValue).getValue();
 
   @override
-  Future<void> write(String key, int value) async =>
-      await preferences.setInt(key, value);
+  Future<void> write(String key, int value) =>
+      preferences.setInt(key, value);
 
   @override
   Stream<int> _watch() => preferences.getInt(key_, defaultValue: defaultValue_);
@@ -97,8 +97,8 @@ class DoublePrimitive extends CommonPreference<double> {
       preferences.getDouble(key, defaultValue: defaultValue).getValue();
 
   @override
-  Future<void> write(String key, double value) async =>
-      await preferences.setDouble(key, value);
+  Future<void> write(String key, double value) =>
+      preferences.setDouble(key, value);
 
   @override
   Stream<double> _watch() =>
@@ -117,8 +117,8 @@ class BoolPrimitive extends CommonPreference<bool> {
       preferences.getBool(key, defaultValue: defaultValue).getValue();
 
   @override
-  Future<void> write(String key, bool value) async =>
-      await preferences.setBool(key, value);
+  Future<void> write(String key, bool value) =>
+      preferences.setBool(key, value);
 
   @override
   Stream<bool> _watch() =>
@@ -140,8 +140,8 @@ class StringSetPrimitive extends CommonPreference<Set<String>> {
           .toSet();
 
   @override
-  Future<void> write(String key, Set<String> value) async =>
-      await preferences.setStringList(key, value.toList());
+  Future<void> write(String key, Set<String> value) =>
+      preferences.setStringList(key, value.toList());
 
   @override
   Stream<Set<String>> _watch() => preferences
@@ -172,8 +172,8 @@ class ObjectPrimitive<T> extends CommonPreference<T> {
   }
 
   @override
-  Future<void> write(String key, T value) async =>
-      await preferences.setString(key, serializer(value));
+  Future<void> write(String key, T value) =>
+      preferences.setString(key, serializer(value));
 
   @override
   Stream<T> _watch() => preferences

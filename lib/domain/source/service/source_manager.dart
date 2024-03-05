@@ -10,6 +10,7 @@ part 'source_manager.g.dart';
 abstract interface class SourceManager {
   late Stream<List<CatalogueSource>> catalogueSources;
   Source? get(int sourceKey);
+  // Dart has no runBlocking >:(
   Source getOrStub(int sourceKey);
   List<HttpSource> getOnlineSources();
   List<CatalogueSource> getCatalogueSources();

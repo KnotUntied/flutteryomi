@@ -288,32 +288,35 @@ class LibraryScreenModel extends _$LibraryScreenModel {
   Stream<_ItemPreferences> _getLibraryItemPreferencesStream() {
     final preferences = ref.watch(basePreferencesProvider);
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
-    return Rx.combineLatestList([
-      libraryPreferences.downloadBadge().changes(),
-      libraryPreferences.localBadge().changes(),
-      libraryPreferences.languageBadge().changes(),
-      libraryPreferences.autoUpdateMangaRestrictions().changes(),
-      preferences.downloadedOnly().changes(),
-      libraryPreferences.filterDownloaded().changes(),
-      libraryPreferences.filterUnread().changes(),
-      libraryPreferences.filterStarted().changes(),
-      libraryPreferences.filterBookmarked().changes(),
-      libraryPreferences.filterCompleted().changes(),
-      libraryPreferences.filterIntervalCustom().changes(),
-    ]).map((it) => _ItemPreferences(
-          downloadBadge: it[0] as bool,
-          localBadge: it[1] as bool,
-          languageBadge: it[2] as bool,
-          skipOutsideReleasePeriod: (it[3] as Set<String>)
-              .contains(LibraryPreferences.mangaOutsideReleasePeriod),
-          globalFilterDownloaded: it[4] as bool,
-          filterDownloaded: it[5] as TriState,
-          filterUnread: it[6] as TriState,
-          filterStarted: it[7] as TriState,
-          filterBookmarked: it[8] as TriState,
-          filterCompleted: it[9] as TriState,
-          filterIntervalCustom: it[10] as TriState,
-        ));
+    return Rx.combineLatest(
+      [
+        libraryPreferences.downloadBadge().changes(),
+        libraryPreferences.localBadge().changes(),
+        libraryPreferences.languageBadge().changes(),
+        libraryPreferences.autoUpdateMangaRestrictions().changes(),
+        preferences.downloadedOnly().changes(),
+        libraryPreferences.filterDownloaded().changes(),
+        libraryPreferences.filterUnread().changes(),
+        libraryPreferences.filterStarted().changes(),
+        libraryPreferences.filterBookmarked().changes(),
+        libraryPreferences.filterCompleted().changes(),
+        libraryPreferences.filterIntervalCustom().changes(),
+      ],
+      (it) => _ItemPreferences(
+        downloadBadge: it[0] as bool,
+        localBadge: it[1] as bool,
+        languageBadge: it[2] as bool,
+        skipOutsideReleasePeriod: (it[3] as Set<String>)
+            .contains(LibraryPreferences.mangaOutsideReleasePeriod),
+        globalFilterDownloaded: it[4] as bool,
+        filterDownloaded: it[5] as TriState,
+        filterUnread: it[6] as TriState,
+        filterStarted: it[7] as TriState,
+        filterBookmarked: it[8] as TriState,
+        filterCompleted: it[9] as TriState,
+        filterIntervalCustom: it[10] as TriState,
+      ),
+    );
   }
 
   /// Get the categories and all its manga from the database.

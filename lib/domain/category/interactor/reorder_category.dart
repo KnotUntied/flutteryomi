@@ -18,11 +18,9 @@ class ReorderCategory {
     required this.logger,
   });
 
-  Future<void> moveUp(Category category) async =>
-      await await_(category, MoveTo.up);
+  Future<void> moveUp(Category category) => await_(category, MoveTo.up);
 
-  Future<void> moveDown(Category category) async =>
-      await await_(category, MoveTo.down);
+  Future<void> moveDown(Category category) => await_(category, MoveTo.down);
 
   Future<void> await_(Category category, MoveTo moveTo) async {
     final categories = await repository.getAll();
@@ -36,8 +34,8 @@ class ReorderCategory {
     }
 
     final newPosition = switch (moveTo) {
-        MoveTo.up => currentIndex - 1,
-        MoveTo.down => currentIndex + 1,
+      MoveTo.up => currentIndex - 1,
+      MoveTo.down => currentIndex + 1,
     };
 
     try {

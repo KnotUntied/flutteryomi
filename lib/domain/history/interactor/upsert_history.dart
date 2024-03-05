@@ -9,9 +9,8 @@ class UpsertHistory {
   final HistoryRepository repository;
   UpsertHistory(this.repository);
 
-  Future<void> await_(History historyUpdate) async {
-    await repository.upsertHistory(historyUpdate);
-  }
+  Future<void> await_(History historyUpdate) =>
+      repository.upsertHistory(historyUpdate);
 }
 
 @riverpod

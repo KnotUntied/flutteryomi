@@ -9,16 +9,14 @@ class RemoveHistory {
   final HistoryRepository repository;
   RemoveHistory(this.repository);
 
-  Future<bool> awaitAll() async =>
-      await repository.deleteAllHistory();
+  Future<bool> awaitAll() =>
+      repository.deleteAllHistory();
 
-  Future<void> await_(HistoryWithRelations history) async {
-    await repository.resetHistory(history.id);
-  }
+  Future<void> await_(HistoryWithRelations history) =>
+      repository.resetHistory(history.id);
 
-  Future<void> awaitById(int mangaId) async {
-    await repository.resetHistoryByMangaId(mangaId);
-  }
+  Future<void> awaitById(int mangaId) =>
+      repository.resetHistoryByMangaId(mangaId);
 }
 
 @riverpod

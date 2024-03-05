@@ -36,7 +36,7 @@ Future<void> main() async {
         // Might be better to ditch the abstract repositories in the future
         sharedPreferencesProvider.overrideWithValue(prefs),
         preferenceStoreProvider.overrideWith((ref) => ref.watch(commonPreferenceStoreProvider)),
-        sourceManagerProvider.overrideWith((ref) => ref.watch(commonSourceManagerProvider)),
+        sourceManagerProvider.overrideWith((ref) => ref.watch(commonSourceManagerProvider.notifier)),
         categoryRepositoryProvider.overrideWith((ref) => ref.watch(categoryRepositoryImplProvider)),
         chapterRepositoryProvider.overrideWith((ref) => ref.watch(chapterRepositoryImplProvider)),
         historyRepositoryProvider.overrideWith((ref) => ref.watch(historyRepositoryImplProvider)),

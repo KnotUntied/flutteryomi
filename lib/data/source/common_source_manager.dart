@@ -1,70 +1,111 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
+import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/source/model/stub_source.dart';
+import 'package:flutteryomi/domain/source/repository/stub_source_repository.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/catalogue_source.dart';
 import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'common_source_manager.g.dart';
 
 //TODO
-class CommonSourceManager implements SourceManager {
+@riverpod
+class CommonSourceManager extends _$CommonSourceManager
+    implements SourceManager {
   @override
-  Source? get(int sourceKey) {
-    // TODO: implement get
-    return null;
+  void build() {
+    // TODO: implement build
+    //final extensionManager = ref.watch(extensionManagerProvider);
+    final sourceRepository = ref.watch(stubSourceRepositoryProvider);
+
+    //extensionManager
+    //    .installedExtensionsStream
+    //    .map((extensions) {
+    //      final mutableMap = <int, Source>{
+    //        LocalSource.id: LocalSource(
+    //          context,
+    //          Injekt.get(),
+    //          Injekt.get(),
+    //        ),
+    //      };
+    //      for (final extension in extensions) {
+    //        for (final source in extension.sources) {
+    //          mutableMap[source.id] = source;
+    //          _registerStubSource(StubSource.from(source));
+    //        }
+    //      }
+    //      _sourcesMapStream.add(mutableMap);
+    //    });
+
+    sourceRepository.subscribeAll().map((sources) {
+      for (final source in sources) {
+        _stubSourcesMap[source.id] = source;
+      }
+    });
   }
 
+  final _sourcesMapStream = BehaviorSubject<Map<int, Source>>();
+
+  final _stubSourcesMap = <int, StubSource>{};
+
+  // Not sure if this will be detrimental in the future
+  // ignore: avoid_public_notifier_properties
   @override
-  Source getOrStub(int sourceKey) {
-    // TODO: implement getOrStub
-    throw UnimplementedError();
-  }
+  late Stream<List<CatalogueSource>> catalogueSources = _sourcesMapStream
+      .map((it) => it.values.whereType<CatalogueSource>().toList());
 
   @override
-  List<HttpSource> getOnlineSources() {
-    // TODO: implement getOnlineSources
-    throw UnimplementedError();
-  }
+  Source? get(int sourceKey) => _sourcesMapStream.value[sourceKey];
+
+  // Dart has no runBlocking >:(
+  @override
+  Source getOrStub(int sourceKey) => _sourcesMapStream.value[sourceKey]
+      ?? _stubSourcesMap.putIfAbsent(
+        sourceKey,
+        () => _createStubSource(sourceKey),
+      );
 
   @override
-  //TODO
-  late Stream<List<CatalogueSource>> catalogueSources;
+  List<HttpSource> getOnlineSources() =>
+      _sourcesMapStream.value.values.whereType<HttpSource>().toList();
 
   @override
-  List<CatalogueSource> getCatalogueSources() {
-    // TODO: implement getCatalogueSources
-    throw UnimplementedError();
-  }
+  List<CatalogueSource> getCatalogueSources() =>
+      _sourcesMapStream.value.values.whereType<CatalogueSource>().toList();
 
   @override
   List<StubSource> getStubSources() {
-    // TODO: implement getStubSources
-    return const [];
+    final onlineSourceIds = getOnlineSources().map((it) => it.id);
+    return _stubSourcesMap.values
+        .whereNot((it) => onlineSourceIds.contains(it.id))
+        .toList();
   }
 
-  void _registerStubSource(StubSource source) {
-    //final dbSource = sourceRepository.getStubSource(source.id);
-    //if (dbSource == source) return;
-    //sourceRepository.upsertStubSource(source.id, source.lang, source.name);
-    //if (dbSource != null) {
-    //  downloadManager.renameSource(dbSource, source);
-    //}
+  void _registerStubSource(StubSource source) async {
+    final downloadManager = ref.watch(downloadManagerProvider);
+    final sourceRepository = ref.watch(stubSourceRepositoryProvider);
+    final dbSource = await sourceRepository.getStubSource(source.id);
+    if (dbSource == source) return;
+    await sourceRepository.upsertStubSource(source.id, source.lang, source.name);
+    if (dbSource != null) downloadManager.renameSource(dbSource, source);
   }
 
   Future<StubSource> _createStubSource(int id) async {
-    //sourceRepository.getStubSource(id)?.let {
-    //    return it
-    //}
-    //extensionManager.getSourceData(id)?.let {
-    //    registerStubSource(it)
-    //    return it
+    //TODO
+    //final extensionManager = ref.watch(extensionManagerProvider);
+    final sourceRepository = ref.watch(stubSourceRepositoryProvider);
+    final stubSource = await sourceRepository.getStubSource(id);
+    if (stubSource != null) return stubSource;
+    //final sourceData = await extensionManager.getSourceData(id);
+    //if (sourceData != null) {
+    //  _registerStubSource(sourceData);
+    //  return sourceData;
     //}
     return StubSource(id: id, lang: "", name: "");
   }
 }
-
-@riverpod
-SourceManager commonSourceManager(CommonSourceManagerRef ref) =>
-    CommonSourceManager();

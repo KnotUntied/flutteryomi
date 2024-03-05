@@ -13,7 +13,7 @@ class StubSourceRepositoryImpl implements StubSourceRepository {
   final Database db;
 
   @override
-  Future<StubSource?> getStubSource(int id) async => await db.sourcesDrift
+  Future<StubSource?> getStubSource(int id) => db.sourcesDrift
       .findOne(id: id)
       .map((it) => _mapStubSource(it.id, it.lang, it.name))
       .getSingleOrNull();
@@ -25,12 +25,11 @@ class StubSourceRepositoryImpl implements StubSourceRepository {
       .watch();
 
   @override
-  Future<void> upsertStubSource(int id, String lang, String name) async =>
-      await db //
-          .into(db.sources)
-          .insert(
-            SourcesCompanion.insert(id: Value(id), lang: lang, name: name),
-          );
+  Future<void> upsertStubSource(int id, String lang, String name) => db
+      .into(db.sources)
+      .insert(
+        SourcesCompanion.insert(id: Value(id), lang: lang, name: name),
+      );
 
   StubSource _mapStubSource(int id, String lang, String name) =>
       StubSource(id: id, lang: lang, name: name);

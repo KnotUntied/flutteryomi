@@ -23,19 +23,19 @@ class HistoryRepositoryImpl implements HistoryRepository {
           .watch();
 
   @override
-  Future<HistoryWithRelations?> getLastHistory() async =>
-      await db.historyViewDrift
+  Future<HistoryWithRelations?> getLastHistory() =>
+      db.historyViewDrift
           .getLatestHistory()
           .map((row) => HistoryMapper.mapHistoryWithRelations(row))
           .getSingleOrNull();
 
   @override
-  Future<int> getTotalReadDuration() async =>
-      await db.historyDrift.getReadDuration().getSingle();
+  Future<int> getTotalReadDuration() =>
+      db.historyDrift.getReadDuration().getSingle();
 
   @override
-  Future<List<History>> getHistoryByMangaId(int mangaId) async =>
-      await db.historyDrift.getHistoryByMangaId(mangaId: mangaId).get();
+  Future<List<History>> getHistoryByMangaId(int mangaId) =>
+      db.historyDrift.getHistoryByMangaId(mangaId: mangaId).get();
 
   @override
   Future<void> resetHistory(int historyId) async {

@@ -10,8 +10,8 @@ class GetHistory {
   final HistoryRepository repository;
   GetHistory(this.repository);
 
-  Future<List<History>> await_(int mangaId) async =>
-      await repository.getHistoryByMangaId(mangaId);
+  Future<List<History>> await_(int mangaId) =>
+      repository.getHistoryByMangaId(mangaId);
 
   Stream<List<HistoryWithRelations>> subscribe(String query) =>
       repository.getHistory(query);

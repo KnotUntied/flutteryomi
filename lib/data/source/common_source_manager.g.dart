@@ -7,12 +7,13 @@ part of 'common_source_manager.dart';
 // **************************************************************************
 
 String _$commonSourceManagerHash() =>
-    r'59861118ec7d37acaa66ec3bda44d0be679b87f9';
+    r'053ae41756967c03122ca93440a791fcb0465c44';
 
-/// See also [commonSourceManager].
-@ProviderFor(commonSourceManager)
-final commonSourceManagerProvider = AutoDisposeProvider<SourceManager>.internal(
-  commonSourceManager,
+/// See also [CommonSourceManager].
+@ProviderFor(CommonSourceManager)
+final commonSourceManagerProvider =
+    AutoDisposeNotifierProvider<CommonSourceManager, void>.internal(
+  CommonSourceManager.new,
   name: r'commonSourceManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -21,6 +22,6 @@ final commonSourceManagerProvider = AutoDisposeProvider<SourceManager>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef CommonSourceManagerRef = AutoDisposeProviderRef<SourceManager>;
+typedef _$CommonSourceManager = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -16,29 +16,28 @@ class SetExcludedScanlators {
   final Database db;
   SetExcludedScanlators(this.db);
 
-  Future<void> await_(int mangaId, Set<String> excludedScanlators) async {
-    db.transaction(() async {
-      final query = await db.excludedScanlatorsDrift //
-          .getExcludedScanlatorsByMangaId(mangaId: mangaId)
-          .get();
-      final currentExcluded = query.toSet();
-      final toAdd = excludedScanlators.difference(currentExcluded);
-      for (final scanlator in toAdd) {
-        await db //
-            .into(db.excludedScanlators)
-            .insert(ExcludedScanlatorsCompanion(
-              mangaId: Value(mangaId),
-              scanlator: Value(scanlator),
-            ));
-      }
-      final toRemove = currentExcluded.difference(excludedScanlators);
-      await (db.delete(db.excludedScanlators)
-            ..where(
-              (s) => s.mangaId.equals(mangaId) & s.scanlator.isIn(toRemove),
-            ))
-          .go();
-    });
-  }
+  Future<void> await_(int mangaId, Set<String> excludedScanlators) =>
+      db.transaction(() async {
+        final query = await db.excludedScanlatorsDrift //
+            .getExcludedScanlatorsByMangaId(mangaId: mangaId)
+            .get();
+        final currentExcluded = query.toSet();
+        final toAdd = excludedScanlators.difference(currentExcluded);
+        for (final scanlator in toAdd) {
+          await db //
+              .into(db.excludedScanlators)
+              .insert(ExcludedScanlatorsCompanion(
+                mangaId: Value(mangaId),
+                scanlator: Value(scanlator),
+              ));
+        }
+        final toRemove = currentExcluded.difference(excludedScanlators);
+        await (db.delete(db.excludedScanlators)
+              ..where(
+                (s) => s.mangaId.equals(mangaId) & s.scanlator.isIn(toRemove),
+              ))
+            .go();
+      });
 }
 
 @riverpod
