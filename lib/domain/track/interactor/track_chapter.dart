@@ -5,13 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/core/util/system/logger.dart';
-import 'package:flutteryomi/data/track/tracker.dart';
-import 'package:flutteryomi/domain/chapter/interactor/get_chapters_by_manga_id.dart';
-import 'package:flutteryomi/domain/chapter/interactor/update_chapter.dart';
-import 'package:flutteryomi/domain/chapter/model/chapter.dart';
-import 'package:flutteryomi/domain/chapter/model/chapter_update.dart';
 import 'package:flutteryomi/domain/track/interactor/insert_track.dart';
-import 'package:flutteryomi/domain/track/model/track.dart';
 
 part 'track_chapter.g.dart';
 

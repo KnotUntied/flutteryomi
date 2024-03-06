@@ -9,8 +9,8 @@ class GetUpdates {
   final UpdatesRepository repository;
   GetUpdates(this.repository);
 
-  Future<List<UpdatesWithRelations>?> await_(bool read, DateTime after) async =>
-      await repository.awaitWithRead(read, after, 500);
+  Future<List<UpdatesWithRelations>?> await_(bool read, DateTime after) =>
+      repository.awaitWithRead(read, after, 500);
 
   Stream<List<UpdatesWithRelations>> subscribe(DateTime instant) =>
       repository.subscribeAll(instant, 500);

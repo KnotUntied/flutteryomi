@@ -5,6 +5,7 @@ import 'package:flutteryomi/data/track/tracker.dart';
 import 'package:flutteryomi/data/track/tracker_manager.dart';
 import 'package:flutteryomi/domain/track/interactor/get_tracks.dart';
 import 'package:flutteryomi/domain/track/interactor/insert_track.dart';
+import 'package:flutteryomi/domain/track/interactor/sync_chapter_progress_with_track.dart';
 
 part 'refresh_tracks.g.dart';
 

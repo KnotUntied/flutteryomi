@@ -26,7 +26,7 @@ import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   final prefs = await StreamingSharedPreferences.instance;
