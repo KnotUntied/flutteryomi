@@ -11,7 +11,8 @@ abstract interface class SourceManager {
   late Stream<List<CatalogueSource>> catalogueSources;
   Source? get(int sourceKey);
   // Dart has no runBlocking >:(
-  Source getOrStub(int sourceKey);
+  //Source getOrStub(int sourceKey);
+  Future<Source> getOrStub(int sourceKey);
   List<HttpSource> getOnlineSources();
   List<CatalogueSource> getCatalogueSources();
   List<StubSource> getStubSources();

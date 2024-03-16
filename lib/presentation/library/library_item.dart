@@ -21,11 +21,14 @@ class LibraryItem with _$LibraryItem {
   /// Checks if a query [constraint] matches the manga.
   ///
   /// Returns true if the manga matches the query, false otherwise.
-  bool matches(String constraint) {
-    final sourceName = this
-        .sourceManager
-        .getOrStub(libraryManga.manga.source)
-        .getNameForMangaInfo();
+  //bool matches(String constraint) {
+    //final sourceName = this
+    //    .sourceManager
+    //    .getOrStub(libraryManga.manga.source)
+    //    .getNameForMangaInfo();
+  Future<bool> matches(String constraint) async {
+    final source = await this.sourceManager.getOrStub(libraryManga.manga.source);
+    final sourceName = source.getNameForMangaInfo();
     return libraryManga.manga.title.containsIgnoreCase(constraint) ||
         (libraryManga.manga.author?.containsIgnoreCase(constraint) ?? false) ||
         (libraryManga.manga.artist?.containsIgnoreCase(constraint) ?? false) ||

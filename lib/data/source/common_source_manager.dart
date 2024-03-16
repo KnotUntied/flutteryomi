@@ -63,12 +63,28 @@ class CommonSourceManager extends _$CommonSourceManager
   Source? get(int sourceKey) => _sourcesMapStream.value[sourceKey];
 
   // Dart has no runBlocking >:(
+  //@override
+  //Source getOrStub(int sourceKey) => _sourcesMapStream.value[sourceKey]
+  //    ?? _stubSourcesMap.putIfAbsent(
+  //      sourceKey,
+  //      () => _createStubSource(sourceKey),
+  //    );
   @override
-  Source getOrStub(int sourceKey) => _sourcesMapStream.value[sourceKey]
-      ?? _stubSourcesMap.putIfAbsent(
-        sourceKey,
-        () => _createStubSource(sourceKey),
-      );
+  Future<Source> getOrStub(int sourceKey) async {
+    final source = _sourcesMapStream.value[sourceKey];
+    if (source != null) {
+      return source;
+    } else {
+      final stubSource = _stubSourcesMap[sourceKey];
+      if (stubSource != null) {
+        return stubSource;
+      } else {
+        final newStubSource = await _createStubSource(sourceKey);
+        _stubSourcesMap[sourceKey] = newStubSource;
+        return newStubSource;
+      }
+    }
+  }
 
   @override
   List<HttpSource> getOnlineSources() =>

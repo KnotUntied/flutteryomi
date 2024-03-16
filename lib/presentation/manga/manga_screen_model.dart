@@ -98,22 +98,40 @@ class MangaScreenModel extends _$MangaScreenModel {
     // Start observe tracking since it only needs mangaId
     _observeTrackers();
 
-    return Rx.combineLatest3(
+    //return Rx.combineLatest3(
+    //  stream1,
+    //  stream2,
+    //  stream3,
+    //  (mangaAndChapters, excludedScanlators, availableScanlators) {
+    //    final (manga: manga, chapters: chapters) = mangaAndChapters;
+    //    return MangaScreenState(
+    //      manga: manga,
+    //      source: sourceManager.getOrStub(manga.source),
+    //      isFromSource: isFromSource,
+    //      chapters: chapters,
+    //      excludedScanlators: excludedScanlators,
+    //      availableScanlators: availableScanlators,
+    //    );
+    //  }
+    //);
+    return Rx.combineLatestList([
       stream1,
       stream2,
       stream3,
-      (mangaAndChapters, excludedScanlators, availableScanlators) {
-        final (manga: manga, chapters: chapters) = mangaAndChapters;
-        return MangaScreenState(
-          manga: manga,
-          source: sourceManager.getOrStub(manga.source),
-          isFromSource: isFromSource,
-          chapters: chapters,
-          excludedScanlators: excludedScanlators,
-          availableScanlators: availableScanlators,
-        );
-      }
-    );
+    ]).asyncMap((e) async {
+      final mangaAndChapters = e.first as ({List<ChapterListItem> chapters, Manga manga});
+      final excludedScanlators = e.second as Set<String>;
+      final availableScanlators = e.third as Set<String>;
+      final (manga: manga, chapters: chapters) = mangaAndChapters;
+      return MangaScreenState(
+        manga: manga,
+        source: await sourceManager.getOrStub(manga.source),
+        isFromSource: isFromSource,
+        chapters: chapters,
+        excludedScanlators: excludedScanlators,
+        availableScanlators: availableScanlators,
+      );
+    });
   }
 
   void _setMangaDefaultChapterFlags(Manga manga) async {

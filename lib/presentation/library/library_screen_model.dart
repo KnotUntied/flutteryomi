@@ -73,12 +73,29 @@ class LibraryScreenModel extends _$LibraryScreenModel {
       final filteredLibrary =
           await applyFilters(newLibrary, tracks, loggedInTrackers);
       final sortedLibrary = _applySort(filteredLibrary, tracks);
-      final queriedLibrary =
-          sortedLibrary.mapValues((entry) => searchQuery != null
-              // Filter query
-              ? entry.value.where((it) => it.matches(searchQuery)).toList()
-              // Don't do anything
-              : entry.value.toList());
+      //final queriedLibrary =
+      //    sortedLibrary.mapValues((entry) => searchQuery != null
+      //        // Filter query
+      //        ? entry.value.where((it) => it.matches(searchQuery)).toList()
+      //        // Don't do anything
+      //        : entry.value.toList());
+      final queriedLibrary = sortedLibrary;
+      queriedLibrary.forEach((k, v) async {
+        if (searchQuery != null) {
+          // Filter query
+          final libraryItems = <LibraryItem>[];
+          for (final it in v) {
+            if (await it.matches(searchQuery)) libraryItems.add(it);
+          }
+          queriedLibrary[k] = libraryItems;
+        }
+      });
+      //final queriedLibrary =
+      //    sortedLibrary.mapValues((entry) => searchQuery != null
+      //        // Filter query
+      //        ? entry.value.where((it) => it.matches(searchQuery)).toList()
+      //        // Don't do anything
+      //        : entry.value);
       return LibraryScreenState(
         library: queriedLibrary,
         searchQuery: searchQuery,
@@ -326,28 +343,56 @@ class LibraryScreenModel extends _$LibraryScreenModel {
     final getCategories = ref.watch(getCategoriesProvider);
     final getLibraryManga = ref.watch(getLibraryMangaProvider);
     final sourceManager = ref.watch(sourceManagerProvider);
-    final libraryMangasStream = Rx.combineLatest2(
+    //final libraryMangasStream = Rx.combineLatest2(
+      //getLibraryManga.subscribe(),
+      //_getLibraryItemPreferencesStream(),
+      ////downloadCache.changes,
+    //  (libraryMangaList, prefs) => libraryMangaList
+    //      .map(
+    //        // Display mode based on user preference: take it from global library setting or category
+    //        (libraryManga) => LibraryItem(
+    //          libraryManga: libraryManga,
+    //          downloadCount: prefs.downloadBadge
+    //              ? downloadManager.getDownloadCountForManga(libraryManga.manga)
+    //              : 0,
+    //          unreadCount: libraryManga.unreadCount,
+    //          isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
+    //          sourceLanguage: prefs.languageBadge
+    //              ? sourceManager.getOrStub(libraryManga.manga.source).lang
+    //              : "",
+    //          sourceManager: sourceManager,
+    //        ),
+    //      )
+    //      .groupBy((it) => it.libraryManga.category),
+    //);
+    final libraryMangasStream = Rx.combineLatestList([
       getLibraryManga.subscribe(),
       _getLibraryItemPreferencesStream(),
       //downloadCache.changes,
-      (libraryMangaList, prefs) => libraryMangaList
-          .map(
-            // Display mode based on user preference: take it from global library setting or category
-            (libraryManga) => LibraryItem(
-              libraryManga: libraryManga,
-              downloadCount: prefs.downloadBadge
-                  ? downloadManager.getDownloadCountForManga(libraryManga.manga)
-                  : 0,
-              unreadCount: libraryManga.unreadCount,
-              isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
-              sourceLanguage: prefs.languageBadge
-                  ? sourceManager.getOrStub(libraryManga.manga.source).lang
-                  : "",
-              sourceManager: sourceManager,
-            ),
-          )
-          .groupBy((it) => it.libraryManga.category),
-    );
+    ]).asyncMap((e) async {
+      final libraryMangaList = e.first as List<LibraryManga>;
+      final prefs = e.second as _ItemPreferences;
+      final libraryItems = <LibraryItem>[];
+      for (final libraryManga in libraryMangaList) {
+        final sourceLanguage = prefs.languageBadge
+            ? (await sourceManager.getOrStub(libraryManga.manga.source)).lang
+            : "";
+        // Display mode based on user preference: take it from global library setting or category
+        libraryItems.add(
+          LibraryItem(
+            libraryManga: libraryManga,
+            downloadCount: prefs.downloadBadge
+                ? downloadManager.getDownloadCountForManga(libraryManga.manga)
+                : 0,
+            unreadCount: libraryManga.unreadCount,
+            isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
+            sourceLanguage: sourceLanguage,
+            sourceManager: sourceManager,
+          ),
+        );
+      }
+      return libraryItems.groupBy((it) => it.libraryManga.category);
+    });
 
     return Rx.combineLatest2(
       getCategories.subscribe(),
