@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:dartx/dartx.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart' hide DebounceExtensions;
@@ -76,6 +75,9 @@ class Download extends Equatable {
 
   @override
   List<Object?> get props => [source, manga, chapter, pages];
+
+  @override
+  bool get stringify => true;
 }
 
 enum DownloadState {

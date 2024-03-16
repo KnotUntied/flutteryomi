@@ -6,10 +6,9 @@ part of 'source_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sourceRepositoryHash() =>
-    r'a8e80eefdb6964d222baa97f8d5f07f6bdfae579'; //// Override this in the main method
-///
-/// Copied from [sourceRepository].
+String _$sourceRepositoryHash() => r'a8e80eefdb6964d222baa97f8d5f07f6bdfae579';
+
+/// See also [sourceRepository].
 @ProviderFor(sourceRepository)
 final sourceRepositoryProvider = AutoDisposeProvider<SourceRepository>.internal(
   sourceRepository,

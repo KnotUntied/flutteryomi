@@ -7,7 +7,7 @@ part of 'common_source_manager.dart';
 // **************************************************************************
 
 String _$commonSourceManagerHash() =>
-    r'053ae41756967c03122ca93440a791fcb0465c44';
+    r'1e1aee909b47238aa016ef1252bc8f283a087b03';
 
 /// See also [CommonSourceManager].
 @ProviderFor(CommonSourceManager)

@@ -160,6 +160,9 @@ class ComicInfo extends Equatable {
     categories,
   ];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfo.fromXmlElement(XmlElement element) =>
       _$ComicInfoFromXmlElement(element);
 
@@ -209,6 +212,9 @@ class ComicInfoTitle extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoTitle.fromXmlElement(XmlElement element) =>
       _$ComicInfoTitleFromXmlElement(element);
@@ -260,6 +266,9 @@ class ComicInfoSeries extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoSeries.fromXmlElement(XmlElement element) =>
       _$ComicInfoSeriesFromXmlElement(element);
 
@@ -309,6 +318,9 @@ class ComicInfoNumber extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoNumber.fromXmlElement(XmlElement element) =>
       _$ComicInfoNumberFromXmlElement(element);
@@ -360,6 +372,9 @@ class ComicInfoSummary extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoSummary.fromXmlElement(XmlElement element) =>
       _$ComicInfoSummaryFromXmlElement(element);
 
@@ -409,6 +424,9 @@ class ComicInfoWriter extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoWriter.fromXmlElement(XmlElement element) =>
       _$ComicInfoWriterFromXmlElement(element);
@@ -460,6 +478,9 @@ class ComicInfoPenciller extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoPenciller.fromXmlElement(XmlElement element) =>
       _$ComicInfoPencillerFromXmlElement(element);
 
@@ -509,6 +530,9 @@ class ComicInfoInker extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoInker.fromXmlElement(XmlElement element) =>
       _$ComicInfoInkerFromXmlElement(element);
@@ -560,6 +584,9 @@ class ComicInfoColorist extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoColorist.fromXmlElement(XmlElement element) =>
       _$ComicInfoColoristFromXmlElement(element);
 
@@ -609,6 +636,9 @@ class ComicInfoLetterer extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoLetterer.fromXmlElement(XmlElement element) =>
       _$ComicInfoLettererFromXmlElement(element);
@@ -660,6 +690,9 @@ class ComicInfoCoverArtist extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoCoverArtist.fromXmlElement(XmlElement element) =>
       _$ComicInfoCoverArtistFromXmlElement(element);
 
@@ -709,6 +742,9 @@ class ComicInfoTranslator extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoTranslator.fromXmlElement(XmlElement element) =>
       _$ComicInfoTranslatorFromXmlElement(element);
@@ -760,6 +796,9 @@ class ComicInfoGenre extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoGenre.fromXmlElement(XmlElement element) =>
       _$ComicInfoGenreFromXmlElement(element);
 
@@ -809,6 +848,9 @@ class ComicInfoTags extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory ComicInfoTags.fromXmlElement(XmlElement element) =>
       _$ComicInfoTagsFromXmlElement(element);
@@ -860,6 +902,9 @@ class ComicInfoWeb extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory ComicInfoWeb.fromXmlElement(XmlElement element) =>
       _$ComicInfoWebFromXmlElement(element);
 
@@ -910,6 +955,9 @@ class PublishingStatusTachiyomi extends Equatable {
   @override
   List<Object> get props => [value];
 
+  @override
+  bool get stringify => true;
+
   factory PublishingStatusTachiyomi.fromXmlElement(XmlElement element) =>
       _$PublishingStatusTachiyomiFromXmlElement(element);
 
@@ -959,6 +1007,9 @@ class CategoriesTachiyomi extends Equatable {
 
   @override
   List<Object> get props => [value];
+
+  @override
+  bool get stringify => true;
 
   factory CategoriesTachiyomi.fromXmlElement(XmlElement element) =>
       _$CategoriesTachiyomiFromXmlElement(element);

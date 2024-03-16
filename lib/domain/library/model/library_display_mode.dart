@@ -24,6 +24,9 @@ sealed class LibraryDisplayMode extends Equatable {
 
   @override
   List<Object?> get props => const [];
+
+  @override
+  bool get stringify => true;
 }
 
 class CompactGrid extends LibraryDisplayMode {}

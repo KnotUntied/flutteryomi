@@ -111,6 +111,9 @@ sealed class Type extends Equatable implements FlagWithMask {
 
   @override
   List<Object?> get props => const [];
+
+  @override
+  bool get stringify => true;
 }
 
 class Alphabetical extends Type {
@@ -170,6 +173,9 @@ sealed class Direction extends Equatable implements FlagWithMask {
 
   @override
   List<Object?> get props => const [];
+
+  @override
+  bool get stringify => true;
 }
 
 class _Ascending extends Direction {

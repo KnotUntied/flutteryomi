@@ -44,6 +44,9 @@ class Page extends Equatable implements ProgressListener {
 
   @override
   List<Object?> get props => [index, url, imageUrl];
+
+  @override
+  bool get stringify => true;
 }
 
 enum PageState {
