@@ -1,9 +1,9 @@
-import 'package:flutteryomi/domain/chapter/model/chapter.dart';
-
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/reader/loader/page_loader.dart';
 import 'package:flutteryomi/domain/reader/model/reader_page.dart';
 
 part 'reader_chapter.freezed.dart';
@@ -23,7 +23,7 @@ class ReaderChapter extends Equatable {
 
   List<ReaderPage>? get pages => (state as ReaderChapterStateLoaded?)?.pages;
 
-  //PageLoader? pageLoader;
+  PageLoader? pageLoader;
 
   int requestedPage = 0;
 
@@ -34,11 +34,11 @@ class ReaderChapter extends Equatable {
   void unref() {
     _references--;
     if (_references == 0) {
-      //if (pageLoader != null) {
+      if (pageLoader != null) {
       //  logger.i("Recycling chapter ${chapter.name}");
-      //}
-      //pageLoader?.recycle();
-      //pageLoader = null;
+      }
+      pageLoader?.recycle();
+      pageLoader = null;
       state = const ReaderChapterStateWait();
     }
   }

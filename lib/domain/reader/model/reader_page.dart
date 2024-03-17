@@ -8,5 +8,5 @@ class ReaderPage extends Page {
     super.imageUrl,
   ]);
 
-  late ReaderChapter chapter;
+  late final ReaderChapter chapter;
 }
