@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
 import 'package:dartx/dartx.dart';
 
@@ -26,7 +25,7 @@ class DirectoryPageLoader extends PageLoader {
         (it) => ImageUtil.isImage(
           it.path,
           headerBytes: it.openSync().readSync(32),
-        )
+        ),
       )
       .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.path, f2.path))
       .mapIndexed((i, entry) => ReaderPage(i)
