@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
 import 'package:dartx/dartx.dart';
@@ -11,30 +13,34 @@ import 'package:flutteryomi/domain/source/model/page.dart';
 class ZipPageLoader extends PageLoader {
   ZipPageLoader(this.channel);
 
-  final InputFileStream channel;
+  final InputStreamBase channel;
   late final _zip = ZipDecoder().decodeBuffer(channel);
 
   @override
   bool get isLocal => true;
 
   @override
-  Future<List<ReaderPage>> getPages() async => 
-      _zip.files
-          .where((it) {
-            final os = OutputStream();
-            it.decompress(os);
-            return it.isFile && ImageUtil.isImage(it.name, headerBytes: os.subset(0, 32));
-          })
-          .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
-          .mapIndexed((i, entry) {
-            final os = OutputStream();
-            entry.decompress(os);
-            return ReaderPage(i)
-              //TODO
-              //..stream = () => zip.getInputStream(entry)
-              ..status = PageState.ready;
-          })
-          .toList();
+  Future<List<ReaderPage>> getPages() async => _zip.files
+      .where((it) {
+        if (!it.isFile) return false;
+        final os = OutputFileStream(
+          Directory.systemTemp.createTempSync().path,
+        );
+        it.writeContent(os);
+        return ImageUtil.isImage(it.name, headerBytes: os.subset(0, 32));
+      })
+      .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
+      .mapIndexed((i, entry) {
+        //TODO: Avoid decompressing twice
+        final os = OutputFileStream(
+          Directory.systemTemp.createTempSync().path,
+        );
+        entry.writeContent(os);
+        return ReaderPage(i)
+          ..stream = File(os.path).openRead
+          ..status = PageState.ready;
+      })
+      .toList();
 
   @override
   Future<void> loadPage(ReaderPage page) async {
