@@ -380,12 +380,12 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
               .sortedWith(
                   (f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
               .firstWhereOrNull((it) {
+            if (!it.isFile) return false;
             final os = OutputFileStream(
               Directory.systemTemp.createTempSync().path,
             );
             it.writeContent(os);
-            return it.isFile &&
-                ImageUtil.isImage(os.path, headerBytes: os.subset(0, 32));
+            return ImageUtil.isImage(os.path, headerBytes: os.subset(0, 32));
           });
 
           if (entry != null) coverManager.updateFromArchive(manga, entry);
@@ -450,7 +450,7 @@ extension _PartialSplit on String {
     if (count == 0) return result;
 
     int offset = 0;
-    var matches = pattern.allMatches(this);
+    final matches = pattern.allMatches(this);
     for (final match in matches) {
       if (result.length + 1 == count) break;
 
