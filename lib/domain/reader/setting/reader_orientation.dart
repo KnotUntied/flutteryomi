@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:riverpod/riverpod.dart';
+
+import 'package:flutteryomi/l10n/l10n.dart';
 
 enum ReaderOrientation {
   // flag needs cross-platform API for screen orientation compatible
@@ -18,8 +20,8 @@ enum ReaderOrientation {
   final int flagValue;
   final IconData icon;
 
-  String string(BuildContext context) {
-    final lang = AppLocalizations.of(context);
+  String string(Ref ref) {
+    final lang = ref.read(appLocalizationsProvider);
     return switch (this) {
       ReaderOrientation.default_ => lang.label_default,
       ReaderOrientation.free => lang.rotation_free,
