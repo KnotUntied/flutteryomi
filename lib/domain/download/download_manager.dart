@@ -55,8 +55,10 @@ class DownloadManager {
   final Logger logger;
 
   /// Downloader whose only task is to download chapters.
-  //late final _downloader = Downloader(context, provider, cache);
   late final _downloader = Downloader(
+    ref: ref,
+    provider: provider,
+    //cache: cache,
     sourceManager: sourceManager,
     downloadPreferences: downloadPreferences,
     getCategories: getCategories,
