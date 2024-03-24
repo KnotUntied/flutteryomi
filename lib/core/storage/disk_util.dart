@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:dartx/dartx_io.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
+
+import 'package:flutteryomi/core/storage/directory_extensions.dart';
+import 'package:flutteryomi/core/util/string_extensions.dart';
 
 //TODO
 abstract class DiskUtil {
@@ -20,24 +22,24 @@ abstract class DiskUtil {
       //          ? file
       //          : null;
       //    });
-      => [];
+      => const [];
 
   static String hashKeyForDisk(String key) => md5.convert(utf8.encode(key)).toString();
 
   static int getDirectorySize(FileSystemEntity f) {
     int size = 0;
-    //if (f is Directory) {
-    //  for (file in f.listFiles().orEmpty()) {
-    //    size += getDirectorySize(file);
-    //  }
-    //} else {
-    //  size = f.length();
-    //}
+    if (f is Directory) {
+      for (final file in f.listSync()) {
+        size += getDirectorySize(file);
+      }
+    } else if (f is File) {
+      size = f.lengthSync();
+    }
     return size;
   }
 
   /// Gets the total space for the disk that a file path points to, in bytes.
-  static int getTotalStorageSpace(File file) {
+  static int getTotalStorageSpace(FileSystemEntity file) {
     //try {
     //  final stat = StatFs(file.absolutePath);
     //  return stat.blockCountLong * stat.blockSizeLong;
@@ -47,7 +49,7 @@ abstract class DiskUtil {
   }
 
   /// Gets the available space for the disk that a file path points to, in bytes.
-  static int getAvailableStorageSpace(File file) {
+  static int getAvailableStorageSpace(FileSystemEntity file) {
     //try {
     //  final stat = StatFs(file.absolutePath);
     //  return stat.availableBlocksLong * stat.blockSizeLong;
@@ -68,10 +70,10 @@ abstract class DiskUtil {
 
   /// Don't display downloaded chapters in gallery apps creating `.nomedia`.
   static void createNoMediaFile([Directory? dir]) async {
-    if (dir != null && await dir.exists()) {
-      final nomedia = File(p.join(dir.path, nomediaFile));
-      if (!await nomedia.exists()) {
-        await nomedia.create();
+    if (dir != null && dir.existsSync()) {
+      final nomedia = dir.findFile(nomediaFile);
+      if (nomedia == null) {
+        await dir.file(nomediaFile).create();
         scanMedia(dir.path);
       }
     }
@@ -88,30 +90,29 @@ abstract class DiskUtil {
   /// replacing any invalid characters with "_". This method doesn't allow hidden files (starting
   /// with a dot), but you can manually add it later.
   static String buildValidFilename(String origName) {
-    //final name = origName.trim('.', ' ');
-    //if (name.isEmpty) return "(invalid)";
-    //final sb = StringBuilder(name.length);
-    //name.forEach((c) {
-    //  if (_isValidFatFilenameChar(c)) {
-    //    sb.append(c);
-    //  } else {
-    //    sb.append('_');
-    //  }
-    //});
-    //// Even though vfat allows 255 UCS-2 chars, we might eventually write to
-    //// ext4 through a FUSE layer, so use that limit minus 15 reserved characters.
-    //return sb.toString().take(240);
-    return '';
+    final name = origName.trimChars(RegExp(r'(\s|\.)+'));
+    if (name.isEmpty) return "(invalid)";
+    final sb = StringBuffer();
+    for (final c in name.characters) {
+      if (_isValidFatFilenameChar(c)) {
+        sb.write(c);
+      } else {
+        sb.write('_');
+      }
+    }
+    // Even though vfat allows 255 UCS-2 chars, we might eventually write to
+    // ext4 through a FUSE layer, so use that limit minus 15 reserved characters.
+    return sb.toString().substring(0, 240);
   }
 
   /// Returns true if the given character is a valid filename character, false otherwise.
   static bool _isValidFatFilenameChar(String c) {
-    //if (0x00.toChar() <= c && c <= 0x1f.toChar()) return false;
-    //return switch (c) {
-    //  '"' || '*' || '/' || ':' || '<' || '>' || '?' || '\\' || '|' || 0x7f.toChar() => false,
-    //  _ => true,
-    //};
-    return false;
+    if (0x00.toChar() <= c && c <= 0x1f.toChar()) return false;
+    // Cannot include 0x7f.toChar() as is has no const builder
+    return switch (c) {
+      '"' || '*' || '/' || ':' || '<' || '>' || '?' || '\\' || '|' => false,
+      _ => true,
+    };
   }
 
   static const nomediaFile = ".nomedia";

@@ -8,7 +8,7 @@ part 'l10n.g.dart';
 ///
 /// Provider used to access the AppLocalizations object for the current locale.
 ///
-/// Intended for Riverpod providers. Currently, widgets can still use BuildContext.
+/// Intended for Riverpod providers and anything else with access to ref.
 @riverpod
 AppLocalizations appLocalizations(AppLocalizationsRef ref) {
   // 1. initialize from the initial locale

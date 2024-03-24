@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:path/path.dart' as p;
+import 'package:dartx/dartx_io.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FolderProvider {
@@ -8,9 +8,7 @@ class FolderProvider {
     final Directory? dir = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    return dir != null
-        ? Directory(p.join(dir.absolute.path, 'Flutteryomi'))
-        : null;
+    return dir?.subdir('Flutteryomi');
   }
 
   Future<String?> path() async {

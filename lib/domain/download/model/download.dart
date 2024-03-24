@@ -13,7 +13,7 @@ import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/online/http_source.dart';
 
-//TODO
+// ignore: must_be_immutable
 class Download extends Equatable {
   Download(
     this.source,
@@ -25,7 +25,7 @@ class Download extends Equatable {
   final HttpSource source;
   final Manga manga;
   final Chapter chapter;
-  final List<Page>? pages;
+  List<Page>? pages;
 
   int get totalProgress => pages?.sumBy((it) => it.progress) ?? 0;
 

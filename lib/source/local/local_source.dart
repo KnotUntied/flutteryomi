@@ -3,15 +3,16 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
-import 'package:dartx/dartx.dart' hide IterableLastOrNull;
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:dartx/dartx_io.dart' hide IterableLastOrNull;
+import 'package:flutteryomi/l10n/l10n.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as p;
+import 'package:riverpod/riverpod.dart';
 import 'package:xml/xml.dart';
 
 import 'package:flutteryomi/core/metadata/comic_info.dart';
 import 'package:flutteryomi/core/metadata/manga_details.dart';
+import 'package:flutteryomi/core/storage/directory_extensions.dart';
 import 'package:flutteryomi/core/util/system/image_util.dart';
 import 'package:flutteryomi/domain/chapter/service/chapter_recognition.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
@@ -19,7 +20,7 @@ import 'package:flutteryomi/domain/source/model/domain_source.dart'
     as domain_source;
 import 'package:flutteryomi/domain/source/model/filter_list.dart';
 import 'package:flutteryomi/domain/source/model/mangas_page.dart';
-import 'package:flutteryomi/domain/source/model/page.dart' as page;
+import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/model/schapter.dart';
 import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/source/api/catalogue_source.dart';
@@ -34,20 +35,20 @@ import 'package:flutteryomi/source/local/io/local_source_file_system.dart';
 //TODO
 class LocalSource implements CatalogueSource, UnmeteredSource {
   LocalSource({
-    required this.context,
+    required this.ref,
     required this.fileSystem,
     required this.coverManager,
     required this.logger,
   });
 
   // Terrible but necessary for localization
-  final BuildContext context;
+  final Ref ref;
   final LocalSourceFileSystem fileSystem;
   final LocalCoverManager coverManager;
   final Logger logger;
 
-  late final _popularFilters = [OrderByPopular(context)];
-  late final _latestFilters = [OrderByLatest(context)];
+  late final _popularFilters = [OrderByPopular(ref)];
+  late final _latestFilters = [OrderByLatest(ref)];
 
   static const localSourceId = 0;
   // Point to Mihon for now
@@ -63,7 +64,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
 
   @override
   String get name {
-    final localizations = AppLocalizations.of(context);
+    final localizations = ref.read(appLocalizationsProvider);
     return localizations.local_source;
   }
 
@@ -94,8 +95,8 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
 
     var mangaDirs = await fileSystem.getFilesInBaseDirectory()
       // Filter out files that are hidden and is not a folder
-      ..where((it) => it is Directory && !p.basename(it.path).startsWith('.'))
-          .distinctBy((it) => p.basename(it.path))
+      ..where((it) => it is Directory && !it.name.startsWith('.'))
+          .distinctBy((it) => it.name)
           .where((it) {
         if (lastModifiedLimit.inMilliseconds == 0 && query.isBlank) {
           return true;
@@ -106,7 +107,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
               .toLowerCase()
               .contains(query.toLowerCase());
         } else {
-          return FileStat.statSync(p.basename(it.path))
+          return FileStat.statSync(it.name)
                   .modified
                   .millisecondsSinceEpoch >=
               lastModifiedLimit.inMilliseconds;
@@ -118,23 +119,23 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
         case OrderByPopular():
           mangaDirs = filter.state!.ascending
               ? mangaDirs.sortedWith((a, b) => compareAsciiLowerCase(
-                    p.basename(a.path).toLowerCase().orEmpty(),
-                    p.basename(b.path).toLowerCase().orEmpty(),
+                    a.name.toLowerCase().orEmpty(),
+                    b.name.toLowerCase().orEmpty(),
                   ))
               : mangaDirs.sortedWith((a, b) => -compareAsciiLowerCase(
-                    p.basename(a.path).toLowerCase().orEmpty(),
-                    p.basename(b.path).toLowerCase().orEmpty(),
+                    a.name.toLowerCase().orEmpty(),
+                    b.name.toLowerCase().orEmpty(),
                   ));
         case OrderByLatest():
           mangaDirs = filter.state!.ascending
               ? mangaDirs.sortedByCompare(
-                  (it) => FileStat.statSync(p.basename(it.path))
+                  (it) => FileStat.statSync(it.name)
                       .modified
                       .millisecondsSinceEpoch,
                   (a, b) => a - b,
                 )
               : mangaDirs.sortedByDescending(
-                  (it) => FileStat.statSync(p.basename(it.path))
+                  (it) => FileStat.statSync(it.name)
                       .modified
                       .millisecondsSinceEpoch,
                 );
@@ -146,7 +147,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
     final mangas = await Future.wait(
       mangaDirs.map(
         (mangaDir) async {
-          final name = p.basename(mangaDir.path).orEmpty();
+          final name = mangaDir.name.orEmpty();
 
           // Try to find the cover
           final file = await coverManager.find(name);
@@ -178,11 +179,11 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
       final mangaDirFiles = mangaDir.listSync().whereType<File>();
 
       final comicInfoFileRef = mangaDirFiles
-          .firstWhereOrNull((it) => p.basename(it.path) == comicInfoFile);
+          .firstWhereOrNull((it) => it.name == comicInfoFile);
       final noXmlFile = mangaDirFiles
-          .firstWhereOrNull((it) => p.basename(it.path) == ".noxml");
+          .firstWhereOrNull((it) => it.name == ".noxml");
       final legacyJsonDetailsFile = mangaDirFiles
-          .firstWhereOrNull((it) => p.extension(it.path) == ".json");
+          .firstWhereOrNull((it) => it.extension == ".json");
 
       if (comicInfoFileRef != null) {
         // Top level ComicInfo.xml
@@ -205,8 +206,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
         // Replace with ComicInfo.xml file
         final comicInfo = manga.getComicInfo();
         final comicInfoFileRef =
-            await File(p.join(mangaDir.path, comicInfoFile))
-                .create(recursive: true);
+            await mangaDir.file(comicInfoFile).create(recursive: true);
         final document = XmlDocument();
         document.children.add(comicInfo.toXmlElement());
         await comicInfoFileRef.writeAsString(document.toXmlString());
@@ -223,7 +223,7 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
           _setMangaDetailsFromComicInfoFile(copiedFile, manga);
         } else {
           // Avoid re-scanning
-          await File(p.join(mangaDir.path, '.noxml')).create(recursive: true);
+          await mangaDir.file('.noxml').create(recursive: true);
         }
       }
     } catch (e) {
@@ -294,10 +294,10 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
             (it is File && local_archive.Archive.isSupported(it)))
         .map((chapterFile) {
       final chapter = SChapter.create()
-        ..url = "${manga.url}/${p.basename(chapterFile.path)}"
+        ..url = "${manga.url}/${chapterFile.name}"
         ..name = (chapterFile is Directory
-                ? p.basename(chapterFile.path)
-                : p.basenameWithoutExtension(chapterFile.path))
+                ? chapterFile.name
+                : chapterFile.nameWithoutExtension)
             .orEmpty()
         ..dateUpload = FileStat.statSync(chapterFile.path).modified;
       chapter.chapterNumber = ChapterRecognition.parseChapterNumber(
@@ -328,22 +328,20 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
   }
 
   @override
-  FilterList getFilterList() => [OrderByPopular(context)];
+  FilterList getFilterList() => [OrderByPopular(ref)];
 
   // Unused stuff
   @override
-  Future<List<page.Page>> getPageList(SChapter chapter) =>
+  Future<List<Page>> getPageList(SChapter chapter) =>
       throw UnsupportedError('Unused');
 
   Future<Format> getFormat(SChapter chapter) async {
-    final lang = AppLocalizations.of(context);
+    final lang = ref.read(appLocalizationsProvider);
     try {
       final [mangaDirName, chapterName] = chapter.url.partialSplit('/', 2);
-      final dir = await fileSystem.getBaseDirectory();
-      final file = dir?.listSync().firstWhereOrNull((it) {
-        final name = p.basename(it.path);
-        return name == mangaDirName || name == chapterName;
-      });
+      final file = (await fileSystem.getBaseDirectory())
+          ?.findDir(mangaDirName, true)
+          ?.findFile(chapterName, true);
       if (file != null) {
         return Format.valueOf(file.path);
       } else {

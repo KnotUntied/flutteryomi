@@ -1,22 +1,27 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
-import 'package:dartx/dartx.dart';
-import 'package:drift/drift.dart';
-import 'package:flutter/widgets.dart';
+import 'package:dartx/dartx_io.dart' hide IterableFirstOrNull, IterableSortedBy, IterableWhereNot;
 import 'package:logger/logger.dart';
+import 'package:mime/mime.dart';
+import 'package:quiver/strings.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:flutteryomi/core/storage/directory_extensions.dart';
 import 'package:flutteryomi/core/util/system/logger.dart';
+import 'package:flutteryomi/l10n/l10n.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
-import 'package:flutteryomi/domain/category/model/category_update.dart';
-import 'package:flutteryomi/domain/category/repository/category_repository.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/download/download_provider.dart';
 import 'package:flutteryomi/domain/download/downloader.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/source.dart';
 
@@ -28,8 +33,8 @@ part 'download_manager.g.dart';
 /// downloaded chapters.
 class DownloadManager {
   DownloadManager({
-    //required this.context,
-    //required this.provider,
+    required this.ref,
+    required this.provider,
     //required this.cache,
     required this.getCategories,
     required this.getChapter,
@@ -39,8 +44,8 @@ class DownloadManager {
     required this.logger,
   });
 
-  //final BuildContext context;
-  //final DownloadProvider provider;
+  final Ref ref;
+  final DownloadProvider provider;
   //final DownloadCache cache;
   final GetCategories getCategories;
   final GetChapter getChapter;
@@ -98,8 +103,8 @@ class DownloadManager {
 
   /// Returns the download from queue if the chapter with [chapterId] is queued for download
   /// else it will return null which means that the chapter is not queued for download
-  Download? getQueuedDownloadOrNull(int chapterId) => null;
-      //queueState.value.firstWhereOrNull((it) => it.chapter.id == chapterId);
+  Download? getQueuedDownloadOrNull(int chapterId) =>
+      queueState.value.firstWhereOrNull((it) => it.chapter.id == chapterId);
 
   void startDownloadNow(int chapterId) async {
     final existingDownload = getQueuedDownloadOrNull(chapterId);
@@ -138,37 +143,37 @@ class DownloadManager {
   }
 
   /// Builds and returns the page list of a downloaded [chapter] from its [manga] and [source].
-  List<Page> buildPageList(Source source, Manga manga, Chapter chapter) {
-  //  final chapterDir = provider.findChapterDir(chapter.name, chapter.scanlator, manga.title, source);
-  //  final files = chapterDir?.listFiles().orEmpty().filter((it) => "image" in it.type.orEmpty());
+  Future<List<Page>> buildPageList(Source source, Manga manga, Chapter chapter) async {
+    final lang = ref.read(appLocalizationsProvider);
+    final chapterDir = await provider.findChapterDir(
+      chapterName: chapter.name,
+      chapterScanlator: chapter.scanlator,
+      mangaTitle: manga.title,
+      source: source,
+    );
+    final files = chapterDir
+        ?.listSync()
+        .where((it) => lookupMimeType(it.name)?.contains("image") ?? false)
+        ?? const [];
 
-  //  if (files.isEmpty) {
-  //    //throw Exception(lang.page_list_empty_error);
-  //  }
+    if (files.isEmpty) {
+      throw Exception(lang.page_list_empty_error);
+    }
 
-  //  return files.sortedBy((it) => it.name)
-  //      .mapIndexed((i, file) {
-  //        final page = Page(i, uri: file.uri);
-  //          //.apply { status = Page.State.READY }
-  //      });
-    return [];
+    return files.sortedBy((it) => it.name)
+        .mapIndexed((i, file) => Page(i)..status = PageState.ready)
+        .toList();
   }
 
   // TODO
   /// Returns true if the chapter is downloaded.
-  ///
-  /// [chapterName] and [chapterScanlator] are the name and scanlator of
-  /// the chapter to query, respectively.
-  /// [mangaTitle] is the title of the manga to query.
-  /// [sourceId] is the id of the source of the chapter.
-  /// [skipCache] is whether to skip the directory cache and check in the filesystem.
   bool isChapterDownloaded(
     String chapterName,
     String? chapterScanlator,
     String mangaTitle,
-    int sourceId, [
+    int sourceId, {
     bool skipCache = false,
-  ]) => false;
+  }) => false;
   //]) => cache.isChapterDownloaded(
   //  chapterName,
   //  chapterScanlator,
@@ -195,29 +200,36 @@ class DownloadManager {
 
     _removeFromDownloadQueue(filteredChapters);
 
-    //final (mangaDir, chapterDirs) = provider.findChapterDirs(filteredChapters, manga, source);
-    //chapterDirs.forEach((it) => it.delete());
+    final (mangaDir, chapterDirs) = await provider.findChapterDirs(
+      chapters: filteredChapters,
+      manga: manga,
+      source: source,
+    );
+    for (final it in chapterDirs) {
+      it.delete();
+    }
     //cache.removeChapters(filteredChapters, manga);
 
-    //// Delete manga directory if empty
-    //if (mangaDir?.listFiles()?.isEmpty == true) {
-    //  deleteManga(manga, source, removeQueued: false);
-    //}
+    // Delete manga directory if empty
+    if (mangaDir?.listSync().isEmpty ?? false) {
+      deleteManga(manga, source, removeQueued: false);
+    }
   }
 
   /// Deletes the directory of a downloaded [manga] in a given [source].
   /// Can be set to also remove queued downloads with [removeQueued].
-  void deleteManga(Manga manga, Source source, [bool removeQueued = true]) {
+  void deleteManga(Manga manga, Source source, {bool removeQueued = true}) async {
     if (removeQueued) _downloader.removeMangaFromQueue(manga);
-  //  provider.findMangaDir(manga.title, source)?.delete();
-  //  cache.removeManga(manga);
+    (await provider.findMangaDir(mangaTitle: manga.title, source: source))
+        ?.delete();
+    //cache.removeManga(manga);
 
-  //  // Delete source directory if empty
-  //  final sourceDir = provider.findSourceDir(source);
-  //  if (sourceDir?.listFiles()?.isEmpty) {
-  //    sourceDir.delete();
-  //    cache.removeSource(source);
-  //  }
+    // Delete source directory if empty
+    final sourceDir = await provider.findSourceDir(source);
+    if (sourceDir?.listSync().isEmpty ?? false) {
+      sourceDir?.delete();
+      //cache.removeSource(source);
+    }
   }
 
   void _removeFromDownloadQueue(List<Chapter> chapters) {
@@ -227,11 +239,11 @@ class DownloadManager {
     _downloader.removeChaptersFromQueue(chapters);
 
     if (wasRunning) {
-    //  if (queueState.value.isEmpty) {
-    //    _downloader.stop();
-    //  } else {
-    //    _downloader.start();
-    //  }
+      if (queueState.value.isEmpty) {
+        //_downloader.stop();
+      } else {
+        //_downloader.start();
+      }
     }
   }
 
@@ -251,25 +263,29 @@ class DownloadManager {
   }
 
   /// Renames source download folder from [oldSource] to [newSource].
-  void renameSource(Source oldSource, Source newSource) {
-  //  final oldFolder = provider.findSourceDir(oldSource);
-  //  if (oldFolder == null) return;
-  //  final newName = provider.getSourceDirName(newSource);
+  void renameSource(Source oldSource, Source newSource) async {
+    final oldFolder = await provider.findSourceDir(oldSource);
+    if (oldFolder == null) return;
+    final newName = provider.getSourceDirName(newSource);
 
-  //  if (oldFolder.name == newName) return;
+    if (oldFolder.name == newName) return;
 
-  //  final capitalizationChanged = oldFolder.name.equals(newName, ignoreCase: true);
-  //  if (capitalizationChanged) {
-  //    final tempName = newName + Downloader.tmpDirSuffix;
-  //    if (oldFolder.renameTo(tempName).not()) {
-  //      logger.e("Failed to rename source download folder: ${oldFolder.name}");
-  //      return;
-  //    }
-  //  }
+    final capitalizationChanged = equalsIgnoreCase(oldFolder.name, newName);
+    if (capitalizationChanged) {
+      final tempName = newName + Downloader.tmpDirSuffix;
+      try {
+        oldFolder.renameSync(tempName);
+      } catch (e) {
+        logger.e("Failed to rename source download folder: ${oldFolder.name}");
+        return;
+      }
+    }
 
-  //  if (oldFolder.renameTo(newName).not()) {
-  //    logger.e("Failed to rename source download folder: ${oldFolder.name}");
-  //  }
+    try {
+      oldFolder.renameSync(newName);
+    } catch (e) {
+      logger.e("Failed to rename source download folder: ${oldFolder.name}");
+    }
   }
 
   /// Renames an already downloaded chapter in a [manga] and [source]
@@ -280,41 +296,45 @@ class DownloadManager {
     Chapter oldChapter,
     Chapter newChapter,
   ) async {
-  //  final oldNames = provider.getValidChapterDirNames(oldChapter.name, oldChapter.scanlator);
-  //  final mangaDir = provider.getMangaDir(manga.title, source);
+    final oldNames = provider.getValidChapterDirNames(
+      chapterName: oldChapter.name,
+      chapterScanlator: oldChapter.scanlator,
+    );
+    final mangaDir = await provider.getMangaDir(manga.title, source);
 
-  //  // Assume there's only 1 version of the chapter name formats present
-  //  final oldDownload = oldNames.asSequence()
-  //      .mapNotNull((it) => mangaDir.findFile(it))
-  //      .firstOrNull();
-  //  if (oldDownload == null) return;
+    // Assume there's only 1 version of the chapter name formats present
+    final oldDownload = oldNames
+        .mapNotNull((it) => mangaDir.findFile(it))
+        .firstOrNull;
+    if (oldDownload == null) return;
 
-  //  String newName = provider.getChapterDirName(newChapter.name, newChapter.scanlator);
-  //  if (oldDownload.isFile && oldDownload.extension == "cbz") newName += ".cbz";
+    String newName = provider.getChapterDirName(newChapter.name, newChapter.scanlator);
+    if (oldDownload.extension == "cbz") newName += ".cbz";
 
-  //  if (oldDownload.name == newName) return;
+    if (oldDownload.name == newName) return;
 
-  //  if (oldDownload.renameTo(newName)) {
-  //    cache.removeChapter(oldChapter, manga);
-  //    cache.addChapter(newName, mangaDir, manga);
-  //  } else {
-  //    logger.e("Could not rename downloaded chapter: ${oldNames.joinToString()}");
-  //  }
+    try {
+      oldDownload.renameSync(newName);
+      //cache.removeChapter(oldChapter, manga);
+      //cache.addChapter(newName, mangaDir, manga);
+    } catch (e) {
+      logger.e("Could not rename downloaded chapter: ${oldNames.joinToString()}");
+    }
   }
 
   Future<List<Chapter>> _getChaptersToDelete(List<Chapter> chapters, Manga manga) async {
     // Retrieve the categories that are set to exclude from being deleted on read
     final categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map((it) => int.parse(it));
 
-    final _categoriesForManga = await getCategories.await_(manga.id);
-    var categoriesForManga = _categoriesForManga.map((it) => it.id).toList();
+    final categories = await getCategories.await_(manga.id);
+    var categoriesForManga = categories.map((it) => it.id).toList();
     if (categoriesForManga.isEmpty) categoriesForManga = const [0];
     final filteredCategoryManga = categoriesForManga.intersect(categoriesToExclude).isNotEmpty
         ? chapters.filterNot((it) => it.read)
         : chapters;
 
     if (!downloadPreferences.removeBookmarkedChapters().get()) {
-      return filteredCategoryManga.filterNot((it) => it.bookmark).toList();
+      return filteredCategoryManga.whereNot((it) => it.bookmark).toList();
     } else {
       return filteredCategoryManga.toList();
     }
@@ -345,8 +365,8 @@ class DownloadManager {
 
 @riverpod
 DownloadManager downloadManager(DownloadManagerRef ref) => DownloadManager(
-      //context: ref.watch(contextProvider),
-      //provider: ref.watch(downloadProviderProvider),
+      ref: ref,
+      provider: ref.watch(downloadProviderProvider),
       //cache: ref.watch(downloadCacheProvider),
       getCategories: ref.watch(getCategoriesProvider),
       getChapter: ref.watch(getChapterProvider),

@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mime/mime.dart';
+
+import 'package:flutteryomi/core/storage/directory_extensions.dart';
 
 part 'image_util.freezed.dart';
 
@@ -185,11 +186,11 @@ abstract class ImageUtil {
 
   //  final splitDataList = options.splitData;
 
-  //  try {
+    try {
   //    splitDataList.forEach((splitData) {
   //      final splitImageName = _splitImageName(filenamePrefix, splitData.index)
   //      // Remove pre-existing split if exists (this split shouldn't exist under normal circumstances)
-  //      tmpDir.findFile(splitImageName)?.delete()
+        //tmpDir.findFile(splitImageName)?.delete();
 
   //      final splitFile = tmpDir.createFile(splitImageName)!!
 
@@ -207,16 +208,16 @@ abstract class ImageUtil {
   //    });
   //    imageFile.delete();
   //    return true;
-  //  } catch (e) {
+    } catch (e) {
   //    // Image splits were not successfully saved so delete them and keep the original image
   //    splitDataList
   //        .map((it) => _splitImageName(filenamePrefix, it.index))
   //        .forEach((it) => tmpDir.findFile(it)?.delete());
   //    logger.e(e);
   //    return false;
-  //  } finally {
+    } finally {
   //    bitmapRegionDecoder.recycle();
-  //  }
+    }
     return false;
   }
 

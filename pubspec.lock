@@ -209,14 +209,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  csv:
-    dependency: transitive
-    description:
-      name: csv
-      sha256: "63ed2871dd6471193dffc52c0e6c76fb86269c00244d244297abbb355c84a86e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -350,6 +342,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_launcher_icons:
+    dependency: "direct dev"
+    description:
+      name: flutter_launcher_icons
+      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -501,6 +501,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  image:
+    dependency: transitive
+    description:
+      name: image
+      sha256: "4c68bfd5ae83e700b5204c1e74451e7bf3cf750e6843c6e158289cf56bda018e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.7"
   infinite_scroll_pagination:
     dependency: "direct main"
     description:
@@ -533,14 +541,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-  json2yaml:
-    dependency: transitive
-    description:
-      name: json2yaml
-      sha256: da94630fbc56079426fdd167ae58373286f603371075b69bf46d848d63ba3e51
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   json_annotation:
     dependency: "direct main"
     description:
@@ -970,22 +970,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  slang:
-    dependency: "direct main"
-    description:
-      name: slang
-      sha256: "5e08ac915ac27a3508863f37734280d30c3713d56746cd2e4a5da77413da4b95"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.30.1"
-  slang_flutter:
-    dependency: "direct main"
-    description:
-      name: slang_flutter
-      sha256: "9ee040b0d364d3a4d692e4af536acff6ef513870689403494ebc6d59b0dccea6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.30.0"
   sliver_tools:
     dependency: transitive
     description:

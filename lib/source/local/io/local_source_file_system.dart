@@ -24,7 +24,7 @@ class LocalSourceFileSystem {
   Future<Directory?> getMangaDirectory(String name) async {
     final dir = await getBaseDirectory();
     if (dir != null) {
-      return await FileSystemEntity.isDirectory(p.join(dir.path, name))
+      return FileSystemEntity.isDirectorySync(p.join(dir.path, name))
           ? Directory(name)
           : null;
     } else {

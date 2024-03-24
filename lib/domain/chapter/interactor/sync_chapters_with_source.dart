@@ -15,6 +15,7 @@ import 'package:flutteryomi/domain/chapter/model/no_chapters_exception.dart';
 import 'package:flutteryomi/domain/chapter/repository/chapter_repository.dart';
 import 'package:flutteryomi/domain/chapter/service/chapter_recognition.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
+import 'package:flutteryomi/domain/download/download_provider.dart';
 import 'package:flutteryomi/domain/download/service/download_preferences.dart';
 import 'package:flutteryomi/domain/manga/interactor/get_excluded_scanlators.dart';
 import 'package:flutteryomi/domain/manga/interactor/update_manga.dart';
@@ -26,11 +27,10 @@ import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'sync_chapters_with_source.g.dart';
 
-//TODO
 class SyncChaptersWithSource {
   final DownloadManager downloadManager;
   final DownloadPreferences downloadPreferences;
-  //final DownloadProvider downloadProvider;
+  final DownloadProvider downloadProvider;
   final ChapterRepository chapterRepository;
   final ShouldUpdateDbChapter shouldUpdateDbChapter;
   final UpdateManga updateManga;
@@ -41,7 +41,7 @@ class SyncChaptersWithSource {
   SyncChaptersWithSource(
     this.downloadManager,
     this.downloadPreferences,
-    //this.downloadProvider,
+    this.downloadProvider,
     this.chapterRepository,
     this.shouldUpdateDbChapter,
     this.updateManga,
@@ -129,14 +129,14 @@ class SyncChaptersWithSource {
         newChapters.add(toAddChapter);
       } else {
         if (shouldUpdateDbChapter.await_(dbChapter, chapter)) {
-          //final shouldRenameChapter = downloadProvider.isChapterDirNameChanged(dbChapter, chapter) &&
-          //    downloadManager.isChapterDownloaded(
-          //      dbChapter.name, dbChapter.scanlator, manga.title, manga.source,
-          //    );
+          final shouldRenameChapter = downloadProvider.isChapterDirNameChanged(dbChapter, chapter) &&
+              downloadManager.isChapterDownloaded(
+                dbChapter.name, dbChapter.scanlator, manga.title, manga.source,
+              );
 
-          //if (shouldRenameChapter) {
-          //  await downloadManager.renameChapter(source, manga, dbChapter, chapter);
-          //}
+          if (shouldRenameChapter) {
+            await downloadManager.renameChapter(source, manga, dbChapter, chapter);
+          }
           Chapter toChangeChapter = dbChapter.copyWith(
             name: chapter.name,
             chapterNumber: chapter.chapterNumber,
@@ -249,7 +249,7 @@ SyncChaptersWithSource syncChaptersWithSource(SyncChaptersWithSourceRef ref) =>
     SyncChaptersWithSource(
       ref.watch(downloadManagerProvider),
       ref.watch(downloadPreferencesProvider),
-      //ref.watch(downloadProviderProvider),
+      ref.watch(downloadProviderProvider),
       ref.watch(chapterRepositoryProvider),
       ref.watch(shouldUpdateDbChapterProvider),
       ref.watch(updateMangaProvider),

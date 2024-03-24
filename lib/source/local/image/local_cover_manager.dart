@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
+import 'package:dartx/dartx_io.dart';
 import 'package:path/path.dart' as p;
 import 'package:quiver/strings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -25,9 +26,9 @@ class LocalCoverManager {
     return files
         // Get all file whose names start with "cover"
         .where((it) => it is File
-            && equalsIgnoreCase(p.basenameWithoutExtension(it.path), 'cover'))
+            && equalsIgnoreCase(it.nameWithoutExtension, 'cover'))
         // Get the first actual image
-        .firstWhereOrNull((it) => ImageUtil.isImage(p.basename(it.path)))
+        .firstWhereOrNull((it) => ImageUtil.isImage(it.name))
         as File?;
   }
 
@@ -36,7 +37,7 @@ class LocalCoverManager {
     if (directory == null) return null;
 
     final targetFileRef = await find(manga.url)
-        ?? await File(p.join(directory.path, _defaultCoverName)).create(recursive: true);
+        ?? await directory.file(_defaultCoverName).create(recursive: true);
     final targetFile = await file.copy(targetFileRef.path);
 
     DiskUtil.createNoMediaFile(directory);
@@ -50,7 +51,7 @@ class LocalCoverManager {
     if (directory == null) return null;
 
     final targetFile = await find(manga.url)
-        ?? await File(p.join(directory.path, _defaultCoverName)).create(recursive: true);
+        ?? await directory.file(_defaultCoverName).create(recursive: true);
     final outputStream = OutputFileStream(targetFile.path);
     file.writeContent(outputStream);
     outputStream.close();

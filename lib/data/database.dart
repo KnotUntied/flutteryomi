@@ -1,9 +1,7 @@
-import 'dart:io';
-
+import 'package:dartx/dartx_io.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 
 import 'package:flutteryomi/data/database.drift.dart';
 import 'package:flutteryomi/data/drift/data/categories.drift.dart';
@@ -64,7 +62,7 @@ Database database(DatabaseRef ref) {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final file = dbFolder.file('db.sqlite');
     return NativeDatabase.createInBackground(file);
   });
 }
