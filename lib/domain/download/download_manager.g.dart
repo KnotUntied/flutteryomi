@@ -6,7 +6,7 @@ part of 'download_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$downloadManagerHash() => r'ea231c37b8dd9572d269944674a7247024b9dee7';
+String _$downloadManagerHash() => r'8df4b38fa4b59cd2ae779d086f253792aea816c9';
 
 /// See also [downloadManager].
 @ProviderFor(downloadManager)

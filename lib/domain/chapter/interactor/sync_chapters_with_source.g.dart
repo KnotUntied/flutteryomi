@@ -7,7 +7,7 @@ part of 'sync_chapters_with_source.dart';
 // **************************************************************************
 
 String _$syncChaptersWithSourceHash() =>
-    r'cb42ae845a5086428ab1222f6538c1a8d0c1ceef';
+    r'280d73b30d3f2e18bcfb3c6c89d70430627a5ca4';
 
 /// See also [syncChaptersWithSource].
 @ProviderFor(syncChaptersWithSource)

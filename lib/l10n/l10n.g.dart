@@ -12,7 +12,7 @@ String _$appLocalizationsHash() => r'479de3fc15e994fb76a9b0a6c5ffd08989afacba';
 ///
 /// Provider used to access the AppLocalizations object for the current locale.
 ///
-/// Intended for Riverpod providers. Currently, widgets can still use BuildContext.
+/// Intended for Riverpod providers and anything else with access to ref.
 ///
 /// Copied from [appLocalizations].
 @ProviderFor(appLocalizations)

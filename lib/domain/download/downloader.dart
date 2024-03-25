@@ -81,12 +81,9 @@ class Downloader {
   /// Whether the downloader is paused
   bool isPaused = false;
 
-  //init {
-  //  launchNow {
-  //    final chapters = () async => await store.restore();
-  //    _addAllToQueue(chapters.await_());
-  //  }
-  //}
+  Future<void> init() async {
+    _addAllToQueue(await _store.restore());
+  }
 
   /// Starts the downloader. It doesn't do anything if it's already running or there isn't anything
   /// to download.
@@ -592,14 +589,14 @@ class Downloader {
   void _addAllToQueue(List<Download> downloads) {
     //_queueState.update((it) {
     //  downloads.forEach((download) => download.status = DownloadState.queue);
-    //  store.addAll(downloads);
+    //  _store.addAll(downloads);
     //  it + downloads;
     //});
   }
 
   void _removeFromQueue(Download download) {
     //_queueState.update((it) {
-    //  store.remove(download);
+    //  _store.remove(download);
     //  if (download.status == DownloadState.downloading || download.status == DownloadState.queue) {
     //    download.status = DownloadState.notDownloaded;
     //  }
@@ -610,7 +607,7 @@ class Downloader {
   void _removeFromQueueIf(bool Function(Download) predicate) {
     //_queueState.update((queue) {
     //  final downloads = queue.where((it) => predicate(it));
-    //  store.removeAll(downloads);
+    //  _store.removeAll(downloads);
     //  downloads.forEach((download) {
     //    if (download.status == DownloadState.downloading || download.status == DownloadState.queue) {
     //      download.status = DownloadState.notDownloaded;
@@ -636,7 +633,7 @@ class Downloader {
     //      download.status = DownloadState.notDownloaded;
     //    }
     //  });
-    //  store.clear();
+    //  _store.clear();
     //  emptyList();
     //});
   }

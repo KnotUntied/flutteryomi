@@ -42,7 +42,9 @@ class DownloadManager {
     required this.sourceManager,
     required this.downloadPreferences,
     required this.logger,
-  });
+  }) {
+    _downloader.init();
+  }
 
   final Ref ref;
   final DownloadProvider provider;
