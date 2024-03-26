@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:dartx/dartx_io.dart' hide IterableFirstOrNull, IterableSortedBy, IterableWhereNot;
+import 'package:dartx/dartx_io.dart'
+    hide IterableFirstOrNull, IterableSortedBy, IterableWhereNot;
 import 'package:logger/logger.dart';
 import 'package:mime/mime.dart';
 import 'package:quiver/strings.dart';
@@ -11,10 +12,10 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:flutteryomi/core/storage/directory_extensions.dart';
 import 'package:flutteryomi/core/util/system/logger.dart';
-import 'package:flutteryomi/l10n/l10n.dart';
 import 'package:flutteryomi/domain/category/interactor/get_categories.dart';
 import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/chapter/model/chapter.dart';
+import 'package:flutteryomi/domain/download/download_pending_deleter.dart';
 import 'package:flutteryomi/domain/download/download_provider.dart';
 import 'package:flutteryomi/domain/download/downloader.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
@@ -23,6 +24,7 @@ import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/model/page.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
+import 'package:flutteryomi/l10n/l10n.dart';
 import 'package:flutteryomi/source/api/source.dart';
 
 part 'download_manager.g.dart';
@@ -71,7 +73,7 @@ class DownloadManager {
   bool get isRunning => _downloader.isRunning;
 
   /// Queue to delay the deletion of a list of chapters until triggered.
-  //late final _pendingDeleter = DownloadPendingDeleter(context);
+  final _pendingDeleter = DownloadPendingDeleter();
 
   late final queueState = _downloader.queueState;
 
@@ -113,12 +115,13 @@ class DownloadManager {
   void startDownloadNow(int chapterId) async {
     final existingDownload = getQueuedDownloadOrNull(chapterId);
     // If not in queue try to start a new download
-    final toAdd = existingDownload ?? await Download.fromChapterId(
-      chapterId: chapterId,
-      getChapter: getChapter,
-      getManga: getManga,
-      sourceManager: sourceManager,
-    );
+    final toAdd = existingDownload ??
+        await Download.fromChapterId(
+          chapterId: chapterId,
+          getChapter: getChapter,
+          getManga: getManga,
+          sourceManager: sourceManager,
+        );
     if (toAdd == null) return;
     final queue = queueState.value;
     if (existingDownload != null) queue.remove(existingDownload);
@@ -133,7 +136,8 @@ class DownloadManager {
   }
 
   /// Tells the downloader to enqueue the given list of [chapters] in [manga]. Can be set to [autoStart].
-  void downloadChapters(Manga manga, List<Chapter> chapters, [bool autoStart = true]) {
+  void downloadChapters(Manga manga, List<Chapter> chapters,
+      [bool autoStart = true]) {
     _downloader.queueChapters(manga, chapters, autoStart);
   }
 
@@ -147,7 +151,8 @@ class DownloadManager {
   }
 
   /// Builds and returns the page list of a downloaded [chapter] from its [manga] and [source].
-  Future<List<Page>> buildPageList(Source source, Manga manga, Chapter chapter) async {
+  Future<List<Page>> buildPageList(
+      Source source, Manga manga, Chapter chapter) async {
     final lang = ref.read(appLocalizationsProvider);
     final chapterDir = await provider.findChapterDir(
       chapterName: chapter.name,
@@ -155,16 +160,16 @@ class DownloadManager {
       mangaTitle: manga.title,
       source: source,
     );
-    final files = chapterDir
-        ?.listSync()
-        .where((it) => lookupMimeType(it.name)?.contains("image") ?? false)
-        ?? const [];
+    final files = chapterDir?.listSync().where(
+            (it) => lookupMimeType(it.name)?.contains("image") ?? false) ??
+        const [];
 
     if (files.isEmpty) {
       throw Exception(lang.page_list_empty_error);
     }
 
-    return files.sortedBy((it) => it.name)
+    return files
+        .sortedBy((it) => it.name)
         .mapIndexed((i, file) => Page(i)..status = PageState.ready)
         .toList();
   }
@@ -177,7 +182,8 @@ class DownloadManager {
     String mangaTitle,
     int sourceId, {
     bool skipCache = false,
-  }) => false;
+  }) =>
+      false;
   //]) => cache.isChapterDownloaded(
   //  chapterName,
   //  chapterScanlator,
@@ -198,7 +204,8 @@ class DownloadManager {
       _removeFromDownloadQueue(downloads.map((it) => it.chapter).toList());
 
   /// Deletes the directories of a list of downloaded [chapters] in their [manga] and [source].
-  void deleteChapters(List<Chapter> chapters, Manga manga, Source source) async {
+  void deleteChapters(
+      List<Chapter> chapters, Manga manga, Source source) async {
     final filteredChapters = await _getChaptersToDelete(chapters, manga);
     if (filteredChapters.isEmpty) return;
 
@@ -222,7 +229,8 @@ class DownloadManager {
 
   /// Deletes the directory of a downloaded [manga] in a given [source].
   /// Can be set to also remove queued downloads with [removeQueued].
-  void deleteManga(Manga manga, Source source, {bool removeQueued = true}) async {
+  void deleteManga(Manga manga, Source source,
+      {bool removeQueued = true}) async {
     if (removeQueued) _downloader.removeMangaFromQueue(manga);
     (await provider.findMangaDir(mangaTitle: manga.title, source: source))
         ?.delete();
@@ -253,17 +261,20 @@ class DownloadManager {
 
   // TODO
   /// Adds a list of [chapters] from a given [manga] to be deleted later.
-  Future<void> enqueueChaptersToDelete(List<Chapter> chapters, Manga manga) async => await null;
-    //await pendingDeleter.addChapters(_getChaptersToDelete(chapters, manga), manga);
+  void enqueueChaptersToDelete(List<Chapter> chapters, Manga manga) async =>
+      _pendingDeleter.addChapters(
+        await _getChaptersToDelete(chapters, manga),
+        manga,
+      );
 
   /// Triggers the execution of the deletion of pending chapters.
   void deletePendingChapters() {
-  //  final pendingChapters = pendingDeleter.getPendingChapters();
-  //  for (final (manga, chapters) in pendingChapters) {
-  //    final source = sourceManager.get(manga.source);
-  //    if (source == null) continue;
-  //    deleteChapters(chapters, manga, source);
-  //  }
+    final pendingChapters = _pendingDeleter.getPendingChapters();
+    pendingChapters.forEach((manga, chapters) {
+      final source = sourceManager.get(manga.source);
+      if (source == null) return;
+      deleteChapters(chapters, manga, source);
+    });
   }
 
   /// Renames source download folder from [oldSource] to [newSource].
@@ -307,12 +318,12 @@ class DownloadManager {
     final mangaDir = await provider.getMangaDir(manga.title, source);
 
     // Assume there's only 1 version of the chapter name formats present
-    final oldDownload = oldNames
-        .mapNotNull((it) => mangaDir.findFile(it))
-        .firstOrNull;
+    final oldDownload =
+        oldNames.mapNotNull((it) => mangaDir.findFile(it)).firstOrNull;
     if (oldDownload == null) return;
 
-    String newName = provider.getChapterDirName(newChapter.name, newChapter.scanlator);
+    String newName =
+        provider.getChapterDirName(newChapter.name, newChapter.scanlator);
     if (oldDownload.extension == "cbz") newName += ".cbz";
 
     if (oldDownload.name == newName) return;
@@ -322,20 +333,26 @@ class DownloadManager {
       //cache.removeChapter(oldChapter, manga);
       //cache.addChapter(newName, mangaDir, manga);
     } catch (e) {
-      logger.e("Could not rename downloaded chapter: ${oldNames.joinToString()}");
+      logger
+          .e("Could not rename downloaded chapter: ${oldNames.joinToString()}");
     }
   }
 
-  Future<List<Chapter>> _getChaptersToDelete(List<Chapter> chapters, Manga manga) async {
+  Future<List<Chapter>> _getChaptersToDelete(
+      List<Chapter> chapters, Manga manga) async {
     // Retrieve the categories that are set to exclude from being deleted on read
-    final categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map((it) => int.parse(it));
+    final categoriesToExclude = downloadPreferences
+        .removeExcludeCategories()
+        .get()
+        .map((it) => int.parse(it));
 
     final categories = await getCategories.await_(manga.id);
     var categoriesForManga = categories.map((it) => it.id).toList();
     if (categoriesForManga.isEmpty) categoriesForManga = const [0];
-    final filteredCategoryManga = categoriesForManga.intersect(categoriesToExclude).isNotEmpty
-        ? chapters.filterNot((it) => it.read)
-        : chapters;
+    final filteredCategoryManga =
+        categoriesForManga.intersect(categoriesToExclude).isNotEmpty
+            ? chapters.filterNot((it) => it.read)
+            : chapters;
 
     if (!downloadPreferences.removeBookmarkedChapters().get()) {
       return filteredCategoryManga.whereNot((it) => it.bookmark).toList();
@@ -345,23 +362,19 @@ class DownloadManager {
   }
 
   Stream<Download> statusStream() => queueState
-      .switchMap((downloads) => Rx.merge(
-        downloads.map((download) => download.statusStream.skip(1).map((_) => download))
-      ))
+      .switchMap((downloads) => Rx.merge(downloads.map(
+          (download) => download.statusStream.skip(1).map((_) => download))))
       .startWithMany(
-        queueState
-            .value
+        queueState.value
             .where((download) => download.status == DownloadState.downloading)
             .toList(),
       );
 
   Stream<Download> progressStream() => queueState
-      .switchMap((downloads) => Rx.merge(
-        downloads.map((download) => download.progressStream.skip(1).map((_) => download))
-      ))
+      .switchMap((downloads) => Rx.merge(downloads.map(
+          (download) => download.progressStream.skip(1).map((_) => download))))
       .startWithMany(
-        queueState
-            .value
+        queueState.value
             .where((download) => download.status == DownloadState.downloading)
             .toList(),
       );
