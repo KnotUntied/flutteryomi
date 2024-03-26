@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartx/dartx.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 
 import 'package:flutteryomi/domain/chapter/interactor/get_chapter.dart';
 import 'package:flutteryomi/domain/download/model/download.dart';
@@ -9,7 +10,6 @@ import 'package:flutteryomi/domain/manga/interactor/get_manga.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/online/http_source.dart';
-import 'package:hive/hive.dart';
 
 part 'download_store.freezed.dart';
 
@@ -25,36 +25,34 @@ class DownloadStore {
   final GetManga getManga;
   final GetChapter getChapter;
 
+  final preferences = Hive.box('active_downloads');
+
   /// Counter used to keep the queue order.
   int _counter = 0;
 
   // shared_preferences is a singleton and has no support for separate files/locations
   // Use hive instead
   /// Adds a list of [downloads] to the store.
-  void addAll(List<Download> downloads) async {
-    final preferences = await Hive.openBox('active_downloads');
+  void addAll(List<Download> downloads) {
     preferences.putAll(
       {for (final it in downloads) _getKey(it): _serialize(it)},
     );
   }
 
   /// Removes a [download] from the store.
-  void remove(Download download) async {
-    final preferences = await Hive.openBox('active_downloads');
+  void remove(Download download) {
     preferences.delete(_getKey(download));
   }
 
   /// Removes a list of [downloads] from the store.
-  void removeAll(List<Download> downloads) async {
-    final preferences = await Hive.openBox('active_downloads');
+  void removeAll(List<Download> downloads) {
     preferences.deleteAll(
       downloads.map((it) => _getKey(it)),
     );
   }
 
   /// Removes all the downloads from the store.
-  void clear() async {
-    final preferences = await Hive.openBox('active_downloads');
+  void clear() {
     preferences.clear();
   }
 
@@ -63,7 +61,6 @@ class DownloadStore {
 
   /// Returns the list of downloads to restore. It should be called in a background thread.
   Future<List<Download>> restore() async {
-    final preferences = await Hive.openBox('active_downloads');
     final objs = preferences.keys.nonNulls
         .mapNotNull((it) => _deserialize(it as String))
         .sortedBy((it) => it.order);
