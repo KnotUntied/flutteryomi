@@ -21,7 +21,7 @@ mixin _$LibraryItem {
   int get unreadCount => throw _privateConstructorUsedError;
   bool get isLocal => throw _privateConstructorUsedError;
   String get sourceLanguage => throw _privateConstructorUsedError;
-  SourceManager get sourceManager => throw _privateConstructorUsedError;
+  Ref<Object?> get ref => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LibraryItemCopyWith<LibraryItem> get copyWith =>
@@ -40,7 +40,7 @@ abstract class $LibraryItemCopyWith<$Res> {
       int unreadCount,
       bool isLocal,
       String sourceLanguage,
-      SourceManager sourceManager});
+      Ref<Object?> ref});
 
   $LibraryMangaCopyWith<$Res> get libraryManga;
 }
@@ -63,7 +63,7 @@ class _$LibraryItemCopyWithImpl<$Res, $Val extends LibraryItem>
     Object? unreadCount = null,
     Object? isLocal = null,
     Object? sourceLanguage = null,
-    Object? sourceManager = null,
+    Object? ref = null,
   }) {
     return _then(_value.copyWith(
       libraryManga: null == libraryManga
@@ -86,10 +86,10 @@ class _$LibraryItemCopyWithImpl<$Res, $Val extends LibraryItem>
           ? _value.sourceLanguage
           : sourceLanguage // ignore: cast_nullable_to_non_nullable
               as String,
-      sourceManager: null == sourceManager
-          ? _value.sourceManager
-          : sourceManager // ignore: cast_nullable_to_non_nullable
-              as SourceManager,
+      ref: null == ref
+          ? _value.ref
+          : ref // ignore: cast_nullable_to_non_nullable
+              as Ref<Object?>,
     ) as $Val);
   }
 
@@ -116,7 +116,7 @@ abstract class _$$LibraryItemImplCopyWith<$Res>
       int unreadCount,
       bool isLocal,
       String sourceLanguage,
-      SourceManager sourceManager});
+      Ref<Object?> ref});
 
   @override
   $LibraryMangaCopyWith<$Res> get libraryManga;
@@ -138,7 +138,7 @@ class __$$LibraryItemImplCopyWithImpl<$Res>
     Object? unreadCount = null,
     Object? isLocal = null,
     Object? sourceLanguage = null,
-    Object? sourceManager = null,
+    Object? ref = null,
   }) {
     return _then(_$LibraryItemImpl(
       libraryManga: null == libraryManga
@@ -161,10 +161,10 @@ class __$$LibraryItemImplCopyWithImpl<$Res>
           ? _value.sourceLanguage
           : sourceLanguage // ignore: cast_nullable_to_non_nullable
               as String,
-      sourceManager: null == sourceManager
-          ? _value.sourceManager
-          : sourceManager // ignore: cast_nullable_to_non_nullable
-              as SourceManager,
+      ref: null == ref
+          ? _value.ref
+          : ref // ignore: cast_nullable_to_non_nullable
+              as Ref<Object?>,
     ));
   }
 }
@@ -178,7 +178,7 @@ class _$LibraryItemImpl extends _LibraryItem {
       this.unreadCount = -1,
       this.isLocal = false,
       this.sourceLanguage = '',
-      required this.sourceManager})
+      required this.ref})
       : super._();
 
   @override
@@ -196,11 +196,11 @@ class _$LibraryItemImpl extends _LibraryItem {
   @JsonKey()
   final String sourceLanguage;
   @override
-  final SourceManager sourceManager;
+  final Ref<Object?> ref;
 
   @override
   String toString() {
-    return 'LibraryItem(libraryManga: $libraryManga, downloadCount: $downloadCount, unreadCount: $unreadCount, isLocal: $isLocal, sourceLanguage: $sourceLanguage, sourceManager: $sourceManager)';
+    return 'LibraryItem(libraryManga: $libraryManga, downloadCount: $downloadCount, unreadCount: $unreadCount, isLocal: $isLocal, sourceLanguage: $sourceLanguage, ref: $ref)';
   }
 
   @override
@@ -217,13 +217,12 @@ class _$LibraryItemImpl extends _LibraryItem {
             (identical(other.isLocal, isLocal) || other.isLocal == isLocal) &&
             (identical(other.sourceLanguage, sourceLanguage) ||
                 other.sourceLanguage == sourceLanguage) &&
-            (identical(other.sourceManager, sourceManager) ||
-                other.sourceManager == sourceManager));
+            (identical(other.ref, ref) || other.ref == ref));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, libraryManga, downloadCount,
-      unreadCount, isLocal, sourceLanguage, sourceManager);
+      unreadCount, isLocal, sourceLanguage, ref);
 
   @JsonKey(ignore: true)
   @override
@@ -239,7 +238,7 @@ abstract class _LibraryItem extends LibraryItem {
       final int unreadCount,
       final bool isLocal,
       final String sourceLanguage,
-      required final SourceManager sourceManager}) = _$LibraryItemImpl;
+      required final Ref<Object?> ref}) = _$LibraryItemImpl;
   const _LibraryItem._() : super._();
 
   @override
@@ -253,7 +252,7 @@ abstract class _LibraryItem extends LibraryItem {
   @override
   String get sourceLanguage;
   @override
-  SourceManager get sourceManager;
+  Ref<Object?> get ref;
   @override
   @JsonKey(ignore: true)
   _$$LibraryItemImplCopyWith<_$LibraryItemImpl> get copyWith =>

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:dartx/dartx_io.dart';
-import 'package:drift/drift.dart';
+// Alias to avoid conflict with Freezed
+import 'package:drift/drift.dart' as drift;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -153,7 +154,7 @@ class _ChapterEntry with _$ChapterEntry {
         id: id,
         url: url,
         name: name,
-        scanlator: Value(scanlator),
+        scanlator: drift.Value(scanlator),
       );
 
   factory _ChapterEntry.fromJson(Map<String, Object?> json) =>

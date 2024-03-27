@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/riverpod.dart';
 
 import 'package:flutteryomi/domain/library/model/library_manga.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
@@ -15,7 +16,7 @@ class LibraryItem with _$LibraryItem {
     @Default(-1) int unreadCount,
     @Default(false) bool isLocal,
     @Default('') String sourceLanguage,
-    required SourceManager sourceManager,
+    required Ref ref,
   }) = _LibraryItem;
 
   /// Checks if a query [constraint] matches the manga.
@@ -27,8 +28,9 @@ class LibraryItem with _$LibraryItem {
     //    .getOrStub(libraryManga.manga.source)
     //    .getNameForMangaInfo();
   Future<bool> matches(String constraint) async {
-    final source = await this.sourceManager.getOrStub(libraryManga.manga.source);
-    final sourceName = source.getNameForMangaInfo();
+    final sourceManager = ref.read(sourceManagerProvider);
+    final source = await sourceManager.getOrStub(libraryManga.manga.source);
+    final sourceName = source.getNameForMangaInfo(ref);
     return libraryManga.manga.title.containsIgnoreCase(constraint) ||
         (libraryManga.manga.author?.containsIgnoreCase(constraint) ?? false) ||
         (libraryManga.manga.artist?.containsIgnoreCase(constraint) ?? false) ||

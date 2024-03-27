@@ -58,8 +58,10 @@ part 'manga_screen_model.g.dart';
 @riverpod
 class MangaScreenModel extends _$MangaScreenModel {
   @override
-  Stream<MangaScreenState> build(
-      {required int mangaId, required bool isFromSource,}) {
+  Stream<MangaScreenState> build({
+    required int mangaId,
+    required bool isFromSource,
+  }) {
     final downloadManager = ref.watch(downloadManagerProvider);
     final getMangaWithChapters = ref.watch(getMangaWithChaptersProvider);
     final getExcludedScanlators = ref.watch(getExcludedScanlatorsProvider);
@@ -82,7 +84,7 @@ class MangaScreenModel extends _$MangaScreenModel {
             state.valueOrNull?.selectedChapterIds ?? {},
           ),
         );
-      }
+      },
     );
 
     final stream2 = getExcludedScanlators.subscribe(mangaId).distinct();
@@ -119,7 +121,8 @@ class MangaScreenModel extends _$MangaScreenModel {
       stream2,
       stream3,
     ]).asyncMap((e) async {
-      final mangaAndChapters = e.first as ({List<ChapterListItem> chapters, Manga manga});
+      final mangaAndChapters =
+          e.first as ({List<ChapterListItem> chapters, Manga manga});
       final excludedScanlators = e.second as Set<String>;
       final availableScanlators = e.third as Set<String>;
       final (manga: manga, chapters: chapters) = mangaAndChapters;
@@ -556,7 +559,7 @@ class MangaScreenModel extends _$MangaScreenModel {
       final manga = previousState.manga;
       //final chapters = filteredChapters.orEmpty().map((it) => it.chapter);
       //final prevChapters = manga.sortDescending() ? chapters.asReversed() : chapters;
-      //final pointerPos = prevChapters.indexOf(pointer)
+      //final pointerPos = prevChapters.indexOf(pointer);
       //if (pointerPos != -1) markChaptersRead(prevChapters.take(pointerPos), true);
     }
   }
@@ -942,7 +945,8 @@ class MangaScreenState with _$MangaScreenState {
 sealed class ChapterList {}
 
 @freezed
-class ChapterListMissingCount extends ChapterList with _$ChapterListMissingCount {
+class ChapterListMissingCount extends ChapterList
+    with _$ChapterListMissingCount {
   const factory ChapterListMissingCount({
     required String id,
     required int count,
@@ -996,9 +1000,8 @@ extension _ChapterListUtils on List<Chapter> {
   ) {
     final isLocal = manga.isLocal();
     return map((chapter) {
-      final activeDownload = isLocal
-          ? null
-          : downloadManager.getQueuedDownloadOrNull(chapter.id);
+      final activeDownload =
+          isLocal ? null : downloadManager.getQueuedDownloadOrNull(chapter.id);
       final downloaded = isLocal
           ? true
           : downloadManager.isChapterDownloaded(

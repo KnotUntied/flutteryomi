@@ -629,6 +629,8 @@ class _MangaScreenSmallImpl extends ConsumerWidget {
     final lang = AppLocalizations.of(context);
     final provider = mangaScreenModelProvider(mangaId: mangaId, isFromSource: fromSource);
     final state = ref.watch(provider);
+    // Only used for the ref. Kinda hacky
+    final screenModel = ref.watch(provider.notifier);
     final (chapters, listItem, isAnySelected) = (
       state.valueOrNull?.processedChapters ?? [],
       state.valueOrNull?.chapterListItems ?? [],
@@ -701,7 +703,7 @@ class _MangaScreenSmallImpl extends ConsumerWidget {
                       title: data.manga.title,
                       author: data.manga.author,
                       artist: data.manga.artist,
-                      sourceName: data.source.getNameForMangaInfo(),
+                      sourceName: data.source.getNameForMangaInfo(screenModel.ref),
                       isStubSource: data.source is StubSource,
                       coverDataProvider: () => data.manga,
                       status: data.manga.status,
@@ -866,6 +868,7 @@ class _MangaScreenLargeImpl extends ConsumerWidget {
     final lang = AppLocalizations.of(context);
     final provider = mangaScreenModelProvider(mangaId: mangaId, isFromSource: fromSource);
     final state = ref.watch(provider);
+    final screenModel = ref.watch(provider.notifier);
     final (chapters, listItem, isAnySelected) = (
       state.valueOrNull?.processedChapters ?? [],
       state.valueOrNull?.chapterListItems ?? [],
@@ -938,7 +941,7 @@ class _MangaScreenLargeImpl extends ConsumerWidget {
                       title: data.manga.title,
                       author: data.manga.author,
                       artist: data.manga.artist,
-                      sourceName: data.source.getNameForMangaInfo(),
+                      sourceName: data.source.getNameForMangaInfo(screenModel.ref),
                       isStubSource: data.source is StubSource,
                       coverDataProvider: () => data.manga,
                       status: data.manga.status,
