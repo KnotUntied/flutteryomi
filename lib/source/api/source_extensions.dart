@@ -1,16 +1,18 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'package:flutteryomi/domain/source/model/stub_source.dart';
+import 'package:flutteryomi/domain/source/service/source_preferences.dart';
 import 'package:flutteryomi/source/api/source.dart';
 import 'package:flutteryomi/source/local/local_source.dart';
 
 extension SourceExtensions on Source {
-  //TODO
   String getNameForMangaInfo(Ref ref) {
-    //final preferences = ref.read(sourcePreferencesProvider);
-    //final enabledLanguages = preferences.enabledLanguages().get()
-    //    .whereNot((it) => ["all", "other"].contains(it));
-    const enabledLanguages = [];
+    final preferences = ref.read(sourcePreferencesProvider);
+    final enabledLanguages = preferences
+        .enabledLanguages()
+        .get()
+        .whereNot((it) => const ["all", "other"].contains(it));
     final hasOneActiveLanguages = enabledLanguages.length == 1;
     final isInEnabledLanguages = enabledLanguages.contains(lang);
     if (hasOneActiveLanguages && !isInEnabledLanguages) {

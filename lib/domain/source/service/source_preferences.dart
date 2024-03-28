@@ -12,15 +12,16 @@ class SourcePreferences {
   SourcePreferences(this.preferenceStore);
   final PreferenceStore preferenceStore;
 
-  Preference<LibraryDisplayMode> sourceDisplayMode() => preferenceStore.getObject(
+  Preference<LibraryDisplayMode> sourceDisplayMode() =>
+      preferenceStore.getObject(
         "pref_display_mode_catalogue",
         LibraryDisplayMode.default_,
         LibraryDisplayMode.serializer,
         LibraryDisplayMode.deserialize,
       );
 
-  Preference<Set<String>> enabledLanguages() =>
-      preferenceStore.getStringSet("source_languages", LocaleHelper.getDefaultEnabledLanguages());
+  Preference<Set<String>> enabledLanguages() => preferenceStore.getStringSet(
+      "source_languages", LocaleHelper.getDefaultEnabledLanguages());
 
   Preference<Set<String>> disabledSources() =>
       preferenceStore.getStringSet("hidden_catalogues", {});
@@ -28,28 +29,37 @@ class SourcePreferences {
   Preference<Set<String>> pinnedSources() =>
       preferenceStore.getStringSet("pinned_catalogues", {});
 
-  Preference<int> lastUsedSource() =>
-      preferenceStore.getInt(Preference.appStateKey("last_catalogue_source"), -1);
+  Preference<int> lastUsedSource() => preferenceStore.getInt(
+      Preference.appStateKey("last_catalogue_source"), -1);
 
   Preference<bool> showNsfwSource() =>
       preferenceStore.getBool("show_nsfw_source", true);
 
-  Preference<SetMigrateSortingMode> migrationSortingMode() => preferenceStore.getEnum(
-      "pref_migration_sorting", SetMigrateSortingMode.alphabetical, SetMigrateSortingMode.values);
+  Preference<SetMigrateSortingMode> migrationSortingMode() =>
+      preferenceStore.getEnum(
+        "pref_migration_sorting",
+        SetMigrateSortingMode.alphabetical,
+        SetMigrateSortingMode.values,
+      );
 
-  Preference<SetMigrateSortingDirection> migrationSortingDirection() => preferenceStore.getEnum(
-      "pref_migration_direction", SetMigrateSortingDirection.ascending, SetMigrateSortingDirection.values);
+  Preference<SetMigrateSortingDirection> migrationSortingDirection() =>
+      preferenceStore.getEnum(
+        "pref_migration_direction",
+        SetMigrateSortingDirection.ascending,
+        SetMigrateSortingDirection.values,
+      );
 
-  Preference<bool> hideInLibraryItems() => preferenceStore.getBool("browse_hide_in_library_items", false);
+  Preference<bool> hideInLibraryItems() =>
+      preferenceStore.getBool("browse_hide_in_library_items", false);
 
-  Preference<Set<String>> extensionRepos() => preferenceStore.getStringSet("extension_repos", {});
+  Preference<Set<String>> extensionRepos() =>
+      preferenceStore.getStringSet("extension_repos", {});
 
-  Preference<int> extensionUpdatesCount() => preferenceStore.getInt("ext_updates_count", 0);
+  Preference<int> extensionUpdatesCount() =>
+      preferenceStore.getInt("ext_updates_count", 0);
 
-  Preference<Set<String>> trustedExtensions() => preferenceStore.getStringSet(
-    Preference.appStateKey("trusted_extensions"),
-    {},
-  );
+  Preference<Set<String>> trustedExtensions() => preferenceStore
+      .getStringSet(Preference.appStateKey("trusted_extensions"), {});
 }
 
 @riverpod

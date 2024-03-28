@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import 'package:flutteryomi/core/preference/common_preference_store.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
@@ -22,9 +22,7 @@ import 'package:flutteryomi/domain/source/repository/stub_source_repository.dart
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/domain/track/repository/track_repository.dart';
 import 'package:flutteryomi/domain/updates/repository/updates_repository.dart';
-//import 'package:flutteryomi/l10n/strings.g.dart';
 import 'package:flutteryomi/presentation/home/home.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,9 +46,6 @@ void main() async {
         updatesRepositoryProvider.overrideWith((ref) => ref.watch(updatesRepositoryImplProvider)),
       ],
       child: const MyApp(),
-      //child: TranslationProvider(
-      //  child: const MyApp(),
-      //),
     ),
   );
 }
@@ -63,12 +58,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Flutteryomi',
       //onGenerateTitle: (context) => lang.app_name,
-      //localizationsDelegates: const [
-      //  GlobalMaterialLocalizations.delegate,
-      //  GlobalWidgetsLocalizations.delegate,
-      //  GlobalCupertinoLocalizations.delegate,
-      //],
-      //supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: HomeScreen(),
