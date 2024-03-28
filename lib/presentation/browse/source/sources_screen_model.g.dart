@@ -7,7 +7,7 @@ part of 'sources_screen_model.dart';
 // **************************************************************************
 
 String _$sourcesScreenModelHash() =>
-    r'76121986a50d7d5f36e5a69063e88dbd49bd70c8';
+    r'9dd8a37a030cf233ee520f4c19f64221b5534170';
 
 /// Copied from Dart SDK
 class _SystemHash {
