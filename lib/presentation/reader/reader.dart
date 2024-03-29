@@ -10,11 +10,11 @@ class ReaderScreen extends ConsumerWidget {
   const ReaderScreen({
     super.key,
     required this.mangaId,
-    this.fromSource = false,
+    required this.chapterId,
   });
 
   final int mangaId;
-  final bool fromSource;
+  final int chapterId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,12 +1,21 @@
-import 'package:flutteryomi/domain/download/download_manager.dart';
-import 'package:flutteryomi/domain/reader/model/reader_chapter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:flutteryomi/core/storage/disk_util.dart';
+import 'package:flutteryomi/core/util/system/logger.dart';
+import 'package:flutteryomi/domain/base/base_preferences.dart';
+import 'package:flutteryomi/domain/download/download_manager.dart';
 import 'package:flutteryomi/domain/manga/model/manga.dart';
+import 'package:flutteryomi/domain/reader/model/reader_chapter.dart';
+import 'package:flutteryomi/domain/reader/model/reader_page.dart';
 import 'package:flutteryomi/domain/reader/model/viewer_chapters.dart';
+import 'package:flutteryomi/domain/reader/setting/reader_preferences.dart';
+import 'package:flutteryomi/domain/source/model/page.dart';
+import 'package:flutteryomi/domain/track/interactor/track_chapter.dart';
+import 'package:flutteryomi/domain/track/service/track_preferences.dart';
 import 'package:flutteryomi/presentation/reader/viewer/viewer.dart';
+import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'reader_screen_model.freezed.dart';
 part 'reader_screen_model.g.dart';
@@ -830,15 +839,121 @@ class ReaderScreenModel extends _$ReaderScreenModel {
 //    }
 //  }
 
+  /// Saves the image of the selected page on the pictures directory and notifies the UI of the result.
+  /// There's also a notification to allow sharing the image somewhere else or deleting it.
+  void saveImage(ReaderPage page) {
+    final readerPreferences = ref.watch(readerPreferencesProvider);
+    if (page.status != PageState.ready) return;
+    final manga = state.valueOrNull?.manga;
+    if (manga == null) return;
+
+    //final context = Injekt.get<Application>();
+    //final notifier = SaveImageNotifier(context);
+    //notifier.onClear();
+
+    //final filename = generateFilename(manga, page);
+
+    // Pictures directory.
+    final relativePath = readerPreferences.folderPerManga().get()
+        ? DiskUtil.buildValidFilename(manga.title)
+        : "";
+
+    //try {
+    //  final uri = imageSaver.save(
+    //    image: ImagePage(
+    //      inputStream: page.stream!,
+    //      name: filename,
+    //      location: Location.Pictures.create(relativePath),
+    //    ),
+    //  );
+    //  notifier.onComplete(uri);
+    //  eventChannel.send(Event.SavedImage(SaveImageResult.Success(uri)));
+    //} catch (e) {
+    //  //notifier.onError(e.message);
+    //  //eventChannel.send(Event.SavedImage(SaveImageResult.Error(e)));
+    //}
+  }
+
   //TODO
+  /// Shares the image of the selected page and notifies the UI with the path of the file to share.
+  /// The image must be first copied to the internal partition because there are many possible
+  /// formats it can come from, like a zipped chapter, in which case it's not possible to directly
+  /// get a path to the file and it has to be decompressed somewhere first. Only the last shared
+  /// image will be kept so it won't be taking lots of internal disk space.
+  void shareImage(ReaderPage page) {
+    //final logger = ref.watch(loggerProvider);
+    if (page.status != PageState.ready) return;
+    final manga = state.valueOrNull?.manga;
+    if (manga == null) return;
+
+    //final context = Injekt.get<Application>();
+    //final destDir = context.cacheImageDir;
+
+    //final filename = generateFilename(manga, page);
+
+    //try {
+    //  destDir.deleteRecursively();
+    //  final uri = imageSaver.save(
+    //    image = ImagePage(
+    //      inputStream: page.stream!,
+    //      name: filename,
+    //      location: LocationCache,
+    //    ),
+    //  )
+    //  //eventChannel.send(EventShareImage(uri, page));
+    //} catch (e) {
+    //  logger.e(e);
+    //}
+  }
+
+  //TODO
+  /// Sets the image of the selected page as cover and notifies the UI of the result.
+  void setAsCover(ReaderPage page) {
+    if (page.status != PageState.ready) return;
+    final manga = state.valueOrNull?.manga;
+    if (manga == null) return;
+    final stream = page.stream;
+    if (stream == null) return;
+
+    //final SetAsCoverResult result;
+    //try {
+    //  manga.editCover(Injekt.get(), stream());
+    //  if (manga.isLocal() || manga.favorite) {
+    //    result = SetAsCoverResult.success;
+    //  } else {
+    //    result = SetAsCoverResult.addToLibraryFirst;
+    //  }
+    //} catch (_) {
+    //  result = SetAsCoverResult.error;
+    //}
+    //eventChannel.send(Event.SetCoverResult(result));
+  }
+
+  /// Starts the service that updates the last chapter read in sync services. This operation
+  /// will run in a background thread and errors are ignored.
+  void _updateTrackChapterRead(ReaderChapter readerChapter) {
+    final preferences = ref.watch(basePreferencesProvider);
+    final trackPreferences = ref.watch(trackPreferencesProvider);
+    final trackChapter = ref.watch(trackChapterProvider);
+    final incognitoMode = preferences.incognitoMode().get();
+    if (incognitoMode) return;
+    if (!trackPreferences.autoUpdateTrack().get()) return;
+
+    final manga = state.valueOrNull?.manga;
+    if (manga == null) return;
+
+    trackChapter.await_(manga.id, readerChapter.chapter.chapterNumber);
+  }
+
   /// Enqueues this [chapter] to be deleted when [_deletePendingChapters] is called. The download
   /// manager handles persisting it across process deaths.
   void _enqueueDeleteReadChapters(ReaderChapter chapter) {
     if (!chapter.chapter.read) return;
     final downloadManager = ref.watch(downloadManagerProvider);
-    //val manga = manga ?: return
+    final manga = state.valueOrNull?.manga;
+    if (manga == null) return;
 
-    //downloadManager.enqueueChaptersToDelete([chapter.chapter.toDomainChapter()!], manga);
+    downloadManager.enqueueChaptersToDelete([chapter.chapter], manga);
   }
 
   /// Deletes all the pending chapters. This operation will run in a background thread and errors
