@@ -27,7 +27,7 @@ class CrashScreen extends StatelessWidget {
       rejectText: lang.crash_screen_restart_application,
       //TODO
       onRejectClick: onRestartClick,
-      content: [
+      children: [
         Container(
           color: Theme.of(context).colorScheme.surfaceVariant,
           decoration: BoxDecoration(

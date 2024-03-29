@@ -1,4 +1,3 @@
-import 'package:dartx/dartx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 //import 'package:flutteryomi/domain/source/model/smanga.dart';
@@ -14,7 +13,7 @@ part 'source_repository.g.dart';
 abstract interface class SourceRepository {
   Stream<List<Source>> getSources();
   Stream<List<Source>> getOnlineSources();
-  Stream<List<Pair<Source, int>>> getSourcesWithFavoriteCount();
+  Stream<List<(Source, int)>> getSourcesWithFavoriteCount();
   Stream<List<SourceWithCount>> getSourcesWithNonLibraryManga();
   //SourcePagingSourceType search(int sourceId, String query, FilterList filterList);
   //SourcePagingSourceType getPopular(int sourceId);

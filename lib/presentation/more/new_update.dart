@@ -31,7 +31,7 @@ class NewUpdateScreen extends StatelessWidget {
       onAcceptClick: onAcceptUpdate,
       rejectText: lang.action_not_now,
       onRejectClick: onRejectUpdate,
-      content: [
+      children: [
         Markdown(data: changelogInfo),
         TextButton(
           onPressed: onOpenInBrowser,

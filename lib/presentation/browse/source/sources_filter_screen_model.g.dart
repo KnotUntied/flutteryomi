@@ -7,7 +7,7 @@ part of 'sources_filter_screen_model.dart';
 // **************************************************************************
 
 String _$sourcesFilterScreenModelHash() =>
-    r'fce9ff080e68a04ac53ab0d63c7185104dbf1c54';
+    r'16cdee84c33f076b4971b6c401ec75e6bb96c787';
 
 /// See also [SourcesFilterScreenModel].
 @ProviderFor(SourcesFilterScreenModel)

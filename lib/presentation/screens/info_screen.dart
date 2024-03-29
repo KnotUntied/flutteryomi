@@ -12,7 +12,7 @@ class InfoScreen extends StatelessWidget {
     this.onAcceptClick,
     this.rejectText,
     this.onRejectClick,
-    required this.content,
+    required this.children,
   });
 
   final IconData icon;
@@ -22,7 +22,7 @@ class InfoScreen extends StatelessWidget {
   final VoidCallback? onAcceptClick;
   final String? rejectText;
   final VoidCallback? onRejectClick;
-  final List<Widget> content;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class InfoScreen extends StatelessWidget {
                     ),
               ),
             ),
-            ...content,
+            ...children,
           ],
         ),
       ),

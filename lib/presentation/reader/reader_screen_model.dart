@@ -1,3 +1,5 @@
+import 'package:flutteryomi/domain/download/download_manager.dart';
+import 'package:flutteryomi/domain/reader/model/reader_chapter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -828,12 +830,23 @@ class ReaderScreenModel extends _$ReaderScreenModel {
 //    }
 //  }
 
-//  // Track sheet - end
+  //TODO
+  /// Enqueues this [chapter] to be deleted when [_deletePendingChapters] is called. The download
+  /// manager handles persisting it across process deaths.
+  void _enqueueDeleteReadChapters(ReaderChapter chapter) {
+    if (!chapter.chapter.read) return;
+    final downloadManager = ref.watch(downloadManagerProvider);
+    //val manga = manga ?: return
 
-//  void setExcludedScanlators(Set<String> excludedScanlators) async {
-//    final setExcludedScanlators = ref.watch(setExcludedScanlatorsProvider);
-//    await setExcludedScanlators.await_(mangaId, excludedScanlators);
-//  }
+    //downloadManager.enqueueChaptersToDelete([chapter.chapter.toDomainChapter()!], manga);
+  }
+
+  /// Deletes all the pending chapters. This operation will run in a background thread and errors
+  /// are ignored.
+  void _deletePendingChapters() {
+    final downloadManager = ref.watch(downloadManagerProvider);
+    downloadManager.deletePendingChapters();
+  }
 }
 
 @freezed
