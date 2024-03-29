@@ -387,7 +387,7 @@ class LibraryScreenModel extends _$LibraryScreenModel {
             unreadCount: libraryManga.unreadCount,
             isLocal: prefs.localBadge ? libraryManga.manga.isLocal() : false,
             sourceLanguage: sourceLanguage,
-            sourceManager: sourceManager,
+            ref: ref,
           ),
         );
       }
