@@ -59,14 +59,14 @@ class ReaderScreenModel extends _$ReaderScreenModel {
   }
 
   ///// The chapter id of the currently loaded chapter. Used to restore from process kill.
-  //private var chapterId = savedState.get<Long>("chapter_id") ?? -1
+  //private var chapterId = savedState.get<int>("chapter_id") ?? -1
   //    set(value) {
   //        savedState["chapter_id"] = value
   //        field = value
   //    }
 
   ///// The visible page index of the currently loaded chapter. Used to restore from process kill.
-  //private var chapterPageIndex = savedState.get<Int>("page_index") ?: -1
+  //private var chapterPageIndex = savedState.get<int>("page_index") ?: -1
   //    set(value) {
   //        savedState["page_index"] = value
   //        field = value

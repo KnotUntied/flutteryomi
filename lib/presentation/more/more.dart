@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,7 +59,9 @@ class MoreTab extends ConsumerWidget {
               SwitchPreferenceWidget(
                 title: lang.pref_incognito_mode,
                 subtitle: lang.pref_incognito_mode_summary,
-                icon: CustomIcons.glasses,
+                //CustomIcon.glasses has some artifacts for some reason
+                //icon: CustomIcons.glasses,
+                icon: CupertinoIcons.eyeglasses,
                 checked: data.incognitoMode,
                 onCheckedChanged: (it) => preferences.incognitoMode().set(it),
               ),

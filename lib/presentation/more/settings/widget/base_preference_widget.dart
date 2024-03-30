@@ -23,12 +23,11 @@ class BasePreferenceWidget extends StatelessWidget {
     return ListTile(
       leading: icon,
       tileColor: Colors.transparent,
-      title: !title.isNullOrBlank
+      title: title.isNotNullOrBlank
           ? Text(
               title!,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-              style: Theme.of(context).textTheme.titleLarge,
             )
           : null,
       subtitle: subcomponent,

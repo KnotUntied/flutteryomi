@@ -26,18 +26,13 @@ class TextPreferenceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasePreferenceWidget(
       title: title,
-      subcomponent: !subtitle.isNullOrBlank
+      subcomponent: subtitle.isNotNullOrBlank
           ? Opacity(
               opacity: secondaryItemAlpha,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: prefsHorizontalPadding,
-                ),
-                child: Text(
-                  subtitle!,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  maxLines: 10,
-                ),
+              child: Text(
+                subtitle!,
+                style: Theme.of(context).textTheme.bodySmall,
+                maxLines: 10,
               ),
             )
           : null,

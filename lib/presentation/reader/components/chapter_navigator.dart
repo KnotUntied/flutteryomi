@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:flutteryomi/presentation/util/system/display_extensions.dart' as display;
+
 //TODO
 class ChapterNavigator extends StatelessWidget {
   const ChapterNavigator({
@@ -27,8 +29,8 @@ class ChapterNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    //final isTabletUi = isTabletUi();
-    const isTabletUi = false;
+    final isTabletUi = display.isTabletUi(context);
+    //const isTabletUi = false;
     final horizontalPadding = isTabletUi ? 24.0 : 16.0;
     final layoutDirection = isRtl ? TextDirection.rtl : TextDirection.ltr;
     // Match with toolbar background color set in ReaderScreen

@@ -9,7 +9,7 @@ icon_font:
 
   font_name: "Custom Icons"
   normalize: false
-  ignore_shapes: true
+  ignore_shapes: false
 
   recursive: true
   verbose: false

@@ -82,7 +82,8 @@ class DownloadManager {
   void downloaderStop(String? reason) => _downloader.stop(reason);
 
   //get isDownloaderRunning => DownloadJob.isRunningStream(context);
-  late final isDownloaderRunning = Stream<bool>.value(false);
+  //late final isDownloaderRunning = Stream<bool>.value(false);
+  late final isDownloaderRunning = BehaviorSubject.seeded(false);
 
   /// Tells the downloader to begin downloads.
   void startDownloads() {
