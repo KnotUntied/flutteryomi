@@ -25,7 +25,7 @@ class DownloadStore {
   final GetManga getManga;
   final GetChapter getChapter;
 
-  final preferences = Hive.box('active_downloads');
+  final preferences = Hive.box<String>('active_downloads');
 
   /// Counter used to keep the queue order.
   int _counter = 0;

@@ -8,7 +8,7 @@ icon_font:
   format: true
 
   font_name: "Custom Icons"
-  normalize: true
+  normalize: false
   ignore_shapes: true
 
   recursive: true

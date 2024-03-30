@@ -28,8 +28,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   final prefs = await StreamingSharedPreferences.instance;
-  await Hive.openBox('chapters_to_delete');
-  await Hive.openBox('active_downloads');
+  await Hive.openBox<String>('chapters_to_delete');
+  await Hive.openBox<String>('active_downloads');
   return runApp(
     ProviderScope(
       overrides: [

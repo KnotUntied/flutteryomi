@@ -36,6 +36,7 @@ import 'package:flutteryomi/source/local/local_source.dart';
 part 'reader_screen_model.freezed.dart';
 part 'reader_screen_model.g.dart';
 
+//TODO
 @riverpod
 class ReaderScreenModel extends _$ReaderScreenModel {
   @override
