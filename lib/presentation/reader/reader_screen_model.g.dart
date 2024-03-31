@@ -6,7 +6,7 @@ part of 'reader_screen_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$readerScreenModelHash() => r'71fc07294ffbb1771e1031cd5fcd263178883590';
+String _$readerScreenModelHash() => r'7ee6f8ec867b036c2beb458ed78e9e27ed17ec4d';
 
 /// See also [ReaderScreenModel].
 @ProviderFor(ReaderScreenModel)

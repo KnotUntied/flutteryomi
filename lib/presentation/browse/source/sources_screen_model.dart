@@ -18,10 +18,7 @@ part 'sources_screen_model.g.dart';
 @riverpod
 class SourcesScreenModel extends _$SourcesScreenModel {
   @override
-  Stream<SourcesScreenState> build({
-    required int mangaId,
-    required bool isFromSource,
-  }) {
+  Stream<SourcesScreenState> build() {
     final getEnabledSources = ref.watch(getEnabledSourcesProvider);
     final logger = ref.watch(loggerProvider);
     return getEnabledSources.subscribe().handleError((it) {

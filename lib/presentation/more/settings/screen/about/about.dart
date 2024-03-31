@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutteryomi/presentation/components/link_icon.dart';
 import 'package:flutteryomi/presentation/icons/custom_icons.dart';
 import 'package:flutteryomi/presentation/more/logo_header.dart';
+import 'package:flutteryomi/presentation/more/settings/widget/text_preference_widget.dart';
 //import 'package:flutteryomi/utils/crash_log.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -13,42 +14,43 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(lang.pref_category_about)),
+      appBar: AppBar(
+        title: Text(lang.pref_category_about),
+      ),
       body: ListView(
         children: [
           const LogoHeader(),
-          ListTile(
-            title: Text(lang.version),
-            // TODO
-            subtitle: const Text('placeholder version'),
-            onTap: () {
+          TextPreferenceWidget(
+            title: lang.version,
+            subtitle: getVersionName(withBuildDate: true),
+            onPreferenceClick: () {
               // Copy app and device info to clipboard
             },
           ),
-          ListTile(
-            title: Text(lang.check_for_updates),
-            onTap: () {
+          TextPreferenceWidget(
+            title: lang.check_for_updates,
+            onPreferenceClick: () {
               // TODO
             },
           ),
-          ListTile(
-            title: Text(lang.whats_new),
-            onTap: () {
+          TextPreferenceWidget(
+            title: lang.whats_new,
+            onPreferenceClick: () {
               // TODO
             },
           ),
-          ListTile(
-            title: Text(lang.licenses),
-            onTap: () => showLicensePage(
+          TextPreferenceWidget(
+            title: lang.licenses,
+            onPreferenceClick: () => showLicensePage(
               context: context,
               //TODO
               //applicationIcon: ,
               //applicationVersion: ,
             ),
           ),
-          ListTile(
-            title: Text(lang.privacy_policy),
-            onTap: () {
+          TextPreferenceWidget(
+            title: lang.privacy_policy,
+            onPreferenceClick: () {
               // TODO
             },
           ),
@@ -95,13 +97,15 @@ class AboutScreen extends StatelessWidget {
   }
 
   // TODO
+  /// Checks version and shows a user prompt if an update is available.
   Future<void> _checkVersion() async {}
 
-  String getVersionName() {
+  //TODO: package_info_plus
+  static String getVersionName({required bool withBuildDate}) {
     return '';
   }
 
-  String getFormattedBuildTime() {
+  static String getFormattedBuildTime() {
     return '';
   }
 }

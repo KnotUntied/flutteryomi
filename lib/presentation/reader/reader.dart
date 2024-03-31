@@ -6,19 +6,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 
-class ReaderScreen extends ConsumerWidget {
+class ReaderScreen extends ConsumerStatefulWidget {
   const ReaderScreen({
     super.key,
     required this.mangaId,
-    required this.chapterId,
+    required this.initialChapterId,
   });
 
   final int mangaId;
-  final int chapterId;
+  final int initialChapterId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const Placeholder();
+  ConsumerState<ReaderScreen> createState() => _ReaderScreenState();
+}
+
+class _ReaderScreenState extends ConsumerState<ReaderScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        PageView(),
+        Scaffold(
+          appBar: AppBar(),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const [
+            ],
+          ),
+        ),
+      ],
+    );
     //return state.when(
     //  loading: () => const LoadingScreen(),
     //  // TODO: Error handling

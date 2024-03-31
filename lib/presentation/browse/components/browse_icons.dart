@@ -22,22 +22,18 @@ class SourceIcon extends StatelessWidget {
     //  return Image(
     //    image: Icons.warning,
     //    colorFilter: ColorFilter.tint(Theme.of(context).colorScheme.error),
-    //    modifier: modifier.then(defaultModifier),
     //  );
     //} else if (icon != null) {
     //  return Image(
     //    bitmap: icon,
-    //    modifier: modifier.then(defaultModifier),
     //  );
     //} else if (source.isLocal()) {
     //  return Image(
     //    painter: painterResource(R.mipmap.ic_local_source),
-    //    modifier: modifier.then(defaultModifier),
     //  );
     //} else {
     //  return Image(
     //    painter: painterResource(R.mipmap.ic_default_source),
-    //    modifier: modifier.then(defaultModifier),
     //  );
     //}
   }

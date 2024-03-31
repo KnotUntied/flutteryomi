@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ReaderScreenState {
+  /// The manga loaded in the reader.
   Manga? get manga => throw _privateConstructorUsedError;
   ViewerChapters? get viewerChapters => throw _privateConstructorUsedError;
   bool get bookmarked => throw _privateConstructorUsedError;
@@ -217,6 +218,7 @@ class _$ReaderScreenStateImpl extends _ReaderScreenState {
         assert(brightnessOverlayValue <= 100),
         super._();
 
+  /// The manga loaded in the reader.
   @override
   final Manga? manga;
   @override
@@ -301,6 +303,8 @@ abstract class _ReaderScreenState extends ReaderScreenState {
   const _ReaderScreenState._() : super._();
 
   @override
+
+  /// The manga loaded in the reader.
   Manga? get manga;
   @override
   ViewerChapters? get viewerChapters;

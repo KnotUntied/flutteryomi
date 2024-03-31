@@ -1,27 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sources_screen_model.dart';
+part of 'get_remote_manga.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sourcesScreenModelHash() =>
-    r'8fdd87f8bf1bcbc084d2192c0121dfeb49b6d679';
+String _$getRemoteMangaHash() => r'358005b7bd0c8f863cfe58c396cf504a06bb1b2f';
 
-/// See also [SourcesScreenModel].
-@ProviderFor(SourcesScreenModel)
-final sourcesScreenModelProvider = AutoDisposeStreamNotifierProvider<
-    SourcesScreenModel, SourcesScreenState>.internal(
-  SourcesScreenModel.new,
-  name: r'sourcesScreenModelProvider',
+/// See also [getRemoteManga].
+@ProviderFor(getRemoteManga)
+final getRemoteMangaProvider = AutoDisposeProvider<GetRemoteManga>.internal(
+  getRemoteManga,
+  name: r'getRemoteMangaProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$sourcesScreenModelHash,
+      : _$getRemoteMangaHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SourcesScreenModel = AutoDisposeStreamNotifier<SourcesScreenState>;
+typedef GetRemoteMangaRef = AutoDisposeProviderRef<GetRemoteManga>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

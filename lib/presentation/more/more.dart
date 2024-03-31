@@ -17,6 +17,7 @@ import 'package:flutteryomi/presentation/download/download_queue.dart';
 import 'package:flutteryomi/presentation/icons/custom_icons.dart';
 import 'package:flutteryomi/presentation/more/logo_header.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/about/about.dart';
+import 'package:flutteryomi/presentation/more/settings/screen/settings_main.dart';
 import 'package:flutteryomi/presentation/more/settings/widget/switch_preference_widget.dart';
 import 'package:flutteryomi/presentation/more/settings/widget/text_preference_widget.dart';
 import 'package:flutteryomi/presentation/more/stats/stats.dart';
@@ -127,12 +128,12 @@ class MoreTab extends ConsumerWidget {
                 title: lang.label_settings,
                 icon: Icons.settings_outlined,
                 onPreferenceClick: () {
-                  //Navigator.push(
-                  //  context,
-                  //  MaterialPageRoute(
-                  //    builder: (context) => const SettingsScreen(),
-                  //  ),
-                  //);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsMainScreen(),
+                    ),
+                  );
                 },
               ),
               TextPreferenceWidget(

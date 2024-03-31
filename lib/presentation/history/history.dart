@@ -14,6 +14,7 @@ import 'package:flutteryomi/presentation/components/list_group_header.dart';
 import 'package:flutteryomi/presentation/history/components/history_dialogs.dart';
 import 'package:flutteryomi/presentation/history/components/history_item.dart';
 import 'package:flutteryomi/presentation/history/history_screen_model.dart';
+import 'package:flutteryomi/presentation/manga/manga.dart';
 import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 import 'package:flutteryomi/presentation/screens/loading_screen.dart';
 
@@ -69,14 +70,13 @@ class HistoryTab extends ConsumerWidget {
           } else {
             return _HistoryScreenContent(
               history: data.list!,
-              onClickCover: (mangaId) {
-                //TODO
-                //Navigator.push(
-                //  context,
-                //  MaterialPageRoute(
-                //    builder: (context) => MangaScreen(mangaId),
-                //  ),
-                //);
+              onClickCover: (history) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MangaScreen(mangaId: history.mangaId),
+                  ),
+                );
               },
               onClickResume: (history) async {
                 final chapters = await getNextChapters.awaitFromChapterId(

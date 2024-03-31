@@ -51,7 +51,7 @@ class _BrowseTabState extends State<BrowseTab>
     final lang = AppLocalizations.of(context);
     // Put tab data here instead of separate files as they
     // depend on context
-    List<TabContent> tabs = [
+    final tabs = [
       TabContent(
         title: lang.label_sources,
         actions: [
@@ -81,20 +81,7 @@ class _BrowseTabState extends State<BrowseTab>
             },
           ),
         ],
-        //content: SourcesScreen(
-        //  state: state,
-        //  onClickItem: (source, listing) {
-        //    Navigator.push(
-        //      context,
-        //      MaterialPageRoute(
-        //        builder: (context) => BrowseSourceScreen(source.id, listing.query),
-        //      ),
-        //    );
-        //  },
-        //  onClickPin: () {},
-        //  onLongClickItem: () {},
-        //),
-        content: const Placeholder(),
+        content: const SourcesScreen(),
       ),
       TabContent(
         title: lang.label_extensions,

@@ -38,9 +38,7 @@ class _HistoryDeleteDialogState extends State<HistoryDeleteDialog> {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
           child: Text(lang.action_remove),
@@ -71,9 +69,7 @@ class HistoryDeleteAllDialog extends StatelessWidget {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
           child: Text(lang.action_ok),

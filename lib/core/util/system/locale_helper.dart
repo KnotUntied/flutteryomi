@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/locale.dart' as intl;
@@ -23,10 +22,21 @@ abstract class LocaleHelper {
     }
   }
 
-  //TODO
   /// Returns display name of a string language code.
   static String getSourceDisplayName(String? lang, Ref ref) {
     final t = ref.read(appLocalizationsProvider);
+    return switch (lang) {
+      SourcesScreenModel.lastUsedKey => t.last_used_source,
+      SourcesScreenModel.pinnedKey => t.pinned_sources,
+      "other" => t.other_source,
+      "all" => t.multi_lang,
+      _ => getLocalizedDisplayName(lang),
+    };
+  }
+
+  /// Returns display name of a string language code.
+  static String getSourceDisplayNameUsingContext(String? lang, BuildContext context) {
+    final t = AppLocalizations.of(context);
     return switch (lang) {
       SourcesScreenModel.lastUsedKey => t.last_used_source,
       SourcesScreenModel.pinnedKey => t.pinned_sources,

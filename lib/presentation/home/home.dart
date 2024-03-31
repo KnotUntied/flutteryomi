@@ -12,14 +12,7 @@ import 'package:flutteryomi/presentation/library/library.dart';
 import 'package:flutteryomi/presentation/more/more.dart';
 import 'package:flutteryomi/presentation/updates/updates.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-const Map<int, Widget> tabs = {
+const _tabs = {
   0: LibraryTab(),
   1: UpdatesTab(),
   2: HistoryTab(),
@@ -27,19 +20,22 @@ const Map<int, Widget> tabs = {
   4: MoreTab(),
 };
 
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
 
   void navigate(int index) {
-    setState(() {
-      currentPageIndex = index;
-    });
+    setState(() => currentPageIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
-    //final homeProvider = Provider.of<HomeProvider>(context);
-
     return PopScope(
       canPop: currentPageIndex == 0,
       onPopInvoked: (bool didPop) {
@@ -49,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           body: Row(
             children: [
+              //tablet rail
               //if (false) NavigationRail(
               //  groupAlignment: -1.0,
               //  labelType: NavigationRailLabelType.all,
@@ -87,7 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
               //  ],
               //),
               Expanded(
-                child: Center(child: tabs[currentPageIndex]),
+                child: Center(
+                  child: _tabs[currentPageIndex],
+                ),
               ),
             ],
           ),
@@ -140,33 +139,62 @@ class HomeNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context);
-    final List<NavigationBarItem> items = [
-      NavigationBarItem(
-        selectedIcon: const Icon(Icons.collections_bookmark),
-        icon: const Icon(Icons.collections_bookmark_outlined),
-        label: lang.label_library,
-      ),
-      NavigationBarItem(
-        selectedIcon: const Icon(Icons.new_releases),
-        icon: const Icon(Icons.new_releases_outlined),
-        label: lang.label_recent_updates,
-      ),
-      NavigationBarItem(
-        selectedIcon: const Icon(Icons.history),
-        icon: const Icon(Icons.history_outlined),
-        label: lang.label_recent_manga,
-      ),
-      NavigationBarItem(
-        selectedIcon: const Icon(Icons.explore),
-        icon: const Icon(Icons.explore_outlined),
-        label: lang.browse,
-      ),
-      NavigationBarItem(
-        selectedIcon: Icon(Icons.adaptive.more),
-        icon: Icon(Icons.adaptive.more_outlined),
-        label: lang.label_more,
-      ),
-    ];
+    final isApple = Platform.isIOS || Platform.isMacOS;
+    final items = isApple
+        ? [
+            NavigationBarItem(
+              selectedIcon: const Icon(CupertinoIcons.collections_solid),
+              icon: const Icon(CupertinoIcons.collections),
+              label: lang.label_library,
+            ),
+            NavigationBarItem(
+              selectedIcon: const Icon(CupertinoIcons.news_solid),
+              icon: const Icon(CupertinoIcons.news),
+              label: lang.label_recent_updates,
+            ),
+            NavigationBarItem(
+              selectedIcon: const Icon(CupertinoIcons.clock_solid),
+              icon: const Icon(CupertinoIcons.clock),
+              label: lang.label_recent_manga,
+            ),
+            NavigationBarItem(
+              selectedIcon: const Icon(CupertinoIcons.compass_fill),
+              icon: const Icon(CupertinoIcons.compass),
+              label: lang.browse,
+            ),
+            NavigationBarItem(
+              selectedIcon: Icon(Icons.adaptive.more),
+              icon: Icon(Icons.adaptive.more_outlined),
+              label: lang.label_more,
+            ),
+          ]
+        : [
+            NavigationBarItem(
+              selectedIcon: const Icon(Icons.collections_bookmark),
+              icon: const Icon(Icons.collections_bookmark_outlined),
+              label: lang.label_library,
+            ),
+            NavigationBarItem(
+              selectedIcon: const Icon(Icons.new_releases),
+              icon: const Icon(Icons.new_releases_outlined),
+              label: lang.label_recent_updates,
+            ),
+            NavigationBarItem(
+              selectedIcon: const Icon(Icons.history),
+              icon: const Icon(Icons.history_outlined),
+              label: lang.label_recent_manga,
+            ),
+            NavigationBarItem(
+              selectedIcon: const Icon(Icons.explore),
+              icon: const Icon(Icons.explore_outlined),
+              label: lang.browse,
+            ),
+            NavigationBarItem(
+              selectedIcon: Icon(Icons.adaptive.more),
+              icon: Icon(Icons.adaptive.more_outlined),
+              label: lang.label_more,
+            ),
+          ];
 
     return AdaptiveNavigationBar(
       index: index,
