@@ -11,13 +11,7 @@ class SourceIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      width: 40.0,
-      height: 40.0,
-      child: Placeholder(),
-    );
     //final icon = source.icon;
-    //const icon = null;
     //if (source.isStub && icon == null) {
     //  return Image(
     //    image: Icons.warning,
@@ -27,14 +21,15 @@ class SourceIcon extends StatelessWidget {
     //  return Image(
     //    bitmap: icon,
     //  );
-    //} else if (source.isLocal()) {
-    //  return Image(
-    //    painter: painterResource(R.mipmap.ic_local_source),
-    //  );
-    //} else {
-    //  return Image(
-    //    painter: painterResource(R.mipmap.ic_default_source),
-    //  );
-    //}
+    //} else
+    if (source.isLocal()) {
+      return const Image(
+        image: AssetImage('assets/images/local_source.webp'),
+      );
+    } else {
+      return const Image(
+        image: AssetImage('assets/images/default_source.webp'),
+      );
+    }
   }
 }

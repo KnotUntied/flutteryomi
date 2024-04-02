@@ -42,11 +42,6 @@ class BrowseSourcesScreenModel extends _$BrowseSourcesScreenModel {
     return const Stream.empty();
   }
 
-//  Future<void> toggleSource(Source source) async {
-//    final toggleSourceInteractor = ref.watch(toggleSourceProvider);
-//    await toggleSourceInteractor.await_(source);
-//  }
-
   // getColumnsPreference probably in widget
 
   //TODO
