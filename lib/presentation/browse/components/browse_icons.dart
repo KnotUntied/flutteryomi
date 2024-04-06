@@ -13,10 +13,10 @@ class SourceIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     //final icon = source.icon;
     //if (source.isStub && icon == null) {
-    //  return Image(
-    //    image: Icons.warning,
-    //    colorFilter: ColorFilter.tint(Theme.of(context).colorScheme.error),
-    //  );
+      //return Icon(
+      //  Icons.warning,
+      //  color: Theme.of(context).colorScheme.error,
+      //);
     //} else if (icon != null) {
     //  return Image(
     //    bitmap: icon,
