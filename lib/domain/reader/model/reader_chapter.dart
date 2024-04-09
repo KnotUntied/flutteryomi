@@ -9,7 +9,6 @@ import 'package:flutteryomi/domain/reader/model/reader_page.dart';
 part 'reader_chapter.freezed.dart';
 
 //TODO
-// ignore: must_be_immutable
 class ReaderChapter extends Equatable {
   ReaderChapter(this.chapter);
 
