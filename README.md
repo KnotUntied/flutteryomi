@@ -1,10 +1,10 @@
 # Flutteryomi
 
-*I can't believe it's not [Tachiyomi/Mihon](https://mihon.app/)!*
+*I can't believe it's not [Mihon](https://mihon.app/)!*
 
 *Well, close enough.*
 
-A personal project for learning Flutter. An attempt to port the now-defunct Tachiyomi's UI and (some) functionality to Flutter and its target platforms.
+A personal project for learning Flutter. An attempt to port Mihon's UI and (some) functionality to Flutter and its target platforms.
 
 ## Running Locally
 

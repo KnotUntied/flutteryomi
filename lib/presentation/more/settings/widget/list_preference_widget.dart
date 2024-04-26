@@ -70,7 +70,7 @@ class _ListPreferenceDialog<T> extends StatelessWidget {
             value: current.key,
             groupValue: value,
             onChanged: (_) {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
               onValueChange(current.key);
             },
           );
@@ -79,7 +79,7 @@ class _ListPreferenceDialog<T> extends StatelessWidget {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
       ],
     );

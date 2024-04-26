@@ -78,11 +78,11 @@ class _MultiSelectListPreferenceDialogState<T> extends State<_MultiSelectListPre
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             widget.onValuesChange(selected.toSet());
           },
           child: Text(lang.action_ok),

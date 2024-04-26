@@ -66,11 +66,11 @@ class SourcesScreen extends ConsumerWidget {
                     builder: (context) => SourceOptionsDialog(
                       source: source,
                       onClickPin: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                         screenModel.togglePin(source);
                       },
                       onClickDisable: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                         screenModel.toggleSource(source);
                       },
                     ),

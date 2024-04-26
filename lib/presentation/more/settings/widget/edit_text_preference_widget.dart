@@ -92,14 +92,14 @@ class _EditTextPreferenceDialogState extends State<_EditTextPreferenceDialog> {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed:
               _controller.text != widget.value && _controller.text.isNotBlank
                   ? () async {
                       if (await widget.onConfirm(_controller.text)) {
-                        if (mounted) Navigator.of(context).pop();
+                        if (mounted) Navigator.pop(context);
                       }
                     }
                   : null,

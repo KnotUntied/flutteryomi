@@ -47,12 +47,12 @@ class _DeleteLibraryMangaDialogState extends State<DeleteLibraryMangaDialog> {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed: list.any((it) => it)
               ? () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                   widget.onConfirm(
                     list[0],
                     !widget.containsLocalManga ? list[1] : false,

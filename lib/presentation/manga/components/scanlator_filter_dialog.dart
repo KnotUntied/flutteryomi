@@ -70,18 +70,18 @@ class _ScanlatorFilterDialogState extends State<ScanlatorFilterDialog> {
         else ...[
           TextButton(
             child: Text(lang.action_reset),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.pop(context),
           ),
           const Spacer(),
           TextButton(
             child: Text(lang.action_cancel),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.pop(context),
           ),
           TextButton(
             child: Text(lang.action_ok),
             onPressed: () {
               widget.onConfirm(mutableExcludedScanlators.toSet());
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
           ),
         ],

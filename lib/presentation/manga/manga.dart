@@ -316,11 +316,11 @@ class MangaScreen extends ConsumerWidget {
 
     //when (val previousController = Navigator.pages[navigator.size - 2]) {
     //  is HomeScreen -> {
-      //  Navigator.of(context).pop();
+      //  Navigator.pop(context);
     //    previousController.search(query);
     //  }
     //  is BrowseSourceScreen -> {
-      //  Navigator.of(context).pop();
+      //  Navigator.pop(context);
     //    previousController.search(query);
     //  }
     //}
@@ -332,7 +332,7 @@ class MangaScreen extends ConsumerWidget {
 
     //final previousController = Navigator.pages[navigator.size - 2];
     //if (previousController is BrowseSourceScreen && source is HttpSource) {
-    //  Navigator.of(context).pop();
+    //  Navigator.pop(context);
     //  previousController.searchGenre(genreName)
     //} else {
     //  _performSearch(genreName, global: false);

@@ -7,7 +7,7 @@ import 'package:flutteryomi/domain/reader/model/viewer_chapters.dart';
 abstract class Viewer {
 
   /// Returns the view this viewer uses.
-  //View getView();
+  Widget getView();
 
   /// Destroys this viewer. Called when leaving the reader or swapping viewers.
   void destroy();

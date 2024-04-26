@@ -70,12 +70,12 @@ class ClearDatabaseScreen extends ConsumerWidget {
                 content: Text(lang.clear_database_confirmation),
                 actions: [
                   TextButton(
-                    onPressed: Navigator.of(context).pop,
+                    onPressed: () => Navigator.pop(context),
                     child: Text(lang.action_cancel),
                   ),
                   TextButton(
                     onPressed: () async {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       await screenModel.removeMangaBySourceId();
                       screenModel.clearSelection();
                       if (context.mounted) {

@@ -53,12 +53,12 @@ class _CategoryCreateDialogState extends State<CategoryCreateDialog> {
           actions: [
             TextButton(
               child: Text(lang.action_cancel),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.pop(context),
             ),
             TextButton(
               onPressed: (name.isNotEmpty && !nameAlreadyExists)
                   ? () {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       widget.onCreate(name);
                     }
                   : null,
@@ -124,12 +124,12 @@ class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
           actions: <Widget>[
             TextButton(
               child: Text(lang.action_cancel),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.pop(context),
             ),
             TextButton(
               onPressed: valueHasChanged && !nameAlreadyExists
                   ? () {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       widget.onRename(name);
                     }
                   : null,
@@ -161,11 +161,11 @@ class CategoryDeleteDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             onDelete();
           },
           child: Text(lang.action_ok),
@@ -192,11 +192,11 @@ class CategorySortAlphabeticallyDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             onSort();
           },
           child: Text(lang.action_ok),
@@ -242,7 +242,7 @@ class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
               widget.onEditCategories();
             },
             child: Text(lang.action_edit_categories),
@@ -276,7 +276,7 @@ class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             widget.onEditCategories();
           },
           child: Text(lang.action_edit),
@@ -284,11 +284,11 @@ class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
         const Spacer(),
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             widget.onConfirm(
               selection
                   .where((it) =>

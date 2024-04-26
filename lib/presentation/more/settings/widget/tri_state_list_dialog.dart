@@ -90,11 +90,11 @@ class _TriStateListDialogState<T> extends State<TriStateListDialog<T>> {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             final included = widget.items
                 .mapIndexedNotNull((index, category) =>
                     selected[index] == _State.checked ? category : null)

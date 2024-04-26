@@ -276,7 +276,7 @@ class _SetAsDefaultDialogState extends State<_SetAsDefaultDialog> {
         TextButton(
           onPressed: () {
             widget.onConfirmed(optionalChecked);
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
           child: Text(lang.action_ok),
         ),

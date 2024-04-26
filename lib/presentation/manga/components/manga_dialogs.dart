@@ -22,12 +22,12 @@ class DeleteChaptersDialog extends StatelessWidget {
       actions: [
         TextButton(
           child: Text(lang.action_cancel),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
           child: Text(lang.action_ok),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             onConfirm();
           },
         ),
@@ -102,7 +102,7 @@ class _SetIntervalDialogState extends State<SetIntervalDialog> {
         TextButton(
           child: Text(lang.action_cancel),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
         ),
         TextButton(
@@ -111,7 +111,7 @@ class _SetIntervalDialogState extends State<SetIntervalDialog> {
             if (widget.onValueChanged != null) {
               widget.onValueChanged!(selectedInterval);
             }
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
         ),
       ],
