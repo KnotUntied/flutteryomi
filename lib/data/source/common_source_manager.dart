@@ -2,13 +2,17 @@ import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:flutteryomi/core/util/system/logger.dart';
 import 'package:flutteryomi/domain/download/download_manager.dart';
+import 'package:flutteryomi/domain/extension/extension_manager.dart';
 import 'package:flutteryomi/domain/source/model/stub_source.dart';
 import 'package:flutteryomi/domain/source/repository/stub_source_repository.dart';
 import 'package:flutteryomi/domain/source/service/source_manager.dart';
 import 'package:flutteryomi/source/api/catalogue_source.dart';
 import 'package:flutteryomi/source/api/online/http_source.dart';
 import 'package:flutteryomi/source/api/source.dart';
+import 'package:flutteryomi/source/local/image/local_cover_manager.dart';
+import 'package:flutteryomi/source/local/io/local_source_file_system.dart';
 import 'package:flutteryomi/source/local/local_source.dart';
 
 part 'common_source_manager.g.dart';
@@ -20,27 +24,28 @@ class CommonSourceManager extends _$CommonSourceManager
   @override
   void build() {
     // TODO: implement build
-    //final extensionManager = ref.watch(extensionManagerProvider);
+    final extensionManager = ref.watch(extensionManagerProvider);
     final sourceRepository = ref.watch(stubSourceRepositoryProvider);
 
-    //extensionManager
-    //    .installedExtensionsStream
-    //    .map((extensions) {
-    //      final mutableMap = <int, Source>{
-    //        LocalSource.id: LocalSource(
-    //          context,
-    //          Injekt.get(),
-    //          Injekt.get(),
-    //        ),
-    //      };
-    //      for (final extension in extensions) {
-    //        for (final source in extension.sources) {
-    //          mutableMap[source.id] = source;
-    //          _registerStubSource(StubSource.from(source));
-    //        }
-    //      }
-    //      _sourcesMapStream.add(mutableMap);
-    //    });
+    extensionManager
+        .installedExtensionsStream
+        .map((extensions) {
+          final mutableMap = <int, Source>{
+            LocalSource.localSourceId: LocalSource(
+              ref: ref,
+              fileSystem: ref.read(localSourceFileSystemProvider),
+              coverManager: ref.read(localCoverManagerProvider),
+              logger: ref.read(loggerProvider),
+            ),
+          };
+          for (final extension in extensions) {
+            for (final source in extension.sources) {
+              mutableMap[source.id] = source;
+              _registerStubSource(StubSource.from(source));
+            }
+          }
+          _sourcesMapStream.add(mutableMap);
+        });
 
     sourceRepository.subscribeAll().map((sources) {
       for (final source in sources) {
@@ -54,7 +59,6 @@ class CommonSourceManager extends _$CommonSourceManager
   final _stubSourcesMap = <int, StubSource>{};
 
   // Not sure if this will be detrimental in the future
-  // ignore: avoid_public_notifier_properties
   @override
   late Stream<List<CatalogueSource>> catalogueSources = _sourcesMapStream
       .map((it) => it.values.whereType<CatalogueSource>().toList());
@@ -62,7 +66,7 @@ class CommonSourceManager extends _$CommonSourceManager
   @override
   Source? get(int sourceKey) => _sourcesMapStream.value[sourceKey];
 
-  // Dart has no runBlocking >:(
+  // Dart has no runBlocking or async-to-sync >:(
   //@override
   //Source getOrStub(int sourceKey) => _sourcesMapStream.value[sourceKey]
   //    ?? _stubSourcesMap.putIfAbsent(
@@ -113,15 +117,15 @@ class CommonSourceManager extends _$CommonSourceManager
 
   Future<StubSource> _createStubSource(int id) async {
     //TODO
-    //final extensionManager = ref.watch(extensionManagerProvider);
+    final extensionManager = ref.watch(extensionManagerProvider);
     final sourceRepository = ref.watch(stubSourceRepositoryProvider);
     final stubSource = await sourceRepository.getStubSource(id);
     if (stubSource != null) return stubSource;
-    //final sourceData = await extensionManager.getSourceData(id);
-    //if (sourceData != null) {
-    //  _registerStubSource(sourceData);
-    //  return sourceData;
-    //}
+    final sourceData = extensionManager.getSourceData(id);
+    if (sourceData != null) {
+      _registerStubSource(sourceData);
+      return sourceData;
+    }
     return StubSource(id: id, lang: "", name: "");
   }
 }

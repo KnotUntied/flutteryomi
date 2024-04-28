@@ -54,6 +54,7 @@ class ExtensionApi {
     //updateExtensionRepo.awaitAll();
 
     //final extensions = if (fromAvailableExtensionList) {
+      // Why is this a circular dependency?
     //  extensionManager.availableExtensionsStream.value;
     //} else {
     //  await findExtensions().also { lastExtCheck.set(Instant.now().toEpochMilli()) };
@@ -84,6 +85,14 @@ class ExtensionApi {
   String getApkUrl(ExtensionAvailable extension) =>
       "${extension.repoUrl}/apk/${extension.apkName}";
 }
+
+//@riverpod
+//ExtensionApi extensionApi(ExtensionApiRef ref) => ExtensionApi(
+//      ref: ref,
+//      preferences: ref.watch(sourcePreferencesProvider),
+//      //trustExtension: ref.watch(trustExtensionProvider),
+//      logger: ref.watch(loggerProvider),
+//    );
 
 @freezed
 class ExtensionJsonObject with _$ExtensionJsonObject {
