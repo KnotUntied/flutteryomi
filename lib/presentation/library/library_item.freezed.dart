@@ -11,43 +11,39 @@ part of 'library_item.dart';
 
 T _$identity<T>(T value) => value;
 
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+final _privateConstructorUsedError = UnsupportedError('It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$LibraryItem {
-  LibraryManga get libraryManga => throw _privateConstructorUsedError;
-  int get downloadCount => throw _privateConstructorUsedError;
-  int get unreadCount => throw _privateConstructorUsedError;
-  bool get isLocal => throw _privateConstructorUsedError;
-  String get sourceLanguage => throw _privateConstructorUsedError;
-  Ref<Object?> get ref => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
-  $LibraryItemCopyWith<LibraryItem> get copyWith =>
-      throw _privateConstructorUsedError;
+ LibraryManga get libraryManga => throw _privateConstructorUsedError; int get downloadCount => throw _privateConstructorUsedError; int get unreadCount => throw _privateConstructorUsedError; bool get isLocal => throw _privateConstructorUsedError; String get sourceLanguage => throw _privateConstructorUsedError; Ref<Object?> get ref => throw _privateConstructorUsedError;
+
+
+
+
+
+
+
+@JsonKey(ignore: true)
+$LibraryItemCopyWith<LibraryItem> get copyWith => throw _privateConstructorUsedError;
+
 }
 
 /// @nodoc
-abstract class $LibraryItemCopyWith<$Res> {
-  factory $LibraryItemCopyWith(
-          LibraryItem value, $Res Function(LibraryItem) then) =
-      _$LibraryItemCopyWithImpl<$Res, LibraryItem>;
-  @useResult
-  $Res call(
-      {LibraryManga libraryManga,
-      int downloadCount,
-      int unreadCount,
-      bool isLocal,
-      String sourceLanguage,
-      Ref<Object?> ref});
+abstract class $LibraryItemCopyWith<$Res>  {
+  factory $LibraryItemCopyWith(LibraryItem value, $Res Function(LibraryItem) then) = _$LibraryItemCopyWithImpl<$Res, LibraryItem>;
+@useResult
+$Res call({
+ LibraryManga libraryManga, int downloadCount, int unreadCount, bool isLocal, String sourceLanguage, Ref<Object?> ref
+});
 
-  $LibraryMangaCopyWith<$Res> get libraryManga;
+
+$LibraryMangaCopyWith<$Res> get libraryManga;
 }
 
 /// @nodoc
-class _$LibraryItemCopyWithImpl<$Res, $Val extends LibraryItem>
-    implements $LibraryItemCopyWith<$Res> {
+class _$LibraryItemCopyWithImpl<$Res,$Val extends LibraryItem> implements $LibraryItemCopyWith<$Res> {
   _$LibraryItemCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -55,206 +51,114 @@ class _$LibraryItemCopyWithImpl<$Res, $Val extends LibraryItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? libraryManga = null,
-    Object? downloadCount = null,
-    Object? unreadCount = null,
-    Object? isLocal = null,
-    Object? sourceLanguage = null,
-    Object? ref = null,
-  }) {
-    return _then(_value.copyWith(
-      libraryManga: null == libraryManga
-          ? _value.libraryManga
-          : libraryManga // ignore: cast_nullable_to_non_nullable
-              as LibraryManga,
-      downloadCount: null == downloadCount
-          ? _value.downloadCount
-          : downloadCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      unreadCount: null == unreadCount
-          ? _value.unreadCount
-          : unreadCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      isLocal: null == isLocal
-          ? _value.isLocal
-          : isLocal // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sourceLanguage: null == sourceLanguage
-          ? _value.sourceLanguage
-          : sourceLanguage // ignore: cast_nullable_to_non_nullable
-              as String,
-      ref: null == ref
-          ? _value.ref
-          : ref // ignore: cast_nullable_to_non_nullable
-              as Ref<Object?>,
-    ) as $Val);
-  }
+@pragma('vm:prefer-inline') @override $Res call({Object? libraryManga = null,Object? downloadCount = null,Object? unreadCount = null,Object? isLocal = null,Object? sourceLanguage = null,Object? ref = null,}) {
+  return _then(_value.copyWith(
+libraryManga: null == libraryManga ? _value.libraryManga : libraryManga // ignore: cast_nullable_to_non_nullable
+as LibraryManga,downloadCount: null == downloadCount ? _value.downloadCount : downloadCount // ignore: cast_nullable_to_non_nullable
+as int,unreadCount: null == unreadCount ? _value.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
+as int,isLocal: null == isLocal ? _value.isLocal : isLocal // ignore: cast_nullable_to_non_nullable
+as bool,sourceLanguage: null == sourceLanguage ? _value.sourceLanguage : sourceLanguage // ignore: cast_nullable_to_non_nullable
+as String,ref: null == ref ? _value.ref : ref // ignore: cast_nullable_to_non_nullable
+as Ref<Object?>,
+  )as $Val);
+}
+@override
+@pragma('vm:prefer-inline')
+$LibraryMangaCopyWith<$Res> get libraryManga {
+  
+  return $LibraryMangaCopyWith<$Res>(_value.libraryManga, (value) {
+    return _then(_value.copyWith(libraryManga: value) as $Val);
+  });
+}
+}
 
-  @override
-  @pragma('vm:prefer-inline')
-  $LibraryMangaCopyWith<$Res> get libraryManga {
-    return $LibraryMangaCopyWith<$Res>(_value.libraryManga, (value) {
-      return _then(_value.copyWith(libraryManga: value) as $Val);
-    });
-  }
+
+/// @nodoc
+abstract class _$$LibraryItemImplCopyWith<$Res> implements $LibraryItemCopyWith<$Res> {
+  factory _$$LibraryItemImplCopyWith(_$LibraryItemImpl value, $Res Function(_$LibraryItemImpl) then) = __$$LibraryItemImplCopyWithImpl<$Res>;
+@override @useResult
+$Res call({
+ LibraryManga libraryManga, int downloadCount, int unreadCount, bool isLocal, String sourceLanguage, Ref<Object?> ref
+});
+
+
+@override $LibraryMangaCopyWith<$Res> get libraryManga;
 }
 
 /// @nodoc
-abstract class _$$LibraryItemImplCopyWith<$Res>
-    implements $LibraryItemCopyWith<$Res> {
-  factory _$$LibraryItemImplCopyWith(
-          _$LibraryItemImpl value, $Res Function(_$LibraryItemImpl) then) =
-      __$$LibraryItemImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {LibraryManga libraryManga,
-      int downloadCount,
-      int unreadCount,
-      bool isLocal,
-      String sourceLanguage,
-      Ref<Object?> ref});
-
-  @override
-  $LibraryMangaCopyWith<$Res> get libraryManga;
-}
-
-/// @nodoc
-class __$$LibraryItemImplCopyWithImpl<$Res>
-    extends _$LibraryItemCopyWithImpl<$Res, _$LibraryItemImpl>
-    implements _$$LibraryItemImplCopyWith<$Res> {
-  __$$LibraryItemImplCopyWithImpl(
-      _$LibraryItemImpl _value, $Res Function(_$LibraryItemImpl) _then)
+class __$$LibraryItemImplCopyWithImpl<$Res> extends _$LibraryItemCopyWithImpl<$Res, _$LibraryItemImpl> implements _$$LibraryItemImplCopyWith<$Res> {
+  __$$LibraryItemImplCopyWithImpl(_$LibraryItemImpl _value, $Res Function(_$LibraryItemImpl) _then)
       : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? libraryManga = null,
-    Object? downloadCount = null,
-    Object? unreadCount = null,
-    Object? isLocal = null,
-    Object? sourceLanguage = null,
-    Object? ref = null,
-  }) {
-    return _then(_$LibraryItemImpl(
-      libraryManga: null == libraryManga
-          ? _value.libraryManga
-          : libraryManga // ignore: cast_nullable_to_non_nullable
-              as LibraryManga,
-      downloadCount: null == downloadCount
-          ? _value.downloadCount
-          : downloadCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      unreadCount: null == unreadCount
-          ? _value.unreadCount
-          : unreadCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      isLocal: null == isLocal
-          ? _value.isLocal
-          : isLocal // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sourceLanguage: null == sourceLanguage
-          ? _value.sourceLanguage
-          : sourceLanguage // ignore: cast_nullable_to_non_nullable
-              as String,
-      ref: null == ref
-          ? _value.ref
-          : ref // ignore: cast_nullable_to_non_nullable
-              as Ref<Object?>,
-    ));
-  }
+
+@pragma('vm:prefer-inline') @override $Res call({Object? libraryManga = null,Object? downloadCount = null,Object? unreadCount = null,Object? isLocal = null,Object? sourceLanguage = null,Object? ref = null,}) {
+  return _then(_$LibraryItemImpl(
+libraryManga: null == libraryManga ? _value.libraryManga : libraryManga // ignore: cast_nullable_to_non_nullable
+as LibraryManga,downloadCount: null == downloadCount ? _value.downloadCount : downloadCount // ignore: cast_nullable_to_non_nullable
+as int,unreadCount: null == unreadCount ? _value.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
+as int,isLocal: null == isLocal ? _value.isLocal : isLocal // ignore: cast_nullable_to_non_nullable
+as bool,sourceLanguage: null == sourceLanguage ? _value.sourceLanguage : sourceLanguage // ignore: cast_nullable_to_non_nullable
+as String,ref: null == ref ? _value.ref : ref // ignore: cast_nullable_to_non_nullable
+as Ref<Object?>,
+  ));
+}
+
+
 }
 
 /// @nodoc
 
-class _$LibraryItemImpl extends _LibraryItem {
-  const _$LibraryItemImpl(
-      {required this.libraryManga,
-      this.downloadCount = -1,
-      this.unreadCount = -1,
-      this.isLocal = false,
-      this.sourceLanguage = '',
-      required this.ref})
-      : super._();
 
-  @override
-  final LibraryManga libraryManga;
-  @override
-  @JsonKey()
-  final int downloadCount;
-  @override
-  @JsonKey()
-  final int unreadCount;
-  @override
-  @JsonKey()
-  final bool isLocal;
-  @override
-  @JsonKey()
-  final String sourceLanguage;
-  @override
-  final Ref<Object?> ref;
+class _$LibraryItemImpl extends _LibraryItem  {
+  const _$LibraryItemImpl({required this.libraryManga, this.downloadCount = -1, this.unreadCount = -1, this.isLocal = false, this.sourceLanguage = '', required this.ref}): super._();
 
-  @override
-  String toString() {
-    return 'LibraryItem(libraryManga: $libraryManga, downloadCount: $downloadCount, unreadCount: $unreadCount, isLocal: $isLocal, sourceLanguage: $sourceLanguage, ref: $ref)';
-  }
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LibraryItemImpl &&
-            (identical(other.libraryManga, libraryManga) ||
-                other.libraryManga == libraryManga) &&
-            (identical(other.downloadCount, downloadCount) ||
-                other.downloadCount == downloadCount) &&
-            (identical(other.unreadCount, unreadCount) ||
-                other.unreadCount == unreadCount) &&
-            (identical(other.isLocal, isLocal) || other.isLocal == isLocal) &&
-            (identical(other.sourceLanguage, sourceLanguage) ||
-                other.sourceLanguage == sourceLanguage) &&
-            (identical(other.ref, ref) || other.ref == ref));
-  }
+@override final  LibraryManga libraryManga;
+@override@JsonKey() final  int downloadCount;
+@override@JsonKey() final  int unreadCount;
+@override@JsonKey() final  bool isLocal;
+@override@JsonKey() final  String sourceLanguage;
+@override final  Ref<Object?> ref;
 
-  @override
-  int get hashCode => Object.hash(runtimeType, libraryManga, downloadCount,
-      unreadCount, isLocal, sourceLanguage, ref);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LibraryItemImplCopyWith<_$LibraryItemImpl> get copyWith =>
-      __$$LibraryItemImplCopyWithImpl<_$LibraryItemImpl>(this, _$identity);
+@override
+String toString() {
+  return 'LibraryItem(libraryManga: $libraryManga, downloadCount: $downloadCount, unreadCount: $unreadCount, isLocal: $isLocal, sourceLanguage: $sourceLanguage, ref: $ref)';
 }
 
-abstract class _LibraryItem extends LibraryItem {
-  const factory _LibraryItem(
-      {required final LibraryManga libraryManga,
-      final int downloadCount,
-      final int unreadCount,
-      final bool isLocal,
-      final String sourceLanguage,
-      required final Ref<Object?> ref}) = _$LibraryItemImpl;
-  const _LibraryItem._() : super._();
 
-  @override
-  LibraryManga get libraryManga;
-  @override
-  int get downloadCount;
-  @override
-  int get unreadCount;
-  @override
-  bool get isLocal;
-  @override
-  String get sourceLanguage;
-  @override
-  Ref<Object?> get ref;
-  @override
-  @JsonKey(ignore: true)
-  _$$LibraryItemImplCopyWith<_$LibraryItemImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _$LibraryItemImpl&&(identical(other.libraryManga, libraryManga) || other.libraryManga == libraryManga)&&(identical(other.downloadCount, downloadCount) || other.downloadCount == downloadCount)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.isLocal, isLocal) || other.isLocal == isLocal)&&(identical(other.sourceLanguage, sourceLanguage) || other.sourceLanguage == sourceLanguage)&&(identical(other.ref, ref) || other.ref == ref));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,libraryManga,downloadCount,unreadCount,isLocal,sourceLanguage,ref);
+
+@JsonKey(ignore: true)
+@override
+@pragma('vm:prefer-inline')
+_$$LibraryItemImplCopyWith<_$LibraryItemImpl> get copyWith => __$$LibraryItemImplCopyWithImpl<_$LibraryItemImpl>(this, _$identity);
+
+
+
+
+
+
+
+
+}
+
+
+abstract class _LibraryItem extends LibraryItem {
+  const factory _LibraryItem({required final  LibraryManga libraryManga, final  int downloadCount, final  int unreadCount, final  bool isLocal, final  String sourceLanguage, required final  Ref<Object?> ref}) = _$LibraryItemImpl;
+  const _LibraryItem._(): super._();
+
+  
+
+@override  LibraryManga get libraryManga;@override  int get downloadCount;@override  int get unreadCount;@override  bool get isLocal;@override  String get sourceLanguage;@override  Ref<Object?> get ref;
+@override @JsonKey(ignore: true)
+_$$LibraryItemImplCopyWith<_$LibraryItemImpl> get copyWith => throw _privateConstructorUsedError;
+
 }

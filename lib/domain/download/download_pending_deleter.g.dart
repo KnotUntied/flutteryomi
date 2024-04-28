@@ -21,7 +21,7 @@ Map<String, dynamic> _$$_EntryImplToJson(_$_EntryImpl instance) =>
 
 _$_ChapterEntryImpl _$$_ChapterEntryImplFromJson(Map<String, dynamic> json) =>
     _$_ChapterEntryImpl(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       url: json['url'] as String,
       name: json['name'] as String,
       scanlator: json['scanlator'] as String?,
@@ -37,10 +37,10 @@ Map<String, dynamic> _$$_ChapterEntryImplToJson(_$_ChapterEntryImpl instance) =>
 
 _$_MangaEntryImpl _$$_MangaEntryImplFromJson(Map<String, dynamic> json) =>
     _$_MangaEntryImpl(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       url: json['url'] as String,
       title: json['title'] as String,
-      source: json['source'] as int,
+      source: (json['source'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$_MangaEntryImplToJson(_$_MangaEntryImpl instance) =>

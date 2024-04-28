@@ -11,35 +11,39 @@ part of 'viewer_chapters.dart';
 
 T _$identity<T>(T value) => value;
 
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+final _privateConstructorUsedError = UnsupportedError('It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ViewerChapters {
-  ReaderChapter get currChapter => throw _privateConstructorUsedError;
-  ReaderChapter? get prevChapter => throw _privateConstructorUsedError;
-  ReaderChapter? get nextChapter => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
-  $ViewerChaptersCopyWith<ViewerChapters> get copyWith =>
-      throw _privateConstructorUsedError;
+ ReaderChapter get currChapter => throw _privateConstructorUsedError; ReaderChapter? get prevChapter => throw _privateConstructorUsedError; ReaderChapter? get nextChapter => throw _privateConstructorUsedError;
+
+
+
+
+
+
+
+@JsonKey(ignore: true)
+$ViewerChaptersCopyWith<ViewerChapters> get copyWith => throw _privateConstructorUsedError;
+
 }
 
 /// @nodoc
-abstract class $ViewerChaptersCopyWith<$Res> {
-  factory $ViewerChaptersCopyWith(
-          ViewerChapters value, $Res Function(ViewerChapters) then) =
-      _$ViewerChaptersCopyWithImpl<$Res, ViewerChapters>;
-  @useResult
-  $Res call(
-      {ReaderChapter currChapter,
-      ReaderChapter? prevChapter,
-      ReaderChapter? nextChapter});
+abstract class $ViewerChaptersCopyWith<$Res>  {
+  factory $ViewerChaptersCopyWith(ViewerChapters value, $Res Function(ViewerChapters) then) = _$ViewerChaptersCopyWithImpl<$Res, ViewerChapters>;
+@useResult
+$Res call({
+ ReaderChapter currChapter, ReaderChapter? prevChapter, ReaderChapter? nextChapter
+});
+
+
+
 }
 
 /// @nodoc
-class _$ViewerChaptersCopyWithImpl<$Res, $Val extends ViewerChapters>
-    implements $ViewerChaptersCopyWith<$Res> {
+class _$ViewerChaptersCopyWithImpl<$Res,$Val extends ViewerChapters> implements $ViewerChaptersCopyWith<$Res> {
   _$ViewerChaptersCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -47,135 +51,98 @@ class _$ViewerChaptersCopyWithImpl<$Res, $Val extends ViewerChapters>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? currChapter = null,
-    Object? prevChapter = freezed,
-    Object? nextChapter = freezed,
-  }) {
-    return _then(_value.copyWith(
-      currChapter: null == currChapter
-          ? _value.currChapter
-          : currChapter // ignore: cast_nullable_to_non_nullable
-              as ReaderChapter,
-      prevChapter: freezed == prevChapter
-          ? _value.prevChapter
-          : prevChapter // ignore: cast_nullable_to_non_nullable
-              as ReaderChapter?,
-      nextChapter: freezed == nextChapter
-          ? _value.nextChapter
-          : nextChapter // ignore: cast_nullable_to_non_nullable
-              as ReaderChapter?,
-    ) as $Val);
-  }
+@pragma('vm:prefer-inline') @override $Res call({Object? currChapter = null,Object? prevChapter = freezed,Object? nextChapter = freezed,}) {
+  return _then(_value.copyWith(
+currChapter: null == currChapter ? _value.currChapter : currChapter // ignore: cast_nullable_to_non_nullable
+as ReaderChapter,prevChapter: freezed == prevChapter ? _value.prevChapter : prevChapter // ignore: cast_nullable_to_non_nullable
+as ReaderChapter?,nextChapter: freezed == nextChapter ? _value.nextChapter : nextChapter // ignore: cast_nullable_to_non_nullable
+as ReaderChapter?,
+  )as $Val);
+}
+
+}
+
+
+/// @nodoc
+abstract class _$$ViewerChaptersImplCopyWith<$Res> implements $ViewerChaptersCopyWith<$Res> {
+  factory _$$ViewerChaptersImplCopyWith(_$ViewerChaptersImpl value, $Res Function(_$ViewerChaptersImpl) then) = __$$ViewerChaptersImplCopyWithImpl<$Res>;
+@override @useResult
+$Res call({
+ ReaderChapter currChapter, ReaderChapter? prevChapter, ReaderChapter? nextChapter
+});
+
+
+
 }
 
 /// @nodoc
-abstract class _$$ViewerChaptersImplCopyWith<$Res>
-    implements $ViewerChaptersCopyWith<$Res> {
-  factory _$$ViewerChaptersImplCopyWith(_$ViewerChaptersImpl value,
-          $Res Function(_$ViewerChaptersImpl) then) =
-      __$$ViewerChaptersImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {ReaderChapter currChapter,
-      ReaderChapter? prevChapter,
-      ReaderChapter? nextChapter});
-}
-
-/// @nodoc
-class __$$ViewerChaptersImplCopyWithImpl<$Res>
-    extends _$ViewerChaptersCopyWithImpl<$Res, _$ViewerChaptersImpl>
-    implements _$$ViewerChaptersImplCopyWith<$Res> {
-  __$$ViewerChaptersImplCopyWithImpl(
-      _$ViewerChaptersImpl _value, $Res Function(_$ViewerChaptersImpl) _then)
+class __$$ViewerChaptersImplCopyWithImpl<$Res> extends _$ViewerChaptersCopyWithImpl<$Res, _$ViewerChaptersImpl> implements _$$ViewerChaptersImplCopyWith<$Res> {
+  __$$ViewerChaptersImplCopyWithImpl(_$ViewerChaptersImpl _value, $Res Function(_$ViewerChaptersImpl) _then)
       : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? currChapter = null,
-    Object? prevChapter = freezed,
-    Object? nextChapter = freezed,
-  }) {
-    return _then(_$ViewerChaptersImpl(
-      currChapter: null == currChapter
-          ? _value.currChapter
-          : currChapter // ignore: cast_nullable_to_non_nullable
-              as ReaderChapter,
-      prevChapter: freezed == prevChapter
-          ? _value.prevChapter
-          : prevChapter // ignore: cast_nullable_to_non_nullable
-              as ReaderChapter?,
-      nextChapter: freezed == nextChapter
-          ? _value.nextChapter
-          : nextChapter // ignore: cast_nullable_to_non_nullable
-              as ReaderChapter?,
-    ));
-  }
+
+@pragma('vm:prefer-inline') @override $Res call({Object? currChapter = null,Object? prevChapter = freezed,Object? nextChapter = freezed,}) {
+  return _then(_$ViewerChaptersImpl(
+currChapter: null == currChapter ? _value.currChapter : currChapter // ignore: cast_nullable_to_non_nullable
+as ReaderChapter,prevChapter: freezed == prevChapter ? _value.prevChapter : prevChapter // ignore: cast_nullable_to_non_nullable
+as ReaderChapter?,nextChapter: freezed == nextChapter ? _value.nextChapter : nextChapter // ignore: cast_nullable_to_non_nullable
+as ReaderChapter?,
+  ));
+}
+
+
 }
 
 /// @nodoc
 
-class _$ViewerChaptersImpl extends _ViewerChapters {
-  _$ViewerChaptersImpl(
-      {required this.currChapter, this.prevChapter, this.nextChapter})
-      : super._();
 
-  @override
-  final ReaderChapter currChapter;
-  @override
-  final ReaderChapter? prevChapter;
-  @override
-  final ReaderChapter? nextChapter;
+class _$ViewerChaptersImpl extends _ViewerChapters  {
+   _$ViewerChaptersImpl({required this.currChapter, this.prevChapter, this.nextChapter}): super._();
 
-  @override
-  String toString() {
-    return 'ViewerChapters(currChapter: $currChapter, prevChapter: $prevChapter, nextChapter: $nextChapter)';
-  }
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ViewerChaptersImpl &&
-            (identical(other.currChapter, currChapter) ||
-                other.currChapter == currChapter) &&
-            (identical(other.prevChapter, prevChapter) ||
-                other.prevChapter == prevChapter) &&
-            (identical(other.nextChapter, nextChapter) ||
-                other.nextChapter == nextChapter));
-  }
+@override final  ReaderChapter currChapter;
+@override final  ReaderChapter? prevChapter;
+@override final  ReaderChapter? nextChapter;
 
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, currChapter, prevChapter, nextChapter);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ViewerChaptersImplCopyWith<_$ViewerChaptersImpl> get copyWith =>
-      __$$ViewerChaptersImplCopyWithImpl<_$ViewerChaptersImpl>(
-          this, _$identity);
+@override
+String toString() {
+  return 'ViewerChapters(currChapter: $currChapter, prevChapter: $prevChapter, nextChapter: $nextChapter)';
 }
 
-abstract class _ViewerChapters extends ViewerChapters {
-  factory _ViewerChapters(
-      {required final ReaderChapter currChapter,
-      final ReaderChapter? prevChapter,
-      final ReaderChapter? nextChapter}) = _$ViewerChaptersImpl;
-  _ViewerChapters._() : super._();
 
-  @override
-  ReaderChapter get currChapter;
-  @override
-  ReaderChapter? get prevChapter;
-  @override
-  ReaderChapter? get nextChapter;
-  @override
-  @JsonKey(ignore: true)
-  _$$ViewerChaptersImplCopyWith<_$ViewerChaptersImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _$ViewerChaptersImpl&&(identical(other.currChapter, currChapter) || other.currChapter == currChapter)&&(identical(other.prevChapter, prevChapter) || other.prevChapter == prevChapter)&&(identical(other.nextChapter, nextChapter) || other.nextChapter == nextChapter));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,currChapter,prevChapter,nextChapter);
+
+@JsonKey(ignore: true)
+@override
+@pragma('vm:prefer-inline')
+_$$ViewerChaptersImplCopyWith<_$ViewerChaptersImpl> get copyWith => __$$ViewerChaptersImplCopyWithImpl<_$ViewerChaptersImpl>(this, _$identity);
+
+
+
+
+
+
+
+
+}
+
+
+abstract class _ViewerChapters extends ViewerChapters {
+   factory _ViewerChapters({required final  ReaderChapter currChapter, final  ReaderChapter? prevChapter, final  ReaderChapter? nextChapter}) = _$ViewerChaptersImpl;
+   _ViewerChapters._(): super._();
+
+  
+
+@override  ReaderChapter get currChapter;@override  ReaderChapter? get prevChapter;@override  ReaderChapter? get nextChapter;
+@override @JsonKey(ignore: true)
+_$$ViewerChaptersImplCopyWith<_$ViewerChaptersImpl> get copyWith => throw _privateConstructorUsedError;
+
 }

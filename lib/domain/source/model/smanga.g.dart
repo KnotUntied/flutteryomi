@@ -13,7 +13,7 @@ _$SMangaImpl _$$SMangaImplFromJson(Map<String, dynamic> json) => _$SMangaImpl(
       author: json['author'] as String?,
       description: json['description'] as String?,
       genre: json['genre'] as String?,
-      status: json['status'] as int? ?? SManga.publishingFinished,
+      status: (json['status'] as num?)?.toInt() ?? SManga.publishingFinished,
       thumbnailUrl: json['thumbnailUrl'] as String?,
       updateStrategy: $enumDecodeNullable(
               _$UpdateStrategyEnumMap, json['updateStrategy']) ??

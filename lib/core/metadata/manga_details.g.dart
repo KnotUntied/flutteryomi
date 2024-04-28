@@ -14,7 +14,7 @@ _$MangaDetailsImpl _$$MangaDetailsImplFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       genre:
           (json['genre'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      status: json['status'] as int?,
+      status: (json['status'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$MangaDetailsImplToJson(_$MangaDetailsImpl instance) =>

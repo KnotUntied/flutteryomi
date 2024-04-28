@@ -7,12 +7,12 @@ part of 'page.dart';
 // **************************************************************************
 
 Page _$PageFromJson(Map<String, dynamic> json) => Page(
-      json['index'] as int,
+      (json['index'] as num).toInt(),
       json['url'] as String? ?? '',
       json['imageUrl'] as String?,
     )
       ..status = $enumDecode(_$PageStateEnumMap, json['status'])
-      ..progress = json['progress'] as int;
+      ..progress = (json['progress'] as num).toInt();
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'index': instance.index,
