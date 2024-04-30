@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'common_source_manager.dart';
+part of 'backup_preferences.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$commonSourceManagerHash() =>
-    r'3a9e509f11211eff20b63b1c1b4df485129892a7';
+String _$backupPreferencesHash() => r'f9f533057e79c75acfbea026c7be8dd46a7e4e03';
 
-/// See also [CommonSourceManager].
-@ProviderFor(CommonSourceManager)
-final commonSourceManagerProvider =
-    AutoDisposeNotifierProvider<CommonSourceManager, void>.internal(
-  CommonSourceManager.new,
-  name: r'commonSourceManagerProvider',
+/// See also [backupPreferences].
+@ProviderFor(backupPreferences)
+final backupPreferencesProvider =
+    AutoDisposeProvider<BackupPreferences>.internal(
+  backupPreferences,
+  name: r'backupPreferencesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$commonSourceManagerHash,
+      : _$backupPreferencesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CommonSourceManager = AutoDisposeNotifier<void>;
+typedef BackupPreferencesRef = AutoDisposeProviderRef<BackupPreferences>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

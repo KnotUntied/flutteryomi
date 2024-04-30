@@ -1,5 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:flutteryomi/core/preference/preference.dart';
 import 'package:flutteryomi/core/preference/preference_store.dart';
+
+part 'backup_preferences.g.dart';
 
 class BackupPreferences {
   BackupPreferences(this.preferenceStore);
@@ -12,3 +16,7 @@ class BackupPreferences {
         0
       );
 }
+
+@riverpod
+BackupPreferences backupPreferences(BackupPreferencesRef ref) =>
+    BackupPreferences(ref.watch(preferenceStoreProvider));

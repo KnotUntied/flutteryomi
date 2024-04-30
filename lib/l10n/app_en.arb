@@ -548,7 +548,14 @@
   "label_data": "Data",
   "pref_storage_usage": "Storage usage",
   "pref_clear_chapter_cache": "Clear chapter cache",
-  "used_cache": "Used: %1$s",
+  "used_cache": "Used: {size}",
+  "@used_cache": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
   "cache_deleted": "Cache cleared. {number} files have been deleted",
   "@cache_deleted": {
     "placeholders": {
@@ -816,7 +823,17 @@
   "myanimelist_relogin": "Please login to MAL again",
   "source_unsupported": "Source is not supported",
   "error_no_match": "No match found",
-  "track_error": "%1$s error: %2$s",
+  "track_error": "{error} error: {message}",
+  "@track_error": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "track_remove_date_conf_title": "Remove date?",
   "track_remove_start_date_conf_text": "This will remove your previously selected start date from {tracker}",
   "@track_remove_start_date_conf_text": {
