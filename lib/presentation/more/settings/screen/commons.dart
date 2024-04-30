@@ -6,11 +6,11 @@ import 'package:flutteryomi/domain/category/model/category.dart';
 import 'package:flutteryomi/presentation/category/category_extensions.dart';
 
 String getCategoriesLabel(
-  BuildContext context,
-  List<Category> allCategories,
-  Set<String> included,
-  Set<String> excluded,
-) {
+  BuildContext context, {
+  required List<Category> allCategories,
+  required Set<String> included,
+  required Set<String> excluded,
+}) {
   final lang = AppLocalizations.of(context);
   final includedCategories = included
       .mapNotNull((id) => allCategories.firstWhere((it) => it.id == id.toInt()))

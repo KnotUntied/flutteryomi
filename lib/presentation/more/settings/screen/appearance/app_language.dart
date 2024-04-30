@@ -12,10 +12,13 @@ class AppLanguageScreen extends StatelessWidget {
     const locales = AppLocalizations.supportedLocales;
     final currentLanguage = Intl.getCurrentLocale();
     return Scaffold(
-      appBar: AppBar(title: Text(lang.pref_app_language)),
+      appBar: AppBar(
+        title: Text(lang.pref_app_language),
+      ),
       body: ListView.builder(
         itemCount: locales.length,
         itemBuilder: (context, index) {
+          final locale = locales[index];
           return ListTile(
             onTap: () {},
             title: const Text('Default'),
