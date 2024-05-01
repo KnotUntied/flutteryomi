@@ -21,7 +21,7 @@ class SettingsDataScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
     return SearchableSettings(
-      title: lang.pref_category_appearance,
+      title: lang.label_data_storage,
       getPreferences: () {
         final backupPreferences = ref.read(backupPreferencesProvider);
         final storagePreferences = ref.read(storagePreferencesProvider);
@@ -218,12 +218,3 @@ class SettingsDataScreen extends ConsumerWidget {
     );
   }
 }
-
-const _dateFormats = [
-  "", // Default
-  "MM/dd/yy",
-  "dd/MM/yy",
-  "yyyy-MM-dd",
-  "dd MMM yyyy",
-  "MMM dd, yyyy",
-];

@@ -176,6 +176,51 @@
 
   "app_not_available": "App not available",
 
+  "pref_onboarding_guide": "Onboarding guide",
+  "onboarding_heading": "Welcome!",
+  "onboarding_description": "Let's set some things up first. You can always change these in the settings later too.",
+  "onboarding_action_next": "Next",
+  "onboarding_action_finish": "Get started",
+  "onboarding_action_skip": "Skip",
+  "onboarding_storage_info": "Select a folder where {first} will store chapter downloads, backups, and more.\n\nA dedicated folder is recommended.\n\nSelected folder: {second}",
+  "@onboarding_storage_info": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "onboarding_storage_action_select": "Select a folder",
+  "onboarding_storage_selection_required": "A folder must be selected",
+  "onboarding_storage_help_info": "Updating from an older version and not sure what to select? Refer to the storage guide for more information.",
+  "onboarding_storage_help_action": "Storage guide",
+  "onboarding_permission_install_apps": "Install apps permission",
+  "onboarding_permission_install_apps_description": "To install source extensions.",
+  "onboarding_permission_notifications": "Notification permission",
+  "onboarding_permission_notifications_description": "Get notified for library updates and more.",
+  "onboarding_permission_ignore_battery_opts": "Background battery usage",
+  "onboarding_permission_ignore_battery_opts_description": "Avoid interruptions to long-running library updates, downloads, and backup restores.",
+  "onboarding_permission_action_grant": "Grant",
+  "onboarding_guides_new_user": "New to {text}? We recommend checking out the getting started guide.",
+  "@onboarding_guides_new_user": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "onboarding_guides_returning_user": "Reinstalling {text}?",
+  "@onboarding_guides_returning_user": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+
   "pref_category_general": "General",
   "pref_category_appearance": "Appearance",
   "pref_category_library": "Library",
@@ -350,6 +395,7 @@
   "ext_installer_private": "Private",
   "ext_installer_shizuku_stopped": "Shizuku is not running",
   "ext_installer_shizuku_unavailable_dialog": "Install and start Shizuku to use Shizuku as extension installer.",
+  "ext_revoke_trust": "Revoke trusted unknown extensions",
 
   "pref_fullscreen": "Fullscreen",
   "pref_show_navigation_mode": "Show tap zones overlay",
