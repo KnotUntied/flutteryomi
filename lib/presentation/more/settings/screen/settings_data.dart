@@ -20,19 +20,16 @@ class SettingsDataScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
+    final backupPreferences = ref.watch(backupPreferencesProvider);
+    final storagePreferences = ref.watch(storagePreferencesProvider);
     return SearchableSettings(
       title: lang.label_data_storage,
-      getPreferences: () {
-        final backupPreferences = ref.read(backupPreferencesProvider);
-        final storagePreferences = ref.read(storagePreferencesProvider);
-
-        return [
-          _getStorageLocationPref(context, storagePreferences),
-          InfoPreference(title: lang.pref_storage_location_info),
-          _getBackupAndRestoreGroup(context, backupPreferences),
-          _getDataGroup(context),
-        ];
-      },
+      getPreferences: () => [
+        _getStorageLocationPref(context, storagePreferences),
+        InfoPreference(title: lang.pref_storage_location_info),
+        _getBackupAndRestoreGroup(context, backupPreferences),
+        _getDataGroup(context),
+      ],
       actions: [
         IconButton(
           icon: const Icon(Icons.help_outline_outlined),
