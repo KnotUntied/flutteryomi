@@ -18,62 +18,59 @@ class SettingsAdvancedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
+    final basePreferences = ref.watch(basePreferencesProvider);
+    //final networkPreferences = ref.watch(networkPreferencesProvider);
     return SearchableSettings(
       title: lang.pref_category_advanced,
-      getPreferences: () {
-        final basePreferences = ref.read(basePreferencesProvider);
-        //final networkPreferences = ref.read(networkPreferencesProvider);
-
-        return [
-          TextPreference(
-            title: lang.pref_dump_crash_logs,
-            subtitle: lang.pref_dump_crash_logs_summary,
-            //onClick: () => CrashLogUtil(context).dumpLogs(),
-          ),
-          //SwitchPreference(
-          //  pref: networkPreferences.verboseLogging(),
-          //  title: lang.pref_verbose_logging,
-          //  subtitle: lang.pref_verbose_logging_summary,
-          //  onValueChanged: (_) async {
-          //    //context.toast(lang.requires_app_restart);
-          //    return true;
-          //  },
-          //),
-          //TextPreference(
-          //  title: lang.pref_debug_info,
-          //  onClick: () => Navigator.push(
-          //    context,
-          //    MaterialPageRoute(
-          //      builder: (context) => const DebugInfoScreen(),
-          //    ),
-          //  ),
-          //),
-          TextPreference(
-            title: lang.pref_onboarding_guide,
-            onClick: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const OnboardingScreen(),
-              ),
+      getPreferences: () => [
+        TextPreference(
+          title: lang.pref_dump_crash_logs,
+          subtitle: lang.pref_dump_crash_logs_summary,
+          //onClick: () => CrashLogUtil(context).dumpLogs(),
+        ),
+        //SwitchPreference(
+        //  pref: networkPreferences.verboseLogging(),
+        //  title: lang.pref_verbose_logging,
+        //  subtitle: lang.pref_verbose_logging_summary,
+        //  onValueChanged: (_) async {
+        //    //context.toast(lang.requires_app_restart);
+        //    return true;
+        //  },
+        //),
+        //TextPreference(
+        //  title: lang.pref_debug_info,
+        //  onClick: () => Navigator.push(
+        //    context,
+        //    MaterialPageRoute(
+        //      builder: (context) => const DebugInfoScreen(),
+        //    ),
+        //  ),
+        //),
+        TextPreference(
+          title: lang.pref_onboarding_guide,
+          onClick: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OnboardingScreen(),
             ),
           ),
-          //TextPreference(
-          //  title: lang.pref_manage_notifications,
-          //  onClick: () {
-              //final intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-              //  putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-              //};
-              //context.startActivity(intent);
-          //  },
-          //),
-          //_getBackgroundActivityGroup(context),
-          _getDataGroup(context, ref),
-          //_getNetworkGroup(context, networkPreferences),
-          _getLibraryGroup(context, ref),
-          //_getReaderGroup(context, basePreferences),
-          //_getExtensionsGroup(context, ref, basePreferences),
-        ];
-      },
+        ),
+        //TextPreference(
+        //  title: lang.pref_manage_notifications,
+        //  onClick: () {
+            //final intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+            //  putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            //};
+            //context.startActivity(intent);
+        //  },
+        //),
+        //_getBackgroundActivityGroup(context),
+        _getDataGroup(context, ref),
+        //_getNetworkGroup(context, networkPreferences),
+        _getLibraryGroup(context, ref),
+        //_getReaderGroup(context, basePreferences),
+        //_getExtensionsGroup(context, ref, basePreferences),
+      ],
     );
   }
 
