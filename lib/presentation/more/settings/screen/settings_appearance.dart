@@ -98,7 +98,7 @@ class _SettingsAppearanceScreenState
   ) {
     final lang = AppLocalizations.of(context);
 
-    //final dateFormat = uiPreferences.dateFormat().get()
+    //final dateFormat = uiPreferences.dateFormat().get();
     //final formattedNow = UiPreferences.dateFormat(dateFormat).format(now);
 
     return PreferenceGroup(

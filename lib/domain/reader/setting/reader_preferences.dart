@@ -1,4 +1,5 @@
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutteryomi/core/preference/preference.dart';
@@ -207,8 +208,8 @@ enum TappingInvertMode {
   final bool shouldInvertHorizontal;
   final bool shouldInvertVertical;
 
-  String title(Ref ref) {
-    final lang = ref.read(appLocalizationsProvider);
+  String title(BuildContext context) {
+    final lang = AppLocalizations.of(context);
     return switch (this) {
       TappingInvertMode.none => lang.tapping_inverted_none,
       TappingInvertMode.horizontal => lang.tapping_inverted_horizontal,

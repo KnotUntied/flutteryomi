@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutteryomi/domain/backup/service/backup_preferences.dart';
+import 'package:flutteryomi/domain/library/service/library_preferences.dart';
 import 'package:flutteryomi/domain/storage/service/storage_preferences.dart';
 import 'package:flutteryomi/presentation/more/settings/preference.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/searchable_settings.dart';
@@ -28,7 +29,7 @@ class SettingsDataScreen extends ConsumerWidget {
         _getStorageLocationPref(context, storagePreferences),
         InfoPreference(title: lang.pref_storage_location_info),
         _getBackupAndRestoreGroup(context, backupPreferences),
-        _getDataGroup(context),
+        _getDataGroup(context, ref),
       ],
       actions: [
         IconButton(
@@ -112,14 +113,9 @@ class SettingsDataScreen extends ConsumerWidget {
                   ),
                 ],
                 selected: const {},
+                //onSelectionChanged: (val) {},
               ),
             ),
-            //subcomponent: MultiChoiceSegmentedButtonRow(
-            //    modifier = Modifier
-            //        .fillMaxWidth()
-            //        .height(intrinsicSize = IntrinsicSize.Min)
-            //        .padding(horizontal = PrefsHorizontalPadding),
-            //) {
             //    SegmentedButton(
             //        modifier = Modifier.fillMaxHeight(),
             //        checked = false,
@@ -141,7 +137,6 @@ class SettingsDataScreen extends ConsumerWidget {
             //            }
             //        },
             //    )
-            //},
           ),
         ),
 
@@ -170,10 +165,10 @@ class SettingsDataScreen extends ConsumerWidget {
     );
   }
 
-  PreferenceGroup _getDataGroup(BuildContext context) {
+  PreferenceGroup _getDataGroup(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
     //val scope = rememberCoroutineScope()
-    //val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
+    final libraryPreferences = ref.read(libraryPreferencesProvider);
 
     //val chapterCache = remember { Injekt.get<ChapterCache>() }
     //var cacheReadableSizeSema by remember { mutableIntStateOf(0) }
@@ -207,10 +202,10 @@ class SettingsDataScreen extends ConsumerWidget {
             }
           },
         ),
-        //SwitchPreference(
-        //  pref: libraryPreferences.autoClearChapterCache(),
-        //  title: lang.pref_auto_clear_chapter_cache,
-        //),
+        SwitchPreference(
+          pref: libraryPreferences.autoClearChapterCache(),
+          title: lang.pref_auto_clear_chapter_cache,
+        ),
       ],
     );
   }

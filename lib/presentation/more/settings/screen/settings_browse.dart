@@ -38,22 +38,22 @@ class SettingsBrowseScreen extends ConsumerWidget {
             //),
           ],
         ),
-        //PreferenceGroup(
-        //  title: lang.pref_category_nsfw_content,
-        //  preferenceItems: [
-        //    //SwitchPreference(
-        //    //  pref: sourcePreferences.showNsfwSource(),
-        //    //  title: lang.pref_show_nsfw_source,
-        //    //  subtitle: lang.requires_app_restart,
-        //    //  onValueChanged: (_) async {
-        //    //    (context as FragmentActivity).authenticate(
-        //    //      title: context.lang.pref_category_nsfw_content,
-        //    //    );
-        //    //  },
-        //    //),
-        //    //InfoPreference(title: lang.parental_controls_info),
-        //  ],
-        //),
+        PreferenceGroup(
+          title: lang.pref_category_nsfw_content,
+          preferenceItems: [
+            //SwitchPreference(
+            //  pref: sourcePreferences.showNsfwSource(),
+            //  title: lang.pref_show_nsfw_source,
+            //  subtitle: lang.requires_app_restart,
+            //  onValueChanged: (_) async {
+            //    (context as FragmentActivity).authenticate(
+            //      title: context.lang.pref_category_nsfw_content,
+            //    );
+            //  },
+            //),
+            InfoPreference(title: lang.parental_controls_info),
+          ],
+        ),
       ],
     );
   }

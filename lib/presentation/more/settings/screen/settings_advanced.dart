@@ -23,11 +23,11 @@ class SettingsAdvancedScreen extends ConsumerWidget {
     return SearchableSettings(
       title: lang.pref_category_advanced,
       getPreferences: () => [
-        TextPreference(
-          title: lang.pref_dump_crash_logs,
-          subtitle: lang.pref_dump_crash_logs_summary,
-          //onClick: () => CrashLogUtil(context).dumpLogs(),
-        ),
+        //TextPreference(
+        //  title: lang.pref_dump_crash_logs,
+        //  subtitle: lang.pref_dump_crash_logs_summary,
+        //  onClick: () => CrashLogUtil(context).dumpLogs(),
+        //),
         //SwitchPreference(
         //  pref: networkPreferences.verboseLogging(),
         //  title: lang.pref_verbose_logging,

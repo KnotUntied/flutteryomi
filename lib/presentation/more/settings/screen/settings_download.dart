@@ -92,7 +92,7 @@ class SettingsDownloadScreen extends ConsumerWidget {
                     it.visualName(context),
                   ))
               .toMap(),
-        )
+        ),
       ],
     );
   }

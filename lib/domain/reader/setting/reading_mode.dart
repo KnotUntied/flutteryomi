@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutteryomi/l10n/l10n.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutteryomi/presentation/icons/custom_icons.dart';
 
@@ -44,8 +43,8 @@ enum ReadingMode {
   final Direction? direction;
   final ViewerType? type;
 
-  String string(Ref ref) {
-    final lang = ref.read(appLocalizationsProvider);
+  String string(BuildContext context) {
+    final lang = AppLocalizations.of(context);
     return switch (this) {
       ReadingMode.default_ => lang.label_default,
       ReadingMode.leftToRight => lang.left_to_right_viewer,

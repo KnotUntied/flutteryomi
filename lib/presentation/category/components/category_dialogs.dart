@@ -121,7 +121,7 @@ class _CategoryRenameDialogState extends State<CategoryRenameDialog> {
               labelText: lang.name,
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: Text(lang.action_cancel),
               onPressed: () => Navigator.pop(context),
@@ -158,7 +158,7 @@ class CategoryDeleteDialog extends StatelessWidget {
     return AlertDialog.adaptive(
       title: Text(lang.delete_category),
       content: Text(lang.delete_category_confirmation(category.name)),
-      actions: <Widget>[
+      actions: [
         TextButton(
           child: Text(lang.action_cancel),
           onPressed: () => Navigator.pop(context),
@@ -189,7 +189,7 @@ class CategorySortAlphabeticallyDialog extends StatelessWidget {
     return AlertDialog.adaptive(
       title: Text(lang.action_sort_category),
       content: Text(lang.sort_category_confirmation),
-      actions: <Widget>[
+      actions: [
         TextButton(
           child: Text(lang.action_cancel),
           onPressed: () => Navigator.pop(context),
@@ -239,7 +239,7 @@ class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
       return AlertDialog.adaptive(
         title: Text(lang.action_move_category),
         content: Text(lang.information_empty_category_dialog),
-        actions: <Widget>[
+        actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
@@ -273,7 +273,7 @@ class _ChangeCategoryDialogState extends State<ChangeCategoryDialog> {
           );
         },
       ),
-      actions: <Widget>[
+      actions: [
         TextButton(
           onPressed: () {
             Navigator.pop(context);
