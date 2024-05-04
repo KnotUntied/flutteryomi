@@ -12,32 +12,21 @@ import 'package:flutteryomi/presentation/more/settings/widget/app_theme_preferen
 import 'package:flutteryomi/presentation/util/time_utils.dart';
 
 //TODO
-class SettingsAppearanceScreen extends ConsumerStatefulWidget {
-  const SettingsAppearanceScreen({super.key});
+class ISettingsAppearanceScreen extends ISearchableSettings {
+  @override
+  String getTitle(BuildContext context) =>
+      AppLocalizations.of(context).pref_category_appearance;
 
   @override
-  ConsumerState<SettingsAppearanceScreen> createState() =>
-      _SettingsAppearanceScreenState();
-}
-
-class _SettingsAppearanceScreenState
-    extends ConsumerState<SettingsAppearanceScreen> {
-  final now = DateTime.now();
+  Widget getWidget() => const SettingsAppearanceScreen();
 
   @override
-  Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context);
-    return SearchableSettings(
-      title: lang.pref_category_appearance,
-      getPreferences: () {
-        final uiPreferences = ref.read(uiPreferencesProvider);
-
-        return [
-          _getThemeGroup(context, uiPreferences),
-          _getDisplayGroup(context, uiPreferences),
-        ];
-      },
-    );
+  List<Preference> getPreferences(BuildContext context, WidgetRef ref) {
+    final uiPreferences = ref.watch(uiPreferencesProvider);
+    return [
+      _getThemeGroup(context, uiPreferences),
+      _getDisplayGroup(context, uiPreferences),
+    ];
   }
 
   PreferenceGroup _getThemeGroup(
@@ -142,6 +131,28 @@ class _SettingsAppearanceScreenState
         //  ),
         //),
       ],
+    );
+  }
+}
+
+class SettingsAppearanceScreen extends ConsumerStatefulWidget {
+  const SettingsAppearanceScreen({super.key});
+
+  @override
+  ConsumerState<SettingsAppearanceScreen> createState() =>
+      _SettingsAppearanceScreenState();
+}
+
+class _SettingsAppearanceScreenState
+    extends ConsumerState<SettingsAppearanceScreen> {
+  final now = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    final i = ISettingsAppearanceScreen();
+    return SearchableSettings(
+      title: i.getTitle(context),
+      preferences: () => i.getPreferences(context, ref),
     );
   }
 }
