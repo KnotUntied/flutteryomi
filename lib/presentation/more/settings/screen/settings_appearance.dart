@@ -13,6 +13,7 @@ import 'package:flutteryomi/presentation/util/time_utils.dart';
 
 //TODO
 class ISettingsAppearanceScreen extends ISearchableSettings {
+  const ISettingsAppearanceScreen();
   @override
   String getTitle(BuildContext context) =>
       AppLocalizations.of(context).pref_category_appearance;
@@ -149,7 +150,7 @@ class _SettingsAppearanceScreenState
 
   @override
   Widget build(BuildContext context) {
-    final i = ISettingsAppearanceScreen();
+    const i = ISettingsAppearanceScreen();
     return SearchableSettings(
       title: i.getTitle(context),
       preferences: () => i.getPreferences(context, ref),

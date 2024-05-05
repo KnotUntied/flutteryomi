@@ -13,6 +13,7 @@ import 'package:flutteryomi/presentation/util/time_utils.dart';
 
 //TODO
 class ISettingsAdvancedScreen extends ISearchableSettings {
+  const ISettingsAdvancedScreen();
   @override
   String getTitle(BuildContext context) =>
       AppLocalizations.of(context).pref_category_advanced;
@@ -316,7 +317,7 @@ class SettingsAdvancedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final i = ISettingsAdvancedScreen();
+    const i = ISettingsAdvancedScreen();
     return SearchableSettings(
       title: i.getTitle(context),
       preferences: () => i.getPreferences(context, ref),

@@ -13,11 +13,17 @@ import 'package:flutteryomi/presentation/more/settings/preference.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/searchable_settings.dart';
 
 //TODO
-class SettingsTrackingScreen extends ConsumerWidget {
-  const SettingsTrackingScreen({super.key});
+class ISettingsTrackingScreen extends ISearchableSettings {
+  const ISettingsTrackingScreen();
+  @override
+  String getTitle(BuildContext context) =>
+      AppLocalizations.of(context).pref_category_tracking;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget getWidget() => const SettingsTrackingScreen();
+
+  @override
+  List<Preference> getPreferences(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
 
     final trackPreferences = ref.watch(trackPreferencesProvider);
@@ -38,8 +44,143 @@ class SettingsTrackingScreen extends ConsumerWidget {
     //  enhancedTrackerInfo += "\n\n$missingSourcesInfo";
     //}
 
+    return [
+      SwitchPreference(
+        pref: trackPreferences.autoUpdateTrack(),
+        title: lang.pref_auto_update_manga_sync,
+      ),
+      PreferenceGroup(
+        title: lang.services,
+        preferenceItems: [
+          //TrackerPreference(
+          //  title: trackerManager.myAnimeList.name,
+          //  tracker: trackerManager.myAnimeList,
+          //  login: () async {
+          //    final Uri url = Uri.parse(MyAnimeListApi.authUrl());
+          //    if (!await launchUrl(url)) {
+          //      throw Exception('Could not open $url');
+          //    }
+          //  },
+          //  logout: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLogoutDialog(
+          //      tracker: trackerManager.myAnimeList,
+          //    ),
+          //  ),
+          //),
+          //TrackerPreference(
+          //  title: trackerManager.aniList.name,
+          //  tracker: trackerManager.aniList,
+          //  login: () async {
+          //    final Uri url = Uri.parse(AnilistApi.authUrl());
+          //    if (!await launchUrl(url)) {
+          //      throw Exception('Could not open $url');
+          //    }
+          //  },
+          //  logout: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLogoutDialog(
+          //      tracker: trackerManager.aniList,
+          //    ),
+          //  ),
+          //),
+          //TrackerPreference(
+          //  title: trackerManager.kitsu.name,
+          //  tracker: trackerManager.kitsu,
+          //  login: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLoginDialog(
+          //      tracker: trackerManager.kitsu,
+          //      uNameString: lang.email,
+          //    ),
+          //  ),
+          //  logout: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLogoutDialog(
+          //      tracker: trackerManager.kitsu,
+          //    ),
+          //  ),
+          //),
+          //TrackerPreference(
+          //  title: trackerManager.mangaUpdates.name,
+          //  tracker: trackerManager.mangaUpdates,
+          //  login: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLoginDialog(
+          //      tracker: trackerManager.mangaUpdates,
+          //      uNameString: lang.username,
+          //    ),
+          //  ),
+          //  logout: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLogoutDialog(
+          //      tracker: trackerManager.mangaUpdates,
+          //    ),
+          //  ),
+          //),
+          //TrackerPreference(
+          //  title: trackerManager.shikimori.name,
+          //  tracker: trackerManager.shikimori,
+          //  login: () async {
+          //    final Uri url = Uri.parse(ShikimoriApi.authUrl());
+          //    if (!await launchUrl(url)) {
+          //      throw Exception('Could not open $url');
+          //    }
+          //  },
+          //  logout: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLogoutDialog(
+          //      tracker: trackerManager.shikimori,
+          //    ),
+          //  ),
+          //),
+          //TrackerPreference(
+          //  title: trackerManager.bangumi.name,
+          //  tracker: trackerManager.bangumi,
+          //  login: () async {
+          //    final Uri url = Uri.parse(BangumiApi.authUrl());
+          //    if (!await launchUrl(url)) {
+          //      throw Exception('Could not open $url');
+          //    }
+          //  },
+          //  logout: () => showAdaptiveDialog(
+          //    context: context,
+          //    builder: (context) => _TrackingLogoutDialog(
+          //      tracker: trackerManager.bangumi,
+          //    ),
+          //  ),
+          //),
+          InfoPreference(title: lang.tracking_info),
+        ],
+      ),
+      PreferenceGroup(
+        title: lang.enhanced_services,
+        preferenceItems: [
+          //...enhancedTrackers
+          //    .first
+          //    .map((service) => TrackerPreference(
+          //      title: service.name,
+          //      tracker: service,
+          //      login: () => (service as EnhancedTracker).loginNoop(),
+          //      logout: () => service.logout(),
+          //    )),
+          InfoPreference(title: enhancedTrackerInfo),
+        ],
+      ),
+    ];
+  }
+}
+
+class SettingsTrackingScreen extends ConsumerWidget {
+  const SettingsTrackingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const i = ISettingsTrackingScreen();
+    final lang = AppLocalizations.of(context);
     return SearchableSettings(
-      title: lang.pref_category_tracking,
+      title: i.getTitle(context),
+      preferences: () => i.getPreferences(context, ref),
       actions: [
         IconButton(
           icon: const Icon(Icons.help_outline_outlined),
@@ -51,130 +192,6 @@ class SettingsTrackingScreen extends ConsumerWidget {
               throw Exception('Could not open $url');
             }
           },
-        ),
-      ],
-      getPreferences: () => [
-        SwitchPreference(
-          pref: trackPreferences.autoUpdateTrack(),
-          title: lang.pref_auto_update_manga_sync,
-        ),
-        PreferenceGroup(
-          title: lang.services,
-          preferenceItems: [
-            //TrackerPreference(
-            //  title: trackerManager.myAnimeList.name,
-            //  tracker: trackerManager.myAnimeList,
-            //  login: () async {
-            //    final Uri url = Uri.parse(MyAnimeListApi.authUrl());
-            //    if (!await launchUrl(url)) {
-            //      throw Exception('Could not open $url');
-            //    }
-            //  },
-            //  logout: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLogoutDialog(
-            //      tracker: trackerManager.myAnimeList,
-            //    ),
-            //  ),
-            //),
-            //TrackerPreference(
-            //  title: trackerManager.aniList.name,
-            //  tracker: trackerManager.aniList,
-            //  login: () async {
-            //    final Uri url = Uri.parse(AnilistApi.authUrl());
-            //    if (!await launchUrl(url)) {
-            //      throw Exception('Could not open $url');
-            //    }
-            //  },
-            //  logout: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLogoutDialog(
-            //      tracker: trackerManager.aniList,
-            //    ),
-            //  ),
-            //),
-            //TrackerPreference(
-            //  title: trackerManager.kitsu.name,
-            //  tracker: trackerManager.kitsu,
-            //  login: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLoginDialog(
-            //      tracker: trackerManager.kitsu,
-            //      uNameString: lang.email,
-            //    ),
-            //  ),
-            //  logout: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLogoutDialog(
-            //      tracker: trackerManager.kitsu,
-            //    ),
-            //  ),
-            //),
-            //TrackerPreference(
-            //  title: trackerManager.mangaUpdates.name,
-            //  tracker: trackerManager.mangaUpdates,
-            //  login: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLoginDialog(
-            //      tracker: trackerManager.mangaUpdates,
-            //      uNameString: lang.username,
-            //    ),
-            //  ),
-            //  logout: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLogoutDialog(
-            //      tracker: trackerManager.mangaUpdates,
-            //    ),
-            //  ),
-            //),
-            //TrackerPreference(
-            //  title: trackerManager.shikimori.name,
-            //  tracker: trackerManager.shikimori,
-            //  login: () async {
-            //    final Uri url = Uri.parse(ShikimoriApi.authUrl());
-            //    if (!await launchUrl(url)) {
-            //      throw Exception('Could not open $url');
-            //    }
-            //  },
-            //  logout: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLogoutDialog(
-            //      tracker: trackerManager.shikimori,
-            //    ),
-            //  ),
-            //),
-            //TrackerPreference(
-            //  title: trackerManager.bangumi.name,
-            //  tracker: trackerManager.bangumi,
-            //  login: () async {
-            //    final Uri url = Uri.parse(BangumiApi.authUrl());
-            //    if (!await launchUrl(url)) {
-            //      throw Exception('Could not open $url');
-            //    }
-            //  },
-            //  logout: () => showAdaptiveDialog(
-            //    context: context,
-            //    builder: (context) => _TrackingLogoutDialog(
-            //      tracker: trackerManager.bangumi,
-            //    ),
-            //  ),
-            //),
-            InfoPreference(title: lang.tracking_info),
-          ],
-        ),
-        PreferenceGroup(
-          title: lang.enhanced_services,
-          preferenceItems: [
-            //...enhancedTrackers
-            //    .first
-            //    .map((service) => TrackerPreference(
-            //      title: service.name,
-            //      tracker: service,
-            //      login: () => (service as EnhancedTracker).loginNoop(),
-            //      logout: () => service.logout(),
-            //    )),
-            InfoPreference(title: enhancedTrackerInfo),
-          ],
         ),
       ],
     );

@@ -7,6 +7,7 @@ import 'package:flutteryomi/presentation/more/settings/preference_scaffold.dart'
 // There might be a better way to handle this while remaining standard with
 // Flutter.
 abstract class ISearchableSettings {
+  const ISearchableSettings();
   String getTitle(BuildContext context);
   Widget getWidget();
   List<Preference> getPreferences(BuildContext context, WidgetRef ref);

@@ -10,60 +10,63 @@ import 'package:flutteryomi/presentation/more/settings/preference.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/searchable_settings.dart';
 
 //TODO
-class SettingsReaderScreen extends ConsumerWidget {
-  const SettingsReaderScreen({super.key});
+class ISettingsReaderScreen extends ISearchableSettings {
+  const ISettingsReaderScreen();
+  @override
+  String getTitle(BuildContext context) =>
+      AppLocalizations.of(context).pref_category_reader;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget getWidget() => const SettingsReaderScreen();
+
+  @override
+  List<Preference> getPreferences(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
     final readerPref = ref.watch(readerPreferencesProvider);
-    return SearchableSettings(
-      title: lang.pref_category_reader,
-      getPreferences: () => [
-        ListPreference(
-          pref: readerPref.defaultReadingMode(),
-          title: lang.pref_viewer_type,
-          entries: ReadingMode
-              .values
-              .drop(1)
-              .associate((it) => MapEntry(it.flagValue, it.string(context))),
-        ),
-        ListPreference(
-          pref: readerPref.doubleTapAnimSpeed(),
-          title: lang.pref_double_tap_anim_speed,
-          entries: {
-            1: lang.double_tap_anim_speed_0,
-            500: lang.double_tap_anim_speed_normal,
-            250: lang.double_tap_anim_speed_fast,
-          },
-        ),
-        SwitchPreference(
-          pref: readerPref.showReadingMode(),
-          title: lang.pref_show_reading_mode,
-          subtitle: lang.pref_show_reading_mode_summary,
-        ),
-        SwitchPreference(
-          pref: readerPref.showNavigationOverlayOnStart(),
-          title: lang.pref_show_navigation_mode,
-          subtitle: lang.pref_show_navigation_mode_summary,
-        ),
-        SwitchPreference(
-          pref: readerPref.pageTransitions(),
-          title: lang.pref_page_transitions,
-        ),
-        SwitchPreference(
-          pref: readerPref.flashOnPageChange(),
-          title: lang.pref_flash_page,
-          subtitle: lang.pref_flash_page_summ,
-        ),
-        _getDisplayGroup(context, readerPref),
-        _getReadingGroup(context, readerPref),
-        _getPagedGroup(context, readerPref),
-        _getWebtoonGroup(context, readerPref),
-        _getNavigationGroup(context, readerPref),
-        _getActionsGroup(context, readerPref),
-      ],
-    );
+    return [
+      ListPreference(
+        pref: readerPref.defaultReadingMode(),
+        title: lang.pref_viewer_type,
+        entries: ReadingMode
+            .values
+            .drop(1)
+            .associate((it) => MapEntry(it.flagValue, it.string(context))),
+      ),
+      ListPreference(
+        pref: readerPref.doubleTapAnimSpeed(),
+        title: lang.pref_double_tap_anim_speed,
+        entries: {
+          1: lang.double_tap_anim_speed_0,
+          500: lang.double_tap_anim_speed_normal,
+          250: lang.double_tap_anim_speed_fast,
+        },
+      ),
+      SwitchPreference(
+        pref: readerPref.showReadingMode(),
+        title: lang.pref_show_reading_mode,
+        subtitle: lang.pref_show_reading_mode_summary,
+      ),
+      SwitchPreference(
+        pref: readerPref.showNavigationOverlayOnStart(),
+        title: lang.pref_show_navigation_mode,
+        subtitle: lang.pref_show_navigation_mode_summary,
+      ),
+      SwitchPreference(
+        pref: readerPref.pageTransitions(),
+        title: lang.pref_page_transitions,
+      ),
+      SwitchPreference(
+        pref: readerPref.flashOnPageChange(),
+        title: lang.pref_flash_page,
+        subtitle: lang.pref_flash_page_summ,
+      ),
+      _getDisplayGroup(context, readerPref),
+      _getReadingGroup(context, readerPref),
+      _getPagedGroup(context, readerPref),
+      _getWebtoonGroup(context, readerPref),
+      _getNavigationGroup(context, readerPref),
+      _getActionsGroup(context, readerPref),
+    ];
   }
 
   PreferenceGroup _getDisplayGroup(
@@ -378,6 +381,19 @@ class SettingsReaderScreen extends ConsumerWidget {
           subtitle: lang.pref_create_folder_per_manga_summary,
         ),
       ],
+    );
+  }
+}
+
+class SettingsReaderScreen extends ConsumerWidget {
+  const SettingsReaderScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const i = ISettingsReaderScreen();
+    return SearchableSettings(
+      title: i.getTitle(context),
+      preferences: () => i.getPreferences(context, ref),
     );
   }
 }

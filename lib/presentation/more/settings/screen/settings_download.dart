@@ -13,51 +13,50 @@ import 'package:flutteryomi/presentation/more/settings/screen/commons.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/searchable_settings.dart';
 import 'package:flutteryomi/presentation/more/settings/widget/tri_state_list_dialog.dart';
 
-class SettingsDownloadScreen extends ConsumerWidget {
-  const SettingsDownloadScreen({super.key});
+//TODO
+// Category items suffer from a the lack of a runBlocking equivalent
+// Exclude them for now :(
+class ISettingsDownloadScreen extends ISearchableSettings {
+  const ISettingsDownloadScreen();
+  @override
+  String getTitle(BuildContext context) =>
+      AppLocalizations.of(context).pref_category_downloads;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget getWidget() => const SettingsDownloadScreen();
+
+  @override
+  List<Preference> getPreferences(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
     final downloadPreferences = ref.watch(downloadPreferencesProvider);
-    final getCategories = ref.watch(getCategoriesProvider);
-    return StreamBuilder<List<Category>>(
-        stream: getCategories.subscribe(),
-        builder: (context, snapshot) {
-          final allCategories = snapshot.data ?? const [];
-          return SearchableSettings(
-            title: lang.pref_category_downloads,
-            getPreferences: () => [
-              SwitchPreference(
-                pref: downloadPreferences.downloadOnlyOverWifi(),
-                title: lang.connected_to_wifi,
-              ),
-              SwitchPreference(
-                pref: downloadPreferences.saveChaptersAsCBZ(),
-                title: lang.save_chapter_as_cbz,
-              ),
-              SwitchPreference(
-                pref: downloadPreferences.splitTallImages(),
-                title: lang.split_tall_images,
-                subtitle: lang.split_tall_images_summary,
-              ),
-              _getDeleteChaptersGroup(
-                context,
-                downloadPreferences,
-                allCategories,
-              ),
-              _getAutoDownloadGroup(
-                  context, downloadPreferences, allCategories),
-              _getDownloadAheadGroup(context, downloadPreferences),
-            ],
-          );
-        });
+    //final getCategories = ref.watch(getCategoriesProvider);
+    //final allCategories = getCategories.subscribe();
+    return [
+      SwitchPreference(
+        pref: downloadPreferences.downloadOnlyOverWifi(),
+        title: lang.connected_to_wifi,
+      ),
+      SwitchPreference(
+        pref: downloadPreferences.saveChaptersAsCBZ(),
+        title: lang.save_chapter_as_cbz,
+      ),
+      SwitchPreference(
+        pref: downloadPreferences.splitTallImages(),
+        title: lang.split_tall_images,
+        subtitle: lang.split_tall_images_summary,
+      ),
+      //_getDeleteChaptersGroup(context, downloadPreferences, allCategories),
+      //_getAutoDownloadGroup(context, downloadPreferences, allCategories),
+      _getDeleteChaptersGroup(context, downloadPreferences),
+      _getAutoDownloadGroup(context, downloadPreferences),
+      _getDownloadAheadGroup(context, downloadPreferences),
+    ];
   }
 
   PreferenceGroup _getDeleteChaptersGroup(
     BuildContext context,
     DownloadPreferences downloadPreferences,
-    List<Category> categories,
+    //List<Category> categories,
   ) {
     final lang = AppLocalizations.of(context);
     return PreferenceGroup(
@@ -83,16 +82,14 @@ class SettingsDownloadScreen extends ConsumerWidget {
           pref: downloadPreferences.removeBookmarkedChapters(),
           title: lang.pref_remove_bookmarked_chapters,
         ),
-        MultiSelectListPreference(
-          pref: downloadPreferences.removeExcludeCategories(),
-          title: lang.pref_remove_exclude_categories,
-          entries: categories
-              .associate((it) => MapEntry(
-                    it.id.toString(),
-                    it.visualName(context),
-                  ))
-              .toMap(),
-        ),
+        //MultiSelectListPreference(
+        //  pref: downloadPreferences.removeExcludeCategories(),
+        //  title: lang.pref_remove_exclude_categories,
+        //  entries: categories.associate((it) => MapEntry(
+        //        it.id.toString(),
+        //        it.visualName(context),
+        //      )),
+        //),
       ],
     );
   }
@@ -100,7 +97,7 @@ class SettingsDownloadScreen extends ConsumerWidget {
   PreferenceGroup _getAutoDownloadGroup(
     BuildContext context,
     DownloadPreferences downloadPreferences,
-    List<Category> allCategories,
+    //List<Category> allCategories,
   ) {
     final lang = AppLocalizations.of(context);
     final downloadNewChaptersPref = downloadPreferences.downloadNewChapters();
@@ -120,50 +117,50 @@ class SettingsDownloadScreen extends ConsumerWidget {
           pref: downloadNewChaptersPref,
           title: lang.pref_download_new,
         ),
-        TextPreference(
-          title: lang.categories,
-          subtitle: getCategoriesLabel(
-            context,
-            allCategories: allCategories,
-            included: included,
-            excluded: excluded,
-          ),
-          onClick: () => showAdaptiveDialog(
-            context: context,
-            builder: (context) {
-              return TriStateListDialog(
-                title: lang.categories,
-                message: lang.pref_download_new_categories_details,
-                items: allCategories,
-                initialChecked: included
-                    .mapNotNull(
-                      (id) => allCategories.firstWhereOrNull(
-                        (it) => it.id.toString() == id,
-                      ),
-                    )
-                    .toList(),
-                initialInversed: excluded
-                    .mapNotNull(
-                      (id) => allCategories.firstWhereOrNull(
-                        (it) => it.id.toString() == id,
-                      ),
-                    )
-                    .toList(),
-                itemLabel: (it) => it.visualName(context),
-                onValueChanged: (newIncluded, newExcluded) {
-                  downloadNewChapterCategoriesPref.set(
-                    newIncluded.map((it) => it.id.toString()).toSet(),
-                  );
-                  downloadNewChapterCategoriesExcludePref.set(
-                    newExcluded.map((it) => it.id.toString()).toSet(),
-                  );
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
-          enabled: downloadNewChapters,
-        ),
+        //TextPreference(
+        //  title: lang.categories,
+        //  subtitle: getCategoriesLabel(
+        //    context,
+        //    allCategories: allCategories,
+        //    included: included,
+        //    excluded: excluded,
+        //  ),
+        //  onClick: () => showAdaptiveDialog(
+        //    context: context,
+        //    builder: (context) {
+        //      return TriStateListDialog(
+        //        title: lang.categories,
+        //        message: lang.pref_download_new_categories_details,
+        //        items: allCategories,
+        //        initialChecked: included
+        //            .mapNotNull(
+        //              (id) => allCategories.firstWhereOrNull(
+        //                (it) => it.id.toString() == id,
+        //              ),
+        //            )
+        //            .toList(),
+        //        initialInversed: excluded
+        //            .mapNotNull(
+        //              (id) => allCategories.firstWhereOrNull(
+        //                (it) => it.id.toString() == id,
+        //              ),
+        //            )
+        //            .toList(),
+        //        itemLabel: (it) => it.visualName(context),
+        //        onValueChanged: (newIncluded, newExcluded) {
+        //          downloadNewChapterCategoriesPref.set(
+        //            newIncluded.map((it) => it.id.toString()).toSet(),
+        //          );
+        //          downloadNewChapterCategoriesExcludePref.set(
+        //            newExcluded.map((it) => it.id.toString()).toSet(),
+        //          );
+        //          Navigator.pop(context);
+        //        },
+        //      );
+        //    },
+        //  ),
+        //  enabled: downloadNewChapters,
+        //),
       ],
     );
   }
@@ -173,20 +170,30 @@ class SettingsDownloadScreen extends ConsumerWidget {
     DownloadPreferences downloadPreferences,
   ) {
     final lang = AppLocalizations.of(context);
-
     return PreferenceGroup(
       title: lang.download_ahead,
       preferenceItems: [
         ListPreference(
           pref: downloadPreferences.autoDownloadWhileReading(),
           title: lang.auto_download_while_reading,
-          entries: [0, 2, 3, 5, 10]
-              .associateWith((it) =>
-                  it == 0 ? lang.disabled : lang.next_unread_chapters(it))
-              .toMap(),
+          entries: [0, 2, 3, 5, 10].associateWith((it) =>
+              it == 0 ? lang.disabled : lang.next_unread_chapters(it)),
         ),
         InfoPreference(title: lang.download_ahead_info),
       ],
+    );
+  }
+}
+
+class SettingsDownloadScreen extends ConsumerWidget {
+  const SettingsDownloadScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const i = ISettingsDownloadScreen();
+    return SearchableSettings(
+      title: i.getTitle(context),
+      preferences: () => i.getPreferences(context, ref),
     );
   }
 }

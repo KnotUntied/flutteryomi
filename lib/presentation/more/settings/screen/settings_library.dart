@@ -16,77 +16,78 @@ import 'package:flutteryomi/presentation/more/settings/screen/searchable_setting
 import 'package:flutteryomi/presentation/more/settings/widget/tri_state_list_dialog.dart';
 
 //TODO
-class SettingsLibraryScreen extends ConsumerWidget {
-  const SettingsLibraryScreen({super.key});
+// Category items suffer from a the lack of a runBlocking equivalent
+// Exclude them for now :(
+class ISettingsLibraryScreen extends ISearchableSettings {
+  const ISettingsLibraryScreen();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  String getTitle(BuildContext context) =>
+      AppLocalizations.of(context).pref_category_library;
+
+  @override
+  Widget getWidget() => const SettingsLibraryScreen();
+
+  @override
+  List<Preference> getPreferences(BuildContext context, WidgetRef ref) {
     final lang = AppLocalizations.of(context);
     final libraryPreferences = ref.watch(libraryPreferencesProvider);
     final getCategories = ref.watch(getCategoriesProvider);
-    return StreamBuilder<List<Category>>(
-      stream: getCategories.subscribe(),
-      builder: (context, snapshot) {
-        final allCategories = snapshot.data ?? const [];
-        return SearchableSettings(
-          title: lang.pref_category_library,
-          getPreferences: () => [
-            _getCategoriesGroup(
-                context, ref, allCategories, libraryPreferences),
-            _getGlobalUpdateGroup(context, allCategories, libraryPreferences),
-            _getChapterSwipeActionsGroup(context, libraryPreferences),
-          ],
-        );
-      },
-    );
+    return [
+      //_getCategoriesGroup(context, ref, allCategories, libraryPreferences),
+      //_getGlobalUpdateGroup(context, allCategories, libraryPreferences),
+      _getCategoriesGroup(context, ref, libraryPreferences),
+      _getGlobalUpdateGroup(context, libraryPreferences),
+      _getChapterSwipeActionsGroup(context, libraryPreferences),
+    ];
   }
 
   PreferenceGroup _getCategoriesGroup(
     BuildContext context,
     WidgetRef ref,
-    List<Category> allCategories,
+    //List<Category> allCategories,
     LibraryPreferences libraryPreferences,
   ) {
     final lang = AppLocalizations.of(context);
     final resetCategoryFlags = ref.read(resetCategoryFlagsProvider);
-    final userCategoriesCount = allCategories
-        .whereNot((it) => it.isSystemCategory)
-        .length;
+    //final userCategoriesCount = allCategories
+    //    .whereNot((it) => it.isSystemCategory)
+    //    .length;
 
     final defaultCategory = libraryPreferences.defaultCategory().get();
-    final selectedCategory = allCategories
-        .firstWhereOrNull((it) => it.id == defaultCategory);
+    //final selectedCategory = allCategories
+    //    .firstWhereOrNull((it) => it.id == defaultCategory);
 
     // For default category
     final ids = [
       libraryPreferences.defaultCategory().defaultValue(),
-      ...allCategories.map((it) => it.id),
+      //...allCategories.map((it) => it.id),
     ];
     final labels = [
       lang.default_category_summary,
-      ...allCategories.map((it) => it.visualName(context)),
+      //...allCategories.map((it) => it.visualName(context)),
     ];
 
     return PreferenceGroup(
       title: lang.categories,
       preferenceItems: [
-        TextPreference(
-          title: lang.action_edit_categories,
-          subtitle: lang.num_categories(userCategoriesCount),
-          onClick: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CategoryScreen(),
-            ),
-          ),
-        ),
-        ListPreference(
-          pref: libraryPreferences.defaultCategory(),
-          title: lang.default_category,
-          subtitle: selectedCategory?.visualName(context)
-              ?? lang.default_category_summary,
-          entries: Map.fromIterables(ids, labels),
-        ),
+        //TextPreference(
+        //  title: lang.action_edit_categories,
+        //  subtitle: lang.num_categories(userCategoriesCount),
+        //  onClick: () => Navigator.push(
+        //    context,
+        //    MaterialPageRoute(
+        //      builder: (context) => const CategoryScreen(),
+        //    ),
+        //  ),
+        //),
+        //ListPreference(
+        //  pref: libraryPreferences.defaultCategory(),
+        //  title: lang.default_category,
+        //  subtitle: selectedCategory?.visualName(context)
+        //      ?? lang.default_category_summary,
+        //  entries: Map.fromIterables(ids, labels),
+        //),
         SwitchPreference(
           pref: libraryPreferences.categorizedDisplaySettings(),
           title: lang.categorized_display_settings,
@@ -101,7 +102,7 @@ class SettingsLibraryScreen extends ConsumerWidget {
 
   PreferenceGroup _getGlobalUpdateGroup(
     BuildContext context,
-    List<Category> allCategories,
+    //List<Category> allCategories,
     LibraryPreferences libraryPreferences,
   ) {
     final lang = AppLocalizations.of(context);
@@ -150,48 +151,48 @@ class SettingsLibraryScreen extends ConsumerWidget {
         //    return true;
         //  },
         //),
-        TextPreference(
-          title: lang.categories,
-          subtitle: getCategoriesLabel(
-            context,
-            allCategories: allCategories,
-            included: included,
-            excluded: excluded,
-          ),
-          onClick: () => showAdaptiveDialog(
-            context: context,
-            builder: (context) {
-              return TriStateListDialog(
-                title: lang.categories,
-                message: lang.pref_library_update_categories_details,
-                items: allCategories,
-                initialChecked: included
-                    .mapNotNull(
-                      (id) => allCategories.firstWhereOrNull(
-                        (it) => it.id.toString() == id,
-                      ),
-                    )
-                    .toList(),
-                initialInversed: excluded
-                    .mapNotNull(
-                      (id) => allCategories.firstWhereOrNull(
-                        (it) => it.id.toString() == id,
-                      ),
-                    )
-                    .toList(),
-                itemLabel: (it) => it.visualName(context),
-                onValueChanged: (newIncluded, newExcluded) {
-                  autoUpdateCategoriesPref.set(
-                    newIncluded.map((it) => it.id.toString()).toSet(),
-                  );
-                  autoUpdateCategoriesExcludePref.set(
-                    newExcluded.map((it) => it.id.toString()).toSet(),
-                  );
-                },
-              );
-            },
-          ),
-        ),
+        //TextPreference(
+        //  title: lang.categories,
+        //  subtitle: getCategoriesLabel(
+        //    context,
+        //    allCategories: allCategories,
+        //    included: included,
+        //    excluded: excluded,
+        //  ),
+        //  onClick: () => showAdaptiveDialog(
+        //    context: context,
+        //    builder: (context) {
+        //      return TriStateListDialog(
+        //        title: lang.categories,
+        //        message: lang.pref_library_update_categories_details,
+        //        items: allCategories,
+        //        initialChecked: included
+        //            .mapNotNull(
+        //              (id) => allCategories.firstWhereOrNull(
+        //                (it) => it.id.toString() == id,
+        //              ),
+        //            )
+        //            .toList(),
+        //        initialInversed: excluded
+        //            .mapNotNull(
+        //              (id) => allCategories.firstWhereOrNull(
+        //                (it) => it.id.toString() == id,
+        //              ),
+        //            )
+        //            .toList(),
+        //        itemLabel: (it) => it.visualName(context),
+        //        onValueChanged: (newIncluded, newExcluded) {
+        //          autoUpdateCategoriesPref.set(
+        //            newIncluded.map((it) => it.id.toString()).toSet(),
+        //          );
+        //          autoUpdateCategoriesExcludePref.set(
+        //            newExcluded.map((it) => it.id.toString()).toSet(),
+        //          );
+        //        },
+        //      );
+        //    },
+        //  ),
+        //),
         SwitchPreference(
           pref: libraryPreferences.autoUpdateMetadata(),
           title: lang.pref_library_update_refresh_metadata,
@@ -247,6 +248,19 @@ class SettingsLibraryScreen extends ConsumerWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class SettingsLibraryScreen extends ConsumerWidget {
+  const SettingsLibraryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const i = ISettingsLibraryScreen();
+    return SearchableSettings(
+      title: i.getTitle(context),
+      preferences: () => i.getPreferences(context, ref),
     );
   }
 }

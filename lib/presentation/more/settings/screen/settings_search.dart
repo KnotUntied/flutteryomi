@@ -102,12 +102,12 @@ class _SearchResult extends StatelessWidget {
   }
 }
 
-//Iterable<SettingsData> _getIndex(BuildContext context, WidgetRef ref) =>
-//    _settingScreens.map((screen) => SettingsData(
-//          title: screen.getTitle(context),
-//          route: screen,
-//          contents: screen.getPreferences(context, ref),
-//        ));
+Iterable<SettingsData> _getIndex(BuildContext context, WidgetRef ref) =>
+    _settingScreens.map((screen) => SettingsData(
+          title: screen.getTitle(context),
+          route: screen.getWidget(),
+          contents: screen.getPreferences(context, ref),
+        ));
 
 String _getLocalizedBreadcrumb({
   required String path,
@@ -120,15 +120,15 @@ String _getLocalizedBreadcrumb({
         : "$node < $path"; // This locale reads right to left.
 
 const _settingScreens = [
-  SettingsAppearanceScreen(),
-  //SettingsLibraryScreen(),
-  //SettingsReaderScreen(),
-  //SettingsDownloadScreen(),
-  //SettingsTrackingScreen(),
-  //SettingsBrowseScreen(),
-  //SettingsDataScreen(),
-  //SettingsSecurityScreen(),
-  SettingsAdvancedScreen(),
+  ISettingsAppearanceScreen(),
+  ISettingsLibraryScreen(),
+  ISettingsReaderScreen(),
+  ISettingsDownloadScreen(),
+  ISettingsTrackingScreen(),
+  ISettingsBrowseScreen(),
+  ISettingsDataScreen(),
+  ISettingsSecurityScreen(),
+  ISettingsAdvancedScreen(),
 ];
 
 @freezed

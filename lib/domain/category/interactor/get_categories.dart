@@ -14,9 +14,9 @@ class GetCategories {
       ? repository.getCategoriesByMangaIdAsStream(mangaId)
       : repository.getAllAsStream();
 
-  Future<List<Category>> await_([int? mangaId]) async => mangaId != null
-      ? await repository.getCategoriesByMangaId(mangaId)
-      : await repository.getAll();
+  Future<List<Category>> await_([int? mangaId]) => mangaId != null
+      ? repository.getCategoriesByMangaId(mangaId)
+      : repository.getAll();
 }
 
 @riverpod
