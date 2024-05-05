@@ -1,15 +1,9 @@
-import 'package:dartx/dartx_io.dart' hide IterableWhereNot;
+import 'package:dartx/dartx_io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import 'package:flutteryomi/data/track/tracker.dart';
-import 'package:flutteryomi/data/track/tracker_manager.dart';
-import 'package:flutteryomi/domain/source/service/source_manager.dart';
-import 'package:flutteryomi/domain/track/service/track_preferences.dart';
-import 'package:flutteryomi/presentation/components/material/constants.dart';
 import 'package:flutteryomi/presentation/more/settings/preference.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/searchable_settings.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/settings_advanced.dart';
@@ -21,6 +15,7 @@ import 'package:flutteryomi/presentation/more/settings/screen/settings_library.d
 import 'package:flutteryomi/presentation/more/settings/screen/settings_reader.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/settings_security.dart';
 import 'package:flutteryomi/presentation/more/settings/screen/settings_tracking.dart';
+import 'package:flutteryomi/presentation/screens/empty_screen.dart';
 
 part 'settings_search.freezed.dart';
 
@@ -46,12 +41,12 @@ class _SettingsSearchScreenState extends State<SettingsSearchScreen> {
           decoration: InputDecoration(
             hintText: lang.action_search_settings,
             hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
           ),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
           textInputAction: TextInputAction.search,
         ),
         actions: [
@@ -81,7 +76,7 @@ class _SettingsSearchScreenState extends State<SettingsSearchScreen> {
   }
 }
 
-class _SearchResult extends StatelessWidget {
+class _SearchResult extends ConsumerWidget {
   const _SearchResult({
     super.key,
     required this.searchKey,
@@ -92,13 +87,97 @@ class _SearchResult extends StatelessWidget {
   final ValueChanged<SearchResultItem> onItemClick;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lang = AppLocalizations.of(context);
     if (searchKey.isEmpty) return const SizedBox.shrink();
 
     final isLtr = Directionality.of(context) == TextDirection.ltr;
 
-    //final index = 
-    return const Placeholder();
+    final index = _getIndex(context, ref);
+    final result = index
+        .flatMap(
+          (settingsData) => settingsData.contents
+              // Only search from enabled prefs and one with valid title
+              .where((it) => it.enabled && it.title.isNotBlank)
+              // Flatten items contained inside *enabled* PreferenceGroup
+              .flatMap<(String?, PreferenceItem)>((p) => switch (p) {
+                    PreferenceGroup() => p.enabled
+                        ? p.preferenceItems
+                            .where((it) => it.enabled && it.title.isNotBlank)
+                            .map((it) => (p.title, it))
+                        : const [],
+                    PreferenceItem() => [(null, p)],
+                  })
+              // Don't show info preference
+              .whereNot((it) => it.$2 is InfoPreference)
+              // Filter by search query
+              .where((it) {
+            final (_, p) = it;
+            final inTitle =
+                p.title.toLowerCase().contains(searchKey.toLowerCase());
+            final inSummary =
+                p.subtitle?.toLowerCase().contains(searchKey.toLowerCase()) ??
+                    false;
+            return inTitle || inSummary;
+          }).map((it) {
+            final (categoryTitle, p) = it;
+            return SearchResultItem(
+              route: settingsData.route,
+              title: p.title,
+              breadcrumbs: _getLocalizedBreadcrumb(
+                path: settingsData.title,
+                node: categoryTitle,
+                isLtr: isLtr,
+              ),
+              highlightKey: p.title,
+            );
+          }),
+        )
+        .take(10) // Just take top 10 result for quicker result
+        .toList();
+
+    //TODO: Crossfade
+    if (result.isEmpty) {
+      return EmptyScreen(message: lang.no_results_found);
+    }
+    return ListView.builder(
+      itemCount: result.length,
+      itemBuilder: (context, index) {
+        final item = result[index];
+        return InkWell(
+          onTap: () => onItemClick(item),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 14.0,
+            ),
+            child: Column(
+              key: Key('${item.hashCode}'),
+              children: [
+                Text(
+                  item.title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.normal,
+                      ),
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                Text(
+                  item.breadcrumbs,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -113,11 +192,12 @@ String _getLocalizedBreadcrumb({
   required String path,
   String? node,
   required bool isLtr,
-}) => node == null
-    ? path
-    : isLtr
-        ? "$path > $node" // This locale reads left to right.
-        : "$node < $path"; // This locale reads right to left.
+}) =>
+    node == null
+        ? path
+        : isLtr
+            ? "$path > $node" // This locale reads left to right.
+            : "$node < $path"; // This locale reads right to left.
 
 const _settingScreens = [
   ISettingsAppearanceScreen(),
