@@ -94,7 +94,7 @@ class MangaRepositoryImpl implements MangaRepository {
   Future<int?> insert(Manga manga) async {
     int? lastInsertedRowId;
     await db.transaction(() async {
-      Manga? lastInsertedRow = await db //
+      final lastInsertedRow = await db //
           .into(db.mangas)
           .insertReturningOrNull(
             MangaUpdate.insert(

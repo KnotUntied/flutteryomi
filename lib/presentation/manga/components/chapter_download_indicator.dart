@@ -127,7 +127,7 @@ class _DownloadingIndicator extends StatelessWidget {
           //  label: "progress");
           arrowColor = downloadProgress < 0.5
               ? strokeColor
-              : Theme.of(context).colorScheme.background;
+              : Theme.of(context).colorScheme.surface;
         }
         return InkWell(
           onTap: enabled ? () => controller.open() : null,

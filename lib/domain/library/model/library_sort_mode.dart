@@ -45,8 +45,8 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
   static LibrarySort deserialize(String serialized) {
     if (serialized.isEmpty) return default_;
     try {
-      List<String> values = serialized.split(",");
-      Type type = switch (values[0]) {
+      final values = serialized.split(",");
+      final type = switch (values[0]) {
         "ALPHABETICAL" => Type.alphabetical,
         "LAST_READ" => Type.lastRead,
         "LAST_MANGA_UPDATE" => Type.lastUpdate,
@@ -58,7 +58,7 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
         "TRACKER_MEAN" => Type.trackerMean,
         _ => Type.alphabetical,
       };
-      Direction ascending = (values[1] == "ASCENDING")
+      final ascending = (values[1] == "ASCENDING")
           ? Direction.ascending
           : Direction.descending;
       return LibrarySort(type, ascending);
@@ -68,7 +68,7 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
   }
 
   String serialize() {
-    String serializedType = switch (type) {
+    final serializedType = switch (type) {
       Alphabetical() => "ALPHABETICAL",
       LastRead() => "LAST_READ",
       LastUpdate() => "LAST_MANGA_UPDATE",
@@ -79,7 +79,7 @@ class LibrarySort with _$LibrarySort implements FlagWithMask {
       DateAdded() => "DATE_ADDED",
       TrackerMean() => "TRACKER_MEAN",
     };
-    String serializedDirection =
+    final serializedDirection =
         (direction == Direction.ascending) ? "ASCENDING" : "DESCENDING";
     return "$serializedType,$serializedDirection";
   }

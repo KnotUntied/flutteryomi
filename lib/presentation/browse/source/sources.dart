@@ -50,32 +50,32 @@ class SourcesScreen extends ConsumerWidget {
               return switch (item) {
                 SourceUiModelHeader() => _SourceHeader(language: item.language),
                 SourceUiModelItem() => _SourceItem(
-                  source: item.source,
-                  //TODO
-                  onClickItem: (source, listing) {
-                    //Navigator.push(
-                    //  context,
-                    //  MaterialPageRoute(
-                    //    builder: (context) => BrowseSourceScreen(source.id, listing.query),
-                    //  ),
-                    //);
-                  },
-                  onLongClickItem: screenModel.togglePin,
-                  onClickPin: (source) => showAdaptiveDialog(
-                    context: context,
-                    builder: (context) => SourceOptionsDialog(
-                      source: source,
-                      onClickPin: () {
-                        Navigator.pop(context);
-                        screenModel.togglePin(source);
-                      },
-                      onClickDisable: () {
-                        Navigator.pop(context);
-                        screenModel.toggleSource(source);
-                      },
+                    source: item.source,
+                    //TODO
+                    onClickItem: (source, listing) {
+                      //Navigator.push(
+                      //  context,
+                      //  MaterialPageRoute(
+                      //    builder: (context) => BrowseSourceScreen(source.id, listing.query),
+                      //  ),
+                      //);
+                    },
+                    onLongClickItem: screenModel.togglePin,
+                    onClickPin: (source) => showAdaptiveDialog(
+                      context: context,
+                      builder: (context) => SourceOptionsDialog(
+                        source: source,
+                        onClickPin: () {
+                          Navigator.pop(context);
+                          screenModel.togglePin(source);
+                        },
+                        onClickDisable: () {
+                          Navigator.pop(context);
+                          screenModel.toggleSource(source);
+                        },
+                      ),
                     ),
                   ),
-                ),
               };
             },
           );
@@ -130,14 +130,13 @@ class _SourceItem extends StatelessWidget {
         children: [
           if (source.supportsLatest)
             TextButton(
-              onPressed: () => onClickItem(source, const ListingLatest()),
-              child: Text(
-                lang.latest,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              )
-            ),
+                onPressed: () => onClickItem(source, const ListingLatest()),
+                child: Text(
+                  lang.latest,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                )),
           _SourcePinButton(
             isPinned: source.pin.contains(Pin.pinned),
             onClick: () => onClickPin(source),
@@ -165,7 +164,10 @@ class _SourcePinButton extends StatelessWidget {
       icon: Icon(isPinned ? Icons.push_pin : Icons.push_pin_outlined),
       color: isPinned
           ? Theme.of(context).colorScheme.primary
-          : Theme.of(context).colorScheme.onBackground.withOpacity(secondaryItemAlpha),
+          : Theme.of(context)
+              .colorScheme
+              .onSurface
+              .withOpacity(secondaryItemAlpha),
       tooltip: isPinned ? lang.action_unpin : lang.action_pin,
       onPressed: onClick,
     );
@@ -197,7 +199,9 @@ class SourceOptionsDialog extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
-                source.pin.contains(Pin.pinned) ? lang.action_unpin : lang.action_pin,
+                source.pin.contains(Pin.pinned)
+                    ? lang.action_unpin
+                    : lang.action_pin,
               ),
             ),
           ),

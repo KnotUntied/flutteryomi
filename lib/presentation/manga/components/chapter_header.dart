@@ -31,7 +31,7 @@ class ChapterHeader extends StatelessWidget {
                   ? lang.chapters
                   : lang.manga_num_chapters(chapterCount!),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),
             if (missingChapterCount > 0) ...[

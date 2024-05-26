@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:flutteryomi/domain/source/model/smanga.dart';
 import 'package:flutteryomi/domain/source/model/domain_source.dart';
 import 'package:flutteryomi/domain/source/model/filter_list.dart';
 import 'package:flutteryomi/domain/source/model/source_with_count.dart';

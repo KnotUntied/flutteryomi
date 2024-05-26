@@ -25,7 +25,7 @@ class DuplicateMangaDialog extends StatelessWidget {
             onOpenManga();
           },
         ),
-        Spacer(),
+        const Spacer(),
         TextButton(
           child: Text(lang.action_cancel),
           onPressed: () => Navigator.pop(context),

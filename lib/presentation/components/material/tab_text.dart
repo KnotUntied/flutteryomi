@@ -28,7 +28,7 @@ class TabText extends StatelessWidget {
             text: '$badgeCount',
             color: Theme.of(context)
                 .colorScheme
-                .onBackground
+                .onSurface
                 .withOpacity(pillOpacity),
             fontSize: 10.0,
           ),

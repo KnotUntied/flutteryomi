@@ -49,7 +49,7 @@ class SetMangaChapterFlags {
   Future<bool> awaitSetSortingModeOrFlipOrder(Manga manga, int flag) {
     int newFlags = manga.chapterFlags;
     if (manga.sorting == flag) {
-      int orderFlag = manga.sortDescending()
+      final orderFlag = manga.sortDescending()
           ? MangaUtils.chapterSortAsc
           : MangaUtils.chapterSortDesc;
       newFlags = newFlags.setFlag(orderFlag, MangaUtils.chapterSortDirMask);

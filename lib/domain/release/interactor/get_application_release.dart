@@ -16,7 +16,7 @@ class GetApplicationRelease {
       preferenceStore.getInt(Preference.appStateKey("last_app_check"), 0);
 
   Future<Result> await_(Arguments arguments) async {
-    DateTime now = DateTime.now();
+    final now = DateTime.now();
 
     // Limit checks to once every 3 days at most
     if (!arguments.forceCheck &&
@@ -27,12 +27,12 @@ class GetApplicationRelease {
       return const Result.noNewUpdate();
     }
 
-    Release release = await service.latest(arguments.repository);
+    final release = await service.latest(arguments.repository);
 
     lastChecked.set(now.millisecondsSinceEpoch);
 
     // Check if latest version is different from current version
-    bool isNewVersion = _isNewVersion(
+    final isNewVersion = _isNewVersion(
       arguments.isPreview,
       arguments.commitCount,
       arguments.versionName,
@@ -54,7 +54,7 @@ class GetApplicationRelease {
     String versionTag,
   ) {
     // Removes prefixes like "r" or "v"
-    String newVersion = versionTag.replaceAll(RegExp(r"[^\d.]"), "");
+    final newVersion = versionTag.replaceAll(RegExp(r"[^\d.]"), "");
     if (isPreview) {
       // Preview builds: based on releases in "tachiyomiorg/tachiyomi-preview" repo
       // tagged as something like "r1234"
@@ -62,16 +62,14 @@ class GetApplicationRelease {
     } else {
       // Release builds: based on releases in "tachiyomiorg/tachiyomi" repo
       // tagged as something like "v0.1.2"
-      String oldVersion = versionName.replaceAll(RegExp(r"[^\d.]"), "");
-      List<int> newSemVer =
+      final oldVersion = versionName.replaceAll(RegExp(r"[^\d.]"), "");
+      final newSemVer =
           newVersion.split(".").map((it) => int.parse(it)).toList();
-      List<int> oldSemVer =
+      final oldSemVer =
           oldVersion.split(".").map((it) => int.parse(it)).toList();
 
       for (final (index, i) in oldSemVer.indexed) {
-        if (newSemVer[index] > i) {
-          return true;
-        }
+        if (newSemVer[index] > i) return true;
       }
       return false;
     }

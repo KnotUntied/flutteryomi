@@ -14,7 +14,7 @@ class SetMangaViewerFlags {
   SetMangaViewerFlags(this.repository);
 
   Future<void> awaitSetReadingMode(int id, int flag) async {
-    Manga manga = await repository.getMangaById(id);
+    final manga = await repository.getMangaById(id);
     await repository.update(
       MangaUpdate(
         id: Value(manga.id),
@@ -26,7 +26,7 @@ class SetMangaViewerFlags {
   }
 
   Future<void> awaitSetOrientation(int id, int flag) async {
-    Manga manga = await repository.getMangaById(id);
+    final manga = await repository.getMangaById(id);
     await repository.update(
       MangaUpdate(
         id: Value(manga.id),

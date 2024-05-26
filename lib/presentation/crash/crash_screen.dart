@@ -29,7 +29,7 @@ class CrashScreen extends StatelessWidget {
       onRejectClick: onRestartClick,
       children: [
         Container(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(MaterialCorner.small),
           ),

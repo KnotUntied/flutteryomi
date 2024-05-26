@@ -44,11 +44,11 @@ abstract class ChapterRecognition {
     name = name.replaceAll(_unwanted, "");
 
     /// Check base case ch.xx
-    RegExpMatch? basicMatch = _basic.firstMatch(name);
+    final basicMatch = _basic.firstMatch(name);
     if (basicMatch != null) return _getChapterNumberFromMatch(basicMatch);
 
     /// Take the first number encountered.
-    RegExpMatch? numberMatch = _number.firstMatch(name);
+    final numberMatch = _number.firstMatch(name);
     if (numberMatch != null) return _getChapterNumberFromMatch(numberMatch);
 
     return chapterNumber ?? -1.0;
@@ -58,10 +58,10 @@ abstract class ChapterRecognition {
   /// @param match result of regex
   /// @return chapter number if found else null
   static double _getChapterNumberFromMatch(RegExpMatch match) {
-    double initial = double.parse(match[1]!);
-    String? subChapterDecimal = match[2];
-    String? subChapterAlpha = match[3];
-    double addition = _checkForDecimal(subChapterDecimal, subChapterAlpha);
+    final initial = double.parse(match[1]!);
+    final subChapterDecimal = match[2];
+    final subChapterAlpha = match[3];
+    final addition = _checkForDecimal(subChapterDecimal, subChapterAlpha);
     return initial + addition;
   }
 
@@ -77,7 +77,7 @@ abstract class ChapterRecognition {
       if (alpha.contains("omake")) return 0.98;
       if (alpha.contains("special")) return 0.97;
 
-      String trimmedAlpha = alpha.trimStart('.');
+      final trimmedAlpha = alpha.trimStart('.');
       if (trimmedAlpha.length == 1) return _parseAlphaPostFix(trimmedAlpha[0]);
     }
 
@@ -86,7 +86,7 @@ abstract class ChapterRecognition {
 
   /// x.a -> x.1, x.b -> x.2, etc
   static double _parseAlphaPostFix(String alpha) {
-    int number = alpha.codeUnitAt(0) - ('a'.codeUnitAt(0) - 1);
+    final number = alpha.codeUnitAt(0) - ('a'.codeUnitAt(0) - 1);
     if (number >= 10) return 0.0;
     return number / 10.0;
   }

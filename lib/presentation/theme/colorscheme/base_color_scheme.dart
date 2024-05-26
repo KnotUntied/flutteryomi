@@ -8,8 +8,6 @@ abstract class BaseColorScheme {
       isDark
           ? (isAmoled
               ? darkScheme.copyWith(
-                  background: Colors.black,
-                  onBackground: Colors.white,
                   surface: Colors.black,
                   onSurface: Colors.white,
                 )

@@ -20,9 +20,9 @@ class Release with _$Release {
   /// Returns the download link of latest release.
   Future<String> getDownloadLink() async {
     String apkVariant;
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      final androidInfo = await deviceInfo.androidInfo;
       apkVariant = switch (androidInfo.supportedAbis[0]) {
         "arm64-v8a" => "-arm64-v8a",
         "armeabi-v7a" => "-armeabi-v7a",

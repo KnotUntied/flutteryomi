@@ -125,7 +125,7 @@ class AppThemePreviewItem extends StatelessWidget {
       onTap: onClick,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           border: Border.all(
             width: 4.0,
             color: selected
@@ -209,7 +209,7 @@ class AppThemePreviewItem extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Card(
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     height: 32.0,

@@ -256,7 +256,7 @@ class SearchToolbar extends StatelessWidget implements PreferredSizeWidget {
         ),
         onChanged: onChangeSearchQuery,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.normal,
               fontSize: 18.0,
             ),

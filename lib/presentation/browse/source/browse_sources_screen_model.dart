@@ -152,7 +152,7 @@ class BrowseSourcesScreenModel extends _$BrowseSourcesScreenModel {
     //final coverCache = ref.watch(coverCacheProvider);
     final setMangaDefaultChapterFlags = ref.watch(setMangaDefaultChapterFlagsProvider);
     final updateManga = ref.watch(updateMangaProvider);
-    var newManga = manga.copyWith(
+    Manga newManga = manga.copyWith(
       favorite: !manga.favorite,
       dateAdded: manga.favorite
         ? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)

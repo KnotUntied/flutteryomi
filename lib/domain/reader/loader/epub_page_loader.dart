@@ -33,12 +33,11 @@ class EpubPageLoader extends PageLoader {
       .sortedWith((f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
       .mapIndexed((i, entry) {
         //TODO: Avoid decompressing twice
-        final os = OutputFileStream(
-          Directory.systemTemp.createTempSync().path,
-        );
+        final path = Directory.systemTemp.createTempSync().path;
+        final os = OutputFileStream(path);
         entry.writeContent(os);
         return ReaderPage(i)
-          ..stream = File(os.path).openRead
+          ..stream = File(path).openRead
           ..status = PageState.ready;
       })
       .toList();

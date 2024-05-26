@@ -379,11 +379,10 @@ class LocalSource implements CatalogueSource, UnmeteredSource {
                   (f1, f2) => compareAsciiLowerCaseNatural(f1.name, f2.name))
               .firstWhereOrNull((it) {
             if (!it.isFile) return false;
-            final os = OutputFileStream(
-              Directory.systemTemp.createTempSync().path,
-            );
+            final path = Directory.systemTemp.createTempSync().path;
+            final os = OutputFileStream(path);
             it.writeContent(os);
-            return ImageUtil.isImage(os.path, headerBytes: os.subset(0, 32));
+            return ImageUtil.isImage(path, headerBytes: os.subset(0, 32));
           });
 
           if (entry != null) coverManager.updateFromArchive(manga, entry);

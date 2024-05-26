@@ -164,7 +164,7 @@ class ObjectPrimitive<T> extends CommonPreference<T> {
   @override
   T read(StreamingSharedPreferences preferences, String key, T defaultValue) {
     try {
-      String? pref = preferences.getString(key, defaultValue: '').getValue();
+      final pref = preferences.getString(key, defaultValue: '').getValue();
       return pref != '' ? deserializer(pref) : defaultValue;
     } catch (e) {
       return defaultValue;

@@ -99,7 +99,7 @@ class _EditTextPreferenceDialogState extends State<_EditTextPreferenceDialog> {
               _controller.text != widget.value && _controller.text.isNotBlank
                   ? () async {
                       if (await widget.onConfirm(_controller.text)) {
-                        if (mounted) Navigator.pop(context);
+                        if (context.mounted) Navigator.pop(context);
                       }
                     }
                   : null,

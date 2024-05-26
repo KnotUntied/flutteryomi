@@ -21,13 +21,13 @@ abstract class Preference<T> {
 // Currently not allowed to overload operators += and -=
 extension PreferenceSet<T> on Preference<Set<T>> {
   void add(T item) {
-    Set<T> mySet = get();
+    final mySet = get();
     mySet.add(item);
     set(mySet);
   }
 
   void remove(T item) {
-    Set<T> mySet = get();
+    final mySet = get();
     mySet.remove(item);
     set(mySet);
   }

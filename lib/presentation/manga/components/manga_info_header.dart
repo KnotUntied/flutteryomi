@@ -630,7 +630,7 @@ class _MangaSummary extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context)
                       .colorScheme
-                      .onBackground
+                      .onSurface
                       .withOpacity(secondaryItemAlpha),
                 ),
           ),
@@ -655,7 +655,7 @@ class _MangaSummary extends StatelessWidget {
                 semanticLabel: expanded //
                     ? lang.manga_info_collapse
                     : lang.manga_info_expand,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),

@@ -395,14 +395,14 @@ class Downloader {
 
     try {
       // If the image is already downloaded, do nothing. Otherwise download from network
-      final file;
-      if (imageFile != null) {
-        file = imageFile;
-      //} else if (chapterCache.isImageInCache(page.imageUrl!)) {
-      //  file = _copyImageFromCache(chapterCache.getImageFile(page.imageUrl!), tmpDir, filename);
-      } else {
-        file = _downloadImage(page, download.source, tmpDir, filename);
-      }
+      //final File? file;
+      //if (imageFile != null) {
+      //  file = imageFile;
+      ////} else if (chapterCache.isImageInCache(page.imageUrl!)) {
+      ////  file = _copyImageFromCache(chapterCache.getImageFile(page.imageUrl!), tmpDir, filename);
+      //} else {
+      //  file = _downloadImage(page, download.source, tmpDir, filename);
+      //}
 
       // When the page is ready, set page path, progress (just in case) and status
       _splitTallImageIfNeeded(page, tmpDir);

@@ -112,7 +112,7 @@ class LibraryRegularToolbar extends StatelessWidget {
             Pill(
               color: Theme.of(context)
                   .colorScheme
-                  .onBackground
+                  .onSurface
                   .withOpacity(pillOpacity),
               text: title.numberOfManga.toString(),
               fontSize: 14.0,

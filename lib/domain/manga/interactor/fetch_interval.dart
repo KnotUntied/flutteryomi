@@ -19,15 +19,15 @@ class FetchInterval {
     DateTime dateTime,
     Pair<int, int> window,
   ) async {
-    Pair<int, int> currentWindow = (window.first == 0 && window.second == 0)
+    final currentWindow = (window.first == 0 && window.second == 0)
         ? getWindow(DateTime.now())
         : window;
-    List<Chapter> chapters =
+    final chapters =
         await getChapterByMangaId.await_(manga.id, applyScanlatorFilter: true);
-    int interval = manga.fetchInterval < 0
+    final interval = manga.fetchInterval < 0
         ? manga.fetchInterval
         : calculateInterval(chapters);
-    int nextUpdate =
+    final nextUpdate =
         _calculateNextUpdate(manga, interval, dateTime, currentWindow);
     if (manga.nextUpdate!.millisecondsSinceEpoch == nextUpdate &&
         manga.fetchInterval == interval) {
@@ -44,9 +44,9 @@ class FetchInterval {
   }
 
   Pair<int, int> getWindow(DateTime dateTime) {
-    DateTime today = DateUtils.dateOnly(dateTime.toLocal());
-    DateTime lowerBound = DateUtils.addDaysToDate(today, -_gracePeriod);
-    DateTime upperBound = DateUtils.addDaysToDate(today, _gracePeriod);
+    final today = DateUtils.dateOnly(dateTime.toLocal());
+    final lowerBound = DateUtils.addDaysToDate(today, -_gracePeriod);
+    final upperBound = DateUtils.addDaysToDate(today, _gracePeriod);
     return Pair(
       lowerBound.millisecondsSinceEpoch,
       upperBound.millisecondsSinceEpoch - 1,
@@ -54,15 +54,15 @@ class FetchInterval {
   }
 
   int calculateInterval(List<Chapter> chapters) {
-    List<DateTime> uploadDates = chapters
-        .filter((c) => c.dateUpload > _zeroDT)
+    final uploadDates = chapters
+        .where((c) => c.dateUpload > _zeroDT)
         .sortedByDescending((c) => c.dateUpload)
         .map((c) => DateUtils.dateOnly(c.dateUpload))
         .distinct()
         .take(10)
         .toList();
-    List<DateTime> fetchDates = chapters
-        .filter((c) => c.dateFetch > _zeroDT)
+    final fetchDates = chapters
+        .where((c) => c.dateFetch > _zeroDT)
         .sortedByDescending((c) => c.dateFetch)
         .map((c) => DateUtils.dateOnly(c.dateFetch))
         .distinct()
@@ -70,12 +70,12 @@ class FetchInterval {
         .toList();
     int interval;
     if (uploadDates.length > 3) {
-      int uploadDelta = uploadDates.first.difference(uploadDates.last).inDays;
-      int uploadPeriod = uploadDates.indexOf(uploadDates.last);
+      final uploadDelta = uploadDates.first.difference(uploadDates.last).inDays;
+      final uploadPeriod = uploadDates.indexOf(uploadDates.last);
       interval = uploadDelta ~/ uploadPeriod;
     } else if (fetchDates.length > 3) {
-      int fetchDelta = fetchDates.first.difference(fetchDates.last).inDays;
-      int uploadPeriod = fetchDates.indexOf(fetchDates.last);
+      final fetchDelta = fetchDates.first.difference(fetchDates.last).inDays;
+      final uploadPeriod = fetchDates.indexOf(fetchDates.last);
       interval = fetchDelta ~/ uploadPeriod;
     } else {
       interval = 7;
@@ -93,9 +93,9 @@ class FetchInterval {
             .rangeTo(window.second + 1)
             .contains(manga.nextUpdate!.millisecondsSinceEpoch) ||
         manga.fetchInterval == 0) {
-      DateTime latestDate = DateUtils.dateOnly(manga.lastUpdate!);
-      int timeSinceLatest = latestDate.difference(dateTime).inDays;
-      int cycle = timeSinceLatest ~/
+      final latestDate = DateUtils.dateOnly(manga.lastUpdate!);
+      final timeSinceLatest = latestDate.difference(dateTime).inDays;
+      final cycle = timeSinceLatest ~/
           (interval < 0
               ? interval.abs()
               : _doubleInterval(interval, timeSinceLatest, 10));
@@ -108,7 +108,7 @@ class FetchInterval {
 
   int _doubleInterval(int delta, int timeSinceLatest, int doubleWhenOver) {
     if (delta >= maxInterval) return maxInterval;
-    int cycle = (timeSinceLatest ~/ delta) + 1;
+    final cycle = (timeSinceLatest ~/ delta) + 1;
     // no tail-call optimization in dart oof
     if (cycle > doubleWhenOver) {
       return _doubleInterval(delta * 2, timeSinceLatest, doubleWhenOver);

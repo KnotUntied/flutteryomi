@@ -8,7 +8,8 @@ extension ExceptionFormatter on Exception {
     final lang = AppLocalizations.of(context);
     switch (this) {
       case HttpException _:
-        return lang.exception_http;
+        //TODO: Get status code
+        return lang.exception_http(500);
       //TODO
       //case UnknownHostException _:
       //  return !isOnline()

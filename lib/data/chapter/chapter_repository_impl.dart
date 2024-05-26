@@ -18,7 +18,7 @@ class ChapterRepositoryImpl implements ChapterRepository {
   @override
   Future<List<Chapter>> addAll(List<Chapter> chapters) async {
     try {
-      List<Chapter> returnedChapters = [];
+      final returnedChapters = <Chapter>[];
       await db.transaction(() async {
         for (final chapter in chapters) {
           returnedChapters.add(
