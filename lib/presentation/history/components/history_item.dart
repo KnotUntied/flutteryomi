@@ -80,9 +80,7 @@ class HistoryItem extends StatelessWidget {
                   Icons.delete_outlined,
                   semanticLabel: lang.action_delete,
                 ),
-                style: IconButton.styleFrom(
-                  surfaceTintColor: Theme.of(context).colorScheme.onSurface,
-                ),
+                color: Theme.of(context).colorScheme.onSurface,
                 onPressed: onClickDelete,
               ),
             ],

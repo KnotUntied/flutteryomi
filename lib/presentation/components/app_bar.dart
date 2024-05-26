@@ -138,7 +138,7 @@ class AppBarAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(iconData, semanticLabel: title),
-      style: IconButton.styleFrom(surfaceTintColor: iconTint),
+      color: iconTint,
       tooltip: title,
       onPressed: onClick,
     );
